@@ -21,8 +21,11 @@ Read these files before starting:
 - `memory/project-space/hypotheses.md` — confirmed, open, and validating hypotheses with ICE scores.
 - `memory/project-space/signals-map.md` — for the business KPIs that anchor recommended actions.
 - `memory/project-space/current-context.md` — for stakeholders, owners, and decision deadlines.
+- `memory/long-term/dynatrace-playbooks.md` — the playbook matched to each hypothesis at Phase 1 supplies the investigation sequence. The numbered steps in that playbook become the candidate investigation-action rows; the "confirmed" / "ruled out" sections become the exit criteria.
 - `memory/long-term/frameworks.md` — for the exit-criteria standard.
 - `memory/long-term/stakeholder-profiles.md` — for the leaders whose decisions will be asked.
+
+**Preserve citations.** Any URL + retrieval-date citation already attached to a hypothesis or signal row (from `skills/external-research/SKILL.md` or from a playbook in `dynatrace-playbooks.md`) must flow through into the investigation-action row that consumes it. If an investigation action depends on a Dynatrace feature behavior not already cited upstream, fetch and cite it now rather than asserting it. Allowlist remains `docs.dynatrace.com` and `community.dynatrace.com`.
 
 ## Steps
 

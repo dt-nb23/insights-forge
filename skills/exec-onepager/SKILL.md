@@ -43,6 +43,7 @@ A one-pager has five sections, in this order, and fits on a single page.
 - **Match the tone to the named stakeholder profile.** A Director of Reliability tolerates more technical depth than a VP of Engineering; a Head of Data Analytics expects time windows and segmentations stated explicitly. Read the profile first.
 - **Tradeoffs in the same paragraph as recommendations.** Never put the cost of an action in a separate "appendix" section. If it costs something, say so where you say what to do.
 - **No hedging language.** "May possibly indicate" is noise. State the finding; state the confidence; let the reader decide.
+- **Cite externally sourced facts in a footnotes block.** Any fact pulled from `docs.dynatrace.com` or `community.dynatrace.com` (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date — but in an exec one-pager, those references live in a short "Sources" footnote block at the bottom of the page, not inline, so the prose reads clean. The Skeptic lens will check that load-bearing claims trace back to a source.
 
 ## Quality gates
 

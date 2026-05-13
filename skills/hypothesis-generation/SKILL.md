@@ -21,8 +21,11 @@ Read these files before starting:
 
 - `memory/project-space/issue-tree.md` — for the approved branches.
 - `memory/project-space/current-context.md` — for scope and stakeholders.
-- `memory/long-term/domain-knowledge.md` — for the standard signal patterns and tech/UX/business linkages, which seed the "expected signals" field.
+- `memory/long-term/domain-knowledge.md` — for the standard signal patterns, tech/UX/business linkages, and the "Authoritative external references" allowlist that seeds the "expected signals" field.
+- `memory/long-term/dynatrace-playbooks.md` — for client-agnostic investigation patterns. Match each hypothesis to a playbook (latency, error spike, RUM regression, log investigation, SLO burn, deploy correlation, third-party dependency, Davis problem). The playbook's investigation sequence seeds the **validation approach** field; its "confirmed" / "ruled out" criteria seed the **exit criteria**.
 - `memory/long-term/frameworks.md` — for the issue-tree-to-hypothesis mapping guidance and the exit criteria standard.
+
+When a hypothesis depends on the specific behavior of a Dynatrace feature (e.g., RUM session capture rules, OneAgent vs OpenTelemetry attribute differences, Davis problem grouping) and local memory is silent or unclear, consult `skills/external-research/SKILL.md` before fixing the hypothesis text. Cite the source URL and retrieval date in the "expected signals" or "validation approach" field for that row.
 
 ## Steps
 

@@ -25,6 +25,8 @@ Read these files before starting:
 
 If any of these inputs is missing or stale, raise that with the user before drafting.
 
+If a Dynatrace concept needed to shape a branch (e.g., Smartscape grouping, Management Zone scoping, Davis problem boundaries) is not adequately defined in local memory, consult `skills/external-research/SKILL.md` before drafting. The allowlist is `docs.dynatrace.com` and `community.dynatrace.com`. Cite the source URL and retrieval date in the branch's "what we'd see if this is the cause" line when the branch leans on an externally sourced concept.
+
 ## Steps
 
 1. **Restate the problem as a question.** A good root for an issue tree is a question, not a statement. "Why has iOS checkout conversion declined 8% week-over-week while web is flat?" — not "iOS checkout is broken." Write the question in `issue-tree.md` under "Root problem".
