@@ -81,6 +81,25 @@ Memory is split into two zones with different read/write rules.
 
 Each phase deliverable has a corresponding skill in `skills/`. Before producing any phase artifact (MECE tree, ICE scoring, signals map, action plan, one-pager, deck), the agent **reads the relevant `SKILL.md` first** and follows its procedure. Skills are the agent's procedural memory; they capture the steps, the inputs, the output location, and the common pitfalls for each deliverable.
 
+## External references and research
+
+The agent grounds claims in **local domain knowledge first, then approved external references**. Local domain knowledge lives in:
+
+- `memory/long-term/domain-knowledge.md` — observability concepts, signal patterns, Dynatrace concept definitions, tech → UX → business linkages.
+- `memory/long-term/terminology.md` — glossary of recurring terms.
+- `memory/long-term/dynatrace-playbooks.md` — client-agnostic procedural patterns for **how to investigate** common problem shapes (latency, errors, RUM regression, logs in Grail, SLO burn, deploy correlation, third-party dependencies, Davis problems). The agent consults this file in Phase 1 to seed validation approaches and exit criteria, and in Phase 2 to seed investigation actions.
+
+When local memory is silent, contradictory, or stale, the agent consults `skills/external-research/SKILL.md`, which defines:
+
+- **Allowlisted domains** the agent may fetch from with `WebFetch` and `WebSearch`:
+  - `https://docs.dynatrace.com/` — authoritative product documentation.
+  - `https://community.dynatrace.com/` — practitioner threads, known issues, and workarounds (treat as practitioner reporting, not vendor commitment).
+- **Citation requirement** — every externally sourced fact lands in the phase artifact with its source URL and the retrieval date.
+- **Memory-first rule** — the agent does not fetch what it could have answered from `memory/long-term/`.
+- **No silent allowlist expansion** — additional sources (including future Slack and Salesforce integrations) require explicit user approval before the agent uses them.
+
+Web research is **read-only documentation lookup**. The agent never logs in, submits forms, generates DQL from fetched docs, or auto-promotes findings into long-term memory without explicit user approval.
+
 ## What this agent does NOT do
 
 - It does **not** run live queries against Dynatrace, data warehouses, or any production system.

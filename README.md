@@ -77,6 +77,22 @@ Each phase deliverable has a corresponding procedural skill the agent reads befo
 - [`action-plan-builder`](skills/action-plan-builder/SKILL.md) — Phase 2 investigation and recommendation plan.
 - [`exec-onepager`](skills/exec-onepager/SKILL.md) — Phase 3 one-page written deliverable.
 - [`pptx-builder`](skills/pptx-builder/SKILL.md) — Phase 3 PowerPoint deck (adapter; calls the standard pptx skill when available).
+- [`external-research`](skills/external-research/SKILL.md) — consult domain knowledge and allowlisted external references (Dynatrace docs and community) with citation.
+
+### External references
+
+The agent grounds Dynatrace-specific claims in local domain knowledge first, then in approved external sources. Local domain knowledge:
+
+- [`memory/long-term/domain-knowledge.md`](memory/long-term/domain-knowledge.md) — concepts, signal patterns, Dynatrace concept definitions, tech → UX → business linkages.
+- [`memory/long-term/terminology.md`](memory/long-term/terminology.md) — glossary of recurring terms.
+- [`memory/long-term/dynatrace-playbooks.md`](memory/long-term/dynatrace-playbooks.md) — client-agnostic procedural patterns for how to investigate common problem shapes (latency, errors, RUM regressions, Grail logs, SLO burn, deploy correlation, third-party dependencies, Davis problems).
+
+External allowlist (used when local memory is silent or stale):
+
+- [`docs.dynatrace.com`](https://docs.dynatrace.com/) — vendor-authoritative product documentation.
+- [`community.dynatrace.com`](https://community.dynatrace.com/) — practitioner threads, known issues, workarounds.
+
+Future internal sources (Slack, Salesforce, internal wikis) require user approval and a dedicated tool integration before the agent will use them. See [`skills/external-research/SKILL.md`](skills/external-research/SKILL.md).
 
 ## Getting started
 

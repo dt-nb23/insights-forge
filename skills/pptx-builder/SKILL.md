@@ -46,7 +46,8 @@ A six-section deck adapted from the one-pager. Adjust slide counts to match the 
 3. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the project space, flag it and ask the user.
 4. **Adapt language for slide format.** Sentences become bullet fragments. Definitions move to footnotes. Long lists of caveats become a single qualifier or move to appendix.
 5. **Preserve the quality-gate outputs.** The Consultative-lens rewrites, the Customer-lens framings, and the Skeptic-lens "questions a leader will ask" are all baked into the one-pager already — do not undo them when adapting to slide format.
-6. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `memory/project-space/deck-outline-YYYY-MM-DD.md` for the team to render manually.
+6. **Carry citations into a "Sources" slide or footer.** Any externally sourced fact in the one-pager (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date. Put them on a final "Sources" slide for VP audiences who skim, or in a small footer on each slide where the fact appears for Director audiences who scrutinize. Do not drop citations during the adaptation.
+7. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `memory/project-space/deck-outline-YYYY-MM-DD.md` for the team to render manually.
 
 ## Output
 

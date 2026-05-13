@@ -20,8 +20,11 @@ Use this skill:
 Read these files before starting:
 
 - `memory/project-space/hypotheses.md` — the hypotheses being mapped.
-- `memory/long-term/domain-knowledge.md` — for the standard tech → UX → business mapping table and the common signal patterns.
+- `memory/long-term/domain-knowledge.md` — for the standard tech → UX → business mapping table, the common signal patterns, and the "Authoritative external references" allowlist.
+- `memory/long-term/dynatrace-playbooks.md` — for the named SLIs and signal artifacts each playbook references (Services app response time, Failure Analysis error rates, RUM session-event timing, SLO burn rate). Pull the SLI names from the matching playbook into the SLI/SLO column rather than inventing them.
 - `memory/project-space/current-context.md` — for stakeholders, since the KPI ladder depends on who owns the KPI.
+
+If the mapping depends on the exact semantics of a Dynatrace metric or feature (e.g., what counts as a "user action" in RUM, how an SLO is computed in Grail, what Davis treats as a root cause), consult `skills/external-research/SKILL.md` before writing the row. Cite the source URL and retrieval date in the relevant cell of `signals-map.md`.
 
 ## Steps
 

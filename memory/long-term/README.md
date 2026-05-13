@@ -5,9 +5,10 @@ This folder holds **durable knowledge that persists across investigations**. The
 ## What lives here
 
 - `frameworks.md` — MECE, ICE, issue-tree-to-hypothesis mapping, exit criteria. The agent's procedural reference for structured analysis.
-- `domain-knowledge.md` — observability concepts, common signal patterns, tech → UX → business linkages, Dynatrace-specific notes.
+- `domain-knowledge.md` — observability concepts, common signal patterns, tech → UX → business linkages, Dynatrace concept definitions (vendor-sourced with citations + `[team to note: …]` slots for org-specific behavior).
+- `dynatrace-playbooks.md` — **client-agnostic procedural patterns** for how to investigate common problem shapes in Dynatrace (latency, error spike, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem). The agent matches each Phase 1 hypothesis to a playbook and pulls its investigation sequence and exit criteria into the live artifacts. Sourced from `docs.dynatrace.com`; re-verify retrieval dates before relying on procedural detail in a deliverable.
 - `stakeholder-profiles.md` — one profile per leader the agent regularly produces outputs for; what they care about, what they ignore, decisions they own.
-- `terminology.md` — glossary of recurring terms (MECE, ICE, SLI, SLO, RUM, hypothesis, signal, exit criteria).
+- `terminology.md` — glossary of recurring terms (MECE, ICE, SLI, SLO, RUM, hypothesis, signal, exit criteria) plus a Dynatrace platform glossary with cited definitions.
 - `past-investigations.md` — index of archived investigations and the lessons each one surfaced.
 
 ## Rules

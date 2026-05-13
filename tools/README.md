@@ -24,6 +24,15 @@ When tools are added, each one should live in its own subfolder with:
 
 If a future integration is genuinely valuable but would cross this boundary, raise it with the user first. Do not silently expand the agent's scope by adding tools that exceed these limits.
 
+## External reference allowlist
+
+External documentation lookup is governed by [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) and the "Authoritative external references" table in [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md). Today the allowlist is:
+
+- `https://docs.dynatrace.com/` — Dynatrace product documentation (vendor-authoritative).
+- `https://community.dynatrace.com/` — Dynatrace community threads (practitioner reporting).
+
+The agent uses `WebFetch` and `WebSearch` against these domains only. Any other domain — and any internal system (Slack, Salesforce, internal wikis) — requires explicit user approval and, where applicable, a dedicated tool integration in this folder before the agent will reach for it.
+
 ## Suggested future integrations
 
 Capture ideas here as the workspace matures. Each idea is a candidate, not a commitment.
