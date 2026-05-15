@@ -36,7 +36,7 @@ Do not ask multiple questions at once. Let each answer drive the next question.
 
 Ask **one question at a time**, in adaptive order — if the consultant's opening description already answers a question, skip it and move to the next unknown. Stop asking when you have enough to write a confident context document.
 
-The eight questions, in default order:
+The nine questions, in default order:
 
 ### Q1 — Customer and what they do
 > "Who is the customer, and what does their business do?"
@@ -50,12 +50,48 @@ Common verticals: Retail / E-commerce, Financial Services (FSI), Healthcare / Li
 
 The vertical shapes which KPIs matter to leadership and which signal → business linkages are most relevant in Phase 1.
 
-### Q3 — Tenant type
+### Q3 — Engagement Framing (C.S.I.R.)
+
+Q3 is a structured sub-sequence, not a single question. Now that the customer and their vertical are established, use C.S.I.R. to lock in the full problem context before moving into environment and capability questions. Work through each dimension in order, one prompt at a time, skipping any already answered in Q1, Q2, or the consultant's opening description.
+
+#### C — Context
+> "Walk me through the situation you're walking into — what's the history with this customer, and what's the mood heading into this engagement?"
+
+Capture: relationship history (new logo, established customer, at-risk account), recent interactions or milestones, and the consultant's role (CSM, SE, consultant, other).
+
+*Why this matters:* The relationship context shapes tone, urgency, and how findings should be framed. An at-risk renewal and a healthy expansion require completely different narratives even if the Dynatrace data is identical.
+
+#### S — Specific Information
+> "What specific information do you already have — for example, known pain points, prior QBR outcomes, commitments made, or anything that limits or shapes what's possible?"
+
+Capture: known environment facts, prior QBR outcomes, existing commitments, contract phase (new, renewal, expansion), known pain points, and any constraints (e.g., limited data access, regulated industry restrictions).
+
+*Why this matters:* Specific information is the boundary of what's usable. Without it, orientation hypotheses in Step 5 will be generic rather than targeted.
+
+#### I — Intent
+> "What are you ultimately trying to accomplish — and what does a successful outcome look like for you as the consultant?"
+
+Capture: the consultant's goal (e.g., prove value, secure renewal, justify expansion, prepare a QBR narrative) and the customer's expected outcome (e.g., confidence in their Dynatrace investment, a clear roadmap, reduced noise in their environment).
+
+*Why this matters:* Intent shapes the consulting objective written in Step 4. If the consultant's goal is renewal and the customer's goal is cost justification, the deliverable must speak to ROI — not feature breadth.
+
+#### R — Response Format
+> "What does the deliverable need to look like — for example, a slide deck, a written findings report, a live walkthrough, a dashboard, or something else? And who is the primary audience?"
+
+Capture: format (deck / report / walkthrough / dashboard / other), audience (exec / technical / mixed), and any known constraints on length, tone, or branding.
+
+*Why this matters:* Format and audience determine how findings are packaged in Phase 3. An exec deck and a technical findings report require completely different structures, depths, and vocabularies.
+
+---
+
+**Q3 gate:** Before moving to Q4, confirm all four C.S.I.R. dimensions are captured. If any are still unknown, ask one follow-up question to close the gap. Record Q3 outputs in `current-context.md` under "Engagement Framing (C.S.I.R.)".
+
+### Q4 — Tenant type
 > "Is this customer on a SaaS tenant or a Managed (on-premises) deployment?"
 
 This affects which features and data are available and constrains what insights and recommendations are possible in later phases.
 
-### Q4 — Active Dynatrace capabilities
+### Q5 — Active Dynatrace capabilities
 > "Which of these Dynatrace capabilities are active in their environment? Select all that apply."
 
 Present as a multi-select checklist — do not pre-check anything:
@@ -92,22 +128,22 @@ Present as a multi-select checklist — do not pre-check anything:
 
 Record the checked items in `current-context.md` under "Active capabilities". This list is the boundary of what insights can be surfaced in Phase 1.
 
-### Q5 — RUM on the application in question
+### Q6 — RUM on the application in question
 > "Is Real User Monitoring enabled on the specific application we'll be focusing on? And if so, is Session Replay active for it?"
 
 This determines whether a user experience story is available. If RUM is not enabled, flag it immediately as a capability gap — the insight narrative will need to anchor on APM and infrastructure signals instead.
 
-### Q6 — Who will consume the deliverable and what they care about
+### Q7 — Who will consume the deliverable and what they care about
 > "Who on the customer side will we be presenting findings to, and what do they care about most — what KPIs, business outcomes, or strategic priorities are top of mind for them right now?"
 
 Capture the person's role and priorities. Match them to the closest role archetype in `stakeholder-profiles.md` — focus on what they own and decide, not their exact title. The eight archetypes are: Executive Sponsor, Product Owner, SRE / Reliability Engineer, IT Operations Manager, Application Developer, Platform / DevOps Engineer, Security / Compliance Officer, Data / Analytics Lead. If no archetype is close enough, note the gap and ask the consultant whether to create a new profile. Capture named KPIs where possible (conversion rate, MTTR, uptime SLA, cost per transaction).
 
-### Q7 — What the technical team cares about
+### Q8 — What the technical team cares about
 > "What does their primary technical team care about day-to-day — what are their pain points, priorities, or frustrations with the current setup?"
 
 The technical team and leadership often have different definitions of success. Capturing both ensures the deliverable speaks to both audiences.
 
-### Q8 — Trigger for this engagement
+### Q9 — Trigger for this engagement
 > "What is driving this engagement right now — is it a QBR, a renewal conversation, an expansion discussion, a scheduled touchpoint, or something else?"
 
 The trigger shapes urgency, tone, and what a "good outcome" looks like for the consultant.
@@ -135,10 +171,11 @@ The trigger shapes urgency, tone, and what a "good outcome" looks like for the c
 
 | Section | Contents |
 |---|---|
+| Engagement Framing (C.S.I.R.) | **C** — Customer name/label, business description, consultant role; **S** — Known constraints, environment facts, contract phase, prior outcomes; **I** — Consultant's goal and customer's expected outcome; **R** — Deliverable format, primary audience, tone/length constraints |
 | Customer | Name / label, industry, size |
 | Vertical | Named vertical |
 | Tenant type | SaaS or Managed |
-| Active capabilities | Checked list from Q4 |
+| Active capabilities | Checked list from Q5 |
 | RUM status | Enabled / not enabled on the app in question; session replay on/off |
 | Consulting objective | The reframed engagement goal |
 | Leadership priorities | Named KPIs and strategic priorities |
@@ -152,6 +189,7 @@ The trigger shapes urgency, tone, and what a "good outcome" looks like for the c
 
 ## Common pitfalls
 
+- **Treating Q3 as a single question.** Q3 is a four-part C.S.I.R. sub-sequence. Skipping Specific Information means orientation hypotheses will be generic. Skipping Intent means the consulting objective won't reflect what the consultant actually needs. Skipping Response Format means Phase 3 packaging decisions are made too late.
 - **Jumping to Phase 1 before the gate.** The insight narrative is only as strong as the context underneath it. A wrong scope in Phase 0 propagates through every subsequent artifact.
 - **Asking all clarifying questions at once.** One question at a time. A wall of questions produces short, low-quality answers.
 - **Skipping the capabilities checklist.** Open-ended capability questions produce vague answers. Always use the checklist for Q4.
