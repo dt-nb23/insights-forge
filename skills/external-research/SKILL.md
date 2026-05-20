@@ -55,12 +55,62 @@ The agent does **not** use these tools to fetch from arbitrary domains. If a sea
 3. **Search within the allowlist when the URL is unknown.** Use `WebSearch` with a `site:docs.dynatrace.com` or `site:community.dynatrace.com` filter. Prefer documentation hits over community hits unless the question is specifically about practitioner experience.
 4. **Fetch the most authoritative result.** Prefer `docs.dynatrace.com` for feature behavior and defaults. Use `community.dynatrace.com` for known-issue corroboration, not for ground truth on product behavior.
 5. **Extract only what answers the question.** Pull the relevant fact, definition, or constraint. Do not dump full page contents into project memory. Quote sparingly and cite.
-6. **Cite every fact from an external source.** Inline cite the URL and the **retrieval date** (today's date) wherever the fact lands — in `hypotheses.md`, `signals-map.md`, `action-plan.md`, the one-pager, or the deck. Citation format:
+6. **Cite every fact from an external source.** Inline cite the URL, the page's own **"Last updated"** date (extracted from the top of the fetched page — write `last-updated unknown` if the page does not advertise one), and the **retrieval date** (today's date) wherever the fact lands — in `hypotheses.md`, `signals-map.md`, `action-plan.md`, the one-pager, or the deck. Citation format:
 
-   > Davis AI groups related events into a single problem when they share dependencies in Smartscape. *(Source: https://docs.dynatrace.com/…/davis-problem-detection — retrieved 2026-05-12.)*
+   > Davis AI groups related events into a single problem when they share dependencies in Smartscape. *(Source: https://docs.dynatrace.com/…/davis-problem-detection — page last-updated 2026-04-30; retrieved 2026-05-12.)*
+
+   Capturing the page's own last-updated date lets the freshness routine (see below) detect drift — "the page was rewritten since we cited it" — without re-reading every sentence.
 
 7. **Distinguish vendor doc from community report.** When citing community threads, label them as practitioner reports (e.g., "community thread; not vendor-confirmed"). Do not promote a community post to documentation-level confidence without corroboration.
 8. **Offer to update long-term memory.** If a lookup surfaces a durable fact the team will want again — a Dynatrace concept definition, a quota, a known issue — propose adding it to `memory/long-term/domain-knowledge.md` or `terminology.md`. **Do not write to long-term memory without the user's explicit approval** (per the rule in `memory/long-term/README.md`).
+
+## Freshness and refresh
+
+Dynatrace documentation updates almost daily/weekly and the site is periodically reformatted. Cited facts have a defined shelf life so the agent never quietly hands a stale claim to a leadership audience.
+
+### Staleness threshold
+
+A citation is **stale** when `today − retrieved > 7 days`. Stale citations must be re-validated before they are reused in:
+
+- Any phase artifact (Phase 1 hypotheses/signals map, Phase 2 action plan, Phase 3 one-pager or deck).
+- The Phase 2 → Phase 3 deliverable transition — re-validate **every** citation regardless of age, since this gate hardens work into a leadership deliverable.
+
+The agent does not silently reuse a stale citation. If asked to, the agent first refreshes the citation or surfaces the staleness.
+
+### Phase 0 background refresh
+
+The refresh is operationalized as a **Haiku background sub-agent** (`doc-freshness-checker`, defined in `.claude/agents/doc-freshness-checker.md`). The main agent dispatches it at the start of Phase 0 — the context-framing skill — via the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. It runs in parallel with the consultant answering the nine clarifying questions, so its wall-clock cost is hidden inside an already-long phase. Haiku keeps the per-run model cost minor.
+
+The sub-agent:
+
+1. Reads every cited URL from `memory/long-term/domain-knowledge.md`, `memory/long-term/dynatrace-playbooks.md`, and `memory/long-term/terminology.md`.
+2. Fetches each URL via `WebFetch` and extracts the page's current "Last updated" date.
+3. Compares the current page-last-updated against the value stored in the existing citation.
+4. Writes findings to `memory/long-term/freshness-report.md`, partitioned into four buckets:
+   - **Unchanged** — page-last-updated has not moved since the stored value. The report records a refreshed `last-checked` date so the user can see the system is alive.
+   - **Drifted** — current page-last-updated is newer than the stored value, OR the citation is in the legacy single-date format and needs a baseline capture, OR the page advertises no last-updated date. The report captures the new last-updated date, the URL, the affected memory file, and a one-line summary of what changed on the page.
+   - **Unreachable** — URL returned 404, redirected, or timed out. The report captures the redirect target (if any) and the failure mode.
+   - **Skipped — out of allowlist** — URL points outside the allowlisted Dynatrace domains. Recorded for visibility; not fetched.
+
+The sub-agent **does not modify `domain-knowledge.md` or `dynatrace-playbooks.md` directly** — that would violate the "no silent writes to long-term memory" rule. It writes only to the freshness report.
+
+### Surfacing drift to the user
+
+At the **Phase 0 approval gate**, the main agent reads `memory/long-term/freshness-report.md`. If the report contains entries in the **Drifted** or **Unreachable** buckets, the agent surfaces them as part of the gate presentation:
+
+> "While framing the engagement, the freshness sub-agent re-checked our Dynatrace doc citations. N pages have changed and M are unreachable. Want to approve memory updates as part of this Phase 0 gate, defer to the next phase gate, or skip?"
+
+When the user approves an update at a phase gate, the main agent edits the relevant long-term memory file inline, bumps the citation (page-last-updated and retrieved), and clears the entry from the freshness report. This keeps long-term memory updates under explicit user control while the heavy lifting (detection) runs in the background on a cheap model.
+
+If the sub-agent is still running when the main agent reaches the gate, the main agent briefly waits for the report (typically 30–60 seconds for ~30 URLs) before presenting the gate. The user is told the sub-agent is finalizing if the wait runs longer than ~60 seconds.
+
+### Manual refresh
+
+The user can trigger an immediate refresh at any time outside of Phase 0:
+
+> "Refresh the docs" or "Run the freshness check now."
+
+The main agent dispatches the same `doc-freshness-checker` sub-agent and presents the report when it completes.
 
 ## Output
 
@@ -81,7 +131,9 @@ This skill does not produce a dedicated artifact. Its outputs are:
 ## Common pitfalls
 
 - **Web-first instead of memory-first.** Local memory exists precisely so the team is not paying for repeated lookups of the same fact. Always check `domain-knowledge.md` and `terminology.md` before reaching for the web.
-- **Citing without a retrieval date.** Dynatrace documentation evolves. A 2024 citation may no longer hold in 2026 — the date matters.
+- **Citing without dates.** Dynatrace documentation evolves continuously. Every citation needs both the page's own "Last updated" date and the agent's retrieval date — the first lets the refresh routine detect drift, the second drives the 7-day staleness threshold.
+- **Reusing a stale citation.** A citation older than 7 days is presumed stale until re-validated. The agent does not paste a stale citation into a new phase artifact "because we cited it last week." Re-check first.
+- **Ignoring the freshness report at session start.** The weekly routine writes to `memory/long-term/freshness-report.md`. If the agent starts a session without checking it, drifted citations make it into deliverables. Always check on session start.
 - **Treating community threads as vendor commitment.** A community workaround can be load-bearing for an action plan, but it should be labeled as such and ideally corroborated with documentation or the team's own test.
 - **Silent allowlist expansion.** Following a search-result link to a third-party blog and quoting it as if it were sanctioned. If it is not on the allowlist, ask first.
 - **Auto-promoting findings into long-term memory.** Lookups land in the artifact and stay there. Long-term memory updates require the user's explicit go-ahead.

@@ -8,7 +8,7 @@ Client-agnostic procedural patterns for using Dynatrace to investigate common pr
 - **Phase 2 (action plan)** — the playbook seeds the investigation-action rows. Each step becomes a candidate action with the playbook's source URL carried through as the citation.
 - **Phase 3 (one-pager and deck)** — the playbook's "what good evidence looks like" anchors the "Top findings" framing so the deliverable matches what the team actually observed.
 
-Playbook content is sourced from `docs.dynatrace.com` on 2026-05-12 unless noted otherwise. Re-verify before relying on a procedural detail in a deliverable; product surfaces evolve.
+Playbook content was originally sourced from `docs.dynatrace.com` on 2026-05-12; baseline page-last-updated values for every citation were captured on 2026-05-20 by the `doc-freshness-checker` sub-agent (see `skills/external-research/SKILL.md`). Each citation below carries both dates; the sub-agent re-validates them at the start of every Phase 0. Re-verify before relying on a procedural detail in a deliverable; product surfaces evolve.
 
 ## Playbook index
 
@@ -55,9 +55,9 @@ A hypothesis names elevated p95/p99 latency on a specific service or call path. 
 
 ### Source
 
-- https://docs.dynatrace.com/docs/observe/application-observability/distributed-traces/analysis/get-started — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/application-observability/distributed-tracing/use-traces-and-dql-to-spot-patterns — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/application-observability/services/services-app — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/observe/application-observability/distributed-traces/analysis/get-started — page last-updated 2024-08-13; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/application-observability/distributed-tracing/use-traces-and-dql-to-spot-patterns — page last-updated 2025-11-20; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/application-observability/services/services-app — page last-updated 2026-05-19; retrieved 2026-05-20.
 
 ---
 
@@ -91,9 +91,9 @@ A hypothesis names elevated error rate (5xx, gRPC errors, span-status errors, or
 
 ### Source
 
-- https://docs.dynatrace.com/docs/observe/application-observability/services/failure-analysis — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/application-observability/distributed-tracing/exception-analysis — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/analyze-explore-automate/distributed-traces/use-cases/error-analysis — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/observe/application-observability/services/failure-analysis — page last-updated 2025-10-23; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/application-observability/distributed-tracing/exception-analysis — page last-updated 2026-01-12; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/analyze-explore-automate/distributed-traces/use-cases/error-analysis — page last-updated 2024-05-17; retrieved 2026-05-20.
 
 ---
 
@@ -127,9 +127,9 @@ A hypothesis names a user-visible problem — page slowness, abandoned flows, br
 
 ### Source
 
-- https://docs.dynatrace.com/docs/observe/digital-experience/new-rum-experience/users-and-sessions — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/digital-experience/new-rum-experience/error-inspector — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/digital-experience/rum-concepts/rum-overview — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/observe/digital-experience/new-rum-experience/users-and-sessions — page last-updated 2026-04-29; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/digital-experience/new-rum-experience/error-inspector — page last-updated 2026-01-08; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/digital-experience/rum-concepts/rum-overview — page last-updated 2023-10-20; retrieved 2026-05-20.
 
 ---
 
@@ -163,10 +163,10 @@ A hypothesis depends on log evidence — error volume in a window, specific erro
 
 ### Source
 
-- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/dql-guide — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/filtering-commands — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/aggregation-commands — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/extraction-and-parsing-commands — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/dql-guide — page last-updated 2026-05-04; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/filtering-commands — page last-updated 2026-05-07; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/aggregation-commands — page last-updated 2026-03-23; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/platform/grail/dynatrace-query-language/commands/extraction-and-parsing-commands — page last-updated 2024-08-12; retrieved 2026-05-20.
 
 ---
 
@@ -199,8 +199,9 @@ A hypothesis depends on the state of an SLO — is the SLO at risk, is the error
 
 ### Source
 
-- https://docs.dynatrace.com/docs/deliver/service-level-objectives/service-level-objective-basics — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/deliver/service-level-objectives — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/deliver/service-level-objectives — page last-updated 2026-03-17; retrieved 2026-05-20.
+
+> Note: a prior citation to `https://docs.dynatrace.com/docs/deliver/service-level-objectives/service-level-objective-basics` was removed on 2026-05-20 after the freshness sub-agent reported it as a 404. The parent `service-level-objectives` page above covers the same material.
 
 ---
 
@@ -233,9 +234,9 @@ A hypothesis names a deploy, release, or configuration change as the suspected c
 
 ### Source
 
-- https://docs.dynatrace.com/docs/deliver/release-monitoring/monitor-releases-with-dynatrace — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/deliver/release-monitoring/version-detection-strategies — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/deliver/pipeline-observability-sdlc-events — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/deliver/release-monitoring/monitor-releases-with-dynatrace — page last-updated 2025-08-11; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/deliver/release-monitoring/version-detection-strategies — page last-updated 2025-08-11; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/deliver/pipeline-observability-sdlc-events — page last-updated 2025-05-04; retrieved 2026-05-20.
 
 ---
 
@@ -268,9 +269,9 @@ A hypothesis names an external dependency — payment processor, identity provid
 
 ### Source
 
-- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring/network-availability-monitors/network-availability-monitoring — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/observe/applications-and-microservices/services/service-detection-v1/monitor-3rd-party-services — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring — page last-updated unknown; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring/network-availability-monitors/network-availability-monitoring — page last-updated 2024-08-08; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/applications-and-microservices/services/service-detection-v1/monitor-3rd-party-services — page last-updated 2023-02-21; retrieved 2026-05-20.
 
 ---
 
@@ -303,9 +304,9 @@ The investigation starts from an open Davis problem (the team was paged, the Pro
 
 ### Source
 
-- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/davis-problems-app — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/platform/davis-ai/problem-and-root-cause — retrieved 2026-05-12.
-- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/concepts/events — retrieved 2026-05-12.
+- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/davis-problems-app — page last-updated 2026-04-08; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/platform/davis-ai/problem-and-root-cause — page last-updated 2026-01-28; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/concepts/events — page last-updated 2026-05-04; retrieved 2026-05-20.
 
 ---
 

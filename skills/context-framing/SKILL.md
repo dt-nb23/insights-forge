@@ -24,6 +24,7 @@ Read these files before starting:
 - `memory/long-term/stakeholder-profiles.md` — to recognize named stakeholder types and calibrate what "exec-ready" means for this engagement.
 - `memory/long-term/domain-knowledge.md` — for the tech → UX → business linkage table; helps identify which insights are likely surfaceable given the active capabilities.
 - `memory/long-term/terminology.md` — to use consistent terminology when restating the engagement context.
+- `memory/long-term/client-question-bank.md` — client-facing phrasings of the 9 clarifying questions below, grouped by rubric classification (MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE). When the consultant indicates this discovery is being done **live with the customer** (rather than the agent gathering context from the consultant), draw question phrasings from this bank instead of the consultant-facing prompts below. Otherwise, treat it as a reference the consultant can take into their own discovery calls.
 - `memory/long-term/past-investigations.md` — scan the index for any prior engagement on the same customer, vertical, or problem shape. If a match exists, surface the key lesson from that archive before proceeding.
 
 If the consultant has not yet described the engagement, open with:
@@ -183,7 +184,7 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 
 ## Steps
 
-1. **Open the conversation** with the prompt above if the consultant has not described the engagement yet.
+1. **Dispatch the doc-freshness-checker sub-agent in background.** Before opening the conversation, call the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. The sub-agent refreshes Dynatrace doc citation status while the consultant answers Q1–Q9; its wall-clock work is hidden inside the user-input phase. The sub-agent writes to `memory/long-term/freshness-report.md` only — it never edits long-term memory. Then **open the conversation** with the prompt above if the consultant has not described the engagement yet.
 2. **Ask clarifying questions** one at a time in adaptive order, skipping any already answered.
 3. **Check past investigations** for any prior engagement on the same customer or vertical. Surface the key lesson if found.
 4. **Reframe the engagement** as a clear consulting objective: what insight will be surfaced, for whom, and to what end. Write this under "Consulting objective" in `current-context.md`. Example: *"Surface underutilized RUM and Davis AI insights for [Customer]'s Executive Sponsor ahead of their Q3 renewal, demonstrating measurable value from their Full-Stack and RUM investment."*
@@ -191,11 +192,12 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 6. **Confirm scope** — what this engagement will cover and what it will not. Name any capability gaps (e.g., RUM not enabled) that limit the insight surface.
 7. **Write `memory/project-space/current-context.md`** fully populated. Every MUST-HAVE row carries a real value. SHOULD-HAVE rows carry either the consultant's answer or the literal string `"not provided (declined at gate)"` if they skipped the confirmation in Step 8. NICE-TO-HAVE rows are written when known and omitted otherwise. No `"TBD"`, no bracketed placeholders.
 8. **Verify the exit-criteria rubric.** Walk the rubric table top-to-bottom. Every MUST-HAVE must be populated with a real value before proceeding. For each unfilled SHOULD-HAVE, ask the consultant a short confirming question framed as helpful-not-blocking — e.g., *"Not required to proceed, but do you happen to know [field]? It would help sharpen the framing."* Record their answer (including "don't know" or "skip") and move on. Do not loop on a SHOULD-HAVE the consultant has declined.
-9. **Present and pause at the gate.** State clearly:
+9. **Check the freshness sub-agent results.** Read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation so the user can approve memory updates inline with the Phase 0 approval — e.g., *"While framing the engagement, the freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note that results will be surfaced at the next phase gate.
+10. **Present and pause at the gate.** State clearly:
 
-   > "This is the Phase 0 framing. Please **approve**, **redirect**, or **iterate** before I begin the diagnosis."
+    > "This is the Phase 0 framing. Please **approve**, **redirect**, or **iterate** before I begin the diagnosis."
 
-   Record the gate decision in `memory/project-space/decisions-log.md`.
+    Record the gate decision in `memory/project-space/decisions-log.md`. When the user approves any freshness updates from Step 9, edit the relevant long-term memory file inline (bump page-last-updated and retrieved), then clear those entries from `freshness-report.md`.
 
 **Do not begin Phase 1 until the user approves.**
 

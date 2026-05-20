@@ -96,9 +96,11 @@ When local memory is silent, contradictory, or stale, the agent consults `skills
 - **Allowlisted domains** the agent may fetch from with `WebFetch` and `WebSearch`:
   - `https://docs.dynatrace.com/` — authoritative product documentation.
   - `https://community.dynatrace.com/` — practitioner threads, known issues, and workarounds (treat as practitioner reporting, not vendor commitment).
-- **Citation requirement** — every externally sourced fact lands in the phase artifact with its source URL and the retrieval date.
+- **Citation requirement** — every externally sourced fact lands in the phase artifact with its source URL, the page's own "Last updated" date, and the agent's retrieval date.
 - **Memory-first rule** — the agent does not fetch what it could have answered from `memory/long-term/`.
 - **No silent allowlist expansion** — additional sources (including future Slack and Salesforce integrations) require explicit user approval before the agent uses them.
+
+**Citation freshness.** Dynatrace updates its documentation almost daily/weekly. Citations older than 7 days are presumed stale and must be re-validated before reuse in any phase artifact; every citation is re-validated at the Phase 2 → Phase 3 transition regardless of age. At the start of every engagement (Phase 0), the main agent dispatches a Haiku background sub-agent (`.claude/agents/doc-freshness-checker.md`) that re-checks every cited URL while the consultant answers the clarifying questions. The sub-agent writes findings to `memory/long-term/freshness-report.md` only — it **never edits `domain-knowledge.md` or `dynatrace-playbooks.md` directly**. At the Phase 0 gate, the main agent surfaces drifted or unreachable citations so the team can approve memory updates inline with Phase 0 approval. The user can also trigger a manual refresh outside of Phase 0 by asking the agent to "refresh the docs." Full procedure: `skills/external-research/SKILL.md`.
 
 Web research is **read-only documentation lookup**. The agent never logs in, submits forms, generates DQL from fetched docs, or auto-promotes findings into long-term memory without explicit user approval.
 
