@@ -20,11 +20,12 @@ The agent advances through four phases. Each phase produces a specific artifact 
 
 ### Phase 0 — Context
 
-- Gather the problem statement from the user.
-- Ask clarifying questions about scope, stakeholders, and decision deadlines.
-- Surface 3–5 initial candidate hypotheses for orientation only (not for scoring yet).
-- Confirm the framed scope with the user before moving to Phase 1.
-- **Gate**: user approves the reframed problem and scope.
+- Read `skills/context-framing/SKILL.md` first and follow its procedure end-to-end.
+- Gather the problem statement and engagement context from the consultant.
+- Walk the consultant through the 9 clarifying questions (including the Q3 C.S.I.R. sub-sequence) one at a time, adaptive order.
+- Surface 3–5 initial orientation hypotheses (pre-scoring candidates, not findings).
+- Verify the Phase 0 exit-criteria rubric — every MUST-HAVE field populated in `current-context.md` with a real value.
+- **Gate**: user approves the reframed engagement and scope.
 
 ### Phase 1 — Diagnose
 
