@@ -24,6 +24,7 @@ Read these files before starting:
 - `memory/project-space/hypotheses.md` — for the confirmed/open/ruled-out status of each hypothesis.
 - `memory/long-term/stakeholder-profiles.md` — for the profile of the intended reader. If no matching profile exists, ask the user which profile to use or whether to create one.
 - `memory/long-term/terminology.md` — to ensure first-use definitions for any acronym the reader's profile says they expect.
+- `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand specification. Governs voice, sentence-case headings, serial commas, product-name capitalization, footer text, and the sources-block style for this deliverable.
 
 ## Structure
 
@@ -45,11 +46,25 @@ A one-pager has five sections, in this order, and fits on a single page.
 - **No hedging language.** "May possibly indicate" is noise. State the finding; state the confidence; let the reader decide.
 - **Cite externally sourced facts in a footnotes block.** Any fact pulled from `docs.dynatrace.com` or `community.dynatrace.com` (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date — but in an exec one-pager, those references live in a short "Sources" footnote block at the bottom of the page, not inline, so the prose reads clean. The Skeptic lens will check that load-bearing claims trace back to a source.
 
+## Brand conformance
+
+The one-pager must follow `memory/long-term/brand/brand-spec.md`. Apply these rules during drafting (not as a post-hoc cleanup):
+
+- **Sentence case for all headings.** Section titles read "Recommended actions," not "Recommended Actions."
+- **Serial commas.** "Owner, timeframe, and cost" — always with the final comma.
+- **Active voice and plain language.** Per styleguide.dynatrace.com: front-load each sentence with the keyword and purpose; avoid hedging modifiers; American English spelling.
+- **Product names use approved capitalization** (brand-spec §7). On first formal mention apply `®` to **Dynatrace®**, **OneAgent®**, **Smartscape®**, **Grail®**. Use "Dynatrace Cluster" (not "Dynatrace Server"), "extension" (not "plugin" or "add-on"), "Dynatrace web UI" (not "Dynatrace interface"), "ready-made" (not "out-of-the-box").
+- **Davis AI** and its variants — **generative AI**, **causal AI**, **predictive AI** — are capitalized as shown.
+- **Footer:** `© 2026 Dynatrace, LLC.   Confidential` in gray (`#6F747F`) at the bottom of the page. Insights Forge one-pagers are Confidential by default — do not relabel unless the user explicitly says the deliverable is being shared with a customer or partner.
+- **Header:** include the Dynatrace Insights horizontal lockup (color, on white) at the top-left when the rendered output is branded; the Markdown intermediate notes its presence with a placeholder line.
+- **Typography (when rendered):** headings in DT Flow Medium; body in DT Flow Light; Arial is the licensed fallback. The Markdown intermediate does not encode font — that gets applied at render time.
+- **Color use:** sparing. Reserve Accent 6 (magenta, `#C93FDB`) for instrumentation gaps and risks; Accent 1 (teal, `#4AC2B3`) for confirmed findings; Accent 3 (royal blue, `#1966FF`) for primary CTAs and "open" hypotheses. Do not use red or green — Dynatrace charts don't carry traffic-light semantics.
+
 ## Quality gates
 
 Before finalizing, run three lenses in this order:
 
-1. **Consultative lens** (`.claude/agents/consultative-lens.md`) — verifies the voice matches the named stakeholder. Apply suggested rewrites.
+1. **Consultative lens** (`.claude/agents/consultative-lens.md`) — verifies the voice matches the named stakeholder **and conforms to the brand voice rules in `memory/long-term/brand/brand-spec.md` §6** (sentence case, active voice, plain language, serial commas, American English, approved product names per §7). Apply suggested rewrites.
 2. **Customer lens** (`.claude/agents/customer-lens.md`) — verifies the document actually addresses what users experience, not just what the systems team measured. Apply suggested edits.
 3. **Skeptic lens** (`.claude/agents/skeptic-lens.md`) — surfaces the "questions a leader will ask" that the current draft does not answer. For each, either incorporate the answer into the one-pager or surface it as a decision ask.
 

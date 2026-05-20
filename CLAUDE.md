@@ -88,6 +88,7 @@ The agent grounds claims in **local domain knowledge first, then approved extern
 - `memory/long-term/domain-knowledge.md` — observability concepts, signal patterns, Dynatrace concept definitions, tech → UX → business linkages.
 - `memory/long-term/terminology.md` — glossary of recurring terms.
 - `memory/long-term/dynatrace-playbooks.md` — client-agnostic procedural patterns for **how to investigate** common problem shapes (latency, errors, RUM regression, logs in Grail, SLO burn, deploy correlation, third-party dependencies, Davis problems). The agent consults this file in Phase 1 to seed validation approaches and exit criteria, and in Phase 2 to seed investigation actions.
+- `memory/long-term/brand/brand-spec.md` — **Dynatrace brand specification** for Phase 3 deliverables: color palette with HEX values, DT Flow Medium / DT Flow Light typography, layout patterns from the official PowerPoint template, voice and tone rules from styleguide.dynatrace.com, and product-name capitalization (Dynatrace®, OneAgent®, Grail®, Smartscape®, AppEngine, ActiveGate, Davis AI). The agent consults this file before producing any one-pager or deck artifact and never invents off-palette colors, off-brand fonts, or improvised layouts.
 
 When local memory is silent, contradictory, or stale, the agent consults `skills/external-research/SKILL.md`, which defines:
 

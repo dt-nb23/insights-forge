@@ -10,6 +10,8 @@ This folder holds **durable knowledge that persists across investigations**. The
 - `stakeholder-profiles.md` — one profile per leader the agent regularly produces outputs for; what they care about, what they ignore, decisions they own.
 - `terminology.md` — glossary of recurring terms (MECE, ICE, SLI, SLO, RUM, hypothesis, signal, exit criteria) plus a Dynatrace platform glossary with cited definitions.
 - `past-investigations.md` — index of archived investigations and the lessons each one surfaced.
+- `brand/brand-spec.md` — Dynatrace brand specification (colors, typography, layout patterns, voice, terminology, footer text) authoritative for Phase 3 one-pager and PPTX deliverables. Mirrored from the Dynatrace PowerPoint brand template PDF, styleguide.dynatrace.com, and the Insights product lockup SVGs. Re-verify when the brand assets are refreshed.
+- `brand/reference/` — supporting notes; currently `source-pdf-notes.md` maps each pattern in the brand spec to its page in the source PDF.
 
 ## Rules
 
