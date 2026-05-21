@@ -10,7 +10,7 @@ If you've never used a phase-gated agent before, the most important thing to int
 
 ## Prerequisites
 
-- **Claude Code** open on this repository, with the working directory at the repo root. You'll find the project at [`/Users/nburwick/insights-forge/`](../).
+- **Claude Code** open on this repository, with the working directory at the repo root.
 - The agent reads [`CLAUDE.md`](../CLAUDE.md) automatically on every session, so you don't need to do anything to "load" the operating manual. If you want to know exactly what it reads, open that file — it's the agent's job description.
 - Optional but recommended: skim [workflow.md](workflow.md) so you know which phase you're in and what the next gate will ask of you.
 
