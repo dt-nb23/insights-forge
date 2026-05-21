@@ -10,9 +10,11 @@ If you've never used a phase-gated agent before, the most important thing to int
 
 ## Prerequisites
 
-- **Claude Code** open on this repository, with the working directory at the repo root.
+- **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. This is the recommended surface today — the chat sidebar sits next to your files so you can watch the agent write artifacts into `memory/project-space/` as it works through each phase. Open the repository as the VS Code workspace root so the agent's working directory matches the repo root.
 - The agent reads [`CLAUDE.md`](../CLAUDE.md) automatically on every session, so you don't need to do anything to "load" the operating manual. If you want to know exactly what it reads, open that file — it's the agent's job description.
 - Optional but recommended: skim [workflow.md](workflow.md) so you know which phase you're in and what the next gate will ask of you.
+
+> **Other surfaces.** Claude Code in a terminal works too, and Claude.ai (Claude Chat) can host a partial version of the workflow as a Project, but neither delivers the same file-watching experience. Stick with VS Code until we publish a packaged plugin.
 
 ## One-time setup
 

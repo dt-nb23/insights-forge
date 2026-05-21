@@ -35,9 +35,9 @@ At each gate the user can **approve**, **redirect**, or **iterate through a crit
 
 ## Quickstart
 
-1. Open this workspace in Claude Code.
+1. Open this workspace in **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. This is the recommended surface today — the workspace assumes a local filesystem for memory and a sidebar chat for the human-in-the-loop gates, and the VS Code extension delivers both. Claude Code in a terminal works too, but VS Code makes it easier to see the artifacts the agent is writing as it works.
 2. Populate stakeholder profiles, domain knowledge, and terminology — see [docs/getting-started.md](docs/getting-started.md).
-3. Begin an investigation:
+3. Begin an investigation in the Claude Code sidebar chat:
 
    > *"Describe the problem you're trying to solve."*
 
