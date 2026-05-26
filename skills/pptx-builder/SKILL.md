@@ -102,8 +102,27 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 
 ## Output
 
-- Preferred: a rendered `.pptx` file produced by the standard pptx skill.
-- Fallback: `memory/project-space/deck-outline-YYYY-MM-DD.md` — a slide-by-slide markdown outline ready to be turned into a deck.
+- **Preferred: run `tools/pptx-generator.py`** with a JSON spec file.
+  The generator is the in-repo equivalent of the standard pptx skill.
+  It handles template loading, sample-slide removal, layout dispatch,
+  placeholder filling, and output path. Use it instead of the external
+  skill check unless the environment explicitly provides `/mnt/skills/public/pptx/SKILL.md`.
+
+  ```bash
+  # Generate the deck
+  python3 tools/pptx-generator.py memory/project-space/deck-spec-YYYY-MM-DD.json
+
+  # List all available layout names
+  python3 tools/pptx-generator.py --list-layouts
+  ```
+
+  Write the spec to `memory/project-space/deck-spec-YYYY-MM-DD.json` before running.
+  The output `.pptx` saves to `memory/project-space/deck-YYYY-MM-DD.pptx` by default.
+  See `tools/pptx-spec-example.json` for the full spec format with comments.
+
+- **Fallback (if python-pptx is unavailable):** write a structured
+  slide-by-slide outline to `memory/project-space/deck-outline-YYYY-MM-DD.md`
+  using the same spec fields, so a human can build it manually from the template.
 
 ## Common pitfalls
 

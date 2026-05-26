@@ -1,0 +1,128 @@
+{
+  "_comment": "Insights Forge deck spec — one file per engagement. Claude generates this; pptx-generator.py renders it. All layout names must exactly match names in Dynatrace_Brand_Insights-Forge.pptx (run: python3 tools/pptx-generator.py --list-layouts). The _comment keys are ignored by the generator.",
+
+  "slides": [
+
+    {
+      "_comment": "Cover slide. Use 'Title slide_1 speaker' for single presenter.",
+      "layout": "Title slide_1 speaker",
+      "title": "Insights Forge",
+      "subtitle": "Decision intelligence for post-sales · SVP Briefing · May 2026",
+      "presenter_name": "Nate Burwick",
+      "presenter_company": "Dynatrace AI Innovation"
+    },
+
+    {
+      "_comment": "Section divider — major transition between problem and solution.",
+      "layout": "Section Header",
+      "title": "The problem"
+    },
+
+    {
+      "_comment": "Exec summary — lead with the business impact number or statement, not telemetry.",
+      "layout": "Title+content+eyebrow_left",
+      "eyebrow": "Executive summary",
+      "title": "Post-sales success scales with headcount today — it should scale with intelligence",
+      "content": [
+        "Consulting quality varies by consultant tenure, not customer need",
+        "Proven frameworks exist but live in tribal knowledge with no scalable delivery mechanism",
+        "Without consistent application of best practices: slower time-to-value, weaker renewals, reduced credibility"
+      ]
+    },
+
+    {
+      "_comment": "3 findings/problems as icon cards. Use 4 icon cards+title for 4 items.",
+      "layout": "3 icon cards+title",
+      "title": "Three structural failure patterns confirmed across all post-sales roles",
+      "cards": [
+        {
+          "header": "Reactive, ad-hoc consulting",
+          "body": "BI and CSM motions lack consistent frameworks across the team",
+          "subcopy": "Quality varies by consultant tenure, geography, and workload"
+        },
+        {
+          "header": "Inconsistent value articulation",
+          "body": "Can't map Dynatrace value signals to business outcomes across customer tiers",
+          "subcopy": "QBR and renewal quality varies significantly by individual"
+        },
+        {
+          "header": "Poor scalability on strategic accounts",
+          "body": "Large accounts force multiple post-sales teams into a siloed approach",
+          "subcopy": "Inconsistent customer experience across regions and account tiers"
+        }
+      ]
+    },
+
+    {
+      "layout": "Section Header",
+      "title": "The solution"
+    },
+
+    {
+      "_comment": "Eyebrow + content for solution narrative.",
+      "layout": "Title+content+eyebrow_left",
+      "eyebrow": "Decision intelligence, not content generation",
+      "title": "AI selects the right consulting framework and explains why — humans own every decision",
+      "content": [
+        "Insights Forge evaluates customer context, selects from proven frameworks, and explains the rationale",
+        "Grounded in the GUIDE framework: Ground → Understand → Illustrate (AI activates here) → Drive → Evolve",
+        "Three user-facing phases, each ending at a human approval gate",
+        "Six critique lenses (MECE, ICE, Optimist, Consultative, Customer, Skeptic) stress-test every deliverable"
+      ]
+    },
+
+    {
+      "_comment": "Recommended actions as 3 text columns: action / owner / timeframe pattern.",
+      "layout": "3 text columns",
+      "title": "Recommended actions",
+      "columns": [
+        {
+          "header": "Step 1 — Approve",
+          "body": "Authorize the Q3 2026 pilot: six accounts, 60 days, three roles — two BI, two CSM, two CSE",
+          "subcopy": "Owner: Jeremy Bower · Nate Burwick"
+        },
+        {
+          "header": "Step 2 — Measure",
+          "body": "Day-30 checkpoint: go/no-go to expand across the full post-sales team. Success criteria defined before day 1",
+          "subcopy": "Metrics: time-to-first-deliverable, consultant satisfaction, IAT narrative consistency"
+        },
+        {
+          "header": "Step 3 — Scale",
+          "body": "Full team onboarding if pilot confirms value against the three success criteria",
+          "subcopy": "Target: Q4 2026 · No production systems accessed at any stage"
+        }
+      ]
+    },
+
+    {
+      "_comment": "Decision required slide — use eyebrow 'Decision required', magenta accent on the ask.",
+      "layout": "Title+content+eyebrow_left",
+      "eyebrow": "Decision required",
+      "title": "Approve a 60-day pilot across six accounts",
+      "content": [
+        "Authorize Q3 2026 pilot: six accounts, 60 days, all three post-sales roles",
+        "No production systems accessed; the agent operates on conversation context only",
+        "Success metrics agreed before day 1 — day-30 review determines whether to expand to full team"
+      ]
+    },
+
+    {
+      "_comment": "Optional: appendix slide for supporting detail.",
+      "layout": "Title+content_left",
+      "title": "Appendix — GUIDE framework detail",
+      "content": [
+        "G — Ground: account maturity, vertical, consumption, AI adoption stage",
+        "U — Understand: success criteria (renewal, expansion, exec vs practitioner motion)",
+        "I — Illustrate: AI selects the right framework from the portfolio; explains the why",
+        "D — Drive: step sequencing, required artifacts, quality gates",
+        "E — Explain and evolve: why this framework, what signals changed, what comes next"
+      ]
+    },
+
+    {
+      "_comment": "Closing slide — always the last slide.",
+      "layout": "Thank you slide"
+    }
+
+  ]
+}
