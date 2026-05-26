@@ -26,7 +26,18 @@ Read these files before starting:
 - `memory/long-term/terminology.md` — to ensure first-use definitions for any acronym the reader's profile says they expect.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand specification. Governs voice, sentence-case headings, serial commas, product-name capitalization, footer text, and the sources-block style for this deliverable.
 
-## Structure
+## Output format: markdown vs. HTML
+
+The one-pager has two output modes. Choose before starting.
+
+| Mode | When to use | Output file |
+|---|---|---|
+| **Markdown** | Internal circulation, async review, or when the reader will consume it as a document | `memory/project-space/one-pager-YYYY-MM-DD.md` |
+| **HTML** | Leadership presentation, slide-adjacent review, or when brand fidelity matters for the audience | `<deliverable-name>.html` in the project root |
+
+The HTML format is preferred when the one-pager will be projected or shared in a leadership review session. It renders DT Flow fonts, uses the actual Insights lockup, and applies Dynatrace wave backgrounds. The markdown format is the intermediate that feeds the pptx-builder skill — if a deck will be produced, write the markdown alongside the HTML.
+
+## Content structure
 
 A one-pager has five sections, in this order, and fits on a single page.
 
@@ -56,9 +67,84 @@ The one-pager must follow `memory/long-term/brand/brand-spec.md`. Apply these ru
 - **Product names use approved capitalization** (brand-spec §7). On first formal mention apply `®` to **Dynatrace®**, **OneAgent®**, **Smartscape®**, **Grail®**. Use "Dynatrace Cluster" (not "Dynatrace Server"), "extension" (not "plugin" or "add-on"), "Dynatrace web UI" (not "Dynatrace interface"), "ready-made" (not "out-of-the-box").
 - **Davis AI** and its variants — **generative AI**, **causal AI**, **predictive AI** — are capitalized as shown.
 - **Footer:** `© 2026 Dynatrace, LLC.   Confidential` in gray (`#6F747F`) at the bottom of the page. Insights Forge one-pagers are Confidential by default — do not relabel unless the user explicitly says the deliverable is being shared with a customer or partner.
-- **Header:** include the Dynatrace Insights horizontal lockup (color, on white) at the top-left when the rendered output is branded; the Markdown intermediate notes its presence with a placeholder line.
-- **Typography (when rendered):** headings in DT Flow Medium; body in DT Flow Light; Arial is the licensed fallback. The Markdown intermediate does not encode font — that gets applied at render time.
-- **Color use:** sparing. Reserve Accent 6 (magenta, `#C93FDB`) for instrumentation gaps and risks; Accent 1 (teal, `#4AC2B3`) for confirmed findings; Accent 3 (royal blue, `#1966FF`) for primary CTAs and "open" hypotheses. Do not use red or green — Dynatrace charts don't carry traffic-light semantics.
+- **Header lockup:** use `DT Insights Lockup RGB/BAE9730_Insights-Lockup-Horizontal-RGB_REV.svg` on dark backgrounds. This is the REV variant — full-color reversed for dark surfaces. Never substitute a text approximation or custom cube-glyph when the actual SVG file is present. Size to ~24–26px height.
+- **Typography (when rendered):** headings in DT Flow Medium; body in DT Flow Light; Arial is the licensed fallback. Load via `@font-face` from `DTFlow/`. The Markdown intermediate does not encode font — that gets applied at render time.
+- **Color use:** sparing. Reserve Accent 6 (magenta, `#C93FDB`) for instrumentation gaps and risks; Accent 1 (teal, `#49C2B3`) for confirmed findings; Accent 3 (royal blue, `#1966FF`) for primary CTAs and "open" hypotheses. Do not use red or green — Dynatrace charts don't carry traffic-light semantics.
+
+## HTML visual format — additional procedure
+
+When producing the HTML deliverable, follow this procedure in addition to the content structure above.
+
+### Dynatrace wave backgrounds
+
+Wave assets live in `Data-Visual-waves/` as Adobe Illustrator `.ai` files. They are PDF-compatible and can be converted to PNG for web use. **Do not use `.ai` files directly as HTML background images.**
+
+**Rendering `.ai` files to PNG:**
+```bash
+qlmanage -t -s 2800 -o assets/ Data-Visual-waves/<subfolder>/<file>.ai
+# Output lands as <file>.ai.png — rename to assets/<name>.png
+```
+Render at `-s 2800` for retina-quality output (2× the 960px page width). Copy rendered PNGs into `assets/` in the project root.
+
+**Wave series selection — readability is the deciding factor:**
+
+| Series | Visual character | Use for | Avoid when |
+|---|---|---|---|
+| `datalargebeam` | Smooth continuous curved beams | Header backgrounds; any section with body text or labels | Never avoid — safe at all text sizes |
+| `datatrail` | Single thin arc line | Secondary dark sections (decision ask, callout strips) | Never avoid — minimal noise |
+| `databeam` | Bold sweeping arc | Decorative backgrounds where text is large (≥18px) | Small body text ≤13px |
+| `dataflow` | Scattered particle dots | Sections with sparse or very large text only | **Do not use behind body text** — dots fragment letterforms at ≤13px and fail readability |
+| `datablocks` | Geometric ribbon blocks | Spacious decorative zones | Dense text areas |
+| `dataparticles` | Fine particle fields | **Check before use** — some files in this series were saved without PDF compatibility and render as a blank placeholder. Test with `qlmanage` before committing |
+
+**Applying wave backgrounds in CSS:**
+
+Always layer a dark left-to-right gradient overlay above the wave image so text on the left reads cleanly:
+
+```css
+background:
+  linear-gradient(to right, rgba(7,16,30,0.90) 0%, rgba(7,16,30,0.72) 42%, rgba(7,16,30,0.32) 100%),
+  url('assets/wave-bg.png') center / cover no-repeat;
+```
+
+Adjust the right-side opacity (`0.32`) to taste — lower values show more wave, higher values increase text contrast. For sections with denser small text, use `0.45` or higher on the right stop. Never use a wave image without the overlay.
+
+**After placing a wave background, always screenshot the section and verify:**
+1. All text at actual render size (not just the large headline — check labels and body copy too)
+2. Right-side content — the wave is brightest there and the overlay is thinnest
+3. If any text zone fails, increase the right-side overlay opacity or switch to a smoother wave series
+
+### Two-column layout balance
+
+The HTML one-pager uses a two-column body grid. Both columns must terminate at approximately the same height — visible blank space at a column's bottom reads as unfinished to a senior audience.
+
+**Diagnosing imbalance:** If the left column is taller than the right, look for redundant paragraphs first. The most common pattern: a section title states the claim, role cards or a pull quote provide the evidence, and then a paragraph between them repeats both. If the title + evidence already communicate the point, the paragraph is filler — cut it, do not compress it.
+
+**Test before cutting:** ask whether removing the paragraph loses any information not already present in the title or the evidence elements. If the answer is no, remove it.
+
+**Uniform grid component heights:** when a row of equal-width cells contains text of varying length (e.g., a five-step framework row), use `display: flex; flex-direction: column` on each cell and a `min-height` on the top section equal to the tallest cell's natural height. This ensures all cells share the same top-section height and the description sections fill remaining space equally. Measure rendered heights to confirm uniformity; do not rely on estimating from the source text.
+
+### Accessibility requirements for HTML deliverables
+
+Apply these standards during initial build, not as a post-hoc pass.
+
+**Font sizes:**
+- Body text: minimum **12px**
+- Labels, section eyebrows, metadata: minimum **11px**
+- Never place readable text below 11px regardless of weight
+
+**Color contrast (WCAG AA):**
+- Normal text (≤18px regular or ≤14px bold): minimum **4.5:1** contrast ratio
+- Large text (≥18px regular or ≥14px bold): minimum **3:1**
+- Known failure: white text on brand teal `#49C2B3` = ~2.5:1 — use darkened teal `#1A7A70` (5.8:1) for any teal text on light backgrounds
+- Known failure: teal `#49C2B3` as an eyebrow label on `#1A2440` navy = ~2.2:1 — use `rgba(255,255,255,0.8)` instead
+- Run a contrast check on every colored text instance, not just the main body copy
+
+**Semantic HTML:**
+- Use `<header>`, `<main>`, `<section>`, `<footer>`, `<blockquote>` rather than generic `<div>` where the element has semantic meaning
+- Add `aria-hidden="true"` to all decorative elements (wave backgrounds, dividers, icon glyphs, pseudo-element orbs)
+- Add `aria-label` to role abbreviations and icon-only groups so screen readers receive the full label
+- Add `role="list"` and `role="listitem"` to visual card groups that function as lists
 
 ## Quality gates
 
@@ -70,9 +156,16 @@ Before finalizing, run three lenses in this order:
 
 After the lenses, do a final read for the one-page constraint. Cut, don't compress.
 
+**HTML only:** after lenses, screenshot the full rendered page and both text-heavy sections (header and any dark strip) at actual size. Confirm every text element is legible before marking the deliverable done.
+
 ## Output
 
-The agent writes a `one-pager.md` file in `memory/project-space/` (filename: `one-pager-YYYY-MM-DD.md` if multiple drafts are expected). The agent then **prompts the user to approve PPTX generation** — it does not automatically invoke the pptx skill. The Phase 3 gate is between the one-pager and the deck.
+- **Markdown:** the agent writes `one-pager-YYYY-MM-DD.md` in `memory/project-space/`. This file feeds the pptx-builder skill.
+- **HTML:** the agent writes `<deliverable-name>.html` in the project root, with supporting assets in `assets/` (rendered wave PNGs, lockup SVG). The HTML file is self-contained when opened from the project root.
+
+The agent then **prompts the user to approve PPTX generation** — it does not automatically invoke the pptx skill. The Phase 3 gate is between the one-pager and the deck.
+
+**Note for pptx-builder:** the pptx-builder skill reads from the markdown one-pager file. If only the HTML was produced, write a companion markdown summary before invoking the deck skill.
 
 ## Common pitfalls
 
@@ -81,3 +174,9 @@ The agent writes a `one-pager.md` file in `memory/project-space/` (filename: `on
 - **Skipping the stakeholder profile.** Every leader reads differently. Read the profile before drafting, not after.
 - **Treating the lens passes as optional.** They are the quality gate. Skipping them is how good drafts become bad final documents.
 - **Auto-generating the PPTX.** The Phase 3 gate is the one-pager. Wait for explicit user approval before invoking the pptx skill.
+- **Using a particle wave (dataflow series) behind body text.** The scattered dots compete with letterforms at ≤13px and fail readability in the text-dense right-side zones where the overlay is thinnest. Use `datalargebeam` or `datatrail` for any section containing small text.
+- **Using a text approximation for the Insights lockup.** The actual REV SVG is in `DT Insights Lockup RGB/`. Use it. Custom cube-glyph approximations are not brand-compliant.
+- **Omitting `Dynatrace®` on first mention.** Brand spec §7 requires the registered trademark symbol on first formal mention in every deliverable.
+- **Skipping the readability screenshot check.** The wave background gradient overlay looks sufficient in the CSS but the right-side stats and action cards are the failure zones — always verify visually at render size, not by reading the CSS opacity values.
+- **Column imbalance from redundant paragraphs.** A section title that states the claim + cards/bullets that provide evidence does not need a paragraph repeating both. When the left column runs long, look for this pattern first before restructuring the layout.
+- **Not producing a markdown companion when only HTML is delivered.** The pptx-builder skill requires `one-pager-YYYY-MM-DD.md` as its input. If the user later asks for a deck, the absence of the markdown file will block that step.
