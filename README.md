@@ -52,6 +52,16 @@ The `skills/` files are **not** slash commands. The main agent reads them as ref
 
    > *"Describe the problem you're trying to solve."*
 
+## Cost management
+
+Claude Code automatically caches the system prompt — which includes `CLAUDE.md` and tool definitions — so you don't pay full re-ingestion cost on every conversational turn within a session. The four session-start file reads (`domain-knowledge.md`, `dynatrace-playbooks.md`, `frameworks.md`, `stakeholder-profiles.md`) enter conversation context and stay cached within that session; starting a new session re-reads them cold.
+
+Practical implications for budget-conscious users:
+
+- **Complete as much of a phase as possible within one session** before closing Claude Code. Continuing a conversation reuses cached context; reopening starts fresh.
+- **`CLAUDE.md` size directly affects system prompt cache footprint.** It is intentionally kept lean — detail lives in skill files and agent files, which are only loaded on demand.
+- **Stable content stays at the top of `CLAUDE.md`.** Claude Code caches the file as a prefix — if you ever customize the file, put frequently-changing content (new skills, new client notes) at the bottom so earlier sections remain cached across edits.
+
 ## Documentation
 
 The detailed reference lives in [`/docs/`](docs/). Start with [docs/README.md](docs/README.md) for the table of contents.
