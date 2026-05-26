@@ -33,10 +33,21 @@ The agent works in **explicit phases with a human approval gate between each pha
 
 At each gate the user can **approve**, **redirect**, or **iterate through a critique lens**. Full detail in [docs/workflow.md](docs/workflow.md).
 
+## How it installs
+
+**Installation = open this folder in Claude Code.** No npm, no build step, no CLI commands.
+
+Three mechanisms activate automatically:
+- **`CLAUDE.md`** — Claude Code reads this on every session start. It is the agent's operating manual and the workspace's entry point.
+- **`.claude/settings.json`** — locks the default model to `claude-sonnet-4-6` and scopes file permissions.
+- **`.claude/agents/`** — registers the seven sub-agents (six critique lenses + doc-freshness-checker). The main agent dispatches these via the `Agent` tool; you don't invoke them directly.
+
+The `skills/` files are **not** slash commands. The main agent reads them as reference documents immediately before producing each phase artifact — triggered by its own operating logic, not by user commands.
+
 ## Quickstart
 
-1. Open this workspace in **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. This is the recommended surface today — the workspace assumes a local filesystem for memory and a sidebar chat for the human-in-the-loop gates, and the VS Code extension delivers both. Claude Code in a terminal works too, but VS Code makes it easier to see the artifacts the agent is writing as it works.
-2. Populate stakeholder profiles, domain knowledge, and terminology — see [docs/getting-started.md](docs/getting-started.md).
+1. Open this workspace in **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. The VS Code extension is the recommended surface — you can watch the agent write artifacts into `memory/project-space/` in the file explorer as it works. Claude Code in a terminal works too.
+2. Follow the one-time setup in [docs/getting-started.md](docs/getting-started.md) — takes about 15 minutes.
 3. Begin an investigation in the Claude Code sidebar chat:
 
    > *"Describe the problem you're trying to solve."*
@@ -62,12 +73,30 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 
 ```
 .
-├── CLAUDE.md                  # Agent operating manual (authoritative)
-├── docs/                      # Detailed documentation (you are here)
-├── skills/                    # Procedural skills, one per phase deliverable
-├── .claude/agents/            # Six critique-lens sub-agents + doc-freshness-checker
+├── CLAUDE.md                     # Agent operating manual (authoritative, auto-loaded)
+├── .claude/
+│   ├── settings.json             # Model, permissions, workspace config
+│   └── agents/                   # Seven sub-agents (6 lenses + doc-freshness-checker)
+├── skills/                       # Procedural reference files, one per phase artifact
+│   ├── context-framing/          # Phase 0
+│   ├── mece-decomposition/       # Phase 1
+│   ├── hypothesis-generation/    # Phase 1
+│   ├── ice-scoring/              # Phase 1 & 2
+│   ├── signal-mapping/           # Phase 1
+│   ├── action-plan-builder/      # Phase 2
+│   ├── exec-onepager/            # Phase 3
+│   ├── pptx-builder/             # Phase 3
+│   ├── external-research/        # All phases (web lookup)
+│   ├── investigation-reset/      # Archive / pause / resume an engagement
+│   ├── stakeholder-overlay/      # Capture a named client leader
+│   ├── environment-intake/       # Capture client DT environment details
+│   └── value-highlight/          # QBR / renewal value brief
 ├── memory/
-│   ├── project-space/         # Live investigation (read/write)
-│   └── long-term/             # Durable knowledge (read freely; write on approval)
-└── tools/                     # Reserved for future integrations (read-only boundary)
+│   ├── long-term/                # Root library — universal knowledge only, no client data
+│   ├── project-space/            # Active client's working directory (read/write)
+│   └── clients/                  # Per-client isolated workspaces
+│       ├── _template/            # Copy this to create a new client workspace
+│       └── <client-name>/        # environment.md, stakeholder-overlays.md, past-investigations/
+├── docs/                         # Human-readable documentation
+└── tools/                        # pptx-generator.py and future integrations
 ```

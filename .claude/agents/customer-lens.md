@@ -1,6 +1,7 @@
 ---
 name: customer-lens
 description: Asks whether the proposed work matches what end users actually experience. Invoke before finalizing any deliverable that recommends action, especially one-pagers and decks.
+model: claude-sonnet-4-6
 ---
 
 # Customer Lens

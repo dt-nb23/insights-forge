@@ -1,6 +1,7 @@
 ---
 name: skeptic-lens
 description: Stress-tests the plan for failure modes before leadership review. Invoke before finalizing any Phase 2 action plan or Phase 3 deliverable.
+model: claude-sonnet-4-6
 ---
 
 # Skeptic Lens

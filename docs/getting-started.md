@@ -1,99 +1,156 @@
 # Getting started
 
-This is the page to read before your first real session. It walks you through three things:
+This page covers three things:
 
-1. What the workspace expects to be in place before you start.
+1. What to do before your first session.
 2. How to run a complete investigation from "describe the problem" to "deck approved."
-3. How to leave the workspace clean for the next engagement.
+3. How to close an engagement cleanly and open the next one.
 
-If you've never used a phase-gated agent before, the most important thing to internalize is this: **the agent will not advance to the next phase without your explicit approval**. You're not just a passenger — you're the human-in-the-loop, and the workspace is designed around that.
+The single most important thing to internalize before you start: **the agent will not advance to the next phase without your explicit approval.** You're the human-in-the-loop, not a passenger.
 
-## Prerequisites
+## Installation
 
-- **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. This is the recommended surface today — the chat sidebar sits next to your files so you can watch the agent write artifacts into `memory/project-space/` as it works through each phase. Open the repository as the VS Code workspace root so the agent's working directory matches the repo root.
-- The agent reads [`CLAUDE.md`](../CLAUDE.md) automatically on every session, so you don't need to do anything to "load" the operating manual. If you want to know exactly what it reads, open that file — it's the agent's job description.
-- Optional but recommended: skim [workflow.md](workflow.md) so you know which phase you're in and what the next gate will ask of you.
+**Installation = open this folder in Claude Code.**
 
-> **Other surfaces.** Claude Code in a terminal works too, and Claude.ai (Claude Chat) can host a partial version of the workflow as a Project, but neither delivers the same file-watching experience. Stick with VS Code until we publish a packaged plugin.
+Open the `insights-forge/` directory in VS Code with the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) installed. The agent's operating manual ([`CLAUDE.md`](../CLAUDE.md)) loads automatically on every session — you don't do anything to "load" it. The Claude Code extension is the recommended surface because you can watch the agent write artifacts in the file explorer as it works, which makes the four-phase loop easier to follow. Claude Code in a terminal (`claude`) works too.
 
-## One-time setup
+> **Other surfaces.** Claude.ai as a Project can run a partial version of the workflow but lacks the local filesystem, so phase artifacts won't persist between sessions. Stick with the VS Code extension or terminal for real engagements.
 
-Before your first real engagement, take 15 minutes to populate the durable knowledge the agent will consult. These are the files that make the workspace *yours*, not generic.
+## Memory architecture — understand this first
 
-### 1. Stakeholder profiles
-Open [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) and add the leaders you produce outputs for — VPs of Engineering, Reliability, Product. Each profile drives the *voice* of the Phase 3 one-pager and deck, so the more specific the better. A profile that says "Director of Reliability, came up through SRE, allergic to vague timelines, owns the error-budget decision" produces a sharper one-pager than "VP of Engineering."
+Before diving into setup, it helps to understand how memory is organized. It has two tiers:
 
-### 2. Domain knowledge — fill in the slots
-Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) and look for `[team to note: …]` slots. The vendor-sourced Dynatrace concepts are already populated — what's missing is anything *your environment* does differently. Retention policy, custom RUM tagging, named SLOs, DPS quota, anything an agent reading the file would otherwise have to guess.
+**Root library (`memory/long-term/`)** — universal knowledge: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic stakeholder archetypes. This knowledge applies to every client. The agent reads it on every session. **You never put client-specific information here.**
 
-### 3. Terminology
-Open [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) and add acronyms or product names your team uses that aren't already there. Internal service names matter most — the agent will refer to them by your name, not a generic one.
+**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile, named leader profiles, and all archived investigations. The agent only reads the active client's folder — never another client's. Each workspace has:
 
-### 4. (Optional) Adjust `CLAUDE.md`
-[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible, but if your team has a stronger preference (different stakeholder roles, different default vertical, a citation-freshness window other than 7 days), this is where to set it.
+```
+memory/clients/<client-name>/
+├── README.md                    (engagement history)
+├── environment.md               (DT environment facts)
+├── stakeholder-overlays.md      (named leaders at this client)
+├── project-space/               (investigation files when paused)
+└── past-investigations/         (archived investigations)
+```
 
-You do **not** need to populate [`memory/project-space/`](../memory/project-space/) — that folder is reset at the start of every investigation. Look inside if you're curious about the templates the agent works from.
+**Active investigation (`memory/project-space/`)** — the working directory for the currently open engagement. Think of it as "you are here." When a client engagement is active, their investigation files live here.
 
-## Running your first investigation
+See [memory.md](memory.md) for the full architecture.
+
+## One-time workspace setup
+
+Before your first real engagement, take 15 minutes to populate the root library with knowledge that applies to every client. These are the files that make the workspace *yours*, not generic.
+
+### 1. Terminology
+
+Open [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) and add acronyms or internal service names your team uses that aren't already there. Internal names matter most — the agent will refer to them by your name, not a generic one.
+
+### 2. Domain knowledge — org-level slots only
+
+Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) and look for `[team to note: …]` slots. These are for **org-level operational context only** — for example, which DPS capabilities your org's standard contract includes, or internal tool conventions that apply across all clients. 
+
+**Do not put client-specific environment details here.** Those go into each client's `environment.md` (see "Before your first engagement with a new client" below).
+
+### 3. (Optional) Adjust `CLAUDE.md`
+
+[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
+
+You do **not** need to populate `memory/project-space/` — those files are managed by the agent during an engagement and reset between engagements.
+
+## Before your first engagement with a new client
+
+When you start working with a client for the first time, the agent will create their workspace automatically at Phase 0 close. You can also prepare ahead:
+
+1. Copy `memory/clients/_template/` to `memory/clients/<client-name>/`.
+2. The agent will populate `environment.md` (via `skills/environment-intake/SKILL.md` at the Phase 0 gate) and `stakeholder-overlays.md` (via `skills/stakeholder-overlay/SKILL.md` when you name a specific leader).
+
+These files persist between engagements with the same client, so you only go through the intake once. On subsequent engagements, the agent reads these files automatically during Phase 0.
+
+## Running an investigation
 
 ### Step 1 — Open with the problem
 
-In the Claude Code chat, start with the canonical opener:
+In the Claude Code chat, start with:
 
 > *"Describe the problem you're trying to solve."*
 
-…or just describe the problem directly. The agent will route to the [`context-framing`](../skills/context-framing/SKILL.md) skill and begin Phase 0. If you want to see exactly what's about to happen, open [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) — every step is documented there.
+…or just describe the problem and client directly. The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
+- Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
+- Checks `memory/project-space/active-engagement.md` to identify the active client
+- Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)
+- Conditionally dispatches the doc-freshness-checker background sub-agent (only if the last check was ≥ 7 days ago)
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent will walk you through up to nine clarifying questions one at a time. They're adaptive — if your opening paragraph already covers customer and vertical, it'll skip Q1 and Q2 and pick up where the gap is.
+The agent walks you through up to nine clarifying questions, one at a time, in adaptive order. If your opening paragraph already covers Q1 and Q2, it skips them.
 
-The nine, in default order:
+| Q | What it asks |
+|---|---|
+| Q1 | Customer and what they do |
+| Q2 | Customer vertical |
+| Q3 | Engagement framing: **C**ontext, **S**pecific information, **I**ntent, **R**esponse format (four-part sub-sequence) |
+| Q4 | Tenant type (SaaS or Managed) |
+| Q5 | Active Dynatrace capabilities (checklist) |
+| Q6 | RUM status on the application in question |
+| Q7 | Who will consume the deliverable and what they care about |
+| Q8 | What the technical team cares about day-to-day |
+| Q9 | Trigger for this engagement (QBR, renewal, expansion, other) |
 
-- **Q1** — Customer and what they do
-- **Q2** — Customer vertical
-- **Q3** — Engagement framing, structured as a four-part sub-sequence: **C**ontext, **S**takeholders, **I**ntent, **R**esult
-- **Q4–Q9** — Environment, capabilities, instrumentation, prior work
+If you name a specific leader in Q7 and no overlay exists for them, the agent will flag it: `skills/stakeholder-overlay/SKILL.md` should run at the gate to capture their profile in the client's workspace.
 
-While you're answering Phase 0, a background sub-agent ([`doc-freshness-checker`](../.claude/agents/doc-freshness-checker.md)) silently runs in parallel and checks every cited Dynatrace URL for drift. You'll see its findings at the Phase 0 gate — no need to wait on it.
+### Step 3 — Phase 0 gate
 
-### Step 3 — Approve the Phase 0 gate
+The agent presents a reframed engagement summary and writes it to `memory/project-space/current-context.md`. At this gate you have three options:
 
-The agent presents a reframed engagement summary in [`memory/project-space/current-context.md`](../memory/project-space/current-context.md). This is the first gate. You have three responses:
+- **Approve** — proceed to Phase 1.
+- **Redirect** — change scope, framing, or priority. The agent updates and re-presents.
+- **Iterate through a lens** — ask for a re-review through MECE, Optimist, ICE, Consultative, Customer, or Skeptic. The agent revises before re-presenting.
 
-- **Approve** — the agent proceeds to Phase 1.
-- **Redirect** — you change scope, framing, or priority. The agent updates and re-presents.
-- **Iterate through a lens** — ask for a re-review through [MECE](../.claude/agents/mece-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [ICE](../.claude/agents/ice-lens.md), [Consultative](../.claude/agents/consultative-lens.md), [Customer](../.claude/agents/customer-lens.md), or [Skeptic](../.claude/agents/skeptic-lens.md). The agent revises before re-presenting.
+The agent will not advance until you explicitly approve. See [workflow.md](workflow.md) for the full ritual.
 
-The agent **will not** advance until you say so. If you want to see the full ritual for each phase, [workflow.md](workflow.md) has the details.
+### Step 4 — Continue through Phases 1, 2, 3
 
-### Step 4 — Continue through Phase 1, 2, 3
+Each phase has its own gate and its own set of artifacts. Don't skip phases — the gate exists to let you redirect before downstream work bakes in a bad assumption. [workflow.md](workflow.md) has the full details. [skills.md](skills.md) indexes every procedural skill.
 
-Each phase has its own gate and its own artifact. The shape of each is laid out in [workflow.md](workflow.md), and the procedural skills are indexed in [skills.md](skills.md). Don't skip phases — even when the answer feels obvious, the gate exists to let you redirect before downstream work bakes in a bad assumption.
+## Finishing an engagement
 
-## Finishing an investigation
+When Phase 3 deliverables are approved, use the investigation-reset skill to close out:
 
-When the Phase 3 deliverables are approved and you're ready to start a new engagement, tell the agent:
+> *"Archive this investigation and reset the workspace."*
 
-> *"Archive this investigation as `<short-name>` and reset the workspace."*
+The agent will:
+1. Ask you four lessons-learned questions (what worked, what to avoid, new knowledge, proposed memory updates).
+2. Ask you to confirm an archive name (`YYYY-MM-DD-<short-name>`).
+3. Copy all project-space files to `memory/clients/<client-name>/past-investigations/<archive-name>/`.
+4. Update the client's `README.md` engagement history.
+5. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
+6. Reset `memory/project-space/` to template state.
 
-Behind the scenes, the agent will:
+The next session starts fresh, but the client's environment profile, stakeholder overlays, and past investigation history are preserved in `memory/clients/<client-name>/` for the next engagement with the same client.
 
-1. Move the contents of [`memory/project-space/`](../memory/project-space/) to `memory/long-term/past-investigations/YYYY-MM-DD-<short-name>/`.
-2. Reset the live files in `memory/project-space/` to their template state.
-3. Prepare for a fresh Phase 0.
+## Working with multiple clients
 
-If anything you learned should live on as durable knowledge — a new playbook insight, a stakeholder you want to remember — tell the agent explicitly. By design, the agent does **not** auto-promote findings to long-term memory; [memory.md](memory.md) explains why and lists the trigger phrases.
+If you need to set aside one client and work on another:
 
-## What if I'm not sure which phase I'm in?
+> *"Pause this engagement and start a new one."*
 
-Read [`memory/project-space/current-context.md`](../memory/project-space/current-context.md). It always reflects the current phase and open questions. If that file looks stale or contradicts what you remember, just ask the agent to reframe — that's a Phase 0 redirect, and it's a normal thing to do.
+The agent moves the current investigation files to `memory/clients/<current-client>/project-space/` (paused, not archived) and clears project-space. When you come back:
+
+> *"Resume [client name]."*
+
+The agent copies the paused files back into project-space and reminds you where you left off. Client data never crosses client boundaries — each client's workspace is read only when that client is active.
+
+## Checking where you are
+
+Read `memory/project-space/active-engagement.md` to see which client is active. Read `memory/project-space/current-context.md` to see the current phase and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
 
 ## Look inside
 
 | The agent reads… | At this file |
 |---|---|
-| The operating manual | [`CLAUDE.md`](../CLAUDE.md) |
+| Operating manual | [`CLAUDE.md`](../CLAUDE.md) |
 | Phase 0 procedure | [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) |
-| Phase 0 question phrasings for live discovery | [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md) |
-| The live investigation state | files under [`memory/project-space/`](../memory/project-space/) |
+| Active client | [`memory/project-space/active-engagement.md`](../memory/project-space/active-engagement.md) |
+| Client environment (if populated) | `memory/clients/<client-name>/environment.md` |
+| Client stakeholder overlays | `memory/clients/<client-name>/stakeholder-overlays.md` |
+| Live investigation state | files under [`memory/project-space/`](../memory/project-space/) |

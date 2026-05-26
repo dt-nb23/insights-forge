@@ -153,7 +153,11 @@ Each profile carries the same fields. Keep entries short and concrete — "they 
 
 # Named-leader overlays
 
-Overlays refine a parent archetype with title-specific or engagement-specific detail. When using an overlay, start from the parent archetype's defaults and apply only the fields the overlay overrides. If the overlay is silent on a field, use the archetype value.
+**This section contains title-type overlays only — generic refinements keyed to a role title (e.g., "VP of Engineering"), not to any named individual or specific client.** They are universally applicable and contain no client-identifying information.
+
+When a specific person at a specific client is named (e.g., "Sarah Chen, VP of Engineering at Acme Corp"), that profile belongs in `memory/clients/<client-name>/stakeholder-overlays.md` — not here. Use `skills/stakeholder-overlay/SKILL.md` to create it.
+
+Overlays refine a parent archetype with title-specific detail. When using an overlay, start from the parent archetype's defaults and apply only the fields the overlay overrides. If the overlay is silent on a field, use the archetype value.
 
 ## VP of Engineering → overlay on Executive Sponsor
 

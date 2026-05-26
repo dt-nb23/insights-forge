@@ -47,10 +47,42 @@ Produce a PowerPoint deck. Adapter that delegates to the standard pptx skill whe
 ### [`external-research`](../skills/external-research/SKILL.md)
 Used by any other skill when local memory is silent, contradictory, or stale. Defines the allowlist (`docs.dynatrace.com` and `community.dynatrace.com`), the citation requirement, and the freshness policy. See [research.md](research.md) for the full story.
 
+## Workspace and client management
+
+### [`investigation-reset`](../skills/investigation-reset/SKILL.md)
+Archives the current engagement and resets the workspace for the next one — or pauses it to work on a different client. Runs the four lessons-learned questions before archiving, executes any approved root library promotions, and moves investigation files into the client's `past-investigations/` folder. Also handles resuming a paused engagement.
+
+**Trigger:** "Archive this investigation," "Reset the workspace," "Pause this engagement," or "Resume [client name]."
+
+### [`stakeholder-overlay`](../skills/stakeholder-overlay/SKILL.md)
+Captures a specific named leader at a client (e.g., "Sarah Chen, VP of Engineering") as a stakeholder overlay in the active client's workspace at `memory/clients/<client-name>/stakeholder-overlays.md`. Builds on the parent role archetype from the shared root library. Requires explicit user approval before writing.
+
+**Never writes named individuals to `memory/long-term/stakeholder-profiles.md`** — that file contains only generic title-type archetypes.
+
+**Trigger:** Named automatically during Phase 0 Q7 when a specific leader is identified and no overlay exists. Can also be run on demand: "Create a stakeholder profile for [name]."
+
+### [`environment-intake`](../skills/environment-intake/SKILL.md)
+Captures client-specific Dynatrace environment details that persist across engagements: Management Zones, defined SLOs, load-bearing synthetic monitors, instrumentation gaps, DPS quota status. Writes to `memory/clients/<client-name>/environment.md`. Run at the Phase 0 gate on first engagement; update when the client's environment changes.
+
+**Trigger:** Flagged automatically by context-framing when no environment file exists for the active client. Can also be run on demand: "Capture their environment setup."
+
+### [`value-highlight`](../skills/value-highlight/SKILL.md)
+Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads prior investigation archives from the active client's `past-investigations/` folder and synthesizes confirmed findings, resolved hypotheses, and actions taken into a 1–2 page written summary.
+
+**Prerequisite:** At least one completed investigation must be archived for the active client.
+
+**Trigger:** When the engagement trigger (Q9) is a QBR or renewal. Can also be run on demand: "Create a value summary for [client]."
+
+## How skills are triggered
+
+Skills are **not slash commands** — you don't call them directly. The main agent reads the relevant `SKILL.md` file via its `Read` tool immediately before producing the artifact it governs. The trigger is the agent's own operating logic (defined in `CLAUDE.md`) and the phase the engagement is in.
+
+The agent tells you which skill it's reading before it starts — so if you want to know what's about to happen, you can open that `SKILL.md` yourself.
+
 ## Look inside
 
 | Where to find them | What's there |
 |---|---|
-| [`skills/`](../skills/) | The eight skill folders, one per deliverable |
+| [`skills/`](../skills/) | Thirteen skill folders |
 | Each `SKILL.md` file | When-to-use, inputs, procedure, output location, common pitfalls |
 | [`memory/long-term/frameworks.md`](../memory/long-term/frameworks.md) | The shared procedural reference skills draw on (MECE, ICE definitions, exit-criteria patterns) |

@@ -1,6 +1,7 @@
 ---
 name: mece-lens
 description: Critiques an issue tree for mutual exclusivity and collective exhaustiveness. Invoke after a MECE tree is drafted and before it is presented to the user for approval.
+model: claude-haiku-4-5-20251001
 ---
 
 # MECE Lens

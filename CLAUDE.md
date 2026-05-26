@@ -14,6 +14,17 @@ This agent helps consultants and analytics teams structure ambiguous problems, g
 - The agent is **explicit about uncertainty and instrumentation gaps**. If a hypothesis cannot be validated with the data available, that limitation appears in the output, not buried.
 - The agent **prefers MECE structure, ranked hypotheses, and named exit criteria** over open-ended exploration. Every artifact should be reviewable in a 15-minute leadership window.
 
+## Session initialization
+
+At session start — before Phase 0 begins — read the following files in this order and hold them in working context for the entire session. Do not re-read them at each phase boundary unless the user explicitly approves an update to one of them during this session; in that case, re-read only the updated file.
+
+1. `memory/long-term/domain-knowledge.md` — observability concepts, signal patterns, tech → UX → business linkages.
+2. `memory/long-term/dynatrace-playbooks.md` — procedural investigation patterns. Load-bearing for Phase 1 and Phase 2; read fully.
+3. `memory/long-term/frameworks.md` — MECE, ICE, and exit-criteria definitions.
+4. `memory/long-term/stakeholder-profiles.md` — role archetypes and named-leader overlays.
+
+These files change only on explicit user approval. Reading them once and holding them in context eliminates 3–4 redundant reads per engagement.
+
 ## Phased workflow
 
 The agent advances through four phases. Each phase produces a specific artifact and ends at an approval gate.
@@ -73,14 +84,71 @@ Six critique lenses live in `.claude/agents/`. Each has a narrow job and a defin
 
 ## Memory model
 
-Memory is split into two zones with different read/write rules.
+Memory has two tiers with strict isolation between client data and shared knowledge.
 
-- **`memory/project-space/`** — the live state of the current investigation. The agent **reads and writes freely** here. Every phase deliverable lands in this folder. When a new investigation begins, the user instructs the agent to archive the contents into `memory/long-term/past-investigations/` with a date stamp and reset the workspace.
-- **`memory/long-term/`** — durable knowledge: frameworks, domain glossaries, stakeholder profiles, terminology, and an index of past investigations. The agent **reads from this folder freely but only writes when the user explicitly approves an update** (e.g., "add this stakeholder", "log this lesson learned", "extend the glossary with this term").
+### Root library — `memory/long-term/` (universal, never contains client data)
 
-## Skills
+The root library holds knowledge that is true regardless of which client is being served. The agent reads it freely on every session. **Writes require explicit user approval.** This tier must never contain client-identifying information, client-specific environment facts, or named individuals from a client.
 
-Each phase deliverable has a corresponding skill in `skills/`. Before producing any phase artifact (MECE tree, ICE scoring, signals map, action plan, one-pager, deck), the agent **reads the relevant `SKILL.md` first** and follows its procedure. Skills are the agent's procedural memory; they capture the steps, the inputs, the output location, and the common pitfalls for each deliverable.
+| File | What it contains |
+|---|---|
+| `domain-knowledge.md` | Dynatrace concepts only. The `[Team to note: ...]` slots are for org-level context (e.g., which DPS capabilities the org has) — never for client-specific data. |
+| `dynatrace-playbooks.md` | Client-agnostic investigation patterns and exit criteria. |
+| `frameworks.md` | MECE, ICE, exit-criteria definitions. |
+| `stakeholder-profiles.md` | Eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). No named individuals. No client associations. |
+| `terminology.md` | Glossary. |
+| `client-question-bank.md` | Discovery question phrasings. |
+| `brand/` | Dynatrace brand spec. |
+| `freshness-report.md` | Doc citation freshness check results (operational — no client data). |
+
+### Client workspace — `memory/clients/<client-name>/` (isolated per client)
+
+**The user is always inside their client's directory.** Each client has a fully isolated workspace. The agent reads only the active client's folder for any client-specific context. It never reads another client's folder — doing so contaminates the investigation.
+
+```
+memory/clients/<client-name>/
+├── README.md                    (engagement summary and history)
+├── environment.md               (DT environment: MZs, SLOs, monitors, gaps — use environment-intake skill)
+├── stakeholder-overlays.md      (named individuals at this client — confidential to this folder)
+├── project-space/               (investigation files when paused)
+└── past-investigations/         (archived investigations for this client only)
+    └── YYYY-MM-DD-<description>/
+```
+
+The template for new client folders lives at `memory/clients/_template/`.
+
+### Active investigation — `memory/project-space/` (the active client's working directory)
+
+The active client's investigation files live in `memory/project-space/` while the engagement is open. Think of it as "you are here" — the project-space IS that client's workspace. The file `memory/project-space/active-engagement.md` names which client is active.
+
+**Engagement states:**
+- **Active** — investigation files in `memory/project-space/`; `active-engagement.md` names the client.
+- **Paused** — files moved to `memory/clients/<client-name>/project-space/`; workspace is clear.
+- **Completed** — files archived to `memory/clients/<client-name>/past-investigations/<date-name>/`.
+
+At session start, read `memory/project-space/active-engagement.md`. If `active: none` and `memory/clients/` contains non-template subfolders, ask: "New engagement or resume an existing one?" Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.
+
+### Context isolation rule
+
+After loading the root library (session initialization), identify the active client from `active-engagement.md`. For the rest of the session, all client-specific reads — environment, stakeholder overlays, past investigations — come **only** from `memory/clients/<active-client-name>/`. The agent never reads or references another client's folder, even if the user's question mentions another client by name. If context from a prior engagement is needed, the user must explicitly archive the current engagement and resume the prior one.
+
+## Skills (read one at a time, on demand)
+
+Each phase deliverable has a corresponding skill in `skills/`. Read exactly one `SKILL.md` immediately before producing the artifact it governs. Do not pre-load skills for future phases and do not read more than one skill at a time unless two are explicitly needed in sequence (hypothesis-generation then ice-scoring in Phase 1).
+
+Skill-to-artifact mapping:
+- Phase 0 (`current-context.md`) → `skills/context-framing/SKILL.md`
+- Phase 1 issue tree (`issue-tree.md`) → `skills/mece-decomposition/SKILL.md`
+- Phase 1 hypotheses (`hypotheses.md`) → `skills/hypothesis-generation/SKILL.md` then `skills/ice-scoring/SKILL.md`
+- Phase 1 signals map (`signals-map.md`) → `skills/signal-mapping/SKILL.md`
+- Phase 2 action plan (`action-plan.md`) → `skills/action-plan-builder/SKILL.md`
+- Phase 3 one-pager → `skills/exec-onepager/SKILL.md`
+- Phase 3 deck → `skills/pptx-builder/SKILL.md`
+- Any external research → `skills/external-research/SKILL.md`
+- Archive/reset an engagement → `skills/investigation-reset/SKILL.md`
+- Add a named client leader → `skills/stakeholder-overlay/SKILL.md`
+- Capture client Dynatrace environment details → `skills/environment-intake/SKILL.md`
+- Renewal/QBR value brief → `skills/value-highlight/SKILL.md`
 
 ## External references and research
 
@@ -100,7 +168,7 @@ When local memory is silent, contradictory, or stale, the agent consults `skills
 - **Memory-first rule** — the agent does not fetch what it could have answered from `memory/long-term/`.
 - **No silent allowlist expansion** — additional sources (including future Slack and Salesforce integrations) require explicit user approval before the agent uses them.
 
-**Citation freshness.** Dynatrace updates its documentation almost daily/weekly. Citations older than 7 days are presumed stale and must be re-validated before reuse in any phase artifact; every citation is re-validated at the Phase 2 → Phase 3 transition regardless of age. At the start of every engagement (Phase 0), the main agent dispatches a Haiku background sub-agent (`.claude/agents/doc-freshness-checker.md`) that re-checks every cited URL while the consultant answers the clarifying questions. The sub-agent writes findings to `memory/long-term/freshness-report.md` only — it **never edits `domain-knowledge.md` or `dynatrace-playbooks.md` directly**. At the Phase 0 gate, the main agent surfaces drifted or unreachable citations so the team can approve memory updates inline with Phase 0 approval. The user can also trigger a manual refresh outside of Phase 0 by asking the agent to "refresh the docs." Full procedure: `skills/external-research/SKILL.md`.
+**Citation freshness.** Dynatrace updates its documentation almost daily/weekly. Citations older than 7 days are presumed stale and must be re-validated before reuse in any phase artifact; every citation is re-validated at the Phase 2 → Phase 3 transition regardless of age. At the start of Phase 0, **first read `memory/long-term/freshness-report.md`** and check the "Last refresh" run date. If the last check was fewer than 7 days ago AND the report shows zero Drifted or Unreachable entries → skip the sub-agent dispatch and note at the Phase 0 gate: "Doc citations verified [N days ago] — current." Only dispatch the Haiku background sub-agent (`.claude/agents/doc-freshness-checker.md`) if the last check was 7 or more days ago, OR if the report shows open Drifted or Unreachable entries. When dispatched, the sub-agent re-checks every cited URL while the consultant answers clarifying questions and writes findings to `memory/long-term/freshness-report.md` only — it **never edits `domain-knowledge.md` or `dynatrace-playbooks.md` directly**. At the Phase 0 gate, the main agent surfaces drifted or unreachable citations so the team can approve memory updates inline. The user can also trigger a manual refresh outside of Phase 0 by asking the agent to "refresh the docs." Full procedure: `skills/external-research/SKILL.md`.
 
 Web research is **read-only documentation lookup**. The agent never logs in, submits forms, generates DQL from fetched docs, or auto-promotes findings into long-term memory without explicit user approval.
 

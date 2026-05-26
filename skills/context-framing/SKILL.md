@@ -25,7 +25,10 @@ Read these files before starting:
 - `memory/long-term/domain-knowledge.md` — for the tech → UX → business linkage table; helps identify which insights are likely surfaceable given the active capabilities.
 - `memory/long-term/terminology.md` — to use consistent terminology when restating the engagement context.
 - `memory/long-term/client-question-bank.md` — client-facing phrasings of the 9 clarifying questions below, grouped by rubric classification (MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE). When the consultant indicates this discovery is being done **live with the customer** (rather than the agent gathering context from the consultant), draw question phrasings from this bank instead of the consultant-facing prompts below. Otherwise, treat it as a reference the consultant can take into their own discovery calls.
-- `memory/long-term/past-investigations.md` — scan the index for any prior engagement on the same customer, vertical, or problem shape. If a match exists, surface the key lesson from that archive before proceeding.
+- `memory/project-space/active-engagement.md` — to get the active client name, which scopes all client-specific reads.
+- `memory/clients/<active-client-name>/README.md` — scan the engagement history for any prior engagement on this client. If prior investigations exist, surface the key lesson before proceeding.
+- `memory/clients/<active-client-name>/environment.md` — if it exists, read it after Q5/Q6 to sharpen orientation hypotheses with environment-specific facts.
+- `memory/clients/<active-client-name>/stakeholder-overlays.md` — if it exists, check for an existing overlay matching the leader identified in Q7.
 
 If the consultant has not yet described the engagement, open with:
 
@@ -129,6 +132,8 @@ Present as a multi-select checklist — do not pre-check anything:
 
 Record the checked items in `current-context.md` under "Active capabilities". This list is the boundary of what insights can be surfaced in Phase 1.
 
+**Environment intake check:** After Q5 and Q6, check `memory/clients/<active-client-name>/environment.md`. If found, read it now — it contains environment-specific facts (Management Zones, defined SLOs, instrumentation gaps, DPS quota) that persist across engagements and should inform orientation hypotheses in Step 5. If no file exists, note that `skills/environment-intake/SKILL.md` should be run at the Phase 0 gate to capture these facts for future engagements.
+
 ### Q6 — RUM on the application in question
 > "Is Real User Monitoring enabled on the specific application we'll be focusing on? And if so, is Session Replay active for it?"
 
@@ -143,6 +148,8 @@ Capture the person's role and priorities. Then resolve them against `stakeholder
 2. **Then check for a named-leader overlay** under that archetype (e.g., "VP of Engineering" overlays Executive Sponsor; "Director of Reliability" overlays SRE / Reliability Engineer). If an overlay exists, record both the archetype and the overlay so Phase 3 layers them correctly.
 
 If no archetype is close enough, note the gap and ask the consultant whether to create a new profile. Capture named KPIs where possible (conversion rate, MTTR, uptime SLA, cost per transaction).
+
+**Stakeholder overlay trigger:** If the consultant names a specific leader (e.g., "Sarah Chen, VP of Engineering"), check `memory/clients/<active-client-name>/stakeholder-overlays.md` for an existing overlay for this person. If no overlay exists, note that `skills/stakeholder-overlay/SKILL.md` should be run at the Phase 0 gate to capture this leader's specifics. The overlay will be saved to this client's workspace — not to the shared `stakeholder-profiles.md`. Do not run the overlay skill mid-questioning — flag it as a follow-on action.
 
 ### Q8 — What the technical team cares about
 > "What does their primary technical team care about day-to-day — what are their pain points, priorities, or frustrations with the current setup?"
@@ -184,15 +191,15 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 
 ## Steps
 
-1. **Dispatch the doc-freshness-checker sub-agent in background.** Before opening the conversation, call the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. The sub-agent refreshes Dynatrace doc citation status while the consultant answers Q1–Q9; its wall-clock work is hidden inside the user-input phase. The sub-agent writes to `memory/long-term/freshness-report.md` only — it never edits long-term memory. Then **open the conversation** with the prompt above if the consultant has not described the engagement yet.
+1. **Conditionally dispatch the doc-freshness-checker sub-agent in background.** Before opening the conversation, read `memory/long-term/freshness-report.md` and check the "Last refresh" run date. If the last check was fewer than 7 days ago AND the report shows zero Drifted or Unreachable entries → skip the dispatch and plan to note at the gate: "Doc citations verified [N days ago] — current." Only dispatch the sub-agent if the last check was 7 or more days ago, OR the report shows any open Drifted or Unreachable entries. When dispatching, call the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. The sub-agent refreshes Dynatrace doc citation status while the consultant answers Q1–Q9; its wall-clock work is hidden inside the user-input phase. It writes to `memory/long-term/freshness-report.md` only — it never edits long-term memory. Then **open the conversation** with the prompt above if the consultant has not described the engagement yet.
 2. **Ask clarifying questions** one at a time in adaptive order, skipping any already answered.
-3. **Check past investigations** for any prior engagement on the same customer or vertical. Surface the key lesson if found.
+3. **Check past investigations for this client.** Read `memory/clients/<active-client-name>/README.md` for prior engagement history. Surface the key lesson from the most recent investigation if found. Do not read other clients' folders — context isolation is strict.
 4. **Reframe the engagement** as a clear consulting objective: what insight will be surfaced, for whom, and to what end. Write this under "Consulting objective" in `current-context.md`. Example: *"Surface underutilized RUM and Davis AI insights for [Customer]'s Executive Sponsor ahead of their Q3 renewal, demonstrating measurable value from their Full-Stack and RUM investment."*
 5. **Surface 3–5 orientation hypotheses** about where value is likely hiding in the environment, given the active capabilities and vertical. Label them clearly as pre-scoring candidates — not findings. Pull from the tech → UX → business linkages in `domain-knowledge.md` and the vertical context. Example: *"Davis AI may be grouping related problems in ways the team hasn't reviewed, understating incident volume and MTTR improvement."*
 6. **Confirm scope** — what this engagement will cover and what it will not. Name any capability gaps (e.g., RUM not enabled) that limit the insight surface.
 7. **Write `memory/project-space/current-context.md`** fully populated. Every MUST-HAVE row carries a real value. SHOULD-HAVE rows carry either the consultant's answer or the literal string `"not provided (declined at gate)"` if they skipped the confirmation in Step 8. NICE-TO-HAVE rows are written when known and omitted otherwise. No `"TBD"`, no bracketed placeholders.
 8. **Verify the exit-criteria rubric.** Walk the rubric table top-to-bottom. Every MUST-HAVE must be populated with a real value before proceeding. For each unfilled SHOULD-HAVE, ask the consultant a short confirming question framed as helpful-not-blocking — e.g., *"Not required to proceed, but do you happen to know [field]? It would help sharpen the framing."* Record their answer (including "don't know" or "skip") and move on. Do not loop on a SHOULD-HAVE the consultant has declined.
-9. **Check the freshness sub-agent results.** Read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation so the user can approve memory updates inline with the Phase 0 approval — e.g., *"While framing the engagement, the freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note that results will be surfaced at the next phase gate.
+9. **Check freshness results (if dispatch occurred in Step 1).** If the sub-agent was dispatched, read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation — e.g., *"The freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note results will be surfaced at the next phase gate. If the dispatch was **skipped** (last check < 7 days, no Drifted/Unreachable), state at the gate: "Doc citations last verified [date from report] — current, no refresh needed."
 10. **Present and pause at the gate.** State clearly:
 
     > "This is the Phase 0 framing. Please **approve**, **redirect**, or **iterate** before I begin the diagnosis."

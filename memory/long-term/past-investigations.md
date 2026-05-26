@@ -1,6 +1,22 @@
-# Past Investigations
+# ⚠️ Deprecated — Do Not Use
 
-Index of completed investigations. Each archived investigation lives in its own dated subfolder under `memory/long-term/past-investigations/`, and is summarized in this index for quick reference.
+Past investigation archives have moved to the per-client workspace architecture to prevent cross-client context pollution.
+
+**The correct location for archived investigations is:**
+`memory/clients/<client-name>/past-investigations/<date-name>/`
+
+**The correct location for a client's engagement history index is:**
+`memory/clients/<client-name>/README.md`
+
+Use `skills/investigation-reset/SKILL.md` to archive an investigation. Files placed in this directory will not be read by any skill.
+
+See `memory/clients/README.md` for the full per-client workspace structure.
+
+---
+
+# Legacy index (pre-isolation architecture)
+
+This content is preserved for reference only. Do not add new rows here.
 
 ## Archive format
 
