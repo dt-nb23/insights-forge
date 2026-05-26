@@ -7,27 +7,95 @@ Dynatrace_Brand_Insights-Forge.pptx as the template base.
 All brand mechanics (layouts, fonts, master, footer) are handled
 by the template. This tool fills in engagement-specific content.
 
+DT Flow fonts are automatically installed from DTFlow/ on first run
+so the output renders correctly in PowerPoint without any manual setup.
+
 Usage:
     python3 tools/pptx-generator.py <spec.json> [output.pptx]
-
-    If output path is omitted, saves to:
+        Generate a deck. Output defaults to
         memory/project-space/deck-YYYY-MM-DD.pptx
 
     python3 tools/pptx-generator.py --list-layouts
-        Prints all 64 named layouts in the template.
+        Print all 64 named layouts in the template.
+
+    python3 tools/pptx-generator.py --install-fonts
+        Install DT Flow fonts from DTFlow/ to the system font directory
+        (macOS: ~/Library/Fonts, Linux: ~/.fonts). Safe to run multiple
+        times — skips fonts already installed.
 
 Spec format:  tools/pptx-spec-example.json
 """
 
 import sys
 import json
+import platform
+import shutil
 from datetime import date
 from pathlib import Path
 from pptx import Presentation
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE     = PROJECT_ROOT / "Dynatrace_Brand_Insights-Forge.pptx"
+FONTS_DIR    = PROJECT_ROOT / "DTFlow"
 OUTPUT_DIR   = PROJECT_ROOT / "memory" / "project-space"
+
+
+# ── Font installation ──────────────────────────────────────────────────────
+
+def _user_font_dir() -> Path | None:
+    """Return the user font directory for the current OS, or None if unsupported."""
+    system = platform.system()
+    if system == "Darwin":
+        return Path.home() / "Library" / "Fonts"
+    if system == "Linux":
+        return Path.home() / ".fonts"
+    return None
+
+
+def ensure_dtflow_fonts(verbose: bool = True) -> int:
+    """Install DT Flow fonts from DTFlow/ into the user font directory.
+
+    Copies only fonts that are not already present.  Safe to call on
+    every generator run — the check is fast and the copy only happens
+    once.  Returns the number of fonts newly installed.
+    """
+    if not FONTS_DIR.exists():
+        if verbose:
+            print(f"  ⚠ DTFlow/ not found — skipping font install", file=sys.stderr)
+        return 0
+
+    font_dir = _user_font_dir()
+    if font_dir is None:
+        if verbose:
+            print(f"  ⚠ Font auto-install not supported on {platform.system()}."
+                  f"  Install DTFlow/*.otf manually.", file=sys.stderr)
+        return 0
+
+    font_dir.mkdir(parents=True, exist_ok=True)
+
+    otf_files = sorted(FONTS_DIR.glob("*.otf"))
+    if not otf_files:
+        if verbose:
+            print("  ⚠ No .otf files found in DTFlow/", file=sys.stderr)
+        return 0
+
+    installed = []
+    for otf in otf_files:
+        dest = font_dir / otf.name
+        if not dest.exists():
+            shutil.copy2(otf, dest)
+            installed.append(otf.name)
+
+    if installed:
+        print(f"  ✓ Installed {len(installed)} DT Flow font(s) → {font_dir}")
+        # Refresh font cache on Linux so apps can see the new fonts
+        if platform.system() == "Linux":
+            import subprocess
+            subprocess.run(["fc-cache", "-fv"], capture_output=True)
+    elif verbose:
+        print(f"  ✓ DT Flow fonts already installed ({len(otf_files)} fonts in {font_dir})")
+
+    return len(installed)
 
 
 # ── Template helpers ───────────────────────────────────────────────────────
@@ -294,6 +362,7 @@ def dispatch(prs, spec: dict):
 # ── Generator ──────────────────────────────────────────────────────────────
 
 def generate(spec_data: dict, output_path: Path) -> None:
+    ensure_dtflow_fonts()
     prs = load_template()
     clear_sample_slides(prs)
 
@@ -326,6 +395,12 @@ def main():
         print(f"{'─'*5}  {'─'*45}")
         for i, name in enumerate(list_layouts(prs)):
             print(f"{i:5d}  {name}")
+        return
+
+    if len(sys.argv) == 2 and sys.argv[1] == "--install-fonts":
+        n = ensure_dtflow_fonts(verbose=True)
+        if n == 0:
+            print("No new fonts installed (already up to date).")
         return
 
     if len(sys.argv) < 2:
