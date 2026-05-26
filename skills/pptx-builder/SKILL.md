@@ -18,12 +18,14 @@ Use this skill when:
 
 Read these files before starting:
 
-- `memory/project-space/one-pager-YYYY-MM-DD.md` — the approved one-pager content.
+- `memory/project-space/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If an HTML one-pager also exists in the project root, read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
 - `memory/long-term/stakeholder-profiles.md` — the profile of the intended reader, to inform pacing, depth, and visual emphasis.
 - `memory/project-space/signals-map.md` and `action-plan.md` — for any supporting numbers, charts, or appendix material the one-pager pointed to.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand spec. Governs cover-slide aesthetic, section-divider pattern, content-card / chart / table layouts, footer text, chart series colors, and product-name capitalization.
 - `memory/long-term/brand/reference/source-pdf-notes.md` — page-by-page index of the source brand PDF, useful when picking a layout pattern.
 - `memory/long-term/brand/reference/pptx-layout-index.md` — complete catalog of the 64 named layouts in the `.pptx` template, grouped by purpose. Consult before picking a non-default layout.
+- `DT Insights Lockup RGB/` — local SVG lockup files for all Insights variants (horizontal and vertical, in Black, Gray, REV, and White). Use these before checking Brandfolder — they are the same source files. See lockup selection rules below.
+- `assets/` — pre-rendered wave PNGs already used in the HTML one-pager. Reuse them in the deck for visual consistency rather than re-rendering from scratch.
 
 ## Important: this skill does not replace the standard pptx skill
 
@@ -54,6 +56,39 @@ Alternative layouts (`Agenda`, `Quote`, `Customer story`, `Hero image+...`, imag
 
 Every body slide carries the footer from brand-spec §8: `© 2026 Dynatrace, LLC.   Confidential` at lower-left in Light 2 gray (`#6F747F`); Dynatrace cube mark + ` | ` + page number at lower-right. Insights Forge deliverables are Confidential by default — do not relabel without explicit user instruction.
 
+## Lockup selection by slide type
+
+The Insights lockup SVG files are in `DT Insights Lockup RGB/`. Always pick the variant that matches the slide background — never substitute a generated or recolored version.
+
+| Slide background | Lockup variant | File |
+|---|---|---|
+| Dark (cover, section divider with photo, any navy/black slide) | **REV** — full-color reversed for dark surfaces | `BAE9730_Insights-Lockup-Horizontal-RGB_REV.svg` |
+| White or light gray (all body/content slides) | **Black** — single-color black for print-safe legibility | `BAE9730_Insights-Lockup-Horizontal-RGB_Black.svg` |
+| Grayscale print output | **Gray** | `BAE9730_Insights-Lockup-Horizontal-RGB_Gray.svg` |
+| White reversed (rare — white lockup on a non-navy dark bg) | **White** | `BAE9730_Insights-Lockup-Horizontal-RGB_White.svg` |
+
+Use the horizontal lockup for slide title bars and one-pager headers where horizontal space is available. Use the vertical lockup for cover slides and tall layouts only. The Dynatrace cube mark (standalone glyph) goes in the lower-right footer of every body slide — it is embedded in the `.pptx` master and does not need to be separately placed.
+
+## Wave backgrounds for dark slides
+
+The brand spec describes the cover slide as "deep navy → black with a particle / bokeh visual (blue and magenta particles flowing diagonally)." This visual is sourced from the `Data-Visual-waves/` design kit. The same selection rules that govern the HTML one-pager apply here — **readability is the deciding factor**.
+
+**Which slides get a wave background:** only dark slides (cover, closing, and any "decision required" accent slide). Section dividers and all body/content slides use white backgrounds per the template; do not add wave images to them.
+
+**Wave series selection for dark slides:**
+
+| Series | Best for | Avoid when |
+|---|---|---|
+| `datalargebeam` | Cover slide, closing slide — smooth continuous beams do not compete with large headline text | Never avoid on dark slides; safe at all text sizes |
+| `datatrail` | Decision-required accent slides, secondary dark strips — single thin arc is minimal and decorative | Never avoid; lowest visual noise of any series |
+| `dataflow` | Cover slide only, where the only text is the large title (≥40px) and the subtitle | **Do not use on any slide with body text or label text ≤18px** — particle dots fragment letterforms |
+| `datablocks` | Decorative closing slides with minimal text | Dense text slides |
+| `dataparticles` | **Verify before use** — some files in this series were saved without PDF compatibility and render blank. Test with `qlmanage` before including |
+
+The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg.png` for the cover slide to keep the visual language consistent between the one-pager and deck. If the deck needs a different wave, render the `.ai` file using the procedure in `skills/exec-onepager/SKILL.md` (wave asset rendering section).
+
+**Applying a wave background in the deck:** in the `.pptx`, insert the PNG as a slide background image behind all other elements, then apply a dark overlay shape (rectangle, no border, fill `#1A2440` at 70–85% transparency) over it to ensure all text reads cleanly. The overlay opacity should be higher (80–85%) where body text appears, lower (65–70%) where only the large title sits.
+
 ## Steps
 
 1. **Check for the standard pptx skill** at `/mnt/skills/public/pptx/SKILL.md`. If it exists, plan to invoke it; if not, plan a structured markdown outline.
@@ -78,4 +113,8 @@ Every body slide carries the footer from brand-spec §8: `© 2026 Dynatrace, LLC
 - **Skipping the appendix decision.** Read the stakeholder profile. Some leaders read appendices; some never look past slide 4. Build accordingly.
 - **Assuming the renderer exists.** Always check for the standard pptx skill at runtime — environments differ.
 - **Going off-brand.** Using off-palette colors, title-case headings, or improvised layouts breaks the brand. Stick to the patterns in `brand-spec.md` — the eight-card grid, three-bucket layout, swimlane, gantt, timeline, hashtag-stat, table, and funnel are the approved compositions. If the content doesn't fit one of those, the content is wrong, not the template.
-- **Inventing logos or icons.** Source the Insights lockup and the Dynatrace cube mark from Brandfolder. Do not generate, trace, or recolor them.
+- **Sourcing the lockup from Brandfolder when local files exist.** `DT Insights Lockup RGB/` contains all eight lockup variants. Use the correct variant for the slide background (REV on dark, Black on white) — do not generate, trace, or recolor any lockup regardless of source.
+- **Using the wrong lockup variant.** REV on a white background makes the color lockup nearly invisible; Black on a dark background disappears. Always match the variant to the surface.
+- **Using a particle wave (dataflow series) on any slide with body text.** The same failure mode from the HTML one-pager applies in the deck: particle dots compete with letterforms at small sizes. Use `datalargebeam` or `datatrail` on any dark slide that carries text below 24pt.
+- **Re-rendering wave assets the HTML one-pager already rendered.** `assets/wave-bg.png` and `assets/wave-ask.png` are already at 2800px width. Reuse them for consistency and to avoid a duplicate render step.
+- **Designing the deck visually independently of the one-pager.** The one-pager is the approved design reference. If an HTML one-pager exists, its color choices, section order, and wave selections are already approved — carry them into the deck rather than redesigning from the brand spec alone.
