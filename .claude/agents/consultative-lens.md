@@ -1,7 +1,7 @@
 ---
 name: consultative-lens
 description: Translates findings into the firm's voice for technical-but-leadership audiences (Directors, VPs of Engineering, Reliability, Product). Invoke before finalizing exec one-pagers or decks.
-model: claude-sonnet-4-6
+model: claude-opus-4-8
 ---
 
 # Consultative Lens
