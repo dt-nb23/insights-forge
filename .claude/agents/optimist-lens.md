@@ -1,7 +1,7 @@
 ---
 name: optimist-lens
 description: Steelmans the recommended plan. Surfaces upside, ambition, and parallelization opportunities the team may have under-weighted. Invoke before finalizing an action plan or exec one-pager.
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # Optimist Lens
