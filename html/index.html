@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insights Forge — Agent Walkthrough</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  @font-face { font-family: 'DTFlow'; src: url('../DTFlow/DTFlow-Medium.otf'); font-weight: 500; }
+  @font-face { font-family: 'DTFlow'; src: url('../DTFlow/DTFlow-Light.otf'); font-weight: 300; }
+  @font-face { font-family: 'DTFlow'; src: url('../DTFlow/DTFlow-Bold.otf'); font-weight: 700; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #07101e;
+    --navy2: #0d1f38;
+    --teal: #49C2B3;
+    --magenta: #C93FDB;
+    --blue: #1966FF;
+    --gray: #6F747F;
+    --gray-lt: #b0b5be;
+    --white: #f0f4f8;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --sidebar-w: 240px;
+  }
+
+  html, body { height: 100%; background: var(--navy); color: var(--white); font-family: 'DTFlow', Arial, sans-serif; font-weight: 300; font-size: 15px; line-height: 1.6; }
+
+  /* ── Layout ── */
+  #shell { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: var(--navy2);
+    border-right: 1px solid var(--card-border);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  #sidebar-logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--card-border); }
+  #sidebar-logo img { height: 22px; display: block; }
+  #sidebar-logo .sub { font-size: 11px; color: var(--gray); margin-top: 4px; letter-spacing: .06em; text-transform: uppercase; }
+
+  nav { flex: 1; padding: 12px 0; }
+  .nav-section { padding: 8px 16px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; cursor: pointer;
+    font-size: 13px; color: var(--gray-lt);
+    border-left: 2px solid transparent;
+    transition: all .15s;
+  }
+  .nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
+  .nav-item.active { color: var(--teal); border-left-color: var(--teal); background: rgba(73,194,179,.06); }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Main ── */
+  #main { flex: 1; overflow-y: auto; padding: 40px 48px; }
+
+  /* ── Section pages ── */
+  .page { display: none; animation: fadeIn .2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Typography ── */
+  h1 { font-size: 28px; font-weight: 500; margin-bottom: 8px; }
+  h2 { font-size: 20px; font-weight: 500; margin: 32px 0 12px; }
+  h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  p { color: var(--gray-lt); margin-bottom: 12px; }
+  .lead { font-size: 16px; color: var(--gray-lt); max-width: 640px; margin-bottom: 32px; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; letter-spacing: .04em; }
+  .tag-teal { background: rgba(73,194,179,.15); color: var(--teal); }
+  .tag-magenta { background: rgba(201,63,219,.15); color: var(--magenta); }
+  .tag-blue { background: rgba(25,102,255,.2); color: #6fa8ff; }
+  .tag-gray { background: rgba(255,255,255,.08); color: var(--gray-lt); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card-sm { padding: 14px 18px; }
+
+  /* ── Phase flow ── */
+  .phase-flow { display: flex; align-items: flex-start; gap: 0; margin: 24px 0 32px; flex-wrap: wrap; }
+  .phase-node {
+    flex: 1; min-width: 140px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+  }
+  .phase-node:hover, .phase-node.active { border-color: var(--teal); background: rgba(73,194,179,.06); }
+  .phase-arrow { display: flex; align-items: center; padding: 0 4px; color: var(--gray); font-size: 20px; padding-top: 20px; }
+  .phase-num { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--gray); margin-bottom: 4px; }
+  .phase-name { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .phase-artifact { font-size: 11px; color: var(--teal); font-family: monospace; }
+
+  /* ── Phase detail panel ── */
+  #phase-detail {
+    background: rgba(73,194,179,.04);
+    border: 1px solid rgba(73,194,179,.2);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 32px;
+    display: none;
+  }
+  #phase-detail.open { display: block; animation: fadeIn .2s ease; }
+
+  /* ── Steps list ── */
+  .steps { list-style: none; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps;
+    display: flex; gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 13px; color: var(--gray-lt);
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(steps);
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(73,194,179,.15); color: var(--teal);
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── Skill cards ── */
+  .skill-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .skill-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; cursor: pointer;
+    transition: background .15s;
+  }
+  .skill-header:hover { background: rgba(255,255,255,.03); }
+  .skill-header-left { display: flex; align-items: center; gap: 12px; }
+  .skill-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .skill-body { display: none; padding: 0 20px 16px; border-top: 1px solid var(--card-border); }
+  .skill-body.open { display: block; animation: fadeIn .15s ease; }
+  .chevron { color: var(--gray); transition: transform .2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* ── Lens grid ── */
+  .lens-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .lens-card { border-radius: 10px; padding: 20px; border: 1px solid var(--card-border); background: var(--card-bg); }
+
+  /* ── Memory diagram ── */
+  .mem-diagram { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+  .mem-tier {
+    flex: 1; min-width: 220px;
+    border-radius: 10px; padding: 20px;
+    border: 1px solid var(--card-border);
+  }
+  .mem-tier h3 { font-size: 13px; margin-bottom: 12px; }
+  .mem-file { font-family: monospace; font-size: 11px; color: var(--teal); padding: 3px 0; display: block; }
+  .mem-rule { font-size: 12px; color: var(--gray-lt); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--card-border); }
+
+  /* ── Artifact table ── */
+  .artifact-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .artifact-table th { text-align: left; padding: 8px 12px; color: var(--gray); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--card-border); }
+  .artifact-table td { padding: 10px 12px; border-bottom: 1px solid var(--card-border); color: var(--gray-lt); vertical-align: top; }
+  .artifact-table tr:last-child td { border-bottom: none; }
+  .artifact-table td:first-child { font-family: monospace; font-size: 12px; color: var(--teal); white-space: nowrap; }
+  .artifact-table td:nth-child(2) { color: var(--white); }
+
+  /* ── Gate callout ── */
+  .gate-callout {
+    display: flex; gap: 16px;
+    background: rgba(25,102,255,.08);
+    border: 1px solid rgba(25,102,255,.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    align-items: flex-start;
+  }
+  .gate-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .gate-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* ── Principle pills ── */
+  .principles { display: flex; flex-direction: column; gap: 8px; }
+  .principle { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--card-border); }
+  .principle-icon { font-size: 18px; flex-shrink: 0; }
+  .principle-text { font-size: 13px; color: var(--gray-lt); }
+
+  /* ── Two-panel viewer ── */
+  .two-panel { display: flex; gap: 0; height: calc(100vh - 130px); min-height: 400px; }
+  .panel-left { width: 210px; flex-shrink: 0; border-right: 1px solid var(--card-border); overflow-y: auto; padding: 6px 0; }
+  .panel-right { flex: 1; overflow-y: auto; padding: 0 0 40px 24px; }
+  .panel-group { padding: 8px 12px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+  .panel-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px; cursor: pointer;
+    font-size: 12px; color: var(--gray-lt);
+    border-left: 2px solid transparent;
+    transition: all .15s;
+  }
+  .panel-item:hover { color: var(--white); background: rgba(255,255,255,.03); }
+  .panel-item.active { color: var(--teal); border-left-color: var(--teal); background: rgba(73,194,179,.06); }
+  .panel-item-mono { font-family: monospace; font-size: 11px; }
+  .panel-item-sub { font-size: 10px; color: var(--gray); }
+
+  /* ── Markdown rendering (marked.js output — scope all rules to .md-content) ── */
+  .md-content { max-width: 720px; }
+  .md-content h1 { font-size: 24px; font-weight: 500; margin: 8px 0 14px; color: var(--white); }
+  .md-content h2 { font-size: 17px; font-weight: 500; margin: 28px 0 10px; color: var(--white); padding-bottom: 7px; border-bottom: 1px solid var(--card-border); }
+  .md-content h3 { font-size: 14px; font-weight: 500; margin: 18px 0 7px; color: var(--white); }
+  .md-content h4 { font-size: 13px; font-weight: 500; margin: 14px 0 6px; color: var(--gray-lt); }
+  .md-content p { color: var(--gray-lt); font-size: 14px; margin: 0 0 12px; line-height: 1.72; }
+  .md-content ul, .md-content ol { padding-left: 22px; margin: 0 0 12px; }
+  .md-content li { color: var(--gray-lt); font-size: 14px; margin: 5px 0; line-height: 1.65; }
+  .md-content li > ul, .md-content li > ol { margin: 4px 0 4px 0; }
+  .md-content blockquote { border-left: 3px solid var(--teal); padding: 10px 16px; margin: 14px 0; background: rgba(73,194,179,.05); border-radius: 0 6px 6px 0; }
+  .md-content blockquote p { color: var(--gray-lt); font-size: 14px; font-style: italic; line-height: 1.65; margin: 0; }
+  .md-content hr { border: none; border-top: 1px solid var(--card-border); margin: 22px 0; }
+  .md-content pre { background: rgba(0,0,0,.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 18px; overflow-x: auto; margin: 10px 0 16px; line-height: 1.55; }
+  .md-content pre code { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: #c8d0e0; font-family: monospace; }
+  .md-content code { background: rgba(255,255,255,.09); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #c8d0e0; }
+  .md-content a { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(73,194,179,.3); transition: border-color .15s; }
+  .md-content a:hover { border-bottom-color: var(--teal); }
+  .md-content strong { color: var(--white); font-weight: 500; }
+  .md-content em { font-style: italic; color: #d8dde6; }
+  .md-content table { width: 100%; border-collapse: collapse; margin: 12px 0 16px; font-size: 13px; }
+  .md-content thead th { text-align: left; padding: 8px 12px; background: rgba(255,255,255,.04); color: var(--gray-lt); font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--card-border); }
+  .md-content tbody td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--gray-lt); vertical-align: top; line-height: 1.55; }
+  .md-content tbody tr:last-child td { border-bottom: none; }
+  /* Inline code shorthand for non-markdown sections */
+  .ic { background: rgba(255,255,255,.09); padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #c8d0e0; }
+
+  /* ── File viewer ── */
+  .file-info { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .file-path-chip { font-family: monospace; font-size: 12px; color: var(--teal); background: rgba(73,194,179,.08); padding: 3px 10px; border-radius: 4px; }
+  .file-wrap { display: flex; background: #080e1a; border: 1px solid var(--card-border); border-radius: 8px; overflow: auto; max-height: calc(100vh - 340px); min-height: 160px; }
+  .file-nums { padding: 14px 8px 14px 14px; color: #2e3545; font-family: monospace; font-size: 12px; line-height: 1.65; text-align: right; user-select: none; flex-shrink: 0; }
+  .file-nums span { display: block; }
+  .file-pre { padding: 14px 14px 14px 0; color: #c8d0e0; font-family: monospace; font-size: 12px; line-height: 1.65; white-space: pre; flex: 1; }
+  .file-ann { margin-top: 20px; }
+  .ann-row { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--card-border); font-size: 12px; }
+  .ann-row:last-child { border-bottom: none; }
+  .ann-key { font-family: monospace; color: var(--teal); min-width: 170px; flex-shrink: 0; padding-top: 1px; }
+  .ann-val { color: var(--gray-lt); line-height: 1.5; }
+
+  /* ── Getting started steps ── */
+  .qs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .qs-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(73,194,179,.15); color: var(--teal); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .qs-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--card-border); }
+  .qs-row:last-child { border-bottom: none; }
+  .qs-q { font-family: monospace; font-size: 11px; color: var(--teal); min-width: 28px; }
+  .q-table { width: 100%; border-collapse: collapse; font-size: 13px; max-width: 560px; }
+  .q-table td { padding: 7px 10px; border-bottom: 1px solid var(--card-border); color: var(--gray-lt); vertical-align: top; }
+  .q-table td:first-child { color: var(--teal); font-family: monospace; font-size: 11px; white-space: nowrap; width: 32px; }
+  .q-table tr:last-child td { border-bottom: none; }
+
+  /* ── View toggle (Rendered / Raw) ── */
+  .view-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+  .view-btn { padding: 4px 14px; font-size: 12px; font-family: 'DTFlow', Arial, sans-serif; background: transparent; border: 1px solid var(--card-border); border-radius: 4px; color: var(--gray); cursor: pointer; transition: all .15s; }
+  .view-btn:hover { color: var(--white); border-color: rgba(255,255,255,.2); }
+  .view-btn.active { background: rgba(73,194,179,.12); border-color: var(--teal); color: var(--teal); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- ── Sidebar ── -->
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <img src="../assets/insights-lockup-rev.svg" alt="Insights Forge" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none;font-size:16px;font-weight:500;color:#49C2B3;">Insights Forge</span>
+    <div class="sub">Agent Walkthrough</div>
+  </div>
+  <nav>
+    <div class="nav-section">Start here</div>
+    <div class="nav-item active" data-page="overview">
+      <div class="nav-dot" style="background:#49C2B3"></div> Overview
+    </div>
+    <div class="nav-item" data-page="init">
+      <div class="nav-dot" style="background:#6fa8ff"></div> Session Init
+    </div>
+
+    <div class="nav-section">Phases</div>
+    <div class="nav-item" data-page="phases">
+      <div class="nav-dot" style="background:#49C2B3"></div> Phase Flow
+    </div>
+    <div class="nav-item" data-page="phase0">
+      <div class="nav-dot" style="background:#6F747F"></div> Phase 0 — Context
+    </div>
+    <div class="nav-item" data-page="phase1">
+      <div class="nav-dot" style="background:#6F747F"></div> Phase 1 — Diagnose
+    </div>
+    <div class="nav-item" data-page="phase2">
+      <div class="nav-dot" style="background:#6F747F"></div> Phase 2 — Solution
+    </div>
+    <div class="nav-item" data-page="phase3">
+      <div class="nav-dot" style="background:#6F747F"></div> Phase 3 — Deliver
+    </div>
+
+    <div class="nav-section">Tooling</div>
+    <div class="nav-item" data-page="skills">
+      <div class="nav-dot" style="background:#C93FDB"></div> Skills
+    </div>
+    <div class="nav-item" data-page="lenses">
+      <div class="nav-dot" style="background:#C93FDB"></div> Lenses
+    </div>
+
+    <div class="nav-section">Architecture</div>
+    <div class="nav-item" data-page="memory">
+      <div class="nav-dot" style="background:#1966FF"></div> Memory Model
+    </div>
+    <div class="nav-item" data-page="artifacts">
+      <div class="nav-dot" style="background:#1966FF"></div> Artifacts
+    </div>
+    <div class="nav-item" data-page="gates">
+      <div class="nav-dot" style="background:#1966FF"></div> Gates &amp; Controls
+    </div>
+
+    <div class="nav-section">Documentation</div>
+    <div class="nav-item" data-page="getting-started">
+      <div class="nav-dot" style="background:#b0b5be"></div> Getting Started
+    </div>
+    <div class="nav-item" data-page="docs">
+      <div class="nav-dot" style="background:#b0b5be"></div> Doc Browser
+    </div>
+
+    <div class="nav-section">Reference</div>
+    <div class="nav-item" data-page="files">
+      <div class="nav-dot" style="background:#b0b5be"></div> Default Files
+    </div>
+    <div class="nav-item" data-page="source-files">
+      <div class="nav-dot" style="background:#49C2B3"></div> Source Files
+    </div>
+  </nav>
+</aside>
+
+<!-- ── Main ── -->
+<main id="main">
+
+<!-- ══════════════ OVERVIEW ══════════════ -->
+<section class="page active" id="page-overview">
+  <h1>Insights Forge</h1>
+  <p class="lead">A phased, human-in-the-loop consulting agent that structures and accelerates engineering judgment for Dynatrace engagements — without substituting for it.</p>
+
+  <div class="card-grid">
+    <div class="card card-sm">
+      <div class="tag tag-teal" style="margin-bottom:10px">Core purpose</div>
+      <h3>Structure &amp; accelerate</h3>
+      <p style="font-size:13px;margin:0">Translates ambiguous reliability problems into MECE issue trees, ranked hypotheses, signal maps, and leadership-ready deliverables.</p>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-blue" style="margin-bottom:10px">What it never does</div>
+      <h3>No live queries</h3>
+      <p style="font-size:13px;margin:0">Never generates DQL, SQL, or executable query syntax. Never executes production changes. Validation stays with the human team.</p>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-magenta" style="margin-bottom:10px">Guardrail</div>
+      <h3>Human-in-the-loop gates</h3>
+      <p style="font-size:13px;margin:0">Every phase ends with an explicit user gate. The agent never advances without approval, redirect, or lens iteration.</p>
+    </div>
+  </div>
+
+  <h2>Operating principles</h2>
+  <div class="principles">
+    <div class="principle"><div class="principle-icon">🔒</div><div><strong>Explicit phases + approval gates</strong><br><span class="principle-text">No phase begins until the prior one is explicitly approved. Every gate decision is logged.</span></div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div><strong>No live query generation</strong><br><span class="principle-text">References patterns, SLIs, SLOs, and concepts only. Raw DQL stays with the engineer.</span></div></div>
+    <div class="principle"><div class="principle-icon">🔍</div><div><strong>Explicit about uncertainty</strong><br><span class="principle-text">When evidence is thin or instrumentation is missing, the agent names the gap — never buries it.</span></div></div>
+    <div class="principle"><div class="principle-icon">📐</div><div><strong>MECE-first structure</strong><br><span class="principle-text">Issue trees must be mutually exclusive and collectively exhaustive. Hypotheses must be falsifiable.</span></div></div>
+    <div class="principle"><div class="principle-icon">🎯</div><div><strong>Named exit criteria</strong><br><span class="principle-text">Every investigation phase has pre-agreed "Confirmed / Ruled out / Inconclusive" criteria before work starts.</span></div></div>
+    <div class="principle"><div class="principle-icon">🗣️</div><div><strong>Every session opens the same way</strong><br><span class="principle-text">"Describe the problem you're trying to solve." — no assumptions about problem shape.</span></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ SESSION INIT ══════════════ -->
+<section class="page" id="page-init">
+  <h1>Session Initialization</h1>
+  <p class="lead">Before Phase 0 begins, the agent loads four long-term memory files in order and holds them for the full session.</p>
+
+  <h2>Read order (hold entire session)</h2>
+  <ol class="steps" style="max-width:600px">
+    <li><div><code>memory/long-term/domain-knowledge.md</code><br><span style="font-size:12px;color:var(--gray)">Tech concepts, signal patterns, tech→UX→business mappings, Dynatrace-specific terminology</span></div></li>
+    <li><div><code>memory/long-term/dynatrace-playbooks.md</code><br><span style="font-size:12px;color:var(--gray)">8 named investigation workflows with step sequences, confirmed/ruled-out criteria, common dead-ends</span></div></li>
+    <li><div><code>memory/long-term/frameworks.md</code><br><span style="font-size:12px;color:var(--gray)">MECE definition, ICE formula, issue-tree → hypothesis rules, exit criteria rubric</span></div></li>
+    <li><div><code>memory/long-term/stakeholder-profiles.md</code><br><span style="font-size:12px;color:var(--gray)">8 role archetypes + named-leader overlays for Phase 3 framing</span></div></li>
+  </ol>
+
+  <h2>Then check active engagement</h2>
+  <div class="card" style="max-width:600px">
+    <p style="margin:0;font-size:13px;color:var(--gray-lt)">Read <code>memory/project-space/active-engagement.md</code>.</p>
+    <div style="display:flex;gap:24px;margin-top:14px">
+      <div style="flex:1">
+        <div class="tag tag-gray" style="margin-bottom:6px">active: none</div>
+        <p style="font-size:12px;margin:0">If <code>memory/clients/</code> has non-template subfolders → ask: <em>"New engagement or resume an existing one?"</em></p>
+      </div>
+      <div style="flex:1">
+        <div class="tag tag-teal" style="margin-bottom:6px">active: &lt;client&gt;</div>
+        <p style="font-size:12px;margin:0">Load client workspace. All client-specific reads come only from <code>memory/clients/&lt;client-name&gt;/</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Long-term memory contents</h2>
+  <div class="card-grid">
+    <div class="card card-sm">
+      <h3 style="color:var(--teal);font-size:13px">domain-knowledge.md</h3>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
+        <li>Observability concepts: SLI, SLO, SLA, error budget, RUM, APM</li>
+        <li>Common signal patterns: latency, error spikes, saturation, cache collapse</li>
+        <li>Tech → UX → business mapping table (7 rows)</li>
+        <li>DT-specific: DPS, Grail, DQL, Smartscape, Davis AI, OneAgent</li>
+        <li>Citation freshness rules (&gt;7 days = stale)</li>
+      </ul>
+    </div>
+    <div class="card card-sm">
+      <h3 style="color:var(--teal);font-size:13px">dynatrace-playbooks.md</h3>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
+        <li>Backend service latency</li>
+        <li>Service failure spike</li>
+        <li>Frontend / UX regression (RUM)</li>
+        <li>Log investigation (Grail)</li>
+        <li>SLO breach / error-budget burn</li>
+        <li>Deploy / release correlation</li>
+        <li>Third-party dependency</li>
+        <li>Reading a Davis problem</li>
+      </ul>
+    </div>
+    <div class="card card-sm">
+      <h3 style="color:var(--teal);font-size:13px">frameworks.md</h3>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
+        <li>MECE: template Q-set for tree validation</li>
+        <li>ICE: Impact × Confidence / Effort (1–10 scale)</li>
+        <li>Issue tree → hypothesis: 2–4 testable claims per branch</li>
+        <li>Exit criteria: Confirmed / Ruled out / Inconclusive</li>
+      </ul>
+    </div>
+    <div class="card card-sm">
+      <h3 style="color:var(--teal);font-size:13px">stakeholder-profiles.md</h3>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
+        <li>Executive Sponsor (CTO/VP Eng) — business impact, 1-page max</li>
+        <li>Product Owner — user journeys, feature velocity</li>
+        <li>SRE — SLO/error budget, blameless retro</li>
+        <li>IT Ops Manager — MTTR, alert noise</li>
+        <li>App Developer — root cause, traces</li>
+        <li>Platform / DevOps — deploy safety, coverage</li>
+        <li>Security / Compliance — audit trails, regulatory</li>
+        <li>Data / Analytics Lead — confidence intervals, KPIs</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE FLOW ══════════════ -->
+<section class="page" id="page-phases">
+  <h1>Phase Flow</h1>
+  <p class="lead">Four phases, each ending with a human approval gate. The agent never advances without explicit go-ahead.</p>
+
+  <div class="phase-flow">
+    <div class="phase-node" onclick="navTo('phase0')">
+      <div class="phase-num">Phase 0</div>
+      <div class="phase-name">Context framing</div>
+      <div class="phase-artifact">current-context.md</div>
+    </div>
+    <div class="phase-arrow">→</div>
+    <div class="phase-node" onclick="navTo('phase1')">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-name">Diagnose</div>
+      <div class="phase-artifact">issue-tree · hypotheses · signals-map</div>
+    </div>
+    <div class="phase-arrow">→</div>
+    <div class="phase-node" onclick="navTo('phase2')">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-name">Solution</div>
+      <div class="phase-artifact">action-plan.md</div>
+    </div>
+    <div class="phase-arrow">→</div>
+    <div class="phase-node" onclick="navTo('phase3')">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-name">Deliver</div>
+      <div class="phase-artifact">one-pager + deck</div>
+    </div>
+  </div>
+
+  <div class="gate-callout">
+    <div class="gate-icon">🔐</div>
+    <div>
+      <strong>Every gate offers three responses</strong>
+      <div class="gate-opts">
+        <span class="tag tag-teal">Approve → advance</span>
+        <span class="tag tag-blue">Redirect → revise scope</span>
+        <span class="tag tag-magenta">Iterate through a lens → critique &amp; revise</span>
+      </div>
+      <p style="font-size:12px;margin-top:8px;margin-bottom:0">Every gate decision is recorded in <code>decisions-log.md</code>.</p>
+    </div>
+  </div>
+
+  <h2>Skill file load rule</h2>
+  <div class="card" style="max-width:560px">
+    <p style="font-size:13px;margin:0;color:var(--gray-lt)">Each phase's skill file is read <strong>immediately before</strong> producing its artifact. Skills for future phases are never pre-loaded. Only one skill is read at a time unless two are explicitly needed in sequence.</p>
+  </div>
+
+  <h2>On-demand skills (read only when task is active)</h2>
+  <div class="card-grid">
+    <div class="card card-sm"><h3 style="font-size:13px">🔎 External research</h3><p style="font-size:12px;margin:0">Docs.dynatrace.com / community lookups with freshness validation</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">⏸ Investigation reset</h3><p style="font-size:12px;margin:0">Archive complete engagement or pause/resume in-progress one</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">👤 Stakeholder overlay</h3><p style="font-size:12px;margin:0">Capture named leader profile in client workspace</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">🌐 Environment intake</h3><p style="font-size:12px;margin:0">Capture persistent client Dynatrace environment facts</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">📈 Value highlight</h3><p style="font-size:12px;margin:0">QBR/renewal backward-looking value summary from prior archives</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 0 ══════════════ -->
+<section class="page" id="page-phase0">
+  <div class="tag tag-gray" style="margin-bottom:12px">Phase 0</div>
+  <h1>Context framing</h1>
+  <p class="lead">Frame the engagement before any diagnosis work. Produces a complete <code>current-context.md</code> with all MUST-HAVE fields populated.</p>
+
+  <h2>Inputs loaded</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
+    <span class="tag tag-teal">stakeholder-profiles.md</span>
+    <span class="tag tag-teal">domain-knowledge.md</span>
+    <span class="tag tag-teal">terminology.md</span>
+    <span class="tag tag-teal">client-question-bank.md</span>
+    <span class="tag tag-teal">active-engagement.md</span>
+    <span class="tag tag-gray">prior client README (if exists)</span>
+  </div>
+
+  <h2>Procedure</h2>
+  <ol class="steps">
+    <li><div><strong>Background: dispatch doc-freshness-checker</strong><br><span>If last check &gt;7 days ago, launch the doc-freshness sub-agent in background while questions are answered.</span></div></li>
+    <li><div><strong>Q1 — Customer &amp; business description</strong><br><span>Who is the customer, what do they do?</span></div></li>
+    <li><div><strong>Q2 — Industry vertical</strong><br><span>Shapes which DT playbooks and signal patterns are most relevant.</span></div></li>
+    <li><div><strong>Q3 — C.S.I.R. (4-part sub-sequence)</strong><br><span>Context · Specific Information · Intent · Response format. Establishes the consulting frame.</span></div></li>
+    <li><div><strong>Q4 — Tenant type</strong><br><span>SaaS vs Managed. Affects DPS, Grail, and capability availability.</span></div></li>
+    <li><div><strong>Q5 — Active capabilities</strong><br><span>Multi-select checklist: which DT capabilities are active (OneAgent, RUM, Synthetics, Grail, etc.).</span></div></li>
+    <li><div><strong>Q6 — RUM status on target application</strong><br><span>Conditional on Q5. Scopes frontend signal availability.</span></div></li>
+    <li><div><strong>Q7 — Stakeholder leader + archetype</strong><br><span>Names who will receive Phase 3 deliverables. Triggers stakeholder-overlay skill if no profile exists.</span></div></li>
+    <li><div><strong>Q8 — Technical team priorities</strong><br><span>What the engineering team cares about; shapes action-plan framing.</span></div></li>
+    <li><div><strong>Q9 — Engagement trigger</strong><br><span>QBR / renewal / expansion / incident follow-up. Shapes value narrative.</span></div></li>
+    <li><div><strong>Check prior investigations</strong><br><span>Surface key lesson if a prior investigation exists for this client.</span></div></li>
+    <li><div><strong>Reframe as consulting objective</strong><br><span>Translate Q&amp;A into a clear, bounded consulting objective.</span></div></li>
+    <li><div><strong>Surface 3–5 orientation hypotheses</strong><br><span>From capabilities + vertical, propose initial hypotheses before Phase 1 begins.</span></div></li>
+    <li><div><strong>Write current-context.md</strong><br><span>All MUST-HAVE fields populated. SHOULD-HAVE fields or "declined".</span></div></li>
+    <li><div><strong>Surface freshness report</strong><br><span>Present doc-freshness results at gate. Flag drifted citations for user approval before promotion.</span></div></li>
+    <li><div><strong>Present &amp; pause at Phase 0 gate</strong></div></li>
+  </ol>
+
+  <h2>Exit criteria (current-context.md)</h2>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+    <div class="card card-sm" style="flex:1;min-width:200px">
+      <div class="tag tag-teal" style="margin-bottom:8px">MUST-HAVE</div>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:14px">
+        <li>Customer + vertical</li>
+        <li>Engagement (C.S.I.R.)</li>
+        <li>Active capabilities</li>
+        <li>Consulting objective</li>
+        <li>Stakeholder archetype</li>
+        <li>Phase 0 gate decision</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="flex:1;min-width:200px">
+      <div class="tag tag-blue" style="margin-bottom:8px">SHOULD-HAVE</div>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:14px">
+        <li>Tenant type</li>
+        <li>RUM status (conditional)</li>
+        <li>Leadership priorities</li>
+        <li>Engagement trigger</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="flex:1;min-width:200px">
+      <div class="tag tag-gray" style="margin-bottom:8px">NICE-TO-HAVE</div>
+      <ul style="font-size:12px;color:var(--gray-lt);padding-left:14px">
+        <li>Prior engagement reference</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 1 ══════════════ -->
+<section class="page" id="page-phase1">
+  <div class="tag tag-gray" style="margin-bottom:12px">Phase 1</div>
+  <h1>Diagnose</h1>
+  <p class="lead">Four sub-deliverables produced in sequence. Each feeds the next. The full Phase 1 gate fires after all four are complete.</p>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px">
+    <span class="tag tag-teal">1a — issue-tree.md</span>
+    <span style="color:var(--gray);padding-top:2px">→</span>
+    <span class="tag tag-teal">1b/c — hypotheses.md</span>
+    <span style="color:var(--gray);padding-top:2px">→</span>
+    <span class="tag tag-teal">1d — signals-map.md</span>
+  </div>
+
+  <!-- 1a -->
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('p1a')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">🌲</div>
+        <div><div style="font-size:13px;font-weight:500">1a — MECE Decomposition</div><div style="font-size:11px;color:var(--gray)">Build mutually exclusive, collectively exhaustive issue tree</div></div>
+      </div>
+      <div class="chevron" id="chev-p1a">▾</div>
+    </div>
+    <div class="skill-body" id="body-p1a">
+      <ol class="steps" style="margin-top:12px">
+        <li>Restate problem as a question (not a statement)</li>
+        <li>Identify axis of decomposition: system layer / user journey / team boundary / time</li>
+        <li>Draft 4–7 branches — problem spaces, not solutions or conclusions</li>
+        <li>For each branch, write "what we'd see if this is the cause"</li>
+        <li>Check pairs for overlap; rename/restructure if found</li>
+        <li>Check set for gaps: third-party, biz process, instrumentation, deploy, data quality</li>
+        <li>Verify all branches are at the same abstraction level</li>
+        <li>Invoke <span class="tag tag-magenta" style="font-size:10px">MECE lens</span> for independent critique</li>
+        <li>Revise based on lens output; write to <code>issue-tree.md</code> with version history</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 1b/c -->
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('p1bc')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(25,102,255,.12)">💡</div>
+        <div><div style="font-size:13px;font-weight:500">1b/c — Hypothesis Generation + ICE Scoring</div><div style="font-size:11px;color:var(--gray)">Testable claims per branch, scored and ranked</div></div>
+      </div>
+      <div class="chevron" id="chev-p1bc">▾</div>
+    </div>
+    <div class="skill-body" id="body-p1bc">
+      <p style="font-size:13px;margin-top:12px;color:var(--white)">Generation (1b)</p>
+      <ol class="steps">
+        <li>For each branch, draft 2–4 candidate hypotheses — specific, testable claims</li>
+        <li>For each hypothesis, write: Expected signals · Validation approach · Required metrics · Status (open)</li>
+        <li>Flag instrumentation gaps explicitly</li>
+        <li>Verify each hypothesis has falsifiable exit criteria</li>
+      </ol>
+      <p style="font-size:13px;margin-top:16px;color:var(--white)">ICE Scoring (1c)</p>
+      <div class="card card-sm" style="margin:8px 0 12px;background:rgba(25,102,255,.06);border-color:rgba(25,102,255,.2)">
+        <code style="font-size:13px;color:#6fa8ff">ICE = (Impact × Confidence) / Effort</code>
+        <p style="font-size:12px;margin-top:6px;margin-bottom:0">Each dimension scored 1–10. Rank descending. Flag where one dimension carries most weight.</p>
+      </div>
+      <ol class="steps">
+        <li>Score Impact: business outcome magnitude (1–10)</li>
+        <li>Score Confidence: strength of prior evidence (1–10)</li>
+        <li>Score Effort: engineering/analytics cost (1–10)</li>
+        <li>Compute ICE, rank descending</li>
+        <li>Invoke <span class="tag tag-magenta" style="font-size:10px">ICE lens</span> for scoring validation</li>
+        <li>Update <code>hypotheses.md</code> with scores; preserve prior scores if changed materially</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 1d -->
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('p1d')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(201,63,219,.12)">🔗</div>
+        <div><div style="font-size:13px;font-weight:500">1d — Signal Mapping</div><div style="font-size:11px;color:var(--gray)">Technical signal → UX outcome → business KPI chains</div></div>
+      </div>
+      <div class="chevron" id="chev-p1d">▾</div>
+    </div>
+    <div class="skill-body" id="body-p1d">
+      <ol class="steps" style="margin-top:12px">
+        <li>List SLIs/SLOs relevant to each hypothesis</li>
+        <li>Map each SLI to a user-visible UX outcome</li>
+        <li>Map UX outcomes to business KPIs; quantify if possible</li>
+        <li>Flag instrumentation gaps explicitly where chain is broken</li>
+        <li>Verify each layer connects to the next</li>
+      </ol>
+      <div class="card card-sm" style="margin-top:12px;font-size:12px;color:var(--gray-lt)">
+        Output sections in <code>signals-map.md</code>: <strong>SLIs/SLOs</strong> · <strong>UX outcomes</strong> · <strong>Business KPIs</strong> · <strong>Instrumentation gaps</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="gate-callout" style="margin-top:24px">
+    <div class="gate-icon">🔐</div>
+    <div>
+      <strong>Phase 1 gate</strong> — fires after all three deliverables are complete
+      <div class="gate-opts">
+        <span class="tag tag-teal">Approve → Phase 2</span>
+        <span class="tag tag-blue">Redirect → revise artifacts</span>
+        <span class="tag tag-magenta">Iterate through lens → MECE / Optimist / Skeptic / ICE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 2 ══════════════ -->
+<section class="page" id="page-phase2">
+  <div class="tag tag-gray" style="margin-bottom:12px">Phase 2</div>
+  <h1>Solution — Action plan</h1>
+  <p class="lead">Translate the ranked diagnosis into investigation actions, recommended actions, decision asks, and documented risks.</p>
+
+  <h2>Inputs</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
+    <span class="tag tag-teal">hypotheses.md</span>
+    <span class="tag tag-teal">signals-map.md</span>
+    <span class="tag tag-teal">current-context.md</span>
+    <span class="tag tag-teal">dynatrace-playbooks.md</span>
+    <span class="tag tag-teal">frameworks.md</span>
+    <span class="tag tag-teal">stakeholder-profiles.md</span>
+  </div>
+
+  <h2>Procedure</h2>
+  <ol class="steps">
+    <li><div><strong>Investigation actions</strong> — for every open/validating hypothesis<br><span>Fields: what · data source · owner · exit criteria (confirmed / ruled out) · target date</span></div></li>
+    <li><div><strong>Recommended actions</strong> — ranked by impact vs effort<br><span>Fields: action · condition · owner · timeframe · notes/coordination</span></div></li>
+    <li><div><strong>Decision asks</strong> — specific decisions named leaders need to make<br><span>Not open questions. Each decision ask names the decision-maker.</span></div></li>
+    <li><div><strong>Risks &amp; tradeoffs</strong> — each risk paired with cost + mitigation<br><span>Tradeoffs appear alongside recommendations, not in a separate appendix.</span></div></li>
+    <li><div>Invoke <span class="tag tag-magenta" style="font-size:10px">Skeptic lens</span> — surfaces hidden assumptions, weak evidence, second-order risks</div></li>
+    <li><div>Revise based on lens output; write to <code>action-plan.md</code></div></li>
+  </ol>
+
+  <h2>action-plan.md sections</h2>
+  <div class="card-grid">
+    <div class="card card-sm"><h3 style="font-size:13px;color:var(--teal)">Investigation actions</h3><p style="font-size:12px;margin:0">What to measure, against which data source, with pre-agreed exit criteria</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px;color:var(--teal)">Recommended actions</h3><p style="font-size:12px;margin:0">Ranked by impact vs effort; each conditionally gated on evidence</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px;color:var(--blue)">Decision asks</h3><p style="font-size:12px;margin:0">Named leaders, named decisions — not open-ended questions</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px;color:var(--magenta)">Risks &amp; tradeoffs</h3><p style="font-size:12px;margin:0">Each risk has a cost and a mitigation. Never buried in a separate appendix.</p></div>
+  </div>
+
+  <div class="gate-callout">
+    <div class="gate-icon">🔐</div>
+    <div>
+      <strong>Phase 2 gate</strong>
+      <div class="gate-opts">
+        <span class="tag tag-teal">Approve → Phase 3</span>
+        <span class="tag tag-blue">Redirect → revise plan</span>
+        <span class="tag tag-magenta">Iterate → Skeptic / Optimist / Customer lens</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 3 ══════════════ -->
+<section class="page" id="page-phase3">
+  <div class="tag tag-gray" style="margin-bottom:12px">Phase 3</div>
+  <h1>Deliver</h1>
+  <p class="lead">Two deliverables: a leadership-ready written brief (one-pager) and a PowerPoint deck. The deck is only generated after explicit one-pager approval.</p>
+
+  <!-- 3a -->
+  <h2>3a — Exec one-pager</h2>
+  <div class="card-grid">
+    <div class="card card-sm">
+      <div class="tag tag-gray" style="margin-bottom:8px">Markdown mode</div>
+      <p style="font-size:12px;margin:0">Async review; feeds into pptx-builder as source document</p>
+      <div style="font-family:monospace;font-size:11px;color:var(--teal);margin-top:8px">one-pager-YYYY-MM-DD.md</div>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-teal" style="margin-bottom:8px">HTML mode</div>
+      <p style="font-size:12px;margin:0">Projected / leadership review; DT Flow fonts + Insights lockup + wave backgrounds</p>
+      <div style="font-family:monospace;font-size:11px;color:var(--teal);margin-top:8px">&lt;deliverable-name&gt;.html</div>
+    </div>
+  </div>
+
+  <h2>One-pager content structure</h2>
+  <ol class="steps" style="max-width:560px">
+    <li>Problem summary — 2–3 sentences, lead with business impact</li>
+    <li>Business impact — quantified with confidence notes if possible</li>
+    <li>Top findings — 3–5 bullets, each with evidence cited</li>
+    <li>Recommended actions — owner + timeframe + cost/risk paired inline</li>
+    <li>Risks &amp; decision asks — short para or 3 bullets; ends with specific ask</li>
+  </ol>
+
+  <h2>HTML visual rules</h2>
+  <div class="card card-sm" style="max-width:560px;font-size:12px;color:var(--gray-lt)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px">
+      <div><strong style="color:var(--white)">Header</strong><br>Insights-Lockup-Horizontal-RGB_REV.svg (24–26px height)</div>
+      <div><strong style="color:var(--white)">Fonts</strong><br>DT Flow Medium (headings), DT Flow Light (body), Arial fallback</div>
+      <div><strong style="color:var(--white)">Wave backgrounds</strong><br>datalargebeam or datatrail — never particle series behind text &lt;13px</div>
+      <div><strong style="color:var(--white)">Overlay</strong><br>Dark left-to-right gradient (7,16,30 navy)</div>
+      <div><strong style="color:var(--white)">Layout</strong><br>Two-column; balance left/right heights</div>
+      <div><strong style="color:var(--white)">Footer</strong><br>© 2026 Dynatrace, LLC. Confidential (#6F747F)</div>
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--card-border)">
+      <strong style="color:var(--white)">Color semantics:</strong>
+      <span style="color:#49C2B3">teal = confirmed</span> ·
+      <span style="color:#C93FDB">magenta = gaps/risks</span> ·
+      <span style="color:#6fa8ff">blue = open/CTA</span>
+    </div>
+  </div>
+
+  <h2>Quality gates before finalizing</h2>
+  <div class="card-grid">
+    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Consultative lens</div><p style="font-size:12px;margin:0">Voice matches stakeholder profile + brand conformance</p></div>
+    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Customer lens</div><p style="font-size:12px;margin:0">Does the work match actual user experience?</p></div>
+    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Skeptic lens</div><p style="font-size:12px;margin:0">Surfaces the questions the leader will ask</p></div>
+  </div>
+
+  <!-- 3b -->
+  <h2 style="margin-top:32px">3b — PowerPoint deck</h2>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:16px">Only generated after explicit one-pager approval. Run via <code>tools/pptx-generator.py</code> with a JSON spec.</p>
+
+  <div class="card" style="max-width:560px">
+    <h3 style="font-size:13px;margin-bottom:10px">Deck structure (6 sections)</h3>
+    <div style="font-size:12px;color:var(--gray-lt);display:flex;flex-direction:column;gap:6px">
+      <div><span class="tag tag-gray" style="margin-right:8px">1</span>Title slide — problem name, audience, date, presenter</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">2</span>Section divider — transition visual</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">3</span>Executive summary — problem + business impact on one slide</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">4</span>Top findings — 3–5 findings in cards or detail slides</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">5</span>Recommended actions — 3–4 column table</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">6</span>Risks &amp; decision asks — leadership questions + named decisions</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">+</span>Appendix (optional) — issue tree, signals map, ICE table</div>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="max-width:560px;margin-top:12px;font-size:12px;color:var(--gray-lt)">
+    <strong style="color:var(--white)">Output:</strong> <code>memory/project-space/deck-YYYY-MM-DD.pptx</code><br>
+    <strong style="color:var(--white)">Fallback:</strong> <code>deck-outline-YYYY-MM-DD.md</code> for manual build if pptx-generator fails
+  </div>
+</section>
+
+<!-- ══════════════ SKILLS ══════════════ -->
+<section class="page" id="page-skills">
+  <h1>Skills</h1>
+  <p class="lead">13 procedural skill files, each read immediately before its artifact is produced. Click any skill to see its procedure.</p>
+
+  <h2>Phase-bound skills</h2>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-cf')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">📋</div>
+        <div><div style="font-size:13px;font-weight:500">context-framing</div><div style="font-size:11px;color:var(--gray)">Phase 0 · skills/context-framing/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-cf">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-cf">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">9-question intake sequence to frame the engagement. Dispatches doc-freshness-checker in background. Writes <code>current-context.md</code>.</p>
+      <p style="font-size:12px;color:var(--gray-lt)">Key questions: Customer · Vertical · C.S.I.R. · Tenant type · Active capabilities · RUM status · Stakeholder · Technical priorities · Engagement trigger</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-md')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">🌲</div>
+        <div><div style="font-size:13px;font-weight:500">mece-decomposition</div><div style="font-size:11px;color:var(--gray)">Phase 1a · skills/mece-decomposition/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-md">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-md">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Builds a 4–7 branch issue tree from the consulting objective. Invokes MECE lens before presenting. Writes <code>issue-tree.md</code>.</p>
+      <p style="font-size:12px;color:var(--gray-lt)">Axes: system layer · user journey stage · team boundary · time. Branches are problem spaces, never solutions.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-hg')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(25,102,255,.12)">💡</div>
+        <div><div style="font-size:13px;font-weight:500">hypothesis-generation</div><div style="font-size:11px;color:var(--gray)">Phase 1b · skills/hypothesis-generation/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-hg">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-hg">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Generates 2–4 testable hypotheses per branch. Each hypothesis must have: expected signals · validation approach · required metrics · falsifiable exit criteria.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-ice')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(25,102,255,.12)">⚖️</div>
+        <div><div style="font-size:13px;font-weight:500">ice-scoring</div><div style="font-size:11px;color:var(--gray)">Phase 1c · skills/ice-scoring/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-ice">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-ice">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Scores each hypothesis on Impact, Confidence, Effort (1–10). Computes ICE = (I×C)/E. Invokes ICE lens for independent validation. Updates <code>hypotheses.md</code>.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-sm')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(201,63,219,.12)">🔗</div>
+        <div><div style="font-size:13px;font-weight:500">signal-mapping</div><div style="font-size:11px;color:var(--gray)">Phase 1d · skills/signal-mapping/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-sm">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-sm">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Links technical signals → UX outcomes → business KPIs. Explicitly flags broken chain links as instrumentation gaps. Writes <code>signals-map.md</code>.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-ap')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">📝</div>
+        <div><div style="font-size:13px;font-weight:500">action-plan-builder</div><div style="font-size:11px;color:var(--gray)">Phase 2 · skills/action-plan-builder/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-ap">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-ap">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Produces four sections: investigation actions · recommended actions (ranked) · decision asks · risks & tradeoffs. Invokes Skeptic lens. Writes <code>action-plan.md</code>.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-op')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">📄</div>
+        <div><div style="font-size:13px;font-weight:500">exec-onepager</div><div style="font-size:11px;color:var(--gray)">Phase 3a · skills/exec-onepager/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-op">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-op">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Produces markdown or HTML one-pager. Invokes Consultative, Customer, and Skeptic lenses before finalizing. Style rules: sentence case, active voice, no acronyms without definition, tradeoffs inline.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-pp')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(73,194,179,.12)">📊</div>
+        <div><div style="font-size:13px;font-weight:500">pptx-builder</div><div style="font-size:11px;color:var(--gray)">Phase 3b · skills/pptx-builder/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-pp">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-pp">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Runs <code>tools/pptx-generator.py</code> with a JSON spec. Requires explicit one-pager approval first. Uses layout names from <code>pptx-layout-index.md</code> (64 templates). Outputs <code>deck-YYYY-MM-DD.pptx</code>.</p>
+    </div>
+  </div>
+
+  <h2>On-demand skills</h2>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-er')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">🔎</div>
+        <div><div style="font-size:13px;font-weight:500">external-research</div><div style="font-size:11px;color:var(--gray)">On demand · skills/external-research/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-er">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-er">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Allowlist: <code>docs.dynatrace.com</code> and <code>community.dynatrace.com</code> only. Check local memory first, then fetch. Every fact requires URL + page-last-updated + retrieval date. Citations &gt;7 days old = stale.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-ir')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">⏸</div>
+        <div><div style="font-size:13px;font-weight:500">investigation-reset</div><div style="font-size:11px;color:var(--gray)">On demand · skills/investigation-reset/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-ir">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-ir">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Two modes: <strong style="color:var(--white)">Archive</strong> (captures lessons-learned, moves artifacts to client past-investigations, resets project-space) or <strong style="color:var(--white)">Pause</strong> (moves current project-space to client folder, resets active-engagement). Also handles Resume.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-so')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">👤</div>
+        <div><div style="font-size:13px;font-weight:500">stakeholder-overlay</div><div style="font-size:11px;color:var(--gray)">On demand · skills/stakeholder-overlay/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-so">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-so">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Captures named leader profile during Phase 0 Q7. 9-question sequence: name/title · org · cares most about · ignores · info preference · KPI vocab · technical depth · sensitivities · DT experience. Written to client workspace only after user approval.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-ei')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">🌐</div>
+        <div><div style="font-size:13px;font-weight:500">environment-intake</div><div style="font-size:11px;color:var(--gray)">On demand · skills/environment-intake/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-ei">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-ei">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">11-question sequence capturing: Management Zones · key apps/services · SLOs · Synthetics · RUM depth · Grail log management · Business events · Instrumentation gaps · DPS quota · Known issues · OneAgent coverage. Persists to <code>memory/clients/&lt;client&gt;/environment.md</code>.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-vh')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">📈</div>
+        <div><div style="font-size:13px;font-weight:500">value-highlight</div><div style="font-size:11px;color:var(--gray)">On demand · skills/value-highlight/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-vh">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-vh">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">QBR/renewal brief from prior archived investigations. Requires at least one prior archive. Identifies 2–4 value narrative threads: Discovery · Improvement · Risk mitigation · Strategic insight · Instrumentation progress.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ LENSES ══════════════ -->
+<section class="page" id="page-lenses">
+  <h1>Sub-agent lenses</h1>
+  <p class="lead">Six narrow-job critique agents living in <code>.claude/agents/</code>. Each has a defined job and output format. Invoked on demand or per skill procedure.</p>
+
+  <div class="lens-grid">
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></div>
+        <strong>MECE lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Haiku</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> After issue tree, before user approval</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: overlap between branches · gaps (third-party, biz process, instrumentation, deploy) · mixed abstraction levels · solution vs problem phrasing</p>
+    </div>
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></div>
+        <strong>ICE lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Haiku</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> After hypotheses drafted or actions need re-ranking</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Scores I/C/E (1–10 each); produces ranked table; flags where one dimension is doing most of the work</p>
+    </div>
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--magenta)"></div>
+        <strong>Skeptic lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing Phase 2 action plan or Phase 3 deliverable</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: hidden assumptions · weak evidence (single signal as truth) · instrumentation gaps · scenarios where plan misleads · second-order risks</p>
+    </div>
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:#6fa8ff"></div>
+        <strong>Optimist lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing action plan or one-pager</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: overly conservative plan · upside left on table · compounding benefits not named · opportunities to parallelize</p>
+    </div>
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:#6fa8ff"></div>
+        <strong>Consultative lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing exec one-pagers or decks</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: voice matches senior leader expectations · SLI/SLO/RUM terminology precise · tradeoffs surfaced not buried · vendor-neutral where possible</p>
+    </div>
+    <div class="lens-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:10px;height:10px;border-radius:50%;background:#6fa8ff"></div>
+        <strong>Customer lens</strong>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
+      </div>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing any deliverable recommending action</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Asks: does work match user experience? Which journeys are deprioritized? Are we solving the right problem vs the easiest one?</p>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="margin-top:16px;max-width:560px">
+    <div class="tag tag-gray" style="margin-bottom:6px">Background agent</div>
+    <strong>doc-freshness-checker</strong> <span class="tag tag-gray" style="font-size:10px">Haiku</span>
+    <p style="font-size:12px;margin-top:6px;margin-bottom:0;color:var(--gray-lt)">Dispatched at Phase 0 start if last check &gt;7 days ago. Re-checks all DT doc citations in long-term memory. Writes to <code>freshness-report.md</code>. Never modifies long-term files directly. Main agent surfaces results at Phase 0 gate.</p>
+  </div>
+</section>
+
+<!-- ══════════════ MEMORY ══════════════ -->
+<section class="page" id="page-memory">
+  <h1>Memory model</h1>
+  <p class="lead">Two tiers with strict isolation between client data and shared knowledge. The agent never reads a client's folder unless that client is the active engagement.</p>
+
+  <div class="mem-diagram">
+    <div class="mem-tier" style="border-color:rgba(73,194,179,.25);background:rgba(73,194,179,.04)">
+      <h3 style="color:var(--teal)">Root library</h3>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/long-term/</div>
+      <span class="mem-file">domain-knowledge.md</span>
+      <span class="mem-file">dynatrace-playbooks.md</span>
+      <span class="mem-file">frameworks.md</span>
+      <span class="mem-file">stakeholder-profiles.md</span>
+      <span class="mem-file">terminology.md</span>
+      <span class="mem-file">client-question-bank.md</span>
+      <span class="mem-file">freshness-report.md</span>
+      <span class="mem-file">brand/brand-spec.md</span>
+      <span class="mem-file">brand/reference/pptx-layout-index.md</span>
+      <div class="mem-rule">Read freely every session.<br>Writes require explicit user approval.<br><strong>Never contains client data.</strong></div>
+    </div>
+
+    <div class="mem-tier" style="border-color:rgba(25,102,255,.25);background:rgba(25,102,255,.04)">
+      <h3 style="color:#6fa8ff">Active project space</h3>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/project-space/</div>
+      <span class="mem-file">active-engagement.md</span>
+      <span class="mem-file">current-context.md</span>
+      <span class="mem-file">issue-tree.md</span>
+      <span class="mem-file">hypotheses.md</span>
+      <span class="mem-file">signals-map.md</span>
+      <span class="mem-file">action-plan.md</span>
+      <span class="mem-file">decisions-log.md</span>
+      <span class="mem-file">one-pager-YYYY-MM-DD.md</span>
+      <span class="mem-file">deck-YYYY-MM-DD.pptx</span>
+      <div class="mem-rule">Active client's working directory.<br>Reset between engagements via investigation-reset skill.</div>
+    </div>
+
+    <div class="mem-tier" style="border-color:rgba(201,63,219,.25);background:rgba(201,63,219,.04)">
+      <h3 style="color:var(--magenta)">Client workspaces</h3>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/clients/&lt;client-name&gt;/</div>
+      <span class="mem-file">README.md (engagement history)</span>
+      <span class="mem-file">environment.md</span>
+      <span class="mem-file">stakeholder-overlays.md</span>
+      <span class="mem-file">project-space/ (if paused)</span>
+      <span class="mem-file">past-investigations/</span>
+      <div class="mem-rule">Fully isolated per client.<br>Never read unless that client is active.<br>Template at memory/clients/_template/</div>
+    </div>
+  </div>
+
+  <h2>Context isolation rule</h2>
+  <div class="card" style="max-width:600px;font-size:13px;color:var(--gray-lt)">
+    After loading the root library, identify the active client from <code>active-engagement.md</code>. For the rest of the session, all client-specific reads come <strong style="color:var(--white)">only from</strong> <code>memory/clients/&lt;active-client-name&gt;/</code>. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current and resume the prior.
+  </div>
+
+  <h2>Promotion path: client → long-term</h2>
+  <div class="card card-sm" style="max-width:600px;font-size:12px;color:var(--gray-lt)">
+    During archive (investigation-reset), lessons-learned are surfaced. The agent may propose promoting new signal patterns or failure modes to long-term memory. Each promotion requires explicit user confirmation before the write.
+  </div>
+</section>
+
+<!-- ══════════════ ARTIFACTS ══════════════ -->
+<section class="page" id="page-artifacts">
+  <h1>Artifacts</h1>
+  <p class="lead">Every phase produces a named artifact in <code>memory/project-space/</code>. Each artifact has a fixed schema and is never overwritten — only updated with a version note.</p>
+
+  <table class="artifact-table">
+    <thead>
+      <tr><th>File</th><th>Phase</th><th>Contents</th><th>Gate</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>current-context.md</td><td>0</td><td>Engagement frame: customer, vertical, C.S.I.R., capabilities, consulting objective, stakeholder archetype</td><td>Phase 0 gate</td></tr>
+      <tr><td>issue-tree.md</td><td>1a</td><td>4–7 MECE branches. Each branch includes: problem framing + "what we'd see if true." Version history appended.</td><td>Part of Phase 1 gate</td></tr>
+      <tr><td>hypotheses.md</td><td>1b/c</td><td>2–4 testable claims per branch, each with expected signals, validation approach, required metrics, status, and ICE scores after 1c</td><td>Part of Phase 1 gate</td></tr>
+      <tr><td>signals-map.md</td><td>1d</td><td>SLIs/SLOs → UX outcomes → Business KPIs. Instrumentation gaps explicitly listed.</td><td>Phase 1 gate</td></tr>
+      <tr><td>action-plan.md</td><td>2</td><td>Investigation actions (with exit criteria) + Recommended actions (ranked) + Decision asks + Risks & tradeoffs</td><td>Phase 2 gate</td></tr>
+      <tr><td>decisions-log.md</td><td>All</td><td>Every gate decision: phase, response type (Approve/Redirect/Lens), date, notes</td><td>Updated at every gate</td></tr>
+      <tr><td>one-pager-YYYY-MM-DD.md</td><td>3a</td><td>Problem summary · business impact · top findings · recommended actions · risks & decision asks. Max one page.</td><td>Phase 3a gate</td></tr>
+      <tr><td>deck-spec-YYYY-MM-DD.json</td><td>3b</td><td>JSON input for pptx-generator.py. Slide specs by layout name.</td><td>—</td></tr>
+      <tr><td>deck-YYYY-MM-DD.pptx</td><td>3b</td><td>PowerPoint deck. 6-section structure. Branding per brand-spec.md.</td><td>Final deliverable</td></tr>
+      <tr><td>value-brief-YYYY-MM-DD.md</td><td>On-demand</td><td>QBR/renewal brief. 2–4 value narrative threads from prior archived investigations.</td><td>User approval</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════ GATES ══════════════ -->
+<section class="page" id="page-gates">
+  <h1>Gates &amp; controls</h1>
+  <p class="lead">Every phase gate offers the same three options. The agent records every decision. No phase begins without the prior one's approval.</p>
+
+  <h2>Gate options</h2>
+  <div class="card-grid">
+    <div class="card card-sm" style="border-color:rgba(73,194,179,.3)">
+      <div class="tag tag-teal" style="margin-bottom:8px">Approve</div>
+      <p style="font-size:13px;margin:0">Proceed to the next phase. Logged in decisions-log.md with timestamp.</p>
+    </div>
+    <div class="card card-sm" style="border-color:rgba(25,102,255,.3)">
+      <div class="tag tag-blue" style="margin-bottom:8px">Redirect</div>
+      <p style="font-size:13px;margin:0">Change scope, framing, or priority. Agent updates artifacts and re-presents. Gate re-fires after update.</p>
+    </div>
+    <div class="card card-sm" style="border-color:rgba(201,63,219,.3)">
+      <div class="tag tag-magenta" style="margin-bottom:8px">Iterate through a lens</div>
+      <p style="font-size:13px;margin:0">User picks a lens; agent invokes it and revises before re-presenting. Same gate re-fires.</p>
+    </div>
+  </div>
+
+  <h2>Available lenses at each gate</h2>
+  <table class="artifact-table" style="max-width:640px">
+    <thead><tr><th>Gate</th><th>Available lenses</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 0 gate</td><td>—</td></tr>
+      <tr><td>Phase 1 gate</td><td>MECE · Optimist · Skeptic · ICE · Consultative · Customer</td></tr>
+      <tr><td>Phase 2 gate</td><td>Skeptic · Optimist · Customer</td></tr>
+      <tr><td>Phase 3a gate</td><td>Consultative · Customer · Skeptic</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Hard constraints (never bypassable)</h2>
+  <div class="principles" style="max-width:600px">
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No DQL, SQL, or executable query syntax generated under any circumstances</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No production changes or configuration updates executed</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No fabricated metrics, SLIs, or instrumentation that doesn't exist in the client env</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No reading another client's folder, even if user names one</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No advancing to the next phase without explicit user approval of the current one</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No writing to long-term memory or client overlays without user confirmation</div></div>
+  </div>
+</section>
+
+<!-- ══════════════ GETTING STARTED ══════════════ -->
+<section class="page" id="page-getting-started">
+  <h1>Getting started</h1>
+  <p class="lead">Everything you need to go from "just opened this folder" to running your first investigation end-to-end.</p>
+
+  <h2>Installation</h2>
+  <div class="card" style="max-width:560px;display:flex;gap:16px;align-items:flex-start">
+    <div style="font-size:28px">📂</div>
+    <div>
+      <strong>Installation = open this folder in Claude Code.</strong>
+      <p style="font-size:13px;margin-top:6px;margin-bottom:0">Open the <code>insights-forge/</code> directory in VS Code with the Claude Code extension installed. <code>CLAUDE.md</code> loads automatically on every session — you don't do anything to activate it. The VS Code extension is recommended so you can watch artifacts appear in the file explorer as the agent works.</p>
+    </div>
+  </div>
+  <div class="card card-sm" style="max-width:560px;margin-top:8px;font-size:12px;color:var(--gray-lt)">
+    <strong style="color:var(--white)">Other surfaces:</strong> Claude.ai as a Project runs a partial workflow but lacks the local filesystem — phase artifacts won't persist between sessions. Use the VS Code extension or terminal for real engagements.
+  </div>
+
+  <h2>One-time workspace setup</h2>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:16px">Before your first real engagement, take 15 minutes to populate the root library. These are the files that make the workspace <em>yours</em>.</p>
+  <div style="max-width:560px">
+    <div class="qs-row">
+      <div class="qs-num">1</div>
+      <div>
+        <strong style="font-size:13px">Terminology</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Open <code>memory/long-term/terminology.md</code> and add acronyms or internal service names your team uses. Internal names matter most — the agent will use your team's vocabulary in all deliverables.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">2</div>
+      <div>
+        <strong style="font-size:13px">Domain knowledge — org-level slots</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Open <code>memory/long-term/domain-knowledge.md</code> and find <code>[team to note: …]</code> slots. Fill in org-level operational context: which DPS capabilities your contract includes, internal tool conventions, etc. <strong style="color:#C93FDB">Do not</strong> put client-specific environment details here — those go in each client's <code>environment.md</code>.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">3</div>
+      <div>
+        <strong style="font-size:13px">(Optional) Adjust CLAUDE.md</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">The operating manual defaults are sensible. Adjust if your team has different preferences: default vertical, citation-freshness window, additional operating constraints. The phased workflow and memory isolation rules should not be changed lightly.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Before your first engagement with a new client</h2>
+  <div class="card card-sm" style="max-width:560px;font-size:13px;color:var(--gray-lt)">
+    Copy <code>memory/clients/_template/</code> to <code>memory/clients/&lt;client-name&gt;/</code>. The agent will populate <code>environment.md</code> (via environment-intake skill at Phase 0 gate) and <code>stakeholder-overlays.md</code> (via stakeholder-overlay skill when you name a specific leader). These files persist between engagements with the same client — you only go through intake once.
+  </div>
+
+  <h2>Running an investigation</h2>
+  <div style="max-width:560px">
+    <div class="qs-row">
+      <div class="qs-num">1</div>
+      <div>
+        <strong style="font-size:13px">Open with the problem</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Start with: <em>"Describe the problem you're trying to solve."</em> — or just describe the problem directly. The agent reads context-framing/SKILL.md and begins Phase 0.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">2</div>
+      <div>
+        <strong style="font-size:13px">Answer 9 clarifying questions</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">One at a time, in adaptive order. If your opening paragraph covers Q1 and Q2, the agent skips them. See the table below.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">3</div>
+      <div>
+        <strong style="font-size:13px">Approve Phase 0</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Agent presents reframed engagement and writes <code>current-context.md</code>. Approve to proceed, redirect to adjust scope, or iterate through a lens.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">4</div>
+      <div>
+        <strong style="font-size:13px">Continue through Phases 1, 2, 3</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Each phase has its own gate and its own artifacts. Don't skip gates — they catch bad assumptions before downstream work bakes them in.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Phase 0 — clarifying questions</h2>
+  <table class="q-table" style="margin-bottom:24px">
+    <tr><td>Q1</td><td>Customer and what they do</td></tr>
+    <tr><td>Q2</td><td>Customer vertical</td></tr>
+    <tr><td>Q3</td><td>Engagement framing — <strong>C</strong>ontext, <strong>S</strong>pecific information, <strong>I</strong>ntent, <strong>R</strong>esponse format (four-part sub-sequence)</td></tr>
+    <tr><td>Q4</td><td>Tenant type (SaaS or Managed)</td></tr>
+    <tr><td>Q5</td><td>Active Dynatrace capabilities (checklist)</td></tr>
+    <tr><td>Q6</td><td>RUM status on the application in question</td></tr>
+    <tr><td>Q7</td><td>Who will consume the deliverable and what they care about — triggers stakeholder-overlay skill if no profile exists</td></tr>
+    <tr><td>Q8</td><td>What the technical team cares about day-to-day</td></tr>
+    <tr><td>Q9</td><td>Trigger for this engagement (QBR, renewal, expansion, incident follow-up)</td></tr>
+  </table>
+
+  <h2>Finishing an engagement</h2>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:12px">When Phase 3 deliverables are approved, archive with: <em>"Archive this investigation and reset the workspace."</em></p>
+  <ol class="steps" style="max-width:520px">
+    <li>Agent asks 4 lessons-learned questions: what worked, what to avoid, new knowledge, proposed memory updates</li>
+    <li>Confirm an archive name (<code>YYYY-MM-DD-&lt;short-name&gt;</code>)</li>
+    <li>All project-space files copied to <code>memory/clients/&lt;client-name&gt;/past-investigations/&lt;archive-name&gt;/</code></li>
+    <li>Client's <code>README.md</code> engagement history updated</li>
+    <li>Any approved root library updates executed (e.g., new playbook insights)</li>
+    <li><code>memory/project-space/</code> reset to template state</li>
+  </ol>
+
+  <h2>Working with multiple clients</h2>
+  <div class="card-grid" style="max-width:560px">
+    <div class="card card-sm">
+      <div class="tag tag-gray" style="margin-bottom:6px">Pause</div>
+      <p style="font-size:12px;margin:0">Say: <em>"Pause this engagement and start a new one."</em> The agent moves current files to <code>memory/clients/&lt;client&gt;/project-space/</code> and clears the workspace.</p>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-teal" style="margin-bottom:6px">Resume</div>
+      <p style="font-size:12px;margin:0">Say: <em>"Resume [client name]."</em> Files copied back to project-space; agent reminds you where you left off. Client data never crosses client boundaries.</p>
+    </div>
+  </div>
+
+  <h2>Checking where you are</h2>
+  <div class="card card-sm" style="max-width:560px;font-size:12px;color:var(--gray-lt)">
+    <strong style="color:var(--white)">Active client?</strong> Read <code>memory/project-space/active-engagement.md</code>.<br>
+    <strong style="color:var(--white)">Current phase?</strong> Read <code>memory/project-space/current-context.md</code>.<br>
+    <strong style="color:var(--white)">Full audit trail?</strong> Read <code>memory/project-space/decisions-log.md</code>.<br>
+    Anything stale or wrong? Ask the agent to reframe — that's a Phase 0 redirect.
+  </div>
+</section>
+
+<!-- ══════════════ DOCS BROWSER ══════════════ -->
+<section class="page" id="page-docs">
+  <h1>Documentation</h1>
+  <p class="lead" style="margin-bottom:20px">Full text of every doc file in <code>docs/</code>, rendered in-browser. Click a doc to read it.</p>
+  <div class="two-panel">
+    <div class="panel-left" id="docs-nav">
+      <div class="panel-group">Docs</div>
+      <div class="panel-item active" data-doc="getting-started" onclick="selectDoc(this,'getting-started')">Getting started</div>
+      <div class="panel-item" data-doc="workflow" onclick="selectDoc(this,'workflow')">Workflow</div>
+      <div class="panel-item" data-doc="skills" onclick="selectDoc(this,'skills')">Skills</div>
+      <div class="panel-item" data-doc="lenses" onclick="selectDoc(this,'lenses')">Lenses</div>
+      <div class="panel-item" data-doc="memory" onclick="selectDoc(this,'memory')">Memory</div>
+      <div class="panel-item" data-doc="research" onclick="selectDoc(this,'research')">Research</div>
+      <div class="panel-item" data-doc="deliverables" onclick="selectDoc(this,'deliverables')">Deliverables</div>
+      <div class="panel-item" data-doc="customizing" onclick="selectDoc(this,'customizing')">Customizing</div>
+    </div>
+    <div class="panel-right">
+      <div class="md-content" id="doc-content">Loading…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ DEFAULT FILES ══════════════ -->
+<section class="page" id="page-files">
+  <h1>Default files</h1>
+  <p class="lead" style="margin-bottom:20px">Template and default content for every file the agent reads or writes. Click a file to inspect it with annotations.</p>
+  <div class="two-panel">
+    <div class="panel-left" id="files-nav">
+      <div class="panel-group">Active workspace</div>
+      <div class="panel-item active panel-item-mono" data-file="active-engagement" onclick="selectFile(this,'active-engagement')">active-engagement.md</div>
+      <div class="panel-item panel-item-mono" data-file="current-context" onclick="selectFile(this,'current-context')">current-context.md</div>
+      <div class="panel-item panel-item-mono" data-file="issue-tree" onclick="selectFile(this,'issue-tree')">issue-tree.md</div>
+      <div class="panel-item panel-item-mono" data-file="hypotheses" onclick="selectFile(this,'hypotheses')">hypotheses.md</div>
+      <div class="panel-item panel-item-mono" data-file="signals-map" onclick="selectFile(this,'signals-map')">signals-map.md</div>
+      <div class="panel-item panel-item-mono" data-file="action-plan" onclick="selectFile(this,'action-plan')">action-plan.md</div>
+      <div class="panel-item panel-item-mono" data-file="decisions-log" onclick="selectFile(this,'decisions-log')">decisions-log.md</div>
+      <div class="panel-group">Client template</div>
+      <div class="panel-item panel-item-mono" data-file="client-readme" onclick="selectFile(this,'client-readme')">README.md</div>
+      <div class="panel-item panel-item-mono" data-file="environment" onclick="selectFile(this,'environment')">environment.md</div>
+      <div class="panel-item panel-item-mono" data-file="stakeholder-overlays" onclick="selectFile(this,'stakeholder-overlays')">stakeholder-overlays.md</div>
+    </div>
+    <div class="panel-right" id="file-panel">
+      <div id="file-content-area">Loading…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SOURCE FILES ══════════════ -->
+<section class="page" id="page-source-files">
+  <h1>Source Files</h1>
+  <p class="lead">Browse every .md file that powers the agent — rendered live from the repo. Requires a local dev server (e.g. VS Code Live Server).</p>
+  <div class="two-panel">
+    <div class="panel-left" id="source-nav">
+      <div class="panel-group">Root</div>
+      <div class="panel-item panel-item-mono active" data-source="claude-md" onclick="selectSource(this,'claude-md')">CLAUDE.md</div>
+      <div class="panel-item panel-item-mono" data-source="readme" onclick="selectSource(this,'readme')">README.md</div>
+
+      <div class="panel-group">Memory</div>
+      <div class="panel-item panel-item-mono" data-source="domain-knowledge" onclick="selectSource(this,'domain-knowledge')">domain-knowledge.md</div>
+      <div class="panel-item panel-item-mono" data-source="dynatrace-playbooks" onclick="selectSource(this,'dynatrace-playbooks')">dynatrace-playbooks.md</div>
+      <div class="panel-item panel-item-mono" data-source="frameworks" onclick="selectSource(this,'frameworks')">frameworks.md</div>
+      <div class="panel-item panel-item-mono" data-source="stakeholder-profiles" onclick="selectSource(this,'stakeholder-profiles')">stakeholder-profiles.md</div>
+      <div class="panel-item panel-item-mono" data-source="terminology" onclick="selectSource(this,'terminology')">terminology.md</div>
+      <div class="panel-item panel-item-mono" data-source="client-question-bank" onclick="selectSource(this,'client-question-bank')">client-question-bank.md</div>
+      <div class="panel-item panel-item-mono" data-source="brand-spec" onclick="selectSource(this,'brand-spec')">brand/brand-spec.md</div>
+
+      <div class="panel-group">Skills</div>
+      <div class="panel-item panel-item-mono" data-source="sk-context-framing" onclick="selectSource(this,'sk-context-framing')">context-framing</div>
+      <div class="panel-item panel-item-mono" data-source="sk-mece-decomposition" onclick="selectSource(this,'sk-mece-decomposition')">mece-decomposition</div>
+      <div class="panel-item panel-item-mono" data-source="sk-hypothesis-generation" onclick="selectSource(this,'sk-hypothesis-generation')">hypothesis-generation</div>
+      <div class="panel-item panel-item-mono" data-source="sk-ice-scoring" onclick="selectSource(this,'sk-ice-scoring')">ice-scoring</div>
+      <div class="panel-item panel-item-mono" data-source="sk-signal-mapping" onclick="selectSource(this,'sk-signal-mapping')">signal-mapping</div>
+      <div class="panel-item panel-item-mono" data-source="sk-action-plan-builder" onclick="selectSource(this,'sk-action-plan-builder')">action-plan-builder</div>
+      <div class="panel-item panel-item-mono" data-source="sk-exec-onepager" onclick="selectSource(this,'sk-exec-onepager')">exec-onepager</div>
+      <div class="panel-item panel-item-mono" data-source="sk-pptx-builder" onclick="selectSource(this,'sk-pptx-builder')">pptx-builder</div>
+      <div class="panel-item panel-item-mono" data-source="sk-external-research" onclick="selectSource(this,'sk-external-research')">external-research</div>
+      <div class="panel-item panel-item-mono" data-source="sk-investigation-reset" onclick="selectSource(this,'sk-investigation-reset')">investigation-reset</div>
+      <div class="panel-item panel-item-mono" data-source="sk-stakeholder-overlay" onclick="selectSource(this,'sk-stakeholder-overlay')">stakeholder-overlay</div>
+      <div class="panel-item panel-item-mono" data-source="sk-environment-intake" onclick="selectSource(this,'sk-environment-intake')">environment-intake</div>
+      <div class="panel-item panel-item-mono" data-source="sk-value-highlight" onclick="selectSource(this,'sk-value-highlight')">value-highlight</div>
+
+      <div class="panel-group">Sub-Agents</div>
+      <div class="panel-item panel-item-mono" data-source="ag-mece-lens" onclick="selectSource(this,'ag-mece-lens')">mece-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-ice-lens" onclick="selectSource(this,'ag-ice-lens')">ice-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-skeptic-lens" onclick="selectSource(this,'ag-skeptic-lens')">skeptic-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-optimist-lens" onclick="selectSource(this,'ag-optimist-lens')">optimist-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-consultative-lens" onclick="selectSource(this,'ag-consultative-lens')">consultative-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-customer-lens" onclick="selectSource(this,'ag-customer-lens')">customer-lens</div>
+      <div class="panel-item panel-item-mono" data-source="ag-doc-freshness" onclick="selectSource(this,'ag-doc-freshness')">doc-freshness-checker</div>
+    </div>
+    <div class="panel-right md-content" id="source-content">
+      <p style="color:var(--gray)">Select a file to render it.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ══ Doc content ══ -->
+<script type="text/plain" id="raw-getting-started">
+# Getting started
+
+This page covers three things:
+
+1. What to do before your first session.
+2. How to run a complete investigation from "describe the problem" to "deck approved."
+3. How to close an engagement cleanly and open the next one.
+
+The single most important thing to internalize before you start: **the agent will not advance to the next phase without your explicit approval.** You're the human-in-the-loop, not a passenger.
+
+## Installation
+
+**Installation = open this folder in Claude Code.**
+
+Open the `insights-forge/` directory in VS Code with the Claude Code extension installed. The agent's operating manual (`CLAUDE.md`) loads automatically on every session — you don't do anything to "load" it. The Claude Code extension is the recommended surface because you can watch the agent write artifacts in the file explorer as it works, which makes the four-phase loop easier to follow. Claude Code in a terminal (`claude`) works too.
+
+> **Other surfaces.** Claude.ai as a Project can run a partial version of the workflow but lacks the local filesystem, so phase artifacts won't persist between sessions. Stick with the VS Code extension or terminal for real engagements.
+
+## Memory architecture — understand this first
+
+Before diving into setup, it helps to understand how memory is organized. It has two tiers:
+
+**Root library (`memory/long-term/`)** — universal knowledge: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic stakeholder archetypes. This knowledge applies to every client. The agent reads it on every session. **You never put client-specific information here.**
+
+**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile, named leader profiles, and all archived investigations. The agent only reads the active client's folder — never another client's.
+
+**Active investigation (`memory/project-space/`)** — the working directory for the currently open engagement. Think of it as "you are here."
+
+See memory.md for the full architecture.
+
+## One-time workspace setup
+
+Before your first real engagement, take 15 minutes to populate the root library with knowledge that applies to every client.
+
+### 1. Terminology
+
+Open `memory/long-term/terminology.md` and add acronyms or internal service names your team uses that aren't already there. Internal names matter most — the agent will refer to them by your name, not a generic one.
+
+### 2. Domain knowledge — org-level slots only
+
+Open `memory/long-term/domain-knowledge.md` and look for `[team to note: …]` slots. These are for **org-level operational context only** — for example, which DPS capabilities your org's standard contract includes, or internal tool conventions that apply across all clients.
+
+**Do not put client-specific environment details here.** Those go into each client's `environment.md`.
+
+### 3. (Optional) Adjust `CLAUDE.md`
+
+`CLAUDE.md` is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
+
+## Before your first engagement with a new client
+
+When you start working with a client for the first time, the agent will create their workspace automatically at Phase 0 close. You can also prepare ahead:
+
+1. Copy `memory/clients/_template/` to `memory/clients/<client-name>/`.
+2. The agent will populate `environment.md` (via `skills/environment-intake/SKILL.md` at the Phase 0 gate) and `stakeholder-overlays.md` (via `skills/stakeholder-overlay/SKILL.md` when you name a specific leader).
+
+These files persist between engagements with the same client, so you only go through the intake once. On subsequent engagements, the agent reads these files automatically during Phase 0.
+
+## Running an investigation
+
+### Step 1 — Open with the problem
+
+In the Claude Code chat, start with:
+
+> *"Describe the problem you're trying to solve."*
+
+…or just describe the problem and client directly. The agent will read `skills/context-framing/SKILL.md` and begin Phase 0.
+
+### Step 2 — Answer Phase 0 clarifying questions
+
+The agent walks you through up to nine clarifying questions, one at a time, in adaptive order.
+
+| Q | What it asks |
+|---|---|
+| Q1 | Customer and what they do |
+| Q2 | Customer vertical |
+| Q3 | Engagement framing: **C**ontext, **S**pecific information, **I**ntent, **R**esponse format (four-part sub-sequence) |
+| Q4 | Tenant type (SaaS or Managed) |
+| Q5 | Active Dynatrace capabilities (checklist) |
+| Q6 | RUM status on the application in question |
+| Q7 | Who will consume the deliverable and what they care about |
+| Q8 | What the technical team cares about day-to-day |
+| Q9 | Trigger for this engagement (QBR, renewal, expansion, other) |
+
+### Step 3 — Phase 0 gate
+
+The agent presents a reframed engagement summary and writes it to `memory/project-space/current-context.md`. At this gate you have three options:
+
+- **Approve** — proceed to Phase 1.
+- **Redirect** — change scope, framing, or priority. The agent updates and re-presents.
+- **Iterate through a lens** — ask for a re-review through MECE, Optimist, ICE, Consultative, Customer, or Skeptic. The agent revises before re-presenting.
+
+### Step 4 — Continue through Phases 1, 2, 3
+
+Each phase has its own gate and its own set of artifacts. Don't skip phases — the gate exists to let you redirect before downstream work bakes in a bad assumption.
+
+## Finishing an engagement
+
+When Phase 3 deliverables are approved, use the investigation-reset skill to close out:
+
+> *"Archive this investigation and reset the workspace."*
+
+The agent will:
+1. Ask you four lessons-learned questions (what worked, what to avoid, new knowledge, proposed memory updates).
+2. Ask you to confirm an archive name (`YYYY-MM-DD-<short-name>`).
+3. Copy all project-space files to `memory/clients/<client-name>/past-investigations/<archive-name>/`.
+4. Update the client's `README.md` engagement history.
+5. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
+6. Reset `memory/project-space/` to template state.
+
+## Working with multiple clients
+
+If you need to set aside one client and work on another:
+
+> *"Pause this engagement and start a new one."*
+
+The agent moves the current investigation files to `memory/clients/<current-client>/project-space/` (paused, not archived) and clears project-space. When you come back:
+
+> *"Resume [client name]."*
+
+The agent copies the paused files back into project-space and reminds you where you left off. Client data never crosses client boundaries.
+
+## Checking where you are
+
+Read `memory/project-space/active-engagement.md` to see which client is active. Read `memory/project-space/current-context.md` to see the current phase and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
+
+## Look inside
+
+| The agent reads… | At this file |
+|---|---|
+| Operating manual | `CLAUDE.md` |
+| Phase 0 procedure | `skills/context-framing/SKILL.md` |
+| Active client | `memory/project-space/active-engagement.md` |
+| Client environment (if populated) | `memory/clients/<client-name>/environment.md` |
+| Live investigation state | files under `memory/project-space/` |
+</script>
+
+<script type="text/plain" id="raw-workflow">
+# The four-phase workflow
+
+This page walks you through what actually happens in each phase, what the gate feels like in practice, and where the artifacts land.
+
+The workspace is built around a simple rhythm: **work, present, gate, repeat**. The agent produces something, stops, asks you to weigh in, and only moves forward when you say so. This isn't ceremony — it's the load-bearing safety mechanism that keeps the workspace useful for ambiguous problems. A bad framing in Phase 0 will produce confident-sounding nonsense in Phase 3 if there's no gate to catch it.
+
+The canonical phase rules live in `CLAUDE.md`. This page expands on what each phase actually feels like.
+
+## Phase 0 — Context
+
+**What it's for.** Take a vague problem statement and reframe it into a scoped, stakeholder-aware engagement. This is where you turn *"latency is bad on checkout"* into *"P95 checkout latency is up 40% week-over-week for the EU region; the VP of Reliability needs an answer before next Thursday's QBR."*
+
+**The skill the agent reads.** `skills/context-framing/SKILL.md` — open it if you want to see every step the agent runs through, including the nine clarifying questions and the C.S.I.R. sub-sequence for Q3.
+
+**Files the agent reads before asking you anything.**
+
+- `memory/long-term/stakeholder-profiles.md` — so it can recognize which leaders you might be producing outputs for.
+- `memory/long-term/domain-knowledge.md` — to anchor in the tech → UX → business linkage table.
+- `memory/long-term/terminology.md` — to use language consistent with the team.
+- `memory/long-term/client-question-bank.md` — when you tell it the discovery is happening **live with the customer**, it switches to the client-facing phrasings.
+
+**What lands on disk.** `memory/project-space/current-context.md`. Open it during Phase 0 to see the agent's running understanding of the problem.
+
+**The gate question.** *"Does this framing match what you actually need?"*
+
+## Phase 1 — Diagnose
+
+**What it's for.** Decompose the framed problem into a MECE issue tree, generate ranked hypotheses per branch, and map the technical signals that would prove or disprove each one.
+
+You'll feel three distinct shifts during this phase:
+
+- First, the **issue tree** appears — a structured decomposition of where the problem could be coming from, where every branch is mutually exclusive and the union is collectively exhaustive.
+- Then **hypotheses** populate under each branch, each one written as a testable statement with a stated exit criterion.
+- Finally, the **signals map** connects each hypothesis to the SLI/SLO, RUM event, or APM trace that would validate it — and importantly, calls out the gaps where the instrumentation doesn't exist.
+
+**Skills the agent reads.**
+
+- `skills/mece-decomposition/SKILL.md` — building the tree.
+- `skills/hypothesis-generation/SKILL.md` — drafting testable hypotheses per branch.
+- `skills/ice-scoring/SKILL.md` — scoring each hypothesis on Impact × Confidence / Effort.
+- `skills/signal-mapping/SKILL.md` — connecting signals to UX outcomes and business KPIs.
+
+**What lands on disk.**
+
+- `memory/project-space/issue-tree.md`
+- `memory/project-space/hypotheses.md`
+- `memory/project-space/signals-map.md`
+
+**Lenses the agent runs by default before presenting.** MECE and ICE. You can ask for any of the others on top.
+
+**The gate question.** *"Does this diagnosis frame the problem the right way, and are the top hypotheses worth pursuing?"*
+
+## Phase 2 — Solution
+
+**What it's for.** Turn ranked hypotheses into an investigation plan with named owners, timeframes, and unambiguous exit criteria for "confirmed" versus "ruled out."
+
+This is the phase where the **Dynatrace playbooks** become load-bearing. The agent reads `memory/long-term/dynatrace-playbooks.md`, matches each hypothesis to the playbook that most closely fits its problem shape (latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem), and pulls the playbook's procedural steps and exit criteria straight into the live action plan.
+
+**The skill the agent reads.** `skills/action-plan-builder/SKILL.md`.
+
+**What lands on disk.** `memory/project-space/action-plan.md`.
+
+**Lenses the agent runs by default before presenting.** Skeptic. Ask for Optimist if the plan feels too defensive, or Customer if you want a sanity check that the proposed work actually maps to something users experience.
+
+**The gate question.** *"Is this the right plan, with the right exit criteria, and are the decision asks clear?"*
+
+## Phase 3 — Deliver
+
+**What it's for.** Produce the exec-ready written and slide deliverables for the named stakeholder.
+
+The order matters here: **one-pager first, deck second**. The one-pager forces the story to fit on a page, which makes the deck dramatically easier to build. The agent won't produce the deck until the one-pager is approved.
+
+**Skills the agent reads, in this order.**
+
+- `skills/exec-onepager/SKILL.md` — one-page written summary.
+- `skills/pptx-builder/SKILL.md` — PowerPoint deck.
+
+**Files the agent reads before producing anything.**
+
+- `memory/long-term/brand/brand-spec.md` — colors, typography, layouts, voice, terminology, footer conventions.
+- The matching profile in `memory/long-term/stakeholder-profiles.md`. Voice and emphasis come from here — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product.
+
+**Lenses the agent runs by default before finalizing.** Consultative, Customer, and Skeptic, often in parallel.
+
+**The gate question.** *"Is this ready to send to the named stakeholder?"*
+
+## What every gate looks like, in practice
+
+At each gate the agent **stops and presents**. You always have three responses available:
+
+| Response | What it does |
+|---|---|
+| **Approve** | Agent proceeds to the next phase. |
+| **Redirect** | You change scope, framing, or priority. Agent updates artifacts and re-presents. |
+| **Iterate through a lens** | You ask for re-review through one of the six lenses. Agent revises before re-presenting. |
+
+Every gate decision is appended to `memory/project-space/decisions-log.md`. That file is the audit trail.
+</script>
+
+<script type="text/plain" id="raw-skills">
+# Procedural skills
+
+Each phase deliverable has a corresponding **skill** the agent reads before producing the artifact. Skills are the workspace's procedural memory: they capture the steps, the inputs, the output location, and the common pitfalls for each deliverable.
+
+If you think of `CLAUDE.md` as the agent's *job description*, the skills under `skills/` are its *standard operating procedures*. The agent reads the relevant `SKILL.md` first, then produces the artifact — never the other way around.
+
+## Phase 0 — Framing the engagement
+
+### context-framing
+
+The required first step of every engagement. Walks the consultant through nine clarifying questions (Q3 is the C.S.I.R. sub-sequence — Context, Stakeholders, Intent, Result), surfaces 3–5 orientation hypotheses as starting candidates (not findings), and produces `current-context.md`.
+
+When the consultant signals that discovery is happening *live with the customer*, this skill pulls phrasings from `memory/long-term/client-question-bank.md` instead of the consultant-facing prompts.
+
+## Phase 1 — Diagnosing the problem
+
+### mece-decomposition
+
+Build a MECE issue tree from the framed problem. Mutually exclusive branches, collectively exhaustive coverage, consistent abstraction within a branch. Output: `issue-tree.md`.
+
+### hypothesis-generation
+
+Draft testable hypotheses per branch of the issue tree, each one written as a falsifiable statement with a stated exit criterion. Output: `hypotheses.md`.
+
+### ice-scoring
+
+Score each hypothesis with Impact × Confidence / Effort and rank. This is how the workspace decides what to pursue first — and what to deprioritize even when it's tempting.
+
+### signal-mapping
+
+Map technical signals (SLI/SLO, RUM, APM) through user-visible UX outcomes to business KPIs. The signals map is also where **instrumentation gaps** get surfaced — if a hypothesis can't be validated with the data available, this is where that limitation lives. Output: `signals-map.md`.
+
+## Phase 2 — Building the action plan
+
+### action-plan-builder
+
+Translate ranked hypotheses into a named investigation plan with owners, timeframes, and "confirmed" versus "ruled out" exit criteria. Pulls procedural steps from `memory/long-term/dynatrace-playbooks.md` — eight playbooks for the most common Dynatrace investigation shapes.
+
+Output: `action-plan.md`.
+
+## Phase 3 — Producing exec-ready deliverables
+
+### exec-onepager
+
+Produce a one-page written summary tailored to a *named* stakeholder. Reads the matching profile in `stakeholder-profiles.md` and applies brand directives from `brand-spec.md`.
+
+### pptx-builder
+
+Produce a PowerPoint deck. Adapter that delegates to the standard pptx skill when available and applies the brand spec on top. **Only produced after the one-pager is approved.**
+
+## Cross-cutting
+
+### external-research
+
+Used by any other skill when local memory is silent, contradictory, or stale. Defines the allowlist (`docs.dynatrace.com` and `community.dynatrace.com`), the citation requirement, and the freshness policy.
+
+## Workspace and client management
+
+### investigation-reset
+
+Archives the current engagement and resets the workspace for the next one — or pauses it to work on a different client. Runs the four lessons-learned questions before archiving.
+
+**Trigger:** "Archive this investigation," "Reset the workspace," "Pause this engagement," or "Resume [client name]."
+
+### stakeholder-overlay
+
+Captures a specific named leader at a client as a stakeholder overlay in the active client's workspace. Builds on the parent role archetype from the shared root library. Requires explicit user approval before writing.
+
+**Never writes named individuals to `memory/long-term/stakeholder-profiles.md`** — that file contains only generic title-type archetypes.
+
+**Trigger:** Named automatically during Phase 0 Q7 when a specific leader is identified and no overlay exists.
+
+### environment-intake
+
+Captures client-specific Dynatrace environment details that persist across engagements: Management Zones, defined SLOs, load-bearing synthetic monitors, instrumentation gaps, DPS quota status. Writes to `memory/clients/<client-name>/environment.md`.
+
+**Trigger:** Flagged automatically by context-framing when no environment file exists for the active client.
+
+### value-highlight
+
+Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads prior investigation archives from the active client's `past-investigations/` folder.
+
+**Prerequisite:** At least one completed investigation must be archived for the active client.
+
+## How skills are triggered
+
+Skills are **not slash commands** — you don't call them directly. The main agent reads the relevant `SKILL.md` file via its Read tool immediately before producing the artifact it governs. The agent tells you which skill it's reading before it starts.
+</script>
+
+<script type="text/plain" id="raw-lenses">
+# The six critique lenses
+
+The workspace ships with six sub-agents whose only job is to **critique work product through a single, narrow point of view**. They don't produce artifacts themselves — they read what the main agent has produced and either bless it, suggest revisions, or push back hard.
+
+You'll meet them in three situations:
+
+1. **Automatically before a gate.** The main agent invokes the default lenses for each phase before presenting.
+2. **On demand at any gate.** You can always say *"run this through the Skeptic lens"* or *"check this issue tree with MECE"*.
+3. **In parallel for Phase 3.** When three or more lenses can review independently (Consultative + Customer + Skeptic on a one-pager is the typical case), the agent dispatches them in parallel.
+
+## Meet the six
+
+### MECE lens
+
+**When you'll use it.** After a Phase 1 issue tree is drafted, before presenting it.
+
+**What it catches.** Branches that overlap (not mutually exclusive). Gaps in coverage (not collectively exhaustive). Abstraction levels that drift within a branch. Silent missing categories.
+
+A clean MECE tree is the foundation everything else in Phase 1 builds on, so this lens is invoked by default before any tree leaves Phase 1.
+
+### Optimist lens
+
+**When you'll use it.** Before finalizing a Phase 2 action plan or a Phase 3 one-pager.
+
+**What it catches.** Plans that have been over-defended. Upside the team has under-weighted. Investigation threads that could run in parallel but are sequenced as if they can't. Recommendations that could be more ambitious without losing rigor.
+
+Think of it as the counterweight to Skeptic — invoke them both, and your plan ends up balanced.
+
+### ICE lens
+
+**When you'll use it.** After hypotheses or actions are drafted.
+
+**What it catches.** Mis-ranked priorities. Hypotheses that have high Impact but low Confidence and high Effort, masquerading as "the top hypothesis." Actions that look cheap but are buried in dependencies.
+
+### Consultative lens
+
+**When you'll use it.** Before finalizing exec one-pagers or decks.
+
+**What it catches.** Passages that read as engineering-internal when the audience is leadership. Generic statements that any consulting firm could have written. Voice mismatches with the named stakeholder profile.
+
+This is the lens that makes the Phase 3 output sound like *your firm*, not *a competent AI*.
+
+### Customer lens
+
+**When you'll use it.** Before finalizing any deliverable that recommends action.
+
+**What it catches.** Recommendations grounded in a backend SLI that has no observable user impact. Wins that don't move anything the customer would notice. Investigations that "succeed" without actually improving anyone's experience.
+
+A common failure mode this lens catches: a 30% improvement to a metric the user never sees.
+
+### Skeptic lens
+
+**When you'll use it.** Before any Phase 2 action plan or Phase 3 deliverable goes to leadership.
+
+**What it catches.** Failure modes that have been hand-waved. The most uncomfortable question a VP could ask. The spots where the evidence is thinnest. The unsaid assumptions.
+
+If you're going to be in a room defending the work, Skeptic is the lens that simulates the room first.
+
+## Default invocations per phase
+
+| Phase | Lenses invoked by default | Lenses available on request |
+|---|---|---|
+| 0 — Context | — | Any |
+| 1 — Diagnose | MECE, ICE | Optimist, Skeptic |
+| 2 — Solution | Skeptic | Optimist, ICE, Customer |
+| 3 — Deliver | Consultative, Customer, Skeptic | Optimist |
+
+## Running lenses in parallel
+
+If three or more lenses can run independently against the same artifact (typical for Phase 3), invoke them in parallel rather than sequentially. The main agent should already do this automatically; you can also ask explicitly:
+
+> *"Run this one-pager through Consultative, Customer, and Skeptic in parallel."*
+
+## The background agent
+
+There's a seventh sub-agent — `doc-freshness-checker` — that isn't a lens. It runs as a background job during Phase 0 to check citation drift. It re-fetches every cited URL in the root library and writes a freshness report to `memory/long-term/freshness-report.md`. It never edits long-term memory directly.
+</script>
+
+<script type="text/plain" id="raw-memory">
+# How memory works
+
+The workspace splits memory into two tiers with strict rules about what goes where. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
+
+If you remember one thing: the agent reads freely from the root library on every session, and reads only the **active client's** workspace for anything client-specific. It never reads another client's folder.
+
+## The two tiers
+
+### Tier 1 — Root library (memory/long-term/)
+
+The root library holds knowledge that is true regardless of which client is active: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic role archetypes.
+
+**Rules:**
+- The agent reads this on every session.
+- Writes require explicit user approval.
+- **This tier must never contain client-identifying information, client-specific environment facts, or named individuals from a client.** If it does, that information bleeds into every future engagement.
+
+| File | What it contains |
+|---|---|
+| `frameworks.md` | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. |
+| `domain-knowledge.md` | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. The `[team to note: …]` slots are for org-level context only. |
+| `dynatrace-playbooks.md` | Eight client-agnostic procedural patterns for common Dynatrace problem shapes. |
+| `terminology.md` | Glossary of recurring terms and Dynatrace platform glossary with citations. |
+| `stakeholder-profiles.md` | Eight generic role archetypes. **No named individuals. No client associations.** |
+| `client-question-bank.md` | Client-facing phrasings of the Phase 0 clarifying questions. |
+| `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer). |
+
+### Tier 2 — Client workspaces (memory/clients/)
+
+Each client has a fully isolated folder. The agent reads only the active client's folder for any client-specific context.
+
+```
+memory/clients/
+├── _template/                   ← Copy this to create a new client workspace
+└── <client-name>/
+    ├── README.md                 ← Engagement history and status
+    ├── environment.md            ← DT environment: MZs, SLOs, monitors, gaps
+    ├── stakeholder-overlays.md   ← Named leaders (confidential to this client)
+    ├── project-space/            ← Investigation files when paused
+    └── past-investigations/      ← Archived investigations for this client only
+```
+
+**How client folders are populated:**
+- `environment.md` — via `skills/environment-intake/SKILL.md` at the Phase 0 gate on first engagement.
+- `stakeholder-overlays.md` — via `skills/stakeholder-overlay/SKILL.md` when a specific leader is named in Q7.
+- `past-investigations/` — populated automatically by `skills/investigation-reset/SKILL.md` at engagement close.
+
+### Active investigation (memory/project-space/)
+
+The active client's investigation files live here while the engagement is open.
+
+| File | Phase | What it contains |
+|---|---|---|
+| `active-engagement.md` | — | Names the active client; maps to `memory/clients/<name>/`. |
+| `current-context.md` | 0 | Problem statement, scope, stakeholders, current phase, open questions. |
+| `issue-tree.md` | 1 | MECE issue tree under active development. |
+| `hypotheses.md` | 1 | Ranked hypothesis table with ICE scores and status. |
+| `signals-map.md` | 1 | SLI/SLO → UX outcome → business KPI mapping. |
+| `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks. |
+| `decisions-log.md` | all | Append-only record of every gate decision. |
+
+## Engagement states
+
+| State | Where the files are | How to get there |
+|---|---|---|
+| **Active** | `memory/project-space/` | Start or resume an engagement |
+| **Paused** | `memory/clients/<name>/project-space/` | Tell the agent to pause |
+| **Completed** | `memory/clients/<name>/past-investigations/<date>/` | Archive via investigation-reset skill |
+
+## Context isolation rule
+
+At session start, the agent identifies the active client from `active-engagement.md`. For the rest of that session, client-specific reads come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+
+## Why the read/write asymmetry exists
+
+**Root library writes require explicit user approval** because auto-promoting session-specific findings into shared memory creates two failure modes:
+
+1. **One-off context bleeds into future investigations as if it were universal truth.**
+2. **The agent slowly accumulates wrong or stale knowledge nobody asked it to remember.**
+
+**Client workspace writes also require explicit approval** for the same reason: the agent should not silently accumulate facts about a client that you haven't confirmed are accurate.
+
+## Triggering a root library write
+
+The agent writes to `memory/long-term/` only when you ask clearly:
+
+- *"Add [name] to `terminology.md` as [definition]."*
+- *"Log a lesson learned: when SDK version segmentation is missing in RUM, always flag it as an instrumentation gap in Phase 1."*
+- *"Update `dynatrace-playbooks.md` with the investigation sequence we just validated."*
+
+Vague phrases — *"this seems important"*, *"remember this"* — are logged in `decisions-log.md` but not promoted.
+</script>
+
+<script type="text/plain" id="raw-research">
+# External research and citation policy
+
+Dynatrace updates its documentation almost daily. If the workspace cites a doc page and that page changed last week, your Phase 3 one-pager could be defending a behavior that no longer exists. This page explains the three policies the workspace uses to stay honest: **memory-first**, **allowlisted sources only**, and **citation freshness**.
+
+## Policy 1 — Memory first, web second
+
+Before reaching for the web, the agent reads what's already on disk:
+
+- `memory/long-term/dynatrace-playbooks.md` — for **procedural** questions. Eight playbooks cover the most common problem shapes; each one already carries its own doc citations.
+- `memory/long-term/domain-knowledge.md` — for Dynatrace concept definitions and the approved-sources list.
+- `memory/long-term/terminology.md` — for terms the team has already defined.
+
+The agent only fetches externally when local memory is **silent, contradictory, or stale**.
+
+## Policy 2 — Allowlisted external sources
+
+External research is **allowlisted**. The agent will fetch from these two domains and no others, ever, without explicit user approval:
+
+| Source | URL root | What it's good for |
+|---|---|---|
+| Dynatrace product documentation | `https://docs.dynatrace.com/` | Authoritative reference for features, defaults, configuration, concepts, supported behavior. |
+| Dynatrace Community | `https://community.dynatrace.com/` | Practitioner discussions, known issues, workarounds, migration experience. Treat as practitioner reporting, not vendor commitment. |
+
+The agent **never silently expands the allowlist**. Adding a new domain requires extending `skills/external-research/SKILL.md` — not a one-off ask.
+
+## Policy 3 — Citation requirement
+
+Every externally sourced fact lands in the phase artifact with three pieces of information:
+
+1. The **source URL**.
+2. The page's own **"Last updated"** date — as published by Dynatrace.
+3. The **agent's retrieval date** — when the agent actually fetched the page.
+
+Without all three, the citation is incomplete.
+
+## Policy 4 — Freshness
+
+Two rules:
+
+- **Citations older than 7 days are presumed stale** and must be re-validated before reuse in any phase artifact.
+- **Every citation is re-validated at the Phase 2 → Phase 3 transition**, regardless of age.
+
+The 7-day threshold is tuned to Dynatrace's actual update cadence. You can adjust the window in `CLAUDE.md`.
+
+## The doc-freshness-checker
+
+At the start of every engagement (Phase 0), the main agent dispatches a background sub-agent that runs in parallel while you're answering the Phase 0 clarifying questions.
+
+Its job:
+
+1. Reads cited URLs from `domain-knowledge.md`, `dynatrace-playbooks.md`, and `terminology.md`.
+2. Re-fetches each one via WebFetch.
+3. Compares stored "Last updated" dates against the current ones.
+4. Writes findings to `memory/long-term/freshness-report.md` — and **only** that file.
+
+This sub-agent **never edits long-term memory directly**. It surfaces drift; the human decides what to do about it.
+
+## What this is NOT
+
+- **Not a live query path.** The agent never logs in, runs DQL, or submits forms.
+- **Not a write path to long-term memory.** Promotion to durable memory still requires explicit user approval.
+- **Not an autonomous research agent.** The agent fetches in service of a specific phase artifact, not to "go learn things."
+</script>
+
+<script type="text/plain" id="raw-deliverables">
+# Phase 3 deliverables — brand, layout, voice
+
+Phase 3 is where the workspace earns its keep — a one-page written summary and a PowerPoint deck, both brand-conformant and tuned to a *named* stakeholder.
+
+The **brand spec is authoritative**. The agent will not improvise off-palette colors, off-brand fonts, or made-up layouts. The spec lives at `memory/long-term/brand/brand-spec.md` and is loaded before any Phase 3 artifact gets produced.
+
+## What the brand spec covers
+
+| Dimension | Where in the spec |
+|---|---|
+| Color palette (HEX values) | Color section |
+| Typography (DT Flow Medium / DT Flow Light, Arial fallback) | Typography section |
+| Slide format (16:9, 13.33" × 7.5") | Header |
+| Layout templates (64 named slide layouts) | Layout patterns section |
+| Logo lockups (horizontal preferred for headers) | Logo usage section |
+| Voice and tone | Voice section |
+| Product-name capitalization | Terminology section |
+| Footer conventions | Footer section |
+
+When the official PowerPoint template and the brand PDF disagree, the **PowerPoint wins** because it's what gets rendered.
+
+## What the one-pager looks like
+
+Produced by `skills/exec-onepager/SKILL.md`. One page, written for a *named* stakeholder. The voice and emphasis genuinely change between stakeholders — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product:
+
+- **VP of Reliability** — error-budget framing, SLO impact, on-call burden, post-incident learnings.
+- **VP of Product** — feature impact, customer-experience surface, release velocity, competitive considerations.
+
+Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks.
+
+## What the deck looks like
+
+Produced by `skills/pptx-builder/SKILL.md`, **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.
+
+Practical implications you'll see in the output:
+
+- **Slide format.** 16:9 widescreen, 13.33" × 7.5".
+- **Typography.** DT Flow Medium / DT Flow Light. Arial is the rendering-side fallback only.
+- **Layouts.** 64 named layouts from the template — content card, chart, table, swimlane, gantt, timeline, funnel, hashtag-stat, and so on.
+- **Logo lockup.** Horizontal lockup preferred for slide title bars and one-pager headers.
+- **Product names.** Capitalized and trademarked as the spec requires.
+
+## Voice and tone
+
+Voice comes from `styleguide.dynatrace.com` and from the matching stakeholder profile. The three Phase 3 lenses do most of the enforcement:
+
+- The **Consultative lens** makes sure the deliverable reads as the firm's voice for a technical-leadership audience.
+- The **Customer lens** checks that the deliverable matches what users actually experience.
+- The **Skeptic lens** stress-tests for hostile leadership questions before send.
+
+## Spot-checking before you send
+
+> *"Verify this one-pager against the brand spec — colors, typography, layout, terminology."*
+
+The agent will load `brand-spec.md`, walk the artifact section by section, and flag anything off-spec.
+</script>
+
+<script type="text/plain" id="raw-customizing">
+# Customizing Insights Forge for your team
+
+Insights Forge is designed to be **specialized to your team** — it's not really useful straight out of the box. The skills, lenses, and workflow are generic; the files under `memory/long-term/` are where *your team* lives.
+
+## High impact — do these first
+
+### 1. Stakeholder profiles
+
+Open `memory/long-term/stakeholder-profiles.md`.
+
+Add one profile per leader you produce outputs for. Each profile should capture what they care about, what they ignore, decisions they own, and how they prefer to receive information.
+
+A profile like *"VP of Engineering"* is generic. A profile like *"VP of Engineering, came up through platform, allergic to vague timelines, owns error-budget policy, reads on mobile during commute"* produces a noticeably sharper one-pager.
+
+**Trigger phrase:** *"Add [name] to the stakeholder profiles as [role]."*
+
+### 2. Domain knowledge — fill in the slots
+
+Open `memory/long-term/domain-knowledge.md`.
+
+The vendor-sourced Dynatrace concept definitions are populated. The `[team to note: …]` slots are where **your environment's specifics** belong: retention policy, DPS quota, custom RUM tagging, named SLOs, anything an agent reading the file would otherwise have to guess.
+
+### 3. Terminology
+
+Open `memory/long-term/terminology.md`.
+
+Add acronyms and product names your team uses that aren't already listed. Especially valuable: internal service names, custom dashboards, named SLOs, internal nicknames for shared infrastructure.
+
+## Medium impact
+
+### 4. Dynatrace playbooks
+
+Open `memory/long-term/dynatrace-playbooks.md`.
+
+Eight playbooks ship out of the box: latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem. You can extend them with org-specific procedural patterns, or add new playbooks for problem shapes the eight don't cover (cost/quota investigations and security-event triage are common additions).
+
+**Trigger phrase:** *"Promote this Phase 2 investigation sequence into a new playbook called `<name>`."*
+
+### 5. Client question bank
+
+Open `memory/long-term/client-question-bank.md`.
+
+If your discovery conversations regularly need question phrasings that aren't in the bank, add them — grouped by the MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE rubric.
+
+### 6. The operating manual itself
+
+Open `CLAUDE.md`.
+
+You may want to adjust: the list of stakeholder roles, the default vertical or domain, the citation-freshness window (default 7 days), or the phased workflow if you've added or removed phases.
+
+## Lower impact — adjust as needed
+
+### 7. Brand spec
+
+Open `memory/long-term/brand/brand-spec.md`.
+
+Refresh when the Dynatrace brand template changes. The spec is sourced from the official PowerPoint template.
+
+### 8. Past-investigations index
+
+Open `memory/long-term/past-investigations.md`.
+
+This is a curated index of completed investigations and the lessons each surfaced. The agent scans it in Phase 0 to detect prior engagements on the same customer, vertical, or problem shape.
+
+## The tools/ boundary
+
+Any tool added to `tools/` must respect the operating principles in `CLAUDE.md`:
+
+- A tool **may** read from internal docs, design files, or local artifacts.
+- A tool **may** render outputs into formats the team uses (PPTX, PDF, Markdown).
+- A tool **must not** execute DQL, SQL, or any query language against production telemetry.
+- A tool **must not** push configuration, deploy code, or modify production state.
+
+## What you should NOT customize lightly
+
+- **The four-phase workflow.** Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee.
+- **The memory split.** Auto-promoting project-space findings into long-term memory was an explicit *non*-design.
+- **The external allowlist.** Adding a new domain requires explicit user approval per investigation, not a silent edit.
+</script>
+
+<!-- ══ File content ══ -->
+<script type="text/plain" id="raw-active-engagement">
+active: none
+# Set this to the client name when an engagement is open:
+# active: acme-corp
+#
+# This tells the agent which memory/clients/<name>/ folder to use for
+# environment, stakeholder overlays, and past investigations.
+# Use skills/investigation-reset/SKILL.md to pause, archive, or resume.
+</script>
+
+<script type="text/plain" id="raw-current-context">
+# Current Context
+
+The single source of truth for the active investigation's framing. The agent updates this file at every gate.
+
+## Problem statement (as user described it)
+
+> [The user's original problem statement, verbatim. Capture how they actually said it — including the ambiguity, the urgency, the noise. The reframed version goes in the next section.]
+
+## Reframed problem (after MECE structuring)
+
+> [The problem restated as a question, at a single level of abstraction, after Phase 0 framing. This is what the issue tree decomposes.]
+
+## Scope and out-of-scope
+
+**In scope**:
+- [What this investigation will look at.]
+- [...]
+
+**Out of scope**:
+- [What this investigation will explicitly not touch — usually because it is owned by another team, deferred to a later phase, or out of bounds for the decision being made.]
+- [...]
+
+## Stakeholders
+
+| Role | Name | Owns | Affected by | Decides on |
+|---|---|---|---|---|
+| [VP of Engineering] | [name] | [what they own] | [how they're affected] | [what they have authority to decide] |
+| [Director of Reliability] | [name] | [...] | [...] | [...] |
+
+## Current phase
+
+**Phase**: [0 / 1 / 2 / 3]
+**Status**: [in progress / awaiting user approval / approved, moving to next phase]
+
+## Last user approval
+
+- **Date**: [YYYY-MM-DD]
+- **Approved**: [what specifically was approved]
+- **Conditions**: [any conditions the user attached to the approval]
+
+## Open questions for the user
+
+- [Specific question the agent needs answered before continuing.]
+- [...]
+</script>
+
+<script type="text/plain" id="raw-issue-tree">
+# Issue Tree
+
+The MECE decomposition of the current problem. The agent updates this file in Phase 1 and any time the user redirects the framing.
+
+## Root problem
+
+> [The reframed problem from `current-context.md`, stated as a question. Example: "Why has checkout conversion declined 8% week-over-week on iOS while remaining flat on web?"]
+
+## Branches
+
+Each branch represents a problem space, not a solution. Each branch carries a one-line note describing **what we would see if this branch is the cause** — this is the seed of the hypotheses generated in Phase 1.
+
+### Client
+
+- **What we'd see if this is the cause**: [e.g., elevated client-side errors, JS exceptions, frontend latency, render failures, increased crash rate on a specific OS version or device class.]
+
+### Network
+
+- **What we'd see if this is the cause**: [e.g., elevated TTFB regionally, packet loss on specific ASNs, CDN edge anomalies, DNS resolution failures.]
+
+### Backend (application)
+
+- **What we'd see if this is the cause**: [e.g., elevated p95/p99 service latency, increased 5xx rate, thread pool saturation, GC pauses, deploy-correlated regressions.]
+
+### Data (storage and pipelines)
+
+- **What we'd see if this is the cause**: [e.g., query latency regressions, replica lag, cache miss rate spike, schema migration timing, stale or missing analytics events.]
+
+### Third-party dependencies
+
+- **What we'd see if this is the cause**: [e.g., elevated latency or error rate from a named upstream vendor — payment gateway, auth provider, geocoding, analytics SDK.]
+
+### Business process / configuration
+
+- **What we'd see if this is the cause**: [e.g., recent pricing change, promotion configuration, feature flag rollout, geographic gating, A/B test in flight.]
+
+### Instrumentation gaps
+
+- **What we'd see if this is the cause**: [the cause is genuine but invisible — note which data we would need to instrument to confirm or rule out.]
+
+## MECE check
+
+Notes from the most recent MECE lens review.
+
+- **Reviewed on**: [YYYY-MM-DD]
+- **Overlaps flagged**: [...]
+- **Gaps flagged**: [...]
+- **Resolution**: [what was changed; what was kept as-is and why]
+
+## Version history
+
+- **YYYY-MM-DD**: Initial draft. [Brief note on the starting structure.]
+- **YYYY-MM-DD**: [What changed and why.]
+</script>
+
+<script type="text/plain" id="raw-hypotheses">
+# Hypotheses
+
+Ranked candidate hypotheses for the current investigation. Each row maps to a branch in `issue-tree.md`. The agent updates this file in Phase 1 (initial drafting and ICE scoring) and keeps the **Status** column current as evidence comes in from the team.
+
+## Status legend
+
+- **open** — not yet investigated.
+- **validating** — investigation in progress; evidence is being gathered.
+- **confirmed** — exit criteria met; this is a real cause.
+- **ruled out** — exit criteria met; this is not the cause.
+
+## Hypothesis table
+
+| ID | Hypothesis | Branch | Expected signals | Validation approach | Required metrics (not queries) | Impact | Confidence | Effort | ICE | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| H-01 | iOS checkout conversion decline is driven by elevated client-side JS exceptions in the payment SDK after the 4.12 SDK update. | Client | Spike in JS exception rate on iOS Safari starting around SDK rollout date; concentrated on payment screen route; absent on web. | Compare client error rate by OS and route before and after rollout; segment by SDK version where available. | RUM JS error rate, segmented by OS and route; SDK version distribution; checkout funnel step conversion. | 8 | 6 | 3 | 16.0 | validating |
+| H-02 | A backend p95 latency regression in the cart-service after the 2026-05-04 deploy is causing a measurable share of users to abandon checkout. | Backend | p95 latency on cart-service rises step-function-like after deploy; abandonment rate at cart→payment step rises in lockstep. | Compare cart-service p95 latency seven days before vs seven days after deploy; correlate with step-level funnel conversion. | Service p95/p99 latency over time; deploy timestamps; funnel step conversion; user session duration on cart route. | 7 | 7 | 4 | 12.25 | open |
+| H-03 | A third-party payment gateway has elevated error rate from a specific region, and iOS traffic is disproportionately routed there. | Third-party | Payment gateway error rate elevated for affected region; iOS traffic share in that region higher than baseline. | Compare payment gateway success rate by region and platform; cross-reference with iOS traffic distribution. | Payment gateway success/error rate by region; iOS vs web traffic distribution by region. | 6 | 4 | 5 | 4.8 | open |
+
+## Notes on the table
+
+- **Expected signals** must be specific enough that the team can recognize the signal when they see it.
+- **Required metrics (not queries)** lists the *kinds* of data needed. The agent does not generate raw DQL. The team writes the queries.
+- **ICE** scores follow the calibration in `memory/long-term/frameworks.md`. Re-score whenever new evidence shifts Confidence materially.
+- Add rows as new hypotheses emerge. Do not delete ruled-out rows — they are part of the audit trail.
+</script>
+
+<script type="text/plain" id="raw-signals-map">
+# Signals Map
+
+The chain from technical signals to user-visible outcomes to business KPIs. The agent fills this in during Phase 1 and references it heavily in Phases 2 and 3 to keep deliverables grounded in business impact rather than raw telemetry.
+
+## SLIs / SLOs (technical signals being watched)
+
+| SLI / SLO | Service or surface | Current value | Target | Notes |
+|---|---|---|---|---|
+| [Service p95 latency] | [cart-service] | [...] | [<300ms] | [Linked to which hypotheses; instrumentation source] |
+| [Error rate] | [payment-service] | [...] | [<0.1%] | [...] |
+| [Availability] | [checkout flow end-to-end] | [...] | [99.95%] | [...] |
+
+## UX outcomes (how tech signals translate to what users feel)
+
+| UX outcome | Driven by which SLIs | How users experience it | How we measure it |
+|---|---|---|---|
+| [Page load speed on payment screen] | [Service p95 latency; CDN TTFB; client render time] | [Visible wait, spinner, or abandonment before page paints] | [RUM page load p75/p95; LCP] |
+| [Checkout completion friction] | [Form error rate; step-level latency; payment SDK errors] | [Repeated attempts, dropped sessions, support tickets] | [Funnel step conversion; session replay] |
+
+## Business KPIs (how UX outcomes translate to business impact)
+
+| Business KPI | UX outcomes that drive it | Current value | Target / baseline | Owner |
+|---|---|---|---|---|
+| [Checkout conversion rate] | [Page load speed; checkout completion friction] | [...] | [...] | [Head of Growth] |
+| [Revenue at risk per percentage-point conversion drop] | [...] | [$ per pp] | [...] | [Finance partner] |
+
+## Instrumentation gaps
+
+Places where the chain breaks — we cannot currently measure what we would need to validate a hypothesis or confirm an outcome.
+
+| Gap | What we'd need to measure | Why it matters now | Estimated cost to close |
+|---|---|---|---|
+| [No SDK version segmentation in RUM] | [JS error rate by payment SDK version] | [Blocks H-01 validation] | [~1 week of frontend platform work] |
+| [No region-level breakdown of payment gateway success rate] | [Payment gateway success/error rate by region] | [Blocks H-03 validation] | [Coordinate with payment vendor] |
+</script>
+
+<script type="text/plain" id="raw-action-plan">
+# Action Plan
+
+The Phase 2 deliverable. Two categories of actions live here: **investigation actions** (what we need to learn) and **recommended actions** (what we should do once we have learned it).
+
+## Investigation actions
+
+| ID | Hypothesis | What we'll look at | Data source(s) | Who's involved | Exit criteria: confirmed | Exit criteria: ruled out | Target completion |
+|---|---|---|---|---|---|---|---|
+| A-01 | H-01 (iOS payment SDK errors) | Client JS error rate on iOS payment screen, segmented by SDK version, around rollout date | RUM | Frontend platform team, payment squad | JS error rate on iOS payment screen rose >2× baseline within 24h of SDK 4.12 rollout AND error volume correlates with conversion drop window | Error rate flat or unrelated to rollout window | [YYYY-MM-DD] |
+| A-02 | H-02 (cart-service latency regression) | cart-service p95/p99 latency 7d before vs 7d after 2026-05-04 deploy; funnel step conversion | Dynatrace APM; analytics events | Backend platform team, analytics | p95 latency rose >30% step-function-like at deploy AND funnel conversion dropped concurrently | No latency change OR latency changed without funnel impact | [YYYY-MM-DD] |
+| A-03 | H-03 (payment gateway by region) | Payment gateway success rate by region; iOS traffic distribution by region | Payment vendor API; analytics events | Payments team, analytics | Gateway success rate in a region dropped >5pp AND iOS share exceeds 1.5× baseline | Gateway success rate stable across regions | [YYYY-MM-DD] |
+
+## Recommended actions
+
+| ID | Action | Conditional on | Owner | Timeframe | Impact | Effort | Notes |
+|---|---|---|---|---|---|---|---|
+| R-01 | Roll back payment SDK to 4.11 on iOS while 4.12 is patched | A-01 confirms H-01 | Mobile platform lead | Within 24h of confirmation | High | Low | Coordinate with payment SDK vendor on patch ETA |
+| R-02 | Revert or hotfix the 2026-05-04 cart-service deploy | A-02 confirms H-02 | Cart-service tech lead | Within 48h of confirmation | High | Medium | Identify the specific change set; coordinate with on-call |
+| R-03 | Add SDK version segmentation to RUM as a permanent capability | (always — closes instrumentation gap) | Frontend platform team | Next sprint | Medium | Low | Surfaced in signals-map.md as a recurring gap |
+
+## Decision asks for leadership
+
+- **Ask 1**: Approval to roll back iOS SDK to 4.11 in production within 24h of H-01 confirmation — VP of Engineering owns this decision.
+- **Ask 2**: [...]
+
+## Risks and tradeoffs
+
+| Risk | Severity | Mitigation |
+|---|---|---|
+| Rolling back the payment SDK reintroduces a known checkout bug fixed in 4.12 | Medium | Apply targeted patch rather than full rollback if vendor can ship in <72h |
+| Reverting the cart-service deploy may also revert unrelated bug fixes | Medium | Cherry-pick the suspected change rather than full revert |
+| Instrumentation work (R-03) competes with frontend platform Q2 roadmap commitments | Low | Frame as one-week investment that pays for itself in faster diagnosis next time |
+</script>
+
+<script type="text/plain" id="raw-decisions-log">
+# Decisions Log
+
+An **append-only** record of every gate decision the user has made during this investigation. The agent writes a new entry whenever the user approves, redirects, or asks for iteration through a lens. Never edit or delete prior entries — they are the audit trail.
+
+## Entry format
+
+Each entry must include:
+
+- **Timestamp** — ISO 8601 (YYYY-MM-DD HH:MM)
+- **Phase** — 0 / 1 / 2 / 3
+- **Presented** — what the agent presented at this gate (one sentence)
+- **Decision** — approve / redirect / iterate
+- **Rationale** — the user's reasoning, captured in their words where possible
+- **Next action** — what the agent does next as a result of this decision
+
+## Entries
+
+### YYYY-MM-DD HH:MM — Phase 0 framing presented
+
+- **Phase**: 0
+- **Presented**: Reframed problem statement, scope, stakeholder list, initial candidate hypotheses.
+- **Decision**: [approve / redirect / iterate]
+- **Rationale**: [user's reasoning]
+- **Next action**: [e.g., "Proceed to Phase 1 — build MECE issue tree."]
+
+### YYYY-MM-DD HH:MM — Phase 1 diagnosis presented
+
+- **Phase**: 1
+- **Presented**: MECE issue tree, ranked hypotheses with ICE scores, signals map.
+- **Decision**: [...]
+- **Rationale**: [...]
+- **Next action**: [...]
+
+### [Append new entries below this line — newest at the bottom]
+</script>
+
+<script type="text/plain" id="raw-client-readme">
+# [Client Name] — Workspace
+
+**Status:** [Active / Paused / Completed]
+**First engagement:** YYYY-MM-DD
+**Last active:** YYYY-MM-DD
+**Vertical:** [industry vertical]
+
+## Engagement history
+
+| Date | Description | Status | Key lesson |
+|---|---|---|---|
+| YYYY-MM-DD | [One-line problem] | complete / incomplete | [One sentence] |
+
+## Quick links
+
+- [environment.md](environment.md) — DT environment profile
+- [stakeholder-overlays.md](stakeholder-overlays.md) — named leaders
+- [past-investigations/](past-investigations/) — archived engagements
+</script>
+
+<script type="text/plain" id="raw-environment">
+# [Client Name] — Dynatrace Environment Profile
+
+**Last updated:** YYYY-MM-DD
+**Tenant type:** SaaS / Managed
+**Active capabilities:** [from Phase 0 Q5]
+
+## Management Zones
+<!-- List MZs and their scope, or "none configured / unknown" -->
+
+## Key applications
+<!-- Primary applications and services this client focuses on -->
+
+## Defined SLOs
+<!-- SLO name, service/journey, target, current status — or "none configured" -->
+
+## Synthetic monitors
+<!-- Key synthetic paths, pass/fail status — or "none active" -->
+
+## RUM coverage
+<!-- Web / mobile / both; custom user actions; business events; session replay -->
+
+## Log management
+<!-- Services with log ingestion; parsing gaps; noise sources — or "not active" -->
+
+## Business events
+<!-- What is being tracked, or "not configured" -->
+
+## Instrumentation gaps
+<!-- Named services, flows, or metrics not currently covered -->
+
+## DPS quota
+<!-- Tier, headroom, or "unknown" -->
+
+## Known environment issues
+<!-- Noisy alerts, stale config, Davis AI tuning gaps — or "none noted" -->
+
+## OneAgent coverage
+<!-- Full / incremental rollout / known uncovered services -->
+</script>
+
+<script type="text/plain" id="raw-stakeholder-overlays">
+# [Client Name] — Stakeholder Overlays
+
+Named-leader profiles specific to this client. Each overlay layers on top of a generic role archetype from `memory/long-term/stakeholder-profiles.md`. Use both together for Phase 3 deliverables.
+
+**These profiles are confidential to this client's workspace.** They are never read during sessions for other clients.
+
+Updated only on explicit user approval via `skills/stakeholder-overlay/SKILL.md`.
+
+---
+
+<!-- Template — copy for each named leader -->
+
+## [Full Name] — [Title]
+
+**Parent archetype:** [archetype name from stakeholder-profiles.md]
+**Organization:** [Client Name]
+**Vertical:** [industry vertical]
+
+- **What they care about:** [2–3 sentences]
+- **What they ignore:** [1–2 sentences]
+- **Information preference:** summary-first / detail-first / decision-first
+- **KPI vocabulary:** [named metrics they actually use]
+- **Technical depth:** shallow / moderate / deep
+- **Sensitivities:** [or "none noted"]
+- **Dynatrace familiarity:** [duration and general impression, or "unknown"]
+
+**Phase 3 notes:** [How to frame a deliverable for this person specifically]
+
+---
+
+<!-- Add additional overlays below using the same template -->
+</script>
+
+<script>
+// ── Navigation ──
+function navTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  const navEl = document.querySelector('[data-page="' + page + '"]');
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('main').scrollTop = 0;
+  // Lazy-init viewers on first visit
+  if (page === 'docs') initDocs();
+  if (page === 'files') initFiles();
+  if (page === 'source-files') initSourceFiles();
+}
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => navTo(item.dataset.page));
+});
+
+function toggleSkill(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+// ── Markdown renderer (marked.js) ──
+marked.use({ gfm: true, breaks: false });
+
+function renderMd(text) {
+  // Strip YAML frontmatter present in SKILL.md files
+  text = text.replace(/^---\n[\s\S]*?\n---\n/, '');
+  // Parse, then make every link open in a new tab
+  return marked.parse(text).replace(/<a href=/g, '<a target="_blank" rel="noopener" href=');
+}
+
+// ── Doc browser ──
+const DOC_IDS = {
+  'getting-started': 'raw-getting-started',
+  'workflow': 'raw-workflow',
+  'skills': 'raw-skills',
+  'lenses': 'raw-lenses',
+  'memory': 'raw-memory',
+  'research': 'raw-research',
+  'deliverables': 'raw-deliverables',
+  'customizing': 'raw-customizing'
+};
+
+let docsInited = false;
+function initDocs() {
+  if(docsInited) return; docsInited = true;
+  selectDoc(document.querySelector('[data-doc="getting-started"]'), 'getting-started');
+}
+
+function selectDoc(el, key) {
+  document.querySelectorAll('#docs-nav .panel-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  const raw = document.getElementById(DOC_IDS[key]);
+  const content = raw ? raw.textContent.trim() : 'Not found.';
+  document.getElementById('doc-content').innerHTML = renderMd(content);
+  document.querySelector('#page-docs .panel-right').scrollTop = 0;
+}
+
+// ── File viewer ──
+const FILE_DEFS = {
+  'active-engagement': {
+    path: 'memory/project-space/active-engagement.md',
+    desc: 'Identifies which client engagement is currently active. The agent reads this at session start to load the correct client workspace.',
+    raw: 'raw-active-engagement',
+    ann: [
+      ['active:', 'Set to the client folder name (e.g., acme-corp) when an engagement is open. Set to "none" when no engagement is active.'],
+      ['# active: acme-corp', 'Example showing how to activate a specific client. The value must match the folder name under memory/clients/.'],
+    ]
+  },
+  'current-context': {
+    path: 'memory/project-space/current-context.md',
+    desc: 'Single source of truth for the active investigation\'s framing. The agent updates this at every phase gate. Read it any time to see the agent\'s current understanding.',
+    raw: 'raw-current-context',
+    ann: [
+      ['## Problem statement', 'The user\'s original words, verbatim — including ambiguity, urgency, and noise. Never edited.'],
+      ['## Reframed problem', 'The problem restated as a single question after Phase 0 framing. This is what the issue tree decomposes in Phase 1.'],
+      ['## Scope and out-of-scope', 'Explicit boundaries prevent scope creep. Out-of-scope items are usually owned by another team or deferred deliberately.'],
+      ['## Stakeholders', 'The table of people who own, are affected by, or decide on this investigation. Drives Phase 3 framing.'],
+      ['## Current phase', 'Phase 0–3 plus status. Always current — check this to know where the investigation stands.'],
+      ['## Last user approval', 'Records what was approved and any conditions attached. Part of the audit trail.'],
+      ['## Open questions', 'Blockers the agent needs answered before continuing. If this is non-empty, the investigation is paused waiting on input.'],
+    ]
+  },
+  'issue-tree': {
+    path: 'memory/project-space/issue-tree.md',
+    desc: 'The MECE decomposition of the active problem. Branches are problem spaces, never solutions. Reviewed by the MECE lens before presentation.',
+    raw: 'raw-issue-tree',
+    ann: [
+      ['## Root problem', 'The reframed problem from current-context.md, stated as a question. Never a statement.'],
+      ['## Branches', 'Each branch is a mutually exclusive problem space. 4–7 branches, all at the same abstraction level.'],
+      ['What we\'d see if this is the cause', 'Required for every branch. Specific enough that the team can recognize the signal. Seeds the hypotheses in Phase 1b.'],
+      ['### Instrumentation gaps', 'A dedicated branch for when the cause exists but is invisible. Changes how the investigation proceeds.'],
+      ['## MECE check', 'Output from the MECE lens review. Records what was flagged and how it was resolved — part of the audit trail.'],
+      ['## Version history', 'Append-only. Records every structural change and why. Never delete prior versions.'],
+    ]
+  },
+  'hypotheses': {
+    path: 'memory/project-space/hypotheses.md',
+    desc: 'Ranked candidate hypotheses per branch, with ICE scores and status. The central diagnostic artifact for Phases 1–2.',
+    raw: 'raw-hypotheses',
+    ann: [
+      ['## Status legend', 'open → validating → confirmed / ruled out. Status is kept current as evidence comes in. Never delete ruled-out rows.'],
+      ['Hypothesis', 'A specific, falsifiable claim — not a vague suspicion. Must be specific enough to have a clear confirmed/ruled-out state.'],
+      ['Expected signals', 'Concrete signals the team can look for. "Latency goes up" is not a signal. "p95 latency on cart-service rises step-function-like after deploy" is.'],
+      ['Required metrics (not queries)', 'The kinds of data needed — not DQL. The team writes the actual queries. The agent never generates executable query syntax.'],
+      ['Impact / Confidence / Effort', 'ICE dimensions, scored 1–10 each. ICE = (I×C)/E. Higher ICE = pursue first.'],
+    ]
+  },
+  'signals-map': {
+    path: 'memory/project-space/signals-map.md',
+    desc: 'The chain linking technical signals → UX outcomes → business KPIs. Shows where the chain is broken (instrumentation gaps). Critical for Phase 3 business-impact framing.',
+    raw: 'raw-signals-map',
+    ann: [
+      ['## SLIs / SLOs', 'Technical signals being watched. Include current value vs target to show the size of the gap.'],
+      ['## UX outcomes', 'How the SLI shows up to real users — not the metric itself, but what users experience. The bridge between engineering and product.'],
+      ['## Business KPIs', 'What moves in the business when the UX outcome changes. Quantify where possible ($ per pp conversion). This section drives Phase 3 impact statements.'],
+      ['## Instrumentation gaps', 'Each gap is a potential work item in the action plan. Names what\'s needed, why it matters, and how much it costs to close.'],
+    ]
+  },
+  'action-plan': {
+    path: 'memory/project-space/action-plan.md',
+    desc: 'The Phase 2 deliverable. Two types of actions: investigation (what to learn) and recommended (what to do once learned). Each action has owners, exit criteria, and timeframes.',
+    raw: 'raw-action-plan',
+    ann: [
+      ['## Investigation actions', 'One row per open hypothesis. Each row names the specific data source, who\'s involved, and pre-agreed exit criteria for confirmed vs ruled out.'],
+      ['## Recommended actions', 'Ranked by impact vs effort. May be conditional on investigation outcomes — that is intentional.'],
+      ['Conditional on', 'Shows which investigation result must come back before this action should proceed. Prevents premature action.'],
+      ['## Decision asks for leadership', 'Specific decisions named leaders need to make — not open questions. Names the decision-maker and what changes once they decide.'],
+      ['## Risks and tradeoffs', 'Each risk has a severity and a mitigation. Tradeoffs appear here, not in a separate appendix — they must be in the same view as the recommendation.'],
+    ]
+  },
+  'decisions-log': {
+    path: 'memory/project-space/decisions-log.md',
+    desc: 'Append-only audit trail of every gate decision. If anyone asks "why did we pursue that hypothesis?" — the answer is here. Never edited or deleted.',
+    raw: 'raw-decisions-log',
+    ann: [
+      ['**Timestamp**', 'ISO 8601 format. Establishes when each decision was made in the investigation timeline.'],
+      ['**Phase**', 'Which phase was being presented at this gate (0, 1, 2, or 3).'],
+      ['**Presented**', 'One sentence describing what the agent showed at this gate.'],
+      ['**Decision**', 'approve / redirect / iterate — exactly one of these three. No other values.'],
+      ['**Rationale**', 'The user\'s reasoning, captured in their words where possible. This is what makes the log useful months later.'],
+      ['**Next action**', 'What the agent does as a result. Makes the consequences of each decision explicit.'],
+    ]
+  },
+  'client-readme': {
+    path: 'memory/clients/_template/README.md',
+    desc: 'Engagement history for a client workspace. The investigation-reset skill appends a new row to the engagement history table at every archive. Gives you a quick glance at all prior work with this client.',
+    raw: 'raw-client-readme',
+    ann: [
+      ['**Status**', 'Active / Paused / Completed — tracks the current state of this client\'s engagement.'],
+      ['Engagement history table', 'Append-only. One row per completed or archived investigation. The "Key lesson" column is what gets surfaced at Phase 0 of the next engagement with this client.'],
+    ]
+  },
+  'environment': {
+    path: 'memory/clients/_template/environment.md',
+    desc: 'Persistent Dynatrace environment profile for this client. Populated by the environment-intake skill at first engagement. Persists across all future engagements with the same client.',
+    raw: 'raw-environment',
+    ann: [
+      ['**Tenant type**', 'SaaS vs Managed affects DPS, Grail availability, and which playbooks apply.'],
+      ['## Management Zones', 'Scopes the investigation — knowing which MZs exist prevents chasing signals outside the relevant scope.'],
+      ['## Defined SLOs', 'Pre-existing SLOs become the benchmarks for hypothesis validation and Phase 3 impact statements.'],
+      ['## RUM coverage', 'Determines which frontend hypotheses can be validated and whether funnel analysis is possible.'],
+      ['## Instrumentation gaps', 'Persistent gaps that carry over from engagement to engagement. Avoids rediscovering the same gaps in every Phase 1.'],
+      ['## DPS quota', 'Scopes what additional instrumentation is feasible within the client\'s contract.'],
+    ]
+  },
+  'stakeholder-overlays': {
+    path: 'memory/clients/_template/stakeholder-overlays.md',
+    desc: 'Named-leader profiles specific to this client. Each overlay layers on top of a generic role archetype. Written only after explicit user approval. Never read outside this client\'s sessions.',
+    raw: 'raw-stakeholder-overlays',
+    ann: [
+      ['**Parent archetype**', 'Links to one of the 8 generic role archetypes in stakeholder-profiles.md. The overlay adds what the generic archetype can\'t know.'],
+      ['**What they care about**', 'The single most important field. Drives which findings lead the Phase 3 one-pager.'],
+      ['**Information preference**', 'summary-first / detail-first / decision-first. Determines document structure.'],
+      ['**KPI vocabulary**', 'The actual metrics this person uses when talking about success. Using their vocabulary in Phase 3 is the difference between "sounds like a consultant" and "sounds like a colleague."'],
+      ['**Phase 3 notes**', 'Specific framing guidance for deliverables aimed at this person.'],
+    ]
+  }
+};
+
+let filesInited = false;
+function initFiles() {
+  if(filesInited) return; filesInited = true;
+  selectFile(document.querySelector('[data-file="active-engagement"]'), 'active-engagement');
+}
+
+let _fileKey = null;
+
+function selectFile(el, key) {
+  _fileKey = key;
+  document.querySelectorAll('#files-nav .panel-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  _renderFile(key, 'rendered');
+}
+
+function setFileView(mode) {
+  if (_fileKey) _renderFile(_fileKey, mode);
+}
+
+function _renderFile(key, mode) {
+  const def = FILE_DEFS[key];
+  if (!def) { document.getElementById('file-content-area').innerHTML='<p>Not found.</p>'; return; }
+  const raw = document.getElementById(def.raw);
+  const content = raw ? raw.textContent.trim() : '';
+
+  const header =
+    '<div class="file-info"><span class="file-path-chip">'+def.path+'</span></div>' +
+    '<p style="font-size:13px;color:var(--gray-lt);max-width:600px;margin-bottom:14px">'+escHtml(def.desc)+'</p>';
+
+  const toggle =
+    '<div class="view-toggle">' +
+    '<button class="view-btn'+(mode==='rendered'?' active':'')+'" onclick="setFileView(\'rendered\')">Rendered</button>' +
+    '<button class="view-btn'+(mode==='raw'?' active':'')+'" onclick="setFileView(\'raw\')">Raw</button>' +
+    '</div>';
+
+  let body;
+  if (mode === 'rendered') {
+    body = '<div class="md-content">'+renderMd(content)+'</div>';
+  } else {
+    const lines = content.split('\n');
+    let nums='', code='';
+    lines.forEach((ln,i)=>{ nums+='<span>'+(i+1)+'</span>'; code+=escHtml(ln)+'\n'; });
+    body = '<div class="file-wrap"><div class="file-nums">'+nums+'</div><pre class="file-pre">'+code+'</pre></div>';
+  }
+
+  const anns = def.ann.map(([k,v]) =>
+    '<div class="ann-row"><div class="ann-key">'+escHtml(k)+'</div><div class="ann-val">'+escHtml(v)+'</div></div>'
+  ).join('');
+  const annSection = anns
+    ? '<div class="file-ann"><p style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);margin:20px 0 8px">Field guide</p>'+anns+'</div>'
+    : '';
+
+  document.getElementById('file-content-area').innerHTML = header + toggle + body + annSection;
+  document.querySelector('#page-files .panel-right').scrollTop = 0;
+}
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Source file viewer ──
+// Paths are relative to html/index.html (one level up = repo root)
+const SOURCE_DEFS = {
+  'claude-md':              { label: 'CLAUDE.md',                   path: '../CLAUDE.md' },
+  'readme':                 { label: 'README.md',                   path: '../README.md' },
+  'domain-knowledge':       { label: 'domain-knowledge.md',         path: '../memory/long-term/domain-knowledge.md' },
+  'dynatrace-playbooks':    { label: 'dynatrace-playbooks.md',      path: '../memory/long-term/dynatrace-playbooks.md' },
+  'frameworks':             { label: 'frameworks.md',               path: '../memory/long-term/frameworks.md' },
+  'stakeholder-profiles':   { label: 'stakeholder-profiles.md',     path: '../memory/long-term/stakeholder-profiles.md' },
+  'terminology':            { label: 'terminology.md',              path: '../memory/long-term/terminology.md' },
+  'client-question-bank':   { label: 'client-question-bank.md',     path: '../memory/long-term/client-question-bank.md' },
+  'brand-spec':             { label: 'brand/brand-spec.md',         path: '../memory/long-term/brand/brand-spec.md' },
+  'sk-context-framing':     { label: 'context-framing/SKILL.md',    path: '../skills/context-framing/SKILL.md' },
+  'sk-mece-decomposition':  { label: 'mece-decomposition/SKILL.md', path: '../skills/mece-decomposition/SKILL.md' },
+  'sk-hypothesis-generation':{ label: 'hypothesis-generation/SKILL.md', path: '../skills/hypothesis-generation/SKILL.md' },
+  'sk-ice-scoring':         { label: 'ice-scoring/SKILL.md',        path: '../skills/ice-scoring/SKILL.md' },
+  'sk-signal-mapping':      { label: 'signal-mapping/SKILL.md',     path: '../skills/signal-mapping/SKILL.md' },
+  'sk-action-plan-builder': { label: 'action-plan-builder/SKILL.md',path: '../skills/action-plan-builder/SKILL.md' },
+  'sk-exec-onepager':       { label: 'exec-onepager/SKILL.md',      path: '../skills/exec-onepager/SKILL.md' },
+  'sk-pptx-builder':        { label: 'pptx-builder/SKILL.md',       path: '../skills/pptx-builder/SKILL.md' },
+  'sk-external-research':   { label: 'external-research/SKILL.md',  path: '../skills/external-research/SKILL.md' },
+  'sk-investigation-reset': { label: 'investigation-reset/SKILL.md',path: '../skills/investigation-reset/SKILL.md' },
+  'sk-stakeholder-overlay': { label: 'stakeholder-overlay/SKILL.md',path: '../skills/stakeholder-overlay/SKILL.md' },
+  'sk-environment-intake':  { label: 'environment-intake/SKILL.md', path: '../skills/environment-intake/SKILL.md' },
+  'sk-value-highlight':     { label: 'value-highlight/SKILL.md',    path: '../skills/value-highlight/SKILL.md' },
+  'ag-mece-lens':           { label: 'mece-lens.md',                path: '../.claude/agents/mece-lens.md' },
+  'ag-ice-lens':            { label: 'ice-lens.md',                 path: '../.claude/agents/ice-lens.md' },
+  'ag-skeptic-lens':        { label: 'skeptic-lens.md',             path: '../.claude/agents/skeptic-lens.md' },
+  'ag-optimist-lens':       { label: 'optimist-lens.md',            path: '../.claude/agents/optimist-lens.md' },
+  'ag-consultative-lens':   { label: 'consultative-lens.md',        path: '../.claude/agents/consultative-lens.md' },
+  'ag-customer-lens':       { label: 'customer-lens.md',            path: '../.claude/agents/customer-lens.md' },
+  'ag-doc-freshness':       { label: 'doc-freshness-checker.md',    path: '../.claude/agents/doc-freshness-checker.md' },
+};
+
+let sourceInited = false;
+function initSourceFiles() {
+  if (sourceInited) return; sourceInited = true;
+  selectSource(document.querySelector('[data-source="claude-md"]'), 'claude-md');
+}
+
+async function selectSource(el, key) {
+  document.querySelectorAll('#source-nav .panel-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const contentEl = document.getElementById('source-content');
+  const def = SOURCE_DEFS[key];
+  if (!def) { contentEl.innerHTML = '<p style="color:var(--gray-lt)">File not found.</p>'; return; }
+
+  // Show the file path as a breadcrumb
+  const pathChip = '<div style="margin-bottom:16px"><span class="file-path-chip">' + def.path.replace('../','') + '</span></div>';
+  contentEl.innerHTML = pathChip + '<p style="color:var(--gray)">Loading…</p>';
+
+  try {
+    const res = await fetch(def.path);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    contentEl.innerHTML = pathChip + renderMd(text);
+  } catch (e) {
+    contentEl.innerHTML = pathChip +
+      '<div style="background:rgba(201,63,219,.06);border:1px solid rgba(201,63,219,.25);border-radius:8px;padding:16px 20px;margin-top:8px">' +
+      '<p style="font-size:13px;font-weight:500;color:var(--white);margin:0 0 6px">Could not load file</p>' +
+      '<p style="font-size:13px;color:var(--gray-lt);margin:0">Open <code class="ic">html/index.html</code> through a local dev server (VS Code Live Server, <code class="ic">python3 -m http.server</code>) to enable live file rendering. Direct <code class="ic">file://</code> access is blocked by browser security policy.</p>' +
+      '</div>';
+  }
+  document.querySelector('#page-source-files .panel-right').scrollTop = 0;
+}
+</script>
+</body>
+</html>
