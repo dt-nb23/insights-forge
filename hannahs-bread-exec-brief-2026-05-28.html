@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynatrace Insights &#8212; Hannah&#39;s Bread Company Executive Brief</title>
+<style>
+  @font-face { font-family:'DTFlow'; src:url('DTFlow/DTFlow-Medium.otf') format('opentype'); font-weight:500; }
+  @font-face { font-family:'DTFlow'; src:url('DTFlow/DTFlow-Light.otf') format('opentype'); font-weight:300; }
+  @font-face { font-family:'DTFlow'; src:url('DTFlow/DTFlow-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'DTFlow'; src:url('DTFlow/DTFlow-Semibold.otf') format('opentype'); font-weight:600; }
+  @font-face { font-family:'DTFlow'; src:url('DTFlow/DTFlow-Bold.otf') format('opentype'); font-weight:700; }
+
+  :root {
+    --navy:    #1A2440;
+    --white:   #FFFFFF;
+    --gray:    #6F747F;
+    --teal:    #49C2B3;
+    --teal-dk: #1A7A70;
+    --lb:      #3BACF0;
+    --royal:   #1966FF;
+    --purple:  #5E28E5;
+    --violet:  #8D1CDC;
+    --mag:     #C93FDB;
+    --rule:    #E0E4ED;
+    --soft:    #F6F8FC;
+    --text:    #2C2C2C;
+    --grad:    linear-gradient(90deg, #3BACF0 0%, #1966FF 33%, #5E28E5 67%, #C93FDB 100%);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family:'DTFlow', Arial, sans-serif; font-weight:300;
+    background:#E4E7F0; display:flex; justify-content:center;
+    padding:32px 16px; min-height:100vh; -webkit-font-smoothing:antialiased;
+  }
+
+  .page { width:960px; background:var(--white); box-shadow:0 8px 60px rgba(26,36,64,0.18); overflow:hidden; }
+
+  /* ── Top bar ──────────────────────────────────────────────────── */
+  .top-bar { height:8px; background:var(--grad); }
+
+  /* ── Header ───────────────────────────────────────────────────── */
+  .header {
+    background:
+      linear-gradient(to right, rgba(7,16,30,0.92) 0%, rgba(7,16,30,0.74) 42%, rgba(7,16,30,0.34) 100%),
+      url('assets/wave-bg.png') center / cover no-repeat;
+    padding:24px 52px 22px;
+    display:flex; justify-content:space-between; align-items:center; gap:32px;
+    position:relative; overflow:hidden;
+  }
+
+  .header-left { position:relative; z-index:2; flex:1; }
+  .lockup { margin-bottom:10px; }
+  .lockup-img { height:22px; width:auto; display:block; }
+
+  .header-eyebrow {
+    font-weight:700; font-size:10.5px; letter-spacing:2.2px; text-transform:uppercase;
+    color:rgba(255,255,255,0.82); margin-bottom:6px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  }
+  .header-eyebrow .pill {
+    font-weight:700; font-size:9.5px; letter-spacing:0.6px; text-transform:uppercase;
+    color:#A8F0E2; background:rgba(73,194,179,0.18); border:1px solid rgba(73,194,179,0.4);
+    padding:2px 8px; border-radius:11px;
+  }
+
+  .header-title { font-weight:700; font-size:30px; color:var(--white); line-height:1.1; letter-spacing:-0.6px; margin-bottom:8px; }
+  .header-tagline { font-weight:300; font-size:13px; color:rgba(255,255,255,0.78); line-height:1.6; max-width:460px; }
+  .header-tagline .t-blue   { color:var(--lb); font-weight:500; }
+  .header-tagline .t-mag    { color:#E590F0; font-weight:500; }
+  .header-tagline .t-teal   { color:var(--teal); font-weight:500; }
+
+  .header-right {
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; gap:0;
+    align-self:stretch; justify-content:center; flex-shrink:0;
+  }
+  .hstat { text-align:right; padding:8px 0 8px 24px; border-left:1px solid rgba(255,255,255,0.1); }
+  .hstat-num   { font-weight:700; font-size:26px; line-height:1; }
+  .hstat-label { font-weight:300; font-size:10px; color:rgba(255,255,255,0.55); margin-top:3px; }
+  .hstat:nth-child(1) .hstat-num { color:var(--lb); }
+  .hstat:nth-child(2) .hstat-num { color:var(--teal); }
+  .hstat:nth-child(3) .hstat-num { color:var(--mag); }
+
+  .grad-rule { height:4px; background:var(--grad); }
+
+  /* ── Executive summary strip ──────────────────────────────────── */
+  .exec-summary {
+    background:linear-gradient(180deg, #F6F8FC 0%, #FFFFFF 100%);
+    border-bottom:1px solid var(--rule);
+    padding:18px 52px 20px;
+    display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:24px;
+  }
+  .es-eyebrow {
+    grid-column:1 / -1; font-weight:700; font-size:10.5px;
+    letter-spacing:2.2px; text-transform:uppercase; color:var(--navy);
+    margin-bottom:-2px; display:flex; align-items:center; gap:10px;
+  }
+  .es-eyebrow::after { content:''; flex:1; height:1px; background:var(--rule); }
+  .es-label {
+    font-weight:700; font-size:10px; letter-spacing:1.4px; text-transform:uppercase;
+    margin-bottom:5px; display:flex; align-items:center; gap:7px;
+  }
+  .es-label::before { content:''; width:14px; height:2px; border-radius:1px; flex-shrink:0; }
+  .es-text { font-weight:300; font-size:12px; color:var(--text); line-height:1.55; }
+  .es-text strong { font-weight:600; color:var(--navy); }
+  .es-col:nth-child(2) .es-label { color:var(--royal); }
+  .es-col:nth-child(2) .es-label::before { background:var(--royal); }
+  .es-col:nth-child(3) .es-label { color:var(--teal-dk); }
+  .es-col:nth-child(3) .es-label::before { background:var(--teal-dk); }
+  .es-col:nth-child(4) .es-label { color:var(--purple); }
+  .es-col:nth-child(4) .es-label::before { background:var(--purple); }
+  .es-col:nth-child(5) .es-label { color:var(--mag); }
+  .es-col:nth-child(5) .es-label::before { background:var(--mag); }
+
+  /* ── Two-column body ──────────────────────────────────────────── */
+  .body { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:0 52px; }
+  .col-l { padding:28px 28px 28px 0; border-right:1px solid var(--rule); }
+  .col-r { padding:28px 0 28px 28px; }
+  .section { margin-bottom:20px; }
+  .section:last-child { margin-bottom:0; }
+  .col-rule { height:1px; background:var(--rule); margin:18px 0; }
+
+  .section-label {
+    font-weight:600; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gray);
+    display:flex; align-items:center; gap:8px; margin-bottom:6px;
+  }
+  .section-label::before {
+    content:''; display:inline-block; width:16px; height:3px;
+    border-radius:2px; background:var(--grad); flex-shrink:0;
+  }
+  .section-title { font-weight:500; font-size:15px; color:var(--navy); line-height:1.3; margin-bottom:9px; }
+  .body-text { font-weight:300; font-size:12.5px; line-height:1.75; color:var(--text); }
+  .body-text strong { font-weight:600; color:var(--navy); }
+
+  /* ── Findings list ─────────────────────────────────────────────── */
+  .findings-list { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+  .finding-item {
+    display:flex; gap:10px; padding:9px 11px;
+    background:var(--soft); border-left:3px solid transparent;
+    border-radius:0 6px 6px 0; box-shadow:0 1px 3px rgba(26,36,64,0.05);
+  }
+  .fi-1 { border-left-color:var(--royal); }
+  .fi-2 { border-left-color:var(--mag); }
+  .fi-3 { border-left-color:var(--mag); }
+  .fi-4 { border-left-color:var(--royal); }
+  .fi-5 { border-left-color:var(--purple); }
+  .finding-num {
+    font-weight:700; font-size:11px; color:var(--gray);
+    min-width:16px; padding-top:1px; flex-shrink:0;
+  }
+  .finding-text { font-weight:300; font-size:12px; color:var(--text); line-height:1.55; flex:1; }
+  .finding-text strong { font-weight:600; color:var(--navy); }
+  .finding-tag {
+    font-weight:700; font-size:9px; letter-spacing:0.8px; text-transform:uppercase;
+    padding:2px 7px; border-radius:9px; flex-shrink:0; align-self:flex-start; margin-top:1px;
+  }
+  .ft-gap  { color:var(--mag); background:rgba(201,63,219,0.10); border:1px solid rgba(201,63,219,0.25); }
+  .ft-open { color:var(--royal); background:rgba(25,102,255,0.08); border:1px solid rgba(25,102,255,0.25); }
+
+  /* ── Wave cards (implementation waves) ────────────────────────── */
+  .wave-cards { display:flex; flex-direction:column; gap:7px; margin-top:6px; position:relative; }
+  .wave-cards::before {
+    content:''; position:absolute; left:18px; top:36px; bottom:36px;
+    width:2px; background:linear-gradient(180deg, var(--lb), var(--royal), var(--purple));
+    border-radius:2px; z-index:0;
+  }
+  .wave-item { display:flex; gap:10px; align-items:flex-start; position:relative; z-index:1; }
+  .wave-badge {
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center;
+    justify-content:center; font-weight:700; font-size:13px; color:white;
+    flex-shrink:0; box-shadow:0 2px 6px rgba(0,0,0,0.16);
+  }
+  .wb-1 { background:var(--lb); }
+  .wb-2 { background:var(--royal); }
+  .wb-3 { background:linear-gradient(135deg, var(--purple), var(--mag)); }
+  .wave-body {
+    flex:1; background:var(--soft); padding:8px 11px;
+    border-radius:0 8px 8px 0; border-left:3px solid transparent;
+  }
+  .wv-1 .wave-body { border-left-color:var(--lb); }
+  .wv-2 .wave-body { border-left-color:var(--royal); }
+  .wv-3 .wave-body { border-left-color:var(--purple); }
+  .wave-name { font-weight:600; font-size:12.5px; color:var(--navy); line-height:1.3; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .wave-timing {
+    font-weight:700; font-size:9.5px; letter-spacing:0.4px; text-transform:uppercase;
+    color:white; padding:2px 7px; border-radius:9px; flex-shrink:0;
+  }
+  .wt-1 { background:var(--lb); }
+  .wt-2 { background:var(--royal); }
+  .wt-3 { background:var(--purple); }
+  .wave-desc { font-weight:300; font-size:11.5px; color:var(--gray); line-height:1.5; margin-top:3px; }
+  .wave-risk { font-weight:600; font-size:11px; color:var(--mag); margin-top:4px; letter-spacing:0.1px; }
+
+  /* ── Decision asks ─────────────────────────────────────────────── */
+  .ask-list { display:flex; flex-direction:column; gap:7px; margin-top:6px; }
+  .ask-item {
+    display:flex; gap:10px; align-items:flex-start;
+    padding:9px 11px; border-radius:6px;
+    background:var(--soft); border:1px solid var(--rule);
+  }
+  .ask-badge {
+    width:20px; height:20px; border-radius:50%; display:flex; align-items:center;
+    justify-content:center; font-weight:700; font-size:10px; color:white;
+    background:var(--navy); flex-shrink:0; margin-top:1px;
+  }
+  .ask-body { flex:1; }
+  .ask-owner { font-weight:700; font-size:10.5px; color:var(--royal); letter-spacing:0.3px; margin-bottom:2px; }
+  .ask-text { font-weight:300; font-size:12px; color:var(--text); line-height:1.5; }
+  .ask-text strong { font-weight:600; color:var(--navy); }
+  .ask-consequence { font-weight:600; font-size:11px; color:var(--mag); margin-top:3px; }
+
+  /* ── Decision ask strip ────────────────────────────────────────── */
+  .ask-strip {
+    background:
+      linear-gradient(to right, rgba(7,16,30,0.94) 0%, rgba(7,16,30,0.80) 45%, rgba(7,16,30,0.48) 100%),
+      url('assets/wave-ask.png') center / cover no-repeat;
+    padding:18px 52px;
+    display:flex; justify-content:space-between; align-items:center; gap:32px;
+  }
+  .ask-strip-left { flex:1; }
+  .ask-strip-eyebrow {
+    font-weight:700; font-size:10px; letter-spacing:2.2px; text-transform:uppercase;
+    color:rgba(255,255,255,0.82); margin-bottom:4px;
+  }
+  .ask-strip-headline { font-weight:500; font-size:16px; color:var(--white); line-height:1.35; letter-spacing:-0.2px; }
+  .ask-strip-headline .hl { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .ask-strip-right {
+    flex-shrink:0; text-align:right;
+    padding-left:22px; border-left:1px solid rgba(255,255,255,0.12);
+  }
+  .asr-label { font-weight:700; font-size:10px; letter-spacing:0.8px; text-transform:uppercase; color:rgba(255,255,255,0.85); margin-bottom:3px; }
+  .asr-text  { font-weight:300; font-size:11px; color:rgba(255,255,255,0.55); line-height:1.45; }
+
+  /* ── Risk table ────────────────────────────────────────────────── */
+  .risk-table { width:100%; border-collapse:collapse; margin-top:6px; font-size:12px; }
+  .risk-table thead tr { background:var(--navy); }
+  .risk-table thead th {
+    font-weight:600; font-size:10px; letter-spacing:1.2px; text-transform:uppercase;
+    color:rgba(255,255,255,0.85); padding:7px 10px; text-align:left;
+  }
+  .risk-table tbody tr { border-bottom:1px solid var(--rule); }
+  .risk-table tbody tr:last-child { border-bottom:none; }
+  .risk-table tbody td { padding:7px 10px; vertical-align:top; font-weight:300; color:var(--text); line-height:1.5; }
+  .risk-table tbody td:first-child { font-weight:600; color:var(--navy); font-size:11.5px; }
+  .risk-table .sev-high { color:var(--mag); font-weight:700; }
+  .risk-table .sev-med  { color:var(--purple); font-weight:700; }
+  .risk-table tbody tr:nth-child(even) { background:var(--soft); }
+
+  /* ── Footer ────────────────────────────────────────────────────── */
+  .footer {
+    padding:12px 52px; display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--rule);
+  }
+  .footer-legal { font-weight:300; font-size:11px; color:var(--gray); }
+  .footer-meta  { font-weight:300; font-size:11px; color:var(--gray); }
+  .footer-meta strong { font-weight:600; color:var(--navy); }
+
+  @media print { body { padding:0; background:white; } .page { box-shadow:none; width:100%; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="lockup">
+        <img class="lockup-img" src="assets/insights-lockup-rev.svg" alt="Dynatrace Insights" width="220" height="22">
+      </div>
+      <div class="header-eyebrow">
+        <span>Executive brief &middot; Decision required</span>
+        <span class="pill">New engagement &middot; 2026-05-28</span>
+      </div>
+      <h1 class="header-title">Hannah's Bread Company</h1>
+      <p class="header-tagline">
+        Establishing <span class="t-blue">cross-channel observability</span>,
+        protecting <span class="t-mag">mission-critical operations</span>,
+        and accelerating <span class="t-teal">time to value</span> on Dynatrace<sup style="font-size:9px;">&#174;</sup>
+      </p>
+    </div>
+    <div class="header-right" aria-label="Engagement at a glance">
+      <div class="hstat">
+        <div class="hstat-num">30</div>
+        <div class="hstat-label">Facilities monitored</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">2</div>
+        <div class="hstat-label">Mission-critical apps</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">4</div>
+        <div class="hstat-label">Implementation waves</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grad-rule" aria-hidden="true"></div>
+
+  <!-- ── Executive summary strip ──────────────────────────────────── -->
+  <section class="exec-summary" aria-label="Executive summary">
+    <div class="es-eyebrow">Engagement at a glance</div>
+
+    <div class="es-col">
+      <div class="es-label" style="color:var(--navy);">
+        <span style="display:inline-block;width:14px;height:2px;border-radius:1px;background:var(--grad);flex-shrink:0;"></span>
+        Customer
+      </div>
+      <div class="es-text">
+        <strong>Hannah's Bread Company</strong> — one of the world's largest producers and marketers of fresh bread, bagels, and pastries. 700+ application users across 30 U.S. and Canada facilities.
+      </div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">Engagement</div>
+      <div class="es-text">
+        New Dynatrace SaaS logo migrating from Datadog. Contract signed; timing pressure is immediate. Two mission-critical logistics apps, a growing mobile ordering channel, and an IT team that is <strong>extremely change-averse.</strong>
+      </div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">Leadership KPIs</div>
+      <div class="es-text">
+        Availability &middot; National expansion readiness &middot; Cross-channel customer experience &middot; Increased mobile conversions
+      </div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">Consultant's goal</div>
+      <div class="es-text">
+        Smooth, fast migration from Datadog with <strong>measurable time to value.</strong> Bounded milestone target: RUM live in 30 days; full APM coverage in 90 days.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Two-column body ──────────────────────────────────────────── -->
+  <main class="body">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-l">
+
+      <!-- Problem summary -->
+      <section class="section" aria-labelledby="prob-title">
+        <div class="section-label">Problem summary</div>
+        <h2 class="section-title" id="prob-title">The IT team learns of outages from staff and customers — not from monitoring</h2>
+        <p class="body-text">
+          Hannah's is transitioning to Dynatrace® from Datadog across 30 U.S. and Canada facilities. Two mission-critical logistics applications — <strong>breadSHIP</strong> (distribution) and <strong>breadSAIL</strong> (yard management) — have significant performance issues with no Application Performance Monitoring (APM) visibility. A fast-growing mobile ordering app delivers Hannah's promise directly to consumers, but has no performance instrumentation: every failed order, every slow checkout, and every geographic gap is invisible until a customer calls. With national expansion planned and no Service Level Objective (SLO) tracking in place, Hannah's is scaling without a measurable safety net.
+        </p>
+      </section>
+
+      <div class="col-rule" aria-hidden="true"></div>
+
+      <!-- Business impact -->
+      <section class="section" aria-labelledby="impact-title">
+        <div class="section-label">Business impact</div>
+        <h2 class="section-title" id="impact-title">Fresh product delivery, mobile revenue, and national expansion are all at risk</h2>
+        <div class="findings-list" role="list">
+          <div class="finding-item fi-1" role="listitem">
+            <div class="finding-text">
+              <strong>Operations:</strong> When breadSHIP or breadSAIL slows down or fails, dock workers, yard coordinators, and drivers cannot complete time-sensitive dispatch operations — directly risking spoilage and missed delivery windows.
+            </div>
+          </div>
+          <div class="finding-item fi-4" role="listitem">
+            <div class="finding-text">
+              <strong>Mobile revenue:</strong> The mobile ordering app is Hannah's fastest-growing direct revenue channel. Without performance instrumentation, mobile order failures accumulate silently until a customer calls.
+            </div>
+          </div>
+          <div class="finding-item fi-2" role="listitem">
+            <div class="finding-text">
+              <strong>Detection:</strong> Every outage is discovered reactively. How long problems go undetected before the IT team responds is currently not measured.
+            </div>
+          </div>
+          <div class="finding-item fi-5" role="listitem">
+            <div class="finding-text">
+              <strong>Expansion:</strong> National growth is planned with no monitoring readiness indicators — new facilities cannot be validated as operationally ready without established coverage benchmarks.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="col-rule" aria-hidden="true"></div>
+
+      <!-- Top findings -->
+      <section class="section" aria-labelledby="findings-title">
+        <div class="section-label">Top findings</div>
+        <h2 class="section-title" id="findings-title">Five confirmed visibility gaps across Hannah's monitoring environment</h2>
+        <div class="findings-list" role="list">
+          <div class="finding-item fi-2" role="listitem">
+            <div class="finding-num">1</div>
+            <div class="finding-text"><strong>Facility staff and customers discover outages before IT does.</strong> No proactive Synthetic monitoring covers breadSHIP, breadSAIL, or the mobile app API. Datadog synthetic scope requires confirmation before the full gap is known.</div>
+            <span class="finding-tag ft-gap">Gap</span>
+          </div>
+          <div class="finding-item fi-2" role="listitem">
+            <div class="finding-num">2</div>
+            <div class="finding-text"><strong>Monitoring coverage across all 30 facilities is unconfirmed.</strong> The baseline host inventory has not been completed — the full scope of the infrastructure gap is unknown. Dynatrace has zero coverage today.</div>
+            <span class="finding-tag ft-gap">Gap</span>
+          </div>
+          <div class="finding-item fi-2" role="listitem">
+            <div class="finding-num">3</div>
+            <div class="finding-text"><strong>Availability is a verbal commitment, not a measured target.</strong> No SLO tracking exists; target values have not been agreed. SLO configuration requires a target-setting workshop — not just a platform configuration task.</div>
+            <span class="finding-tag ft-gap">Gap</span>
+          </div>
+          <div class="finding-item fi-4" role="listitem">
+            <div class="finding-num">4</div>
+            <div class="finding-text"><strong>Mobile order failures go undetected until a customer complains.</strong> The mobile app has no Real User Monitoring (RUM) or performance instrumentation across devices, browsers, or geographies.</div>
+            <span class="finding-tag ft-gap">Gap</span>
+          </div>
+          <div class="finding-item fi-5" role="listitem">
+            <div class="finding-num">5</div>
+            <div class="finding-text"><strong>Leadership learns of operational impact from logistics reports, not dashboards.</strong> No instrumented connection exists between application performance and business outcomes such as order delays, dispatch failures, or conversion rates.</div>
+            <span class="finding-tag ft-gap">Gap</span>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /col-l -->
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-r">
+
+      <!-- Recommended actions -->
+      <section class="section" aria-labelledby="actions-title">
+        <div class="section-label">Recommended actions</div>
+        <h2 class="section-title" id="actions-title">Four sequenced implementation waves — serialized for a change-averse team</h2>
+        <div class="wave-cards" role="list">
+
+          <div class="wave-item wv-1" role="listitem">
+            <div class="wave-badge wb-1" aria-label="Wave 1">1</div>
+            <div class="wave-body">
+              <div class="wave-name">
+                Foundation monitoring
+                <span class="wave-timing wt-1">Weeks 1–3</span>
+              </div>
+              <div class="wave-desc">Deploy Synthetic monitors on all mission-critical endpoints; configure SLOs and red/green availability dashboards; enable Web RUM for a visitor behavior baseline. <strong>No host agents or code changes required.</strong></div>
+              <div class="wave-risk">Risk: SLO targets set too aggressively trigger a breach state on Day 1 — start at 99.0%, tighten after 30 days.</div>
+            </div>
+          </div>
+
+          <div class="wave-item wv-2" role="listitem">
+            <div class="wave-badge wb-2" aria-label="Wave 2">2</div>
+            <div class="wave-body">
+              <div class="wave-name">
+                Core APM — breadSHIP &amp; breadSAIL
+                <span class="wave-timing wt-2">Weeks 3–8</span>
+              </div>
+              <div class="wave-desc">Deploy OneAgent® on breadSHIP and breadSAIL hosts. Non-production pilot for 5 business days; then production with a documented rollback plan. Validate host coverage across all 30 facilities against the inventory baseline.</div>
+              <div class="wave-risk">Gate: Wave 2 requires a named technical DRI with production deployment authority. Without one, this wave does not start.</div>
+            </div>
+          </div>
+
+          <div class="wave-item wv-3" role="listitem">
+            <div class="wave-badge wb-3" aria-label="Wave 3">3</div>
+            <div class="wave-body">
+              <div class="wave-name">
+                Mobile RUM &amp; business intelligence
+                <span class="wave-timing wt-3">TBD</span>
+              </div>
+              <div class="wave-desc">Deploy Mobile RUM SDK into the mobile ordering app; configure Business Events for the conversion funnel and logistics outcomes. <strong>Timeline TBD</strong> — contingent on mobile engineering contact and app release cadence confirmation (IA-06). Begins only after Wave 2 is stable in production.</div>
+              <div class="wave-risk">Risk: Do not commit this timeline to leadership until IA-06 is resolved.</div>
+            </div>
+          </div>
+
+        </div><!-- /wave-cards -->
+      </section>
+
+      <div class="col-rule" aria-hidden="true"></div>
+
+      <!-- Decision asks -->
+      <section class="section" aria-labelledby="asks-title">
+        <div class="section-label">Decision asks</div>
+        <h2 class="section-title" id="asks-title">Five decisions needed from leadership before the migration can begin</h2>
+        <div class="ask-list" role="list">
+
+          <div class="ask-item" role="listitem">
+            <div class="ask-badge" aria-label="Decision 1">1</div>
+            <div class="ask-body">
+              <div class="ask-owner">VP of IT &mdash; Day 1</div>
+              <div class="ask-text">Approve export of all Datadog monitoring data before the contract lapses.</div>
+              <div class="ask-consequence">Without this, the historical baseline for measuring migration ROI disappears permanently.</div>
+            </div>
+          </div>
+
+          <div class="ask-item" role="listitem">
+            <div class="ask-badge" aria-label="Decision 2">2</div>
+            <div class="ask-body">
+              <div class="ask-owner">VP of IT &mdash; Day 3</div>
+              <div class="ask-text">Name a technical DRI with production deployment authority for breadSHIP and breadSAIL.</div>
+              <div class="ask-consequence">Without a named DRI, Wave 2 cannot begin — and Waves 3 and 4 are also blocked.</div>
+            </div>
+          </div>
+
+          <div class="ask-item" role="listitem">
+            <div class="ask-badge" aria-label="Decision 3">3</div>
+            <div class="ask-body">
+              <div class="ask-owner">VP of IT + VP of Operations &mdash; Day 5</div>
+              <div class="ask-text">Approve SLO targets for breadSHIP, breadSAIL, and the mobile app. Requires a target-setting workshop with application owners — not just a platform configuration task.</div>
+              <div class="ask-consequence">Without agreed targets, the availability dashboard cannot be built and SLO tracking remains a verbal commitment.</div>
+            </div>
+          </div>
+
+          <div class="ask-item" role="listitem">
+            <div class="ask-badge" aria-label="Decision 4">4</div>
+            <div class="ask-body">
+              <div class="ask-owner">CTO &mdash; Day 5</div>
+              <div class="ask-text">Approve full Dynatrace SaaS implementation scope and confirm a mobile engineering contact for Mobile RUM SDK injection.</div>
+              <div class="ask-consequence">Wave 3 timing is TBD until this is resolved. The mobile app conversion story cannot begin without it.</div>
+            </div>
+          </div>
+
+          <div class="ask-item" role="listitem">
+            <div class="ask-badge" aria-label="Decision 5">5</div>
+            <div class="ask-body">
+              <div class="ask-owner">VP of Operations &mdash; Day 5</div>
+              <div class="ask-text">Provide the national expansion plan (facilities, timeline, geographies) so Synthetic monitoring geo coverage can be designed from Day 1.</div>
+              <div class="ask-consequence">Without this input, national expansion readiness cannot be instrumented and remains an unmeasured leadership KPI.</div>
+            </div>
+          </div>
+
+        </div><!-- /ask-list -->
+      </section>
+
+      <div class="col-rule" aria-hidden="true"></div>
+
+      <!-- Key risks -->
+      <section class="section" aria-labelledby="risks-title">
+        <div class="section-label">Key risks</div>
+        <h2 class="section-title" id="risks-title">Three risks require immediate action</h2>
+        <table class="risk-table" aria-label="Key risks and mitigations">
+          <thead>
+            <tr>
+              <th>Risk</th>
+              <th>Mitigation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Datadog contract lapses before data export — migration ROI baseline is permanently lost <span class="sev-high">&#9679; High</span></td>
+              <td>Approve IA-01 on Day 1; escalate immediately if Datadog admin access is restricted</td>
+            </tr>
+            <tr>
+              <td>No technical DRI named — Wave 2 blocked indefinitely <span class="sev-high">&#9679; High</span></td>
+              <td>DA-03 is a leadership ask at the kickoff meeting; frame it as a migration timeline risk, not an administrative request</td>
+            </tr>
+            <tr>
+              <td>SLO targets set too tight → breach state on Day 1 erodes trust in Dynatrace <span class="sev-med">&#9679; Medium</span></td>
+              <td>Start all SLOs at 99.0%; schedule a formal review after 30 days of live data</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div><!-- /col-r -->
+
+  </main>
+
+  <!-- ── Decision ask strip ────────────────────────────────────────── -->
+  <div class="ask-strip" aria-label="Most urgent decision">
+    <div class="ask-strip-left">
+      <div class="ask-strip-eyebrow">Most urgent &middot; Decision required by Day 3</div>
+      <div class="ask-strip-headline">
+        Name a technical DRI before <span class="hl">Wave 2 can begin</span>
+      </div>
+    </div>
+    <div class="ask-strip-right">
+      <div class="asr-label">Owner</div>
+      <div class="asr-text">VP of IT<br>Production deployment authority<br>Required: breadSHIP &amp; breadSAIL</div>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-legal">&#169; 2026 Dynatrace, LLC.&nbsp;&nbsp;&nbsp;Confidential</div>
+    <div class="footer-meta">Prepared by <strong>Dynatrace Insights</strong> &middot; Hannah's Bread Company &middot; 2026-05-28</div>
+  </footer>
+
+</div><!-- /page -->
+</body>
+</html>

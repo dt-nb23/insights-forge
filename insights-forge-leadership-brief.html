@@ -16,7 +16,7 @@
     --white:   #FFFFFF;
     --gray:    #6F747F;
     --teal:    #49C2B3;
-    --teal-dk: #1A7A70; /* darkened teal for accessible text on light bg */
+    --teal-dk: #1A7A70;
     --lb:      #3BACF0;
     --royal:   #1966FF;
     --purple:  #5E28E5;
@@ -41,108 +41,160 @@
   /* ── Top bar ──────────────────────────────────────────────────── */
   .top-bar { height:8px; background:var(--grad); }
 
-  /* ── Header — Dynatrace datalargebeam wave + Insights lockup ─── */
+  /* ── Header — deck-aligned positioning ────────────────────────── */
   .header {
-    /* Dark overlay L→R so text stays readable, wave shows on the right */
     background:
-      linear-gradient(to right, rgba(7,16,30,0.90) 0%, rgba(7,16,30,0.72) 42%, rgba(7,16,30,0.32) 100%),
+      linear-gradient(to right, rgba(7,16,30,0.92) 0%, rgba(7,16,30,0.74) 42%, rgba(7,16,30,0.34) 100%),
       url('assets/wave-bg.png') center / cover no-repeat;
-    padding:38px 52px 34px;
+    padding:24px 52px 22px;
     display:flex; justify-content:space-between; align-items:center; gap:32px;
     position:relative; overflow:hidden;
   }
 
   .header-left { position:relative; z-index:2; flex:1; }
 
-  /* Insights horizontal lockup REV — sized for header */
-  .lockup { margin-bottom:18px; }
-  .lockup-img { height:26px; width:auto; display:block; }
+  .lockup { margin-bottom:10px; }
+  .lockup-img { height:22px; width:auto; display:block; }
 
-  .header-title { font-weight:500; font-size:44px; color:var(--white); line-height:1.15; letter-spacing:-1px; }
-  .header-title .grad-text { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; display:block; padding-bottom:3px; }
-  .header-sub { font-weight:300; font-size:14px; color:rgba(255,255,255,0.6); margin-top:10px; max-width:380px; line-height:1.65; }
+  .header-eyebrow { font-weight:700; font-size:10.5px; letter-spacing:2.2px; text-transform:uppercase; color:rgba(255,255,255,0.82); margin-bottom:6px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .header-eyebrow .validated-pill {
+    font-weight:700; font-size:9.5px; letter-spacing:0.6px; text-transform:uppercase;
+    color:#A8F0E2; background:rgba(73,194,179,0.18); border:1px solid rgba(73,194,179,0.4);
+    padding:2px 8px; border-radius:11px; letter-spacing:0.8px;
+  }
 
-  .badge-row { display:flex; gap:7px; margin-top:20px; flex-wrap:wrap; }
-  /* Badges: 11px min — border ensures they don't rely on color alone */
-  .badge { font-weight:600; font-size:11px; padding:4px 11px; border-radius:20px; letter-spacing:0.7px; text-transform:uppercase; }
-  .b-royal  { background:rgba(25,102,255,0.25); color:#82ABFF; border:1px solid rgba(25,102,255,0.4); }
-  .b-teal   { background:rgba(73,194,179,0.2);  color:#B0EDE7; border:1px solid rgba(73,194,179,0.4); }
-  .b-mag    { background:rgba(201,63,219,0.2);  color:#E8A0F2; border:1px solid rgba(201,63,219,0.35); }
+  /* Master title — deck cover style */
+  .header-title { font-weight:700; font-size:34px; color:var(--white); line-height:1.1; letter-spacing:-0.8px; margin-bottom:9px; }
+
+  /* Cover tagline — three colored phrases mirroring the deck cover */
+  .header-tagline { font-weight:300; font-size:13.5px; color:rgba(255,255,255,0.78); line-height:1.55; max-width:470px; }
+  .header-tagline .t-blue   { color: var(--lb); font-weight:500; }
+  .header-tagline .t-magenta{ color: #E590F0; font-weight:500; }
+  .header-tagline .t-teal   { color: var(--teal); font-weight:500; }
 
   .header-right { position:relative; z-index:2; display:flex; flex-direction:column; gap:0; align-self:stretch; justify-content:center; flex-shrink:0; }
-  .hstat { text-align:right; padding:10px 0 10px 28px; border-left:1px solid rgba(255,255,255,0.1); }
-  /* 34px bold = large text, white on navy passes at 18:1 */
-  .hstat-num   { font-weight:700; font-size:34px; line-height:1; }
-  /* 11px — minimum acceptable for metadata at this visual weight */
-  .hstat-label { font-weight:300; font-size:11px; color:rgba(255,255,255,0.5); margin-top:3px; }
+  .hstat { text-align:right; padding:8px 0 8px 24px; border-left:1px solid rgba(255,255,255,0.1); }
+  .hstat-num   { font-weight:700; font-size:28px; line-height:1; }
+  .hstat-label { font-weight:300; font-size:10.5px; color:rgba(255,255,255,0.55); margin-top:3px; }
   .hstat:nth-child(1) .hstat-num { color:var(--lb); }
   .hstat:nth-child(2) .hstat-num { color:var(--teal); }
   .hstat:nth-child(3) .hstat-num { color:var(--mag); }
 
   .grad-rule { height:4px; background:var(--grad); }
 
+  /* ── Executive summary — the VP TL;DR strip ───────────────────── */
+  .exec-summary {
+    background: linear-gradient(180deg, #F6F8FC 0%, #FFFFFF 100%);
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 52px 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 26px;
+    position: relative;
+  }
+  .es-eyebrow {
+    grid-column: 1 / -1;
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: -4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .es-eyebrow::after { content:''; flex:1; height:1px; background: var(--rule); }
+  .es-col { position: relative; }
+  .es-label {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .es-label::before { content:''; width: 14px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+  .es-text { font-weight: 300; font-size: 12px; color: var(--text); line-height: 1.55; }
+  .es-text strong { font-weight: 600; color: var(--navy); }
+  .es-col:nth-child(2) .es-label { color: var(--royal); }
+  .es-col:nth-child(2) .es-label::before { background: var(--royal); }
+  .es-col:nth-child(3) .es-label { color: var(--teal-dk); }
+  .es-col:nth-child(3) .es-label::before { background: var(--teal-dk); }
+  .es-col:nth-child(4) .es-label { color: var(--purple); }
+  .es-col:nth-child(4) .es-label::before { background: var(--purple); }
+  .es-col:nth-child(5) .es-label { color: var(--mag); }
+  .es-col:nth-child(5) .es-label::before { background: var(--mag); }
+  .es-ask-chip {
+    display: inline-block; font-weight: 700; font-size: 11.5px; color: white;
+    background: var(--royal); padding: 2px 9px; border-radius: 11px;
+    letter-spacing: 0.3px; margin-right: 4px;
+  }
+
   /* ── Layout ───────────────────────────────────────────────────── */
   .body { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:0 52px; }
-  .col-l { padding:32px 30px 32px 0; border-right:1px solid var(--rule); }
-  .col-r { padding:32px 0 32px 30px; }
+  .col-l { padding:30px 30px 30px 0; border-right:1px solid var(--rule); }
+  .col-r { padding:30px 0 30px 30px; }
   .section { margin-bottom:22px; }
   .section:last-child { margin-bottom:0; }
   .col-rule { height:1px; background:var(--rule); margin:20px 0; }
 
-  /* Section labels: 11px uppercase — meets minimum with letter spacing context */
   .section-label {
     font-weight:600; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gray);
     display:flex; align-items:center; gap:8px; margin-bottom:7px;
   }
   .section-label::before { content:''; display:inline-block; width:16px; height:3px; border-radius:2px; background:var(--grad); flex-shrink:0; }
   .section-title  { font-weight:500; font-size:15.5px; color:var(--navy); line-height:1.3; margin-bottom:10px; }
-  /* Body text: 13px — passes WCAG AA on white (#2C2C2C = 14:1) */
   .body-text { font-weight:300; font-size:13px; line-height:1.75; color:var(--text); }
 
-  /* ── Role cards (original left-border style — no contrast issues) ── */
+  /* ── Role cards — Core focus vs Future considerations ─────────── */
   .role-cards { display:flex; flex-direction:column; gap:7px; margin-top:12px; }
   .role-card {
-    display:flex; gap:12px; padding:10px 13px;
+    display:flex; gap:12px; padding:10px 13px; align-items:flex-start;
     background:var(--soft); border-left:3px solid transparent; border-radius:0 7px 7px 0;
     box-shadow:0 1px 3px rgba(26,36,64,0.06);
   }
-  .rc-bi  { border-left-color:var(--royal); }
+  .rc-bi  { border-left-color:var(--royal); background:linear-gradient(135deg, rgba(25,102,255,0.06), var(--soft)); }
   .rc-csm { border-left-color:var(--teal); }
   .rc-cse { border-left-color:var(--purple); }
-  /* 11px bold — role abbreviation, same color as border accent for color-plus-weight cue */
   .role-abbr { font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; min-width:30px; padding-top:1px; flex-shrink:0; }
   .rc-bi  .role-abbr { color:var(--royal); }
-  .rc-csm .role-abbr { color:var(--teal-dk); } /* darkened teal: #1A7A70 = 5.8:1 on white */
+  .rc-csm .role-abbr { color:var(--teal-dk); }
   .rc-cse .role-abbr { color:var(--purple); }
-  /* 12px — meets WCAG AA minimum */
-  .role-text { font-weight:300; font-size:12px; color:var(--text); line-height:1.55; }
-
-  /* ── Pull quote ───────────────────────────────────────────────── */
-  .pull-quote {
-    border-left:4px solid var(--royal);
-    background:linear-gradient(135deg, rgba(25,102,255,0.05), rgba(73,194,179,0.04));
-    border-radius:0 8px 8px 0; padding:13px 15px; margin-top:12px;
+  .role-text { font-weight:300; font-size:12px; color:var(--text); line-height:1.55; flex:1; }
+  /* Focus / future tags on role cards */
+  .role-tag {
+    font-weight:700; font-size:9px; letter-spacing:0.8px; text-transform:uppercase;
+    padding:2px 7px; border-radius:9px; flex-shrink:0; align-self:flex-start; margin-top:1px;
   }
-  /* 13px italic — passes at #1A2440 on near-white bg */
-  .pull-quote p { font-weight:300; font-size:13px; color:var(--navy); line-height:1.65; font-style:italic; }
-  /* 11px cite — acceptable for attribution metadata */
-  .pull-quote cite { font-weight:400; font-size:11px; color:var(--gray); display:block; margin-top:5px; font-style:normal; }
+  .rt-core   { color:white; background:var(--royal); }
+  .rt-future { color:var(--gray); background:rgba(111,116,127,0.13); border:1px solid rgba(111,116,127,0.2); }
+
+  /* ── Pull quote / winning position ─────────────────────────────── */
+  .winning-position {
+    background: linear-gradient(135deg, var(--royal) 0%, var(--purple) 100%);
+    border-radius: 8px;
+    padding: 13px 16px;
+    margin-top: 12px;
+    color: white;
+  }
+  .wp-eyebrow { font-weight:700; font-size:9.5px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.72); margin-bottom:4px; }
+  .wp-headline { font-weight:600; font-size:16px; color:var(--white); line-height:1.3; margin-bottom:6px; letter-spacing:-0.2px; }
+  .wp-headline em { font-style:italic; color:#FFE082; font-weight:600; }
+  .wp-quote { font-weight:300; font-size:12px; color:rgba(255,255,255,0.88); line-height:1.55; font-style:italic; }
 
   /* ── GUIDE framework ──────────────────────────────────────────── */
   .guide-row { display:flex; align-items:stretch; gap:4px; margin-top:12px; }
   .guide-step { flex:1; text-align:center; display:flex; flex-direction:column; }
   .g-top { padding:9px 4px 7px; border-radius:8px 8px 0 0; min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  /* Large display letters: 24px bold = large text, 3:1 threshold.
-     G/U/D/E use --navy on tinted bg: ~14:1. I uses gradient on navy. */
   .g-letter { font-weight:700; font-size:24px; line-height:1; color:var(--navy); }
-  /* 11px labels — minimum for all-caps abbreviated text */
   .g-word   { font-weight:600; font-size:11px; letter-spacing:0.3px; text-transform:uppercase; color:var(--navy); margin-top:3px; opacity:0.7; }
-  /* 11px desc — passes at #555 on --soft; flex:1 ensures all desc boxes are equal height */
   .g-desc   { padding:6px 4px; font-weight:300; font-size:11px; color:#555; line-height:1.4; text-align:center; background:var(--soft); border-radius:0 0 8px 8px; flex:1; display:flex; align-items:flex-start; justify-content:center; }
 
   .gs-g .g-top { background:rgba(59,172,240,0.12); }
   .gs-u .g-top { background:rgba(73,194,179,0.14); }
-  /* I — special: gradient letter on navy, large decorative display */
   .gs-i .g-top  { background:var(--navy); }
   .gs-i .g-letter { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-size:28px; }
   .gs-i .g-word { color:rgba(255,255,255,0.65); }
@@ -155,7 +207,6 @@
 
   /* ── Phase cards ──────────────────────────────────────────────── */
   .three-phases { display:flex; flex-direction:column; gap:6px; margin-top:12px; position:relative; }
-  /* Vertical connector gradient */
   .three-phases::before { content:''; position:absolute; left:19px; top:38px; bottom:38px; width:2px; background:linear-gradient(180deg, var(--lb), var(--royal), var(--purple)); border-radius:2px; z-index:0; }
 
   .tp-item { display:flex; gap:12px; align-items:flex-start; position:relative; z-index:1; }
@@ -167,69 +218,75 @@
   .tp1 .tp-body { border-left-color:var(--lb); }
   .tp2 .tp-body { border-left-color:var(--royal); }
   .tp3 .tp-body { border-left-color:var(--purple); }
-  .tp-name { font-weight:600; font-size:12.5px; color:var(--navy); line-height:1.3; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-  /* "Core" tag: 11px bold white on royal blue — royal (#1966FF) on white 5.7:1, white on royal passes large-text 3:1 */
-  .tp-core { font-weight:700; font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:white; background:var(--royal); padding:2px 7px; border-radius:10px; flex-shrink:0; }
-  /* 12px desc — passes WCAG AA */
-  .tp-desc { font-weight:300; font-size:12px; color:var(--gray); line-height:1.5; margin-top:2px; }
-  /* GUIDE mapping: 11px, in body of description */
-  .tp-guide { font-weight:600; font-size:11px; color:var(--royal); margin-top:3px; }
+  .tp-name { font-weight:600; font-size:13px; color:var(--navy); line-height:1.3; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .tp-core { font-weight:700; font-size:10.5px; letter-spacing:0.5px; text-transform:uppercase; color:white; background:var(--royal); padding:2px 7px; border-radius:10px; flex-shrink:0; }
+  .tp-desc { font-weight:300; font-size:12px; color:var(--gray); line-height:1.5; margin-top:3px; }
+  .tp-guide { font-weight:600; font-size:11px; color:var(--royal); margin-top:4px; letter-spacing:0.2px; }
 
-  /* ── Lens grid ────────────────────────────────────────────────── */
-  .lens-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:12px; }
-  .lens-item { display:flex; align-items:center; gap:8px; font-weight:300; font-size:12px; color:var(--text); line-height:1.4; }
-  /* 8px dot — purely decorative, color not the sole differentiator (text label present) */
-  .lens-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  /* ── Lens subgroups (frameworks vs personas) ─────────────────── */
+  .lens-subgroup { margin-top:14px; }
+  .lens-subgroup:first-of-type { margin-top:12px; }
+  .lens-subgroup-label { font-weight:600; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--navy); margin-bottom:7px; opacity:0.78; }
+  .lens-list { display:flex; flex-direction:column; gap:6px; }
+  .lens-row { display:flex; align-items:flex-start; gap:9px; font-weight:300; font-size:12px; color:var(--text); line-height:1.5; }
+  .lens-row .lens-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .lens-body { flex:1; }
+  .lens-name { font-weight:600; color:var(--navy); }
+  .lens-acro { font-weight:300; font-size:11px; color:var(--gray); }
+
+  /* ── Three core principles strip ──────────────────────────────── */
+  .principles-strip { display:flex; flex-wrap:wrap; gap:6px; margin-top:11px; margin-bottom:11px; }
+  .principle-chip {
+    display:flex; align-items:center; gap:6px;
+    font-weight:600; font-size:10.5px; padding:4px 10px; border-radius:12px;
+    letter-spacing:0.2px;
+  }
+  .principle-chip .pc-num {
+    width:14px; height:14px; border-radius:50%; display:inline-flex;
+    align-items:center; justify-content:center;
+    font-weight:700; font-size:9px; color:white;
+  }
+  .pc-1 { background:rgba(25,102,255,0.08);  color:var(--royal);   border:1px solid rgba(25,102,255,0.25); }
+  .pc-1 .pc-num { background:var(--royal); }
+  .pc-2 { background:rgba(73,194,179,0.1);   color:var(--teal-dk); border:1px solid rgba(73,194,179,0.32); }
+  .pc-2 .pc-num { background:var(--teal-dk); }
+  .pc-3 { background:rgba(94,40,229,0.08);   color:var(--purple);  border:1px solid rgba(94,40,229,0.25); }
+  .pc-3 .pc-num { background:var(--purple); }
 
   /* ── Design principles (guardrails) ──────────────────────────── */
-  .guardrail-group { margin-top:12px; }
+  .guardrail-group { margin-top:10px; }
   .guardrail-group + .guardrail-group { margin-top:9px; }
-  /* 11px group label */
   .g-group-label { font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px; }
-  .g-yes-label { color:var(--teal-dk); }   /* #1A7A70 on white = 5.8:1 — passes */
-  .g-no-label  { color:var(--purple); }     /* #5E28E5 on white = 7.1:1 — passes */
+  .g-yes-label { color:var(--teal-dk); }
+  .g-no-label  { color:var(--purple); }
 
   .guardrail-list { display:flex; flex-direction:column; gap:5px; }
   .guardrail-item { display:flex; gap:8px; font-weight:300; font-size:12px; line-height:1.5; color:var(--text); }
-  /* Icon: 14px — large enough to pass as large text; colors chosen for contrast */
   .g-icon { font-size:14px; flex-shrink:0; margin-top:0; font-style:normal; font-weight:700; }
-  .g-yes .g-icon { color:var(--teal-dk); }  /* #1A7A70 = 5.8:1 — passes */
-  .g-no  .g-icon { color:var(--purple); }   /* #5E28E5 = 7.1:1 — passes */
+  .g-yes .g-icon { color:var(--teal-dk); }
+  .g-no  .g-icon { color:var(--purple); }
 
-  /* ── Decision ask strip ───────────────────────────────────────── */
+  /* ── Decision ask strip — thin, header-matched ────────────────── */
   .ask-strip {
     background:
-      linear-gradient(to right, rgba(7,16,30,0.92) 0%, rgba(7,16,30,0.78) 45%, rgba(7,16,30,0.45) 100%),
+      linear-gradient(to right, rgba(7,16,30,0.94) 0%, rgba(7,16,30,0.80) 45%, rgba(7,16,30,0.48) 100%),
       url('assets/wave-ask.png') center / cover no-repeat;
-    padding:28px 52px;
-    display:grid; grid-template-columns:1fr auto; gap:36px; align-items:center;
+    padding:20px 52px;
+    display:flex; justify-content:space-between; align-items:center; gap:32px;
     position:relative; overflow:hidden;
   }
 
-  .ask-left { position:relative; z-index:1; }
-  /* 11px eyebrow on navy: rgba(255,255,255,0.8) = ~15:1 — passes */
-  .ask-eyebrow { font-weight:600; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.8); margin-bottom:7px; }
-  /* 19px headline — large text, white on navy */
-  .ask-headline { font-weight:500; font-size:19px; color:var(--white); line-height:1.25; margin-bottom:8px; }
+  .ask-left { position:relative; z-index:1; flex:1; }
+  .ask-eyebrow { font-weight:700; font-size:10.5px; letter-spacing:2.2px; text-transform:uppercase; color:rgba(255,255,255,0.82); margin-bottom:5px; }
+  .ask-headline { font-weight:500; font-size:17px; color:var(--white); line-height:1.3; letter-spacing:-0.2px; }
   .ask-headline .highlight { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  /* 13px body on navy — white 21:1, rgba(255,255,255,0.6) ≈ 9:1 — passes */
-  .ask-body { font-weight:300; font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; max-width:480px; }
 
-  .ask-actions { position:relative; z-index:1; flex-shrink:0; }
-  .action-cards { display:flex; flex-direction:column; gap:7px; }
-  .action-card { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:11px 15px; min-width:230px; }
-  /* 11px step label on dark bg — white enough to pass */
-  .ac-step { font-weight:700; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:4px; }
-  .ac-step.s1 { color:#A8DBFF; }   /* light blue on navy — high contrast */
-  .ac-step.s2 { color:#A0EDE6; }   /* light teal on navy — high contrast */
-  /* 12px card text */
-  .ac-text { font-weight:300; font-size:12px; color:rgba(255,255,255,0.8); line-height:1.5; }
-  /* 11px meta */
-  .ac-meta { font-weight:400; font-size:11px; color:rgba(255,255,255,0.45); margin-top:3px; }
+  .ask-meta { position:relative; z-index:1; flex-shrink:0; text-align:right; padding-left:24px; border-left:1px solid rgba(255,255,255,0.12); }
+  .am-owner { font-weight:700; font-size:10.5px; letter-spacing:0.8px; text-transform:uppercase; color:rgba(255,255,255,0.85); margin-bottom:4px; }
+  .am-step  { font-weight:300; font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.45; }
 
   /* ── Footer ───────────────────────────────────────────────────── */
   .footer { padding:13px 52px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--rule); }
-  /* 11px footer — gray #6F747F on white = 4.7:1, passes WCAG AA */
   .footer-legal { font-weight:300; font-size:11px; color:var(--gray); }
   .footer-team  { font-weight:300; font-size:11px; color:var(--gray); }
   .footer-team strong { font-weight:600; color:var(--navy); }
@@ -242,26 +299,24 @@
 
   <div class="top-bar" aria-hidden="true"></div>
 
-  <!-- ── Header ─────────────────────────────────────────────────── -->
+  <!-- ── Header — deck-aligned positioning ──────────────────────── -->
   <header class="header">
     <div class="header-left">
-      <!-- Dynatrace Insights horizontal lockup — REV variant for dark backgrounds -->
       <div class="lockup">
-        <img class="lockup-img" src="assets/insights-lockup-rev.svg" alt="Dynatrace Insights" width="220" height="24">
+        <img class="lockup-img" src="assets/insights-lockup-rev.svg" alt="Dynatrace Insights" width="220" height="22">
       </div>
-      <h1 class="header-title">
-        Insights Forge<br>
-        <span class="grad-text">Decision intelligence,</span>
-        for Business Insights
-      </h1>
-      <p class="header-sub">Scaling structured, outcome-driven consulting across every analyst</p>
-      <div class="badge-row" aria-label="Key attributes">
-        <span class="badge b-royal">GUIDE framework</span>
-        <span class="badge b-teal">Human-in-the-loop</span>
-        <span class="badge b-mag">Exec-ready outputs</span>
+      <div class="header-eyebrow">
+        <span>Leadership Brief &middot; Approval Requested</span>
+        <span class="validated-pill">Validated &middot; Cooper Suits</span>
       </div>
+      <h1 class="header-title">Insights Forge</h1>
+      <p class="header-tagline">
+        Enabling <span class="t-blue">Decision Intelligence</span>,
+        accelerating <span class="t-magenta">customer value</span>,
+        through <span class="t-teal">AI-enhanced consulting</span>
+      </p>
     </div>
-    <div class="header-right" aria-label="Key numbers">
+    <div class="header-right" aria-label="Tool anatomy">
       <div class="hstat"><div class="hstat-num">3</div><div class="hstat-label">User-facing phases</div></div>
       <div class="hstat"><div class="hstat-num">5</div><div class="hstat-label">GUIDE framework steps</div></div>
       <div class="hstat"><div class="hstat-num">6</div><div class="hstat-label">Quality sub-agents</div></div>
@@ -270,27 +325,55 @@
 
   <div class="grad-rule" aria-hidden="true"></div>
 
+  <!-- ── Executive summary — what a VP needs to decide ───────────── -->
+  <section class="exec-summary" aria-label="Executive summary">
+    <div class="es-eyebrow">For Leadership &middot; What you need to decide</div>
+
+    <div class="es-col">
+      <div class="es-label">What it is</div>
+      <div class="es-text"><strong>Decision Intelligence, not content generation.</strong> An AI agent that evaluates customer context, recommends the appropriate consulting framework, and explains why &#8212; with humans owning every decision</div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">Why it matters</div>
+      <div class="es-text">Business Insights delivery today is <strong>inconsistent, reactive, and hard to scale</strong> &#8212; slowing time-to-value and weakening renewal and expansion outcomes. This codifies senior analyst rigor</div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">What we&#8217;re asking</div>
+      <div class="es-text"><span class="es-ask-chip">60-day pilot</span> BI-led: four BI accounts plus two exploratory (one CSM, one CSE), starting Q3 2026. No production access; fully reversible at day 30</div>
+    </div>
+
+    <div class="es-col">
+      <div class="es-label">How we&#8217;ll know</div>
+      <div class="es-text">BI KPIs: <strong>time-to-value</strong>, <strong>renewal rate</strong>, <strong>expansion growth</strong>. Plus operational: consultant satisfaction and IAT narrative consistency at day 30</div>
+    </div>
+  </section>
+
   <!-- ── Body ───────────────────────────────────────────────────── -->
   <main class="body">
 
-    <!-- LEFT: Problem → Solution → GUIDE ─────────────────────────── -->
+    <!-- LEFT: Problem → Solution → Design principles ─────────────── -->
     <div class="col-l">
 
       <section class="section">
         <div class="section-label">The problem</div>
-        <h2 class="section-title">Post-sales success relies too heavily on individual expertise</h2>
+        <h2 class="section-title">Business Insights &amp; post-sales delivery is inconsistent, reactive, and hard to scale</h2>
         <div class="role-cards" role="list">
           <div class="role-card rc-bi" role="listitem">
             <div class="role-abbr" aria-label="Business Insights">BI</div>
-            <div class="role-text">No standardized framework for diagnosing customer problems; deliverables scattered across tribal knowledge</div>
+            <div class="role-text">No standardized diagnostic framework; reusable deliverables scattered as tribal knowledge; inconsistent value driven by divergent experience levels &#8212; slowing time-to-value and weakening renewal and expansion</div>
+            <span class="role-tag rt-core" title="Pilot core focus">Core focus</span>
           </div>
           <div class="role-card rc-csm" role="listitem">
             <div class="role-abbr" aria-label="Customer Success Management">CSM</div>
-            <div class="role-text">Reactive motions without consistent frameworks; unable to map value signals to business outcomes across tiers</div>
+            <div class="role-text">Reactive engagement model; weak links between technical signals and business outcomes &#8212; missed renewals and diminished credibility</div>
+            <span class="role-tag rt-future" title="Future expansion">Future</span>
           </div>
           <div class="role-card rc-cse" role="listitem">
             <div class="role-abbr" aria-label="Customer Success Engineering">CSE</div>
-            <div class="role-text">Siloed approach on strategic accounts; best practices not codified into repeatable technical playbooks</div>
+            <div class="role-text">Fragmented execution across teams; best practices not codified &#8212; limited scalability and inconsistent customer experience</div>
+            <span class="role-tag rt-future" title="Future expansion">Future</span>
           </div>
         </div>
       </section>
@@ -299,14 +382,48 @@
 
       <section class="section">
         <div class="section-label">The solution</div>
-        <h2 class="section-title">AI recommends the right framework and explains why &#8212; humans own every decision</h2>
-        <blockquote class="pull-quote">
-          <p>&#8220;An AI agent that evaluates customer context, recommends the right consulting framework, and explains why &#8212; so the IAT hears one coherent story.&#8221;</p>
-          <cite>&#8212; Winning position statement, Insights Forge v1</cite>
-        </blockquote>
+        <h2 class="section-title">From individualistic, ad-hoc consulting to repeatable, scalable Decision Intelligence</h2>
+        <div class="winning-position">
+          <div class="wp-eyebrow">Our winning position</div>
+          <div class="wp-headline">Decision Intelligence, <em>not</em> Content Generation</div>
+          <p class="wp-quote">&#8220;An AI agent that evaluates customer context, recommends the appropriate consulting framework, and explains why.&#8221;</p>
+        </div>
       </section>
 
       <div class="col-rule" aria-hidden="true"></div>
+
+      <section class="section">
+        <div class="section-label">Design principles</div>
+        <h2 class="section-title">Scales by guiding role-based behavior &#8212; never replacing human judgment, accountability, or trust</h2>
+
+        <div class="principles-strip" role="list" aria-label="Three core principles">
+          <span class="principle-chip pc-1" role="listitem"><span class="pc-num">1</span>Human in the Loop</span>
+          <span class="principle-chip pc-2" role="listitem"><span class="pc-num">2</span>Explainable &amp; IAT-Owned</span>
+          <span class="principle-chip pc-3" role="listitem"><span class="pc-num">3</span>Unified IAT Story</span>
+        </div>
+
+        <div class="guardrail-group">
+          <div class="g-group-label g-yes-label">AI must do</div>
+          <div class="guardrail-list" role="list">
+            <div class="guardrail-item g-yes" role="listitem"><span class="g-icon" aria-hidden="true">&#10003;</span><span>Recommend next-best actions and connect technical signals to business outcomes</span></div>
+            <div class="guardrail-item g-yes" role="listitem"><span class="g-icon" aria-hidden="true">&#10003;</span><span>Generate structured, executive-ready outputs and enforce consistent frameworks</span></div>
+          </div>
+        </div>
+
+        <div class="guardrail-group">
+          <div class="g-group-label g-no-label">AI must not do</div>
+          <div class="guardrail-list" role="list">
+            <div class="guardrail-item g-no" role="listitem"><span class="g-icon" aria-hidden="true">&#10007;</span><span>Replace human judgment, ownership, or commit to scope, timelines, or pricing</span></div>
+            <div class="guardrail-item g-no" role="listitem"><span class="g-icon" aria-hidden="true">&#10007;</span><span>Act autonomously or provide black-box recommendations without traceability</span></div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- RIGHT: GUIDE → Phases → Quality lenses ───────────────────── -->
+    <div class="col-r">
 
       <section class="section">
         <div class="section-label">Where rigor is encoded &#8212; not replaced</div>
@@ -318,15 +435,15 @@
           </div>
           <div class="guide-step gs-u" role="listitem">
             <div class="g-top"><div class="g-letter" aria-hidden="true">U</div><div class="g-word">Understand</div></div>
-            <div class="g-desc">Success criteria: renewal, expansion, exec motion</div>
+            <div class="g-desc">Success criteria: renewal, expansion, exec vs practitioner</div>
           </div>
           <div class="guide-step gs-i" role="listitem">
             <div class="g-top"><div class="g-letter" aria-hidden="true">I</div><div class="g-word">Illustrate</div></div>
-            <div class="g-desc">AI kicks in &#8212; selects the right framework, explains the why</div>
+            <div class="g-desc">AI chooses, not invents, the right consulting framework</div>
           </div>
           <div class="guide-step gs-d" role="listitem">
             <div class="g-top"><div class="g-letter" aria-hidden="true">D</div><div class="g-word">Drive</div></div>
-            <div class="g-desc">Step sequencing, required artifacts, quality gates</div>
+            <div class="g-desc">Execution discipline: sequencing, required artifacts, quality gates</div>
           </div>
           <div class="guide-step gs-e" role="listitem">
             <div class="g-top"><div class="g-letter" aria-hidden="true">E</div><div class="g-word">Explain &amp; evolve</div></div>
@@ -336,10 +453,7 @@
         <p class="guide-note">AI activates at <strong>Illustrate</strong> &#8212; choosing from proven frameworks, never inventing them. Humans own every decision through Drive and Evolve.</p>
       </section>
 
-    </div>
-
-    <!-- RIGHT: Phases → Quality → Guardrails ──────────────────────── -->
-    <div class="col-r">
+      <div class="col-rule" aria-hidden="true"></div>
 
       <section class="section">
         <div class="section-label">How users interact &#8212; 3 phases</div>
@@ -349,27 +463,27 @@
           <div class="tp-item tp1" role="listitem">
             <div class="tp-badge" aria-label="Phase 1">1</div>
             <div class="tp-body">
-              <div class="tp-name">Set context and success criteria</div>
-              <div class="tp-desc">User shares account situation and desired outcomes; AI grounds the engagement in maturity, vertical, and goals &#8212; then maps to renewal, expansion, or exec motion</div>
-              <div class="tp-guide">Maps to: G &#8594; U</div>
+              <div class="tp-name">Context &amp; Goals</div>
+              <div class="tp-desc">User shares account context and desired outcomes; AI grounds the engagement in maturity, vertical, and goals &#8212; mapping to renewal, expansion, or exec audience</div>
+              <div class="tp-guide">Grounds context, then understands success criteria</div>
             </div>
           </div>
 
           <div class="tp-item tp2" role="listitem">
             <div class="tp-badge" aria-label="Phase 2 — Core">2</div>
             <div class="tp-body">
-              <div class="tp-name">Diagnose and present framework options <span class="tp-core">Core</span></div>
-              <div class="tp-desc">AI illustrates the right consulting framework, explains the rationale, and surfaces trade-offs and assumptions for IAT review and approval</div>
-              <div class="tp-guide">Maps to: I &#8212; where AI kicks in</div>
+              <div class="tp-name">Diagnose &amp; Recommend <span class="tp-core">Core</span></div>
+              <div class="tp-desc">AI illustrates the right consulting framework for the situation and explains the rationale, trade-offs, and assumptions &#8212; for IAT review and approval</div>
+              <div class="tp-guide">Illustrates options &#8212; where AI activates</div>
             </div>
           </div>
 
           <div class="tp-item tp3" role="listitem">
             <div class="tp-badge" aria-label="Phase 3">3</div>
             <div class="tp-body">
-              <div class="tp-name">Deliver and evolve</div>
+              <div class="tp-name">Execute &amp; Deliver</div>
               <div class="tp-desc">AI drives execution discipline with artifacts and quality gates; consultant validates with the IAT and evolves the approach with the customer</div>
-              <div class="tp-guide">Maps to: D &#8594; E</div>
+              <div class="tp-guide">Drives execution, then explains and evolves</div>
             </div>
           </div>
 
@@ -380,66 +494,57 @@
 
       <section class="section">
         <div class="section-label">Built-in quality gates</div>
-        <h2 class="section-title">Six critique lenses run before any output reaches leadership</h2>
-        <div class="lens-grid" role="list">
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--royal);" aria-hidden="true"></div>MECE &#8212; issue tree gaps</div>
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--teal);" aria-hidden="true"></div>Optimist &#8212; upside and parallelization</div>
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--purple);" aria-hidden="true"></div>ICE &#8212; re-rank by impact</div>
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--mag);" aria-hidden="true"></div>Consultative &#8212; leadership voice</div>
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--violet);" aria-hidden="true"></div>Customer &#8212; real UX alignment</div>
-          <div class="lens-item" role="listitem"><div class="lens-dot" style="background:var(--lb);" aria-hidden="true"></div>Skeptic &#8212; hostile Q&amp;A preparation</div>
-        </div>
-      </section>
+        <h2 class="section-title">Six review passes stress-test every leadership-facing output &#8212; two structural checks and four perspective reviews</h2>
 
-      <div class="col-rule" aria-hidden="true"></div>
-
-      <section class="section">
-        <div class="section-label">Design principles</div>
-        <h2 class="section-title">Augments judgment &#8212; never replaces it</h2>
-
-        <div class="guardrail-group">
-          <div class="g-group-label g-yes-label">AI must do</div>
-          <div class="guardrail-list" role="list">
-            <div class="guardrail-item g-yes" role="listitem"><span class="g-icon" aria-hidden="true">&#10003;</span><span>Recommend the right success motion and surface proactive risk signals</span></div>
-            <div class="guardrail-item g-yes" role="listitem"><span class="g-icon" aria-hidden="true">&#10003;</span><span>Generate executive-ready narratives and data-backed value hypotheses</span></div>
-            <div class="guardrail-item g-yes" role="listitem"><span class="g-icon" aria-hidden="true">&#10003;</span><span>Structure technical discovery and next-best actions using clear frameworks</span></div>
+        <div class="lens-subgroup">
+          <div class="lens-subgroup-label">Structural checks &#8212; frameworks</div>
+          <div class="lens-list" role="list">
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--royal);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">MECE</span> <span class="lens-acro">(Mutually Exclusive, Collectively Exhaustive)</span> &#8212; audits the issue tree for gaps and overlaps</div>
+            </div>
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--purple);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">ICE</span> <span class="lens-acro">(Impact &times; Confidence &divide; Effort)</span> &#8212; re-ranks priorities by expected value</div>
+            </div>
           </div>
         </div>
 
-        <div class="guardrail-group">
-          <div class="g-group-label g-no-label">AI must not do</div>
-          <div class="guardrail-list" role="list">
-            <div class="guardrail-item g-no" role="listitem"><span class="g-icon" aria-hidden="true">&#10007;</span><span>Replace human judgment, relationship ownership, or decision accountability</span></div>
-            <div class="guardrail-item g-no" role="listitem"><span class="g-icon" aria-hidden="true">&#10007;</span><span>Commit to timelines, pricing, or scope, or act on systems autonomously</span></div>
-            <div class="guardrail-item g-no" role="listitem"><span class="g-icon" aria-hidden="true">&#10007;</span><span>Provide generic recommendations without customer context or traceability</span></div>
+        <div class="lens-subgroup">
+          <div class="lens-subgroup-label">Perspective reviews &#8212; personas</div>
+          <div class="lens-list" role="list">
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--teal);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">Optimist</span> &#8212; surfaces upside and parallelization opportunities the team may have under-weighted</div>
+            </div>
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--mag);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">Consultative</span> &#8212; translates findings into the firm&#8217;s leadership voice</div>
+            </div>
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--violet);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">Customer</span> &#8212; checks alignment with real user experience and operational fit</div>
+            </div>
+            <div class="lens-row" role="listitem">
+              <div class="lens-dot" style="background:var(--lb);" aria-hidden="true"></div>
+              <div class="lens-body"><span class="lens-name">Skeptic</span> &#8212; prepares for hostile Q&amp;A and stress-tests claims before leadership review</div>
+            </div>
           </div>
         </div>
-
       </section>
 
     </div>
   </main>
 
-  <!-- ── Decision ask ────────────────────────────────────────────── -->
+  <!-- ── Decision ask — thin, single-row ────────────────────────── -->
   <section class="ask-strip" aria-label="Decision ask">
     <div class="ask-left">
-      <div class="ask-eyebrow">Decision ask</div>
-      <div class="ask-headline">Approve a <span class="highlight">60-day pilot</span> across six accounts</div>
-      <p class="ask-body">We are asking for authorization to run Insights Forge with six accounts spanning all three post-sales roles &#8212; two BI, two CSM, two CSE &#8212; beginning Q3 2026. No production systems are accessed; the agent operates on conversation context only. Success is measured on time-to-first-deliverable, consultant satisfaction, and IAT narrative consistency at the leadership review.</p>
+      <div class="ask-eyebrow">Decision required &middot; Q3 2026 &middot; Validated approach</div>
+      <div class="ask-headline">Authorize a <span class="highlight">60-day BI-led pilot</span> &#8212; six accounts, day-30 go/no-go on BI KPIs and IAT consistency</div>
     </div>
-    <div class="ask-actions">
-      <div class="action-cards">
-        <div class="action-card">
-          <div class="ac-step s1">Step 1 &#8212; Approve</div>
-          <div class="ac-text">Authorize the Q3 2026 pilot: six accounts, 60 days, three roles</div>
-          <div class="ac-meta">Owner: Jeremy Bower &middot; Nate Burwick</div>
-        </div>
-        <div class="action-card">
-          <div class="ac-step s2">Step 2 &#8212; Measure</div>
-          <div class="ac-text">Day-30 checkpoint: go/no-go to expand across the full post-sales team</div>
-          <div class="ac-meta">Success criteria defined before day 1</div>
-        </div>
-      </div>
+    <div class="ask-meta">
+      <div class="am-owner">Owners: Jeremy Bower &middot; Nate Burwick</div>
+      <div class="am-step">Approve &#8594; Day-30 checkpoint &#8594; Expand</div>
     </div>
   </section>
 
