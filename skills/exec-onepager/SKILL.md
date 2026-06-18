@@ -17,11 +17,18 @@ Use this skill when:
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/action-plan.md` — the approved action plan.
-- `memory/project-space/signals-map.md` — for the business impact numbers and the SLI/SLO grounding.
-- `memory/project-space/hypotheses.md` — for the confirmed/open/ruled-out status of each hypothesis.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/action-plan.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/action-plan.md` — the approved action plan.
+- `<ENGAGEMENT_PATH>/signals-map.md` — for the business impact numbers and the SLI/SLO grounding.
+- `<ENGAGEMENT_PATH>/hypotheses.md` — for the confirmed/open/ruled-out status of each hypothesis.
 - `memory/long-term/stakeholder-profiles.md` — for the profile of the intended reader. If no matching profile exists, ask the user which profile to use or whether to create one.
 - `memory/long-term/terminology.md` — to ensure first-use definitions for any acronym the reader's profile says they expect.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand specification. Governs voice, sentence-case headings, serial commas, product-name capitalization, footer text, and the sources-block style for this deliverable.
@@ -32,7 +39,7 @@ The one-pager has two output modes. Choose before starting.
 
 | Mode | When to use | Output file |
 |---|---|---|
-| **Markdown** | Internal circulation, async review, or when the reader will consume it as a document | `memory/project-space/one-pager-YYYY-MM-DD.md` |
+| **Markdown** | Internal circulation, async review, or when the reader will consume it as a document | `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` |
 | **HTML** | Leadership presentation, slide-adjacent review, or when brand fidelity matters for the audience | `<deliverable-name>.html` in the project root |
 
 The HTML format is preferred when the one-pager will be projected or shared in a leadership review session. It renders DT Flow fonts, uses the actual Insights lockup, and applies Dynatrace wave backgrounds. The markdown format is the intermediate that feeds the pptx-builder skill — if a deck will be produced, write the markdown alongside the HTML.
@@ -160,12 +167,12 @@ After the lenses, do a final read for the one-page constraint. Cut, don't compre
 
 ## Output
 
-- **Markdown:** the agent writes `one-pager-YYYY-MM-DD.md` in `memory/project-space/`. This file feeds the pptx-builder skill.
+- **Markdown:** the agent writes `one-pager-YYYY-MM-DD.md` inside `<ENGAGEMENT_PATH>/`. This file feeds the pptx-builder skill.
 - **HTML:** the agent writes `<deliverable-name>.html` in the project root, with supporting assets in `assets/` (rendered wave PNGs, lockup SVG). The HTML file is self-contained when opened from the project root.
 
 The agent then **prompts the user to approve PPTX generation** — it does not automatically invoke the pptx skill. The Phase 3 gate is between the one-pager and the deck.
 
-**Note for pptx-builder:** the pptx-builder skill reads from the markdown one-pager file. If only the HTML was produced, write a companion markdown summary before invoking the deck skill.
+**Note for pptx-builder:** the pptx-builder skill reads from the markdown one-pager file at `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`. If only the HTML was produced, write a companion markdown summary before invoking the deck skill.
 
 ## Common pitfalls
 

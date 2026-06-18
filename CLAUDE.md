@@ -17,7 +17,7 @@ At session start — before Phase 0 begins — read the following files in this 
 3. `memory/long-term/frameworks.md`
 4. `memory/long-term/stakeholder-profiles.md`
 
-Then read `memory/project-space/active-engagement.md`. If `active: none` and `memory/clients/` contains non-template subfolders, ask: "New engagement or resume an existing one?" Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.
+Then read `memory/project-space/active-engagement.md`. Extract the full path after `active: ` — this is the active engagement folder. Derive the client name as the segment between `memory/clients/` and `/engagements/`. If `active: none` and `memory/clients/` contains non-template subfolders, ask: "New engagement or resume an existing one?" Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.
 
 ## Phased workflow
 
@@ -48,7 +48,7 @@ Between each phase the agent **presents its output and pauses**. The user has th
 - **Redirect** — change scope, framing, or priority; the agent updates artifacts and re-presents.
 - **Iterate through a lens** — the user may ask for re-review through MECE, Optimist, ICE, Consultative, Customer, or Skeptic lenses, and the agent revises before re-presenting.
 
-The agent records every gate decision in `memory/project-space/decisions-log.md`.
+The agent records every gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (where ENGAGEMENT_PATH is the full path stored in `active-engagement.md`).
 
 ## Sub-agent lenses
 
@@ -60,11 +60,11 @@ Two tiers with strict isolation between client data and shared knowledge.
 
 **Root library — `memory/long-term/`** — universal knowledge, never contains client data. Read freely on every session; writes require explicit user approval.
 
-**Client workspace — `memory/clients/<client-name>/`** — fully isolated per client. Each folder contains `README.md`, `environment.md`, `stakeholder-overlays.md`, `project-space/`, and `past-investigations/`. Template at `memory/clients/_template/`.
+**Client workspace — `memory/clients/<client-name>/`** — fully isolated per client. Each folder contains `README.md`, `environment.md`, `stakeholder-overlays.md`, and an `engagements/` subfolder. Each engagement lives at `engagements/YYYY-MM-DD-<slug>/` and is created fresh at Phase 0. Template at `memory/clients/_template/`.
 
-**Active investigation — `memory/project-space/`** — the active client's working directory. `active-engagement.md` names which client is active.
+**Active investigation — `memory/project-space/active-engagement.md`** — a single pointer to the active engagement folder. Format: `active: memory/clients/<client-name>/engagements/YYYY-MM-DD-<slug>/`. All phase files (current-context.md, issue-tree.md, etc.) live inside that engagement folder, not in project-space itself.
 
-**Context isolation rule** — after loading the root library, identify the active client from `active-engagement.md`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
+**Context isolation rule** — after loading the root library, read `active-engagement.md` and extract the full engagement path. Derive the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<that-client-name>/`. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
 
 ## What this agent does NOT do
 

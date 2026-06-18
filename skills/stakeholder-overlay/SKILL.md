@@ -15,12 +15,19 @@ description: Captures a named client leader as a stakeholder overlay in the acti
 
 ## Inputs
 
-Read before starting:
+**Resolve the engagement path first (before reading any files):**
+
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
+5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
+
+Then read these files:
 
 - `memory/long-term/stakeholder-profiles.md` — to identify the parent role archetype (generic archetypes only — no named people here).
-- `memory/project-space/active-engagement.md` — to determine the active client name (sets the target file path).
-- `memory/clients/<active-client-name>/stakeholder-overlays.md` — to check whether an overlay already exists for this person.
-- `memory/project-space/current-context.md` — for the client name, vertical, and what the consultant has already shared about this person.
+- `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md` — to check whether an overlay already exists for this person.
+- `<ENGAGEMENT_PATH>/current-context.md` — for the client name, vertical, and what the consultant has already shared about this person.
 
 ## Procedure
 
@@ -41,7 +48,7 @@ If the title suggests a different archetype (e.g., a "Director of Observability"
 
 ### Step 2 — Check for an existing overlay
 
-Search `memory/clients/<active-client-name>/stakeholder-overlays.md` for any overlay that matches this person's name or title. If the file does not exist yet, it will be created in Step 5. If a matching overlay exists:
+Search `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md` for any overlay that matches this person's name or title. If the file does not exist yet, it will be created in Step 5. If a matching overlay exists:
 - Read it to the consultant and ask whether it needs updating.
 - If updating, proceed to Step 3 with the delta fields only.
 - If current, confirm and stop.
@@ -88,15 +95,15 @@ Present the draft to the consultant and ask: "Does this capture [name] accuratel
 
 Only after the consultant approves the draft:
 
-- If `memory/clients/<active-client-name>/stakeholder-overlays.md` does not exist, copy it from `memory/clients/_template/stakeholder-overlays.md` first.
-- Append the overlay to `memory/clients/<active-client-name>/stakeholder-overlays.md`.
+- If `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md` does not exist, copy it from `memory/clients/_template/stakeholder-overlays.md` first.
+- Append the overlay to `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md`.
 - Confirm: "Overlay for [name] saved to this client's workspace. Phase 3 deliverables for this engagement will read against it. This profile is not visible in other clients' sessions."
 
 If the consultant declines or wants to revise, update the draft and re-present before writing.
 
 ## Output
 
-A named-leader overlay appended to the correct archetype section in `memory/long-term/stakeholder-profiles.md`, covering the fields above.
+A named-leader overlay appended to `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md`, covering the fields above. This file is isolated to this client's workspace — it is never written to `memory/long-term/stakeholder-profiles.md`.
 
 ## Common pitfalls
 

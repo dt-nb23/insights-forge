@@ -16,11 +16,18 @@ Use this skill when:
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/hypotheses.md` — confirmed, open, and validating hypotheses with ICE scores.
-- `memory/project-space/signals-map.md` — for the business KPIs that anchor recommended actions.
-- `memory/project-space/current-context.md` — for stakeholders, owners, and decision deadlines.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/action-plan.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed, open, and validating hypotheses with ICE scores.
+- `<ENGAGEMENT_PATH>/signals-map.md` — for the business KPIs that anchor recommended actions.
+- `<ENGAGEMENT_PATH>/current-context.md` — for stakeholders, owners, and decision deadlines.
 - `memory/long-term/dynatrace-playbooks.md` — the playbook matched to each hypothesis at Phase 1 supplies the investigation sequence. The numbered steps in that playbook become the candidate investigation-action rows; the "confirmed" / "ruled out" sections become the exit criteria.
 - `memory/long-term/frameworks.md` — for the exit-criteria standard.
 - `memory/long-term/stakeholder-profiles.md` — for the leaders whose decisions will be asked.
@@ -45,11 +52,11 @@ Read these files before starting:
 4. **Document risks and tradeoffs.** Every recommendation has a cost. Pair each high-impact recommendation with its risk and a mitigation in the same line. This is what the Consultative lens will look for in Phase 3 — surface it now so the one-pager does not have to invent it.
 5. **Invoke the Skeptic lens** (`.claude/agents/skeptic-lens.md`) on the draft plan. Capture risks, severity, and mitigations. Incorporate the "questions a leader will ask" into the decision-asks section so the plan answers them up front.
 6. **Revise** based on the lens output.
-7. **Write to `memory/project-space/action-plan.md`.** All four sections — investigation actions, recommended actions, decision asks, risks and tradeoffs — must be populated. No placeholders in the live file.
+7. **Write to `<ENGAGEMENT_PATH>/action-plan.md`.** All four sections — investigation actions, recommended actions, decision asks, risks and tradeoffs — must be populated. No placeholders in the live file.
 
 ## Output
 
-`memory/project-space/action-plan.md`, fully populated and ready for the Phase 2 gate.
+`<ENGAGEMENT_PATH>/action-plan.md`, fully populated and ready for the Phase 2 gate.
 
 ## Common pitfalls
 

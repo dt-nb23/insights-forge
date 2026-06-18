@@ -7,29 +7,36 @@ description: Captures client-specific Dynatrace environment details that persist
 
 ## When to use
 
-- First engagement with a client that has no file in `memory/long-term/client-environments/`.
+- First engagement with a client that has no `environment.md` in `memory/clients/<client-name>/`.
 - An existing client's environment has changed significantly (new Management Zones, SLOs added, DPS tier change, major instrumentation expansion).
 - The consultant explicitly says "update the environment profile" or "capture their environment setup."
 
-**This skill writes to `memory/long-term/client-environments/` — always get explicit user approval before writing.**
+**This skill writes to `memory/clients/<client-name>/environment.md` — always get explicit user approval before writing.**
 
 ## Why this matters
 
-`memory/project-space/current-context.md` captures environment facts during Phase 0, but is reset between engagements. Without a persistent environment profile, every new engagement with the same client starts from scratch on the same ground-truth questions — wasting the consultant's time and producing generic orientation hypotheses. This file is what makes repeat-client engagements feel informed rather than generic.
+Each engagement's `current-context.md` captures environment facts during Phase 0, but those facts are scoped to that engagement folder. Without a persistent environment profile at the client root, every new engagement with the same client starts from scratch on the same ground-truth questions — wasting the consultant's time and producing generic orientation hypotheses. This file is what makes repeat-client engagements feel informed rather than generic.
 
 ## Inputs
 
-Read before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/current-context.md` — for the client name, tenant type, and active capabilities already captured in Phase 0 Q4/Q5.
-- `memory/project-space/active-engagement.md` — to determine the active client name (sets the target file path).
-- `memory/clients/<active-client-name>/environment.md` — if it exists, read it first. This session may be an update, not a first capture.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
+5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/current-context.md` — for the client name, tenant type, and active capabilities already captured in Phase 0 Q4/Q5.
+- `memory/clients/<CLIENT_NAME>/environment.md` — if it exists, read it first. This session may be an update, not a first capture.
 
 ## Procedure
 
 ### Step 1 — Check for existing file
 
-Read `memory/project-space/active-engagement.md` to get the active client name. Then check `memory/clients/<active-client-name>/environment.md`.
+The CLIENT_NAME was derived in the Inputs step. Check `memory/clients/<CLIENT_NAME>/environment.md`.
 
 - **If found:** Read it to the consultant and ask: "This is what we have on [client]'s environment. Does anything need updating?" Proceed to only the fields that need updating, then jump to Step 3.
 - **If not found:** Proceed to Step 2 for a full first-time intake.
@@ -103,13 +110,13 @@ Present the draft to the consultant. Ask: "Does this capture their environment a
 
 Only after the consultant approves:
 
-- If `memory/clients/<active-client-name>/environment.md` does not exist, copy from `memory/clients/_template/environment.md` first.
-- Write the profile to `memory/clients/<active-client-name>/environment.md`.
+- If `memory/clients/<CLIENT_NAME>/environment.md` does not exist, copy from `memory/clients/_template/environment.md` first.
+- Write the profile to `memory/clients/<CLIENT_NAME>/environment.md`.
 - Confirm: "Environment profile for [client] saved to their workspace. It will be read automatically at the start of future Phase 0 sessions for this client. It is not visible in other clients' sessions."
 
 ## Output
 
-`memory/clients/<active-client-name>/environment.md` — the environment profile file, approved and written. Isolated to this client's workspace.
+`memory/clients/<CLIENT_NAME>/environment.md` — the environment profile file, approved and written. Isolated to this client's workspace.
 
 ## Common pitfalls
 

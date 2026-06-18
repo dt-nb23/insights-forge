@@ -11,38 +11,45 @@ description: Produces a backward-looking "Dynatrace value delivered" brief for r
 - The consultant asks for "what Dynatrace found for this client" or "a value summary" for the period.
 - Phase 3 deliverable needs a backward-looking "here's what we surfaced" section before the current-engagement findings.
 
-**Pre-requisite:** At least one prior completed investigation must exist in `memory/long-term/past-investigations/<date-name>/` for this client. If none exist, inform the consultant and offer to run Phase 0 → Phase 3 for the current engagement, then use this skill on the next renewal cycle.
+**Pre-requisite:** At least one prior completed engagement must exist in `memory/clients/<client-name>/engagements/` for this client. If none exist, inform the consultant and offer to run Phase 0 → Phase 3 for the current engagement, then use this skill on the next renewal cycle.
 
 ## Inputs
 
-Read before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/active-engagement.md` — to get the active client name (all prior-engagement reads scope to this client's folder only).
-- `memory/clients/<active-client-name>/README.md` — the engagement history index for this client.
-- `memory/clients/<active-client-name>/past-investigations/<date-name>/hypotheses.md` — confirmed, ruled-out, and open hypotheses with ICE scores.
-- `memory/clients/<active-client-name>/past-investigations/<date-name>/action-plan.md` — recommended actions and any stated outcomes.
-- `memory/clients/<active-client-name>/past-investigations/<date-name>/current-context.md` — consulting objective and engagement trigger.
-- `memory/clients/<active-client-name>/past-investigations/<date-name>/lessons-learned.md` — "What worked / new knowledge."
-- `memory/clients/<active-client-name>/environment.md` — for environment context (if the file exists).
-- `memory/project-space/current-context.md` — for the current engagement's scope and named stakeholder.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
+5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
+
+Then read these files:
+
+- `memory/clients/<CLIENT_NAME>/README.md` — the engagement history index for this client (contains the list of engagement folders and their status).
+- `memory/clients/<CLIENT_NAME>/engagements/<dated-slug>/hypotheses.md` — confirmed, ruled-out, and open hypotheses with ICE scores (for each selected prior engagement).
+- `memory/clients/<CLIENT_NAME>/engagements/<dated-slug>/action-plan.md` — recommended actions and any stated outcomes.
+- `memory/clients/<CLIENT_NAME>/engagements/<dated-slug>/current-context.md` — consulting objective and engagement trigger.
+- `memory/clients/<CLIENT_NAME>/engagements/<dated-slug>/lessons-learned.md` — "What worked / new knowledge."
+- `memory/clients/<CLIENT_NAME>/environment.md` — for environment context (if the file exists).
+- `<ENGAGEMENT_PATH>/current-context.md` — for the current engagement's scope and named stakeholder.
 
 ## Procedure
 
 ### Step 1 — Find prior engagements for this client
 
-Read `memory/project-space/active-engagement.md` to get the active client name. Then read `memory/clients/<active-client-name>/README.md` and find the engagement history table.
+The engagement path and CLIENT_NAME were resolved in the Inputs step. Read `memory/clients/<CLIENT_NAME>/README.md` and find the engagement history table.
 
 List the prior engagements to the consultant:
 
 > "I found [N] prior engagement(s) for [client]:
-> - [Date] — [Problem one-liner] — [status: complete / incomplete]
-> - [Date] — [Problem one-liner] — [status]"
+> - [Folder path] — [Problem one-liner] — [status: complete / incomplete]
+> - [Folder path] — [Problem one-liner] — [status]"
 
 Ask the consultant: "Which engagements should be included in the value summary? (Default: all completed ones.)"
 
-If `memory/clients/<active-client-name>/past-investigations/` is empty or the folder does not exist, inform the consultant and stop:
+If `memory/clients/<CLIENT_NAME>/engagements/` is empty or contains only the current active engagement, inform the consultant and stop:
 
-> "No prior completed engagements found for [client] in their workspace archive. This skill requires at least one archived investigation. Once this engagement completes and is archived, the value summary will be available for the next renewal cycle."
+> "No prior completed engagements found for [client] in their workspace. This skill requires at least one archived investigation. Once this engagement completes and is archived, the value summary will be available for the next renewal cycle."
 
 ### Step 2 — Extract value evidence
 
@@ -115,7 +122,7 @@ Revise based on feedback. Do not finalize until the consultant approves.
 
 ### Step 6 — Output
 
-Write the approved brief to `memory/project-space/value-brief-YYYY-MM-DD.md` for inclusion in the Phase 3 one-pager or deck.
+Write the approved brief to `<ENGAGEMENT_PATH>/value-brief-YYYY-MM-DD.md` for inclusion in the Phase 3 one-pager or deck.
 
 Inform the consultant: "Value brief saved. When we produce the Phase 3 one-pager or deck, include this as the 'Value delivered' section before the current-engagement findings."
 

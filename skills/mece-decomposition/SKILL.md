@@ -17,9 +17,16 @@ Use this skill when:
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/current-context.md` — for the reframed problem and scope.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/current-context.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/current-context.md` — for the reframed problem and scope.
 - `memory/long-term/frameworks.md` — for MECE definitions and pitfalls.
 - `memory/long-term/domain-knowledge.md` — for the common signal patterns and tech/UX/business linkages.
 
@@ -43,11 +50,11 @@ If a Dynatrace concept needed to shape a branch (e.g., Smartscape grouping, Mana
 7. **Verify all branches are at the same level of abstraction.** Read them out loud. If one sounds like a stack layer and another sounds like a specific component, the abstraction is mixed — restructure.
 8. **Invoke the MECE lens** (`.claude/agents/mece-lens.md`) for critique. Capture the findings in the "MECE check" section of `issue-tree.md`.
 9. **Revise** based on the lens output. Re-invoke if the revision was substantial.
-10. **Write to `memory/project-space/issue-tree.md`.** Append a "Version history" entry describing what changed.
+10. **Write to `<ENGAGEMENT_PATH>/issue-tree.md`.** Append a "Version history" entry describing what changed.
 
 ## Output
 
-The agent writes (and overwrites) `memory/project-space/issue-tree.md`. The file follows the template in that location: root problem, branches with "what we'd see" notes, MECE check, version history.
+The agent writes (and overwrites) `<ENGAGEMENT_PATH>/issue-tree.md`. The file follows the template: root problem, branches with "what we'd see" notes, MECE check, version history.
 
 ## Common pitfalls
 

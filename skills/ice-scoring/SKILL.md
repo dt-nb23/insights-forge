@@ -7,7 +7,7 @@ description: Procedure for scoring and ranking hypotheses or actions using Impac
 
 ## When to use
 
-- After new hypotheses are drafted in `memory/project-space/hypotheses.md` and the table needs ranking.
+- After new hypotheses are drafted in the active engagement's `hypotheses.md` and the table needs ranking.
 - After new evidence arrives that materially changes Confidence on one or more hypotheses.
 - When the Phase 2 action plan needs prioritization across recommended actions.
 
@@ -21,11 +21,18 @@ All dimensions scored 1–10. Higher ICE = higher priority. Use the ranking as a
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/hypotheses.md` — the items to score.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/hypotheses.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/hypotheses.md` — the items to score.
 - `memory/long-term/frameworks.md` — for the calibration definitions of Impact, Confidence, and Effort. Apply consistently within a single scoring pass.
-- `memory/project-space/signals-map.md` — for the business KPI mappings that anchor Impact scores.
+- `<ENGAGEMENT_PATH>/signals-map.md` — for the business KPI mappings that anchor Impact scores.
 
 ## Steps
 
@@ -36,11 +43,11 @@ Read these files before starting:
 5. **Rank descending.** Sort the table by ICE.
 6. **Flag items where one dimension is doing most of the work.** A very low Effort score can inflate ICE for a low-impact item. A very high Confidence score on a single-signal Hypothesis can inflate ICE artificially. Flag these in the justification column so the team scrutinizes them.
 7. **Invoke the ICE lens** (`.claude/agents/ice-lens.md`) for a sanity-check pass on the scoring. Capture any rescoring suggestions.
-8. **Update the table** in `memory/project-space/hypotheses.md` with the scores and the ICE column. Preserve prior scores in a brief annotation if a score has materially changed (e.g., "C: 4 → 7, raised after A-02 confirmed latency regression").
+8. **Update the table** in `<ENGAGEMENT_PATH>/hypotheses.md` with the scores and the ICE column. Preserve prior scores in a brief annotation if a score has materially changed (e.g., "C: 4 → 7, raised after A-02 confirmed latency regression").
 
 ## Output
 
-Updates `memory/project-space/hypotheses.md` with Impact, Confidence, Effort, and ICE columns populated for every row.
+Updates `<ENGAGEMENT_PATH>/hypotheses.md` with Impact, Confidence, Effort, and ICE columns populated for every row.
 
 ## Calibration reminders
 

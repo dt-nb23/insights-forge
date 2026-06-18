@@ -15,4 +15,4 @@
 
 - [environment.md](environment.md) — DT environment profile
 - [stakeholder-overlays.md](stakeholder-overlays.md) — named leaders
-- [past-investigations/](past-investigations/) — archived engagements
+- [engagements/](engagements/) — all engagements for this client (one dated folder each)

@@ -1,42 +1,42 @@
-# Project Space — Active Client's Working Directory
+# Project Space — Session Pointer Only
 
-This folder holds the **live investigation files for the currently active client**. Think of it as "you are here" — while an engagement is open, the agent works directly in this folder. The `active-engagement.md` file names which client this is.
+This folder holds **one file**: `active-engagement.md`. All investigation phase files now live directly inside the client's dated engagement folder.
 
 ## What lives here
 
-- `active-engagement.md` — identifies the active client (maps to `memory/clients/<name>/`).
-- `current-context.md` — problem statement, scope, stakeholders, current phase, and open questions.
-- `issue-tree.md` — the MECE issue tree under active development.
-- `hypotheses.md` — the ranked hypothesis table with ICE scores and status.
-- `signals-map.md` — SLI/SLO → UX outcome → business KPI mapping for the active investigation.
-- `action-plan.md` — investigation actions, recommended actions, decision asks, risks.
-- `decisions-log.md` — append-only record of every gate decision (approve / redirect / iterate).
+- `active-engagement.md` — the session pointer. Format:
 
-## Two-tier memory architecture
+```
+active: memory/clients/<client-name>/engagements/YYYY-MM-DD-<slug>/
+```
+
+Set to `active: none` when no engagement is open. On pause, a `paused:` line is added alongside.
+
+## Why this design
+
+Previously this folder held all live phase files (current-context.md, issue-tree.md, etc.), which meant two concurrent sessions would overwrite each other's work. Moving phase files directly into client-scoped, dated engagement folders eliminates that risk — each session creates its own uniquely-named folder at Phase 0 and writes only there.
+
+## Architecture overview
 
 ```
 memory/
-├── long-term/          ← Root library: Dynatrace knowledge, frameworks, brand, generic archetypes.
-│                          Universal. Never contains client data. Read on every session.
+├── long-term/          ← Universal knowledge (Dynatrace, frameworks, brand). Never client data.
 │
 ├── clients/            ← Per-client workspaces. Strictly isolated.
 │   └── <client-name>/
-│       ├── environment.md          (DT environment facts for this client)
-│       ├── stakeholder-overlays.md (named leaders at this client)
-│       ├── project-space/          (investigation files when paused)
-│       └── past-investigations/    (archived investigations for this client only)
+│       ├── environment.md
+│       ├── stakeholder-overlays.md
+│       └── engagements/
+│           └── YYYY-MM-DD-<slug>/   ← All phase files live here
 │
-└── project-space/      ← "You are here." The active client's working files.
-    └── active-engagement.md names which client is active.
+└── project-space/
+    └── active-engagement.md         ← "You are here." Points to the active engagement folder.
 ```
-
-## Context isolation rule
-
-The agent reads `memory/long-term/` (universal) + `memory/clients/<active-client-name>/` (this client only). It never reads another client's folder. Client data does not cross client boundaries.
 
 ## State transitions
 
-Use `skills/investigation-reset/SKILL.md` to:
-- **Pause** — move files to `memory/clients/<client-name>/project-space/`, clear this folder, start a new engagement.
-- **Archive** — capture lessons-learned, move files to `memory/clients/<client-name>/past-investigations/<date-name>/`, reset.
-- **Resume** — copy files from `memory/clients/<client-name>/project-space/` back here, set `active-engagement.md`.
+- **Active**: `active: memory/clients/<name>/engagements/<dated-slug>/`
+- **Paused**: `active: none` + `paused: memory/clients/<name>/engagements/<dated-slug>/`
+- **No engagement**: `active: none`
+
+Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.

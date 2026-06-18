@@ -17,12 +17,19 @@ Use this skill:
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/hypotheses.md` — the hypotheses being mapped.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/signals-map.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/hypotheses.md` — the hypotheses being mapped.
 - `memory/long-term/domain-knowledge.md` — for the standard tech → UX → business mapping table, the common signal patterns, and the "Authoritative external references" allowlist.
 - `memory/long-term/dynatrace-playbooks.md` — for the named SLIs and signal artifacts each playbook references (Services app response time, Failure Analysis error rates, RUM session-event timing, SLO burn rate). Pull the SLI names from the matching playbook into the SLI/SLO column rather than inventing them.
-- `memory/project-space/current-context.md` — for stakeholders, since the KPI ladder depends on who owns the KPI.
+- `<ENGAGEMENT_PATH>/current-context.md` — for stakeholders, since the KPI ladder depends on who owns the KPI.
 
 If the mapping depends on the exact semantics of a Dynatrace metric or feature (e.g., what counts as a "user action" in RUM, how an SLO is computed in Grail, what Davis treats as a root cause), consult `skills/external-research/SKILL.md` before writing the row. Cite the source URL and retrieval date in the relevant cell of `signals-map.md`.
 
@@ -36,7 +43,7 @@ If the mapping depends on the exact semantics of a Dynatrace metric or feature (
 
 ## Output
 
-The agent writes to `memory/project-space/signals-map.md`, populating the four sections: SLIs/SLOs, UX outcomes, Business KPIs, Instrumentation gaps. Each section is a table with concrete entries — no placeholders left in the live file.
+The agent writes to `<ENGAGEMENT_PATH>/signals-map.md`, populating the four sections: SLIs/SLOs, UX outcomes, Business KPIs, Instrumentation gaps. Each section is a table with concrete entries — no placeholders left in the live file.
 
 ## Common pitfalls
 

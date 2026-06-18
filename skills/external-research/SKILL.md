@@ -18,12 +18,18 @@ If the answer is already in `memory/long-term/domain-knowledge.md` or `memory/lo
 
 ## Inputs
 
-Read these files first:
+**Resolve the engagement path first (before reading any files):**
+
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, use global long-term memory only — no engagement-scoped reads.
+3. ENGAGEMENT_PATH = that value (if active). Phase file reads use `<ENGAGEMENT_PATH>/<file>`.
+
+Then read these files:
 
 - `memory/long-term/dynatrace-playbooks.md` — for **procedural** questions ("how do I investigate X in Dynatrace?"). Eight playbooks cover the common problem shapes; each carries its own doc citations. If the playbook answers the question, stop — no web fetch needed.
 - `memory/long-term/domain-knowledge.md` — for the Dynatrace concept definitions and the "Authoritative external references" section that lists approved sources.
 - `memory/long-term/terminology.md` — for terms the team has already defined.
-- `memory/project-space/current-context.md` — to scope the question to the active investigation.
+- `<ENGAGEMENT_PATH>/current-context.md` — to scope the question to the active investigation (if an engagement is active).
 
 ## Approved external sources
 
@@ -118,7 +124,7 @@ This skill does not produce a dedicated artifact. Its outputs are:
 
 - **Inline citations** in whatever phase artifact the lookup supported.
 - **Proposed updates** to `memory/long-term/domain-knowledge.md` or `terminology.md`, surfaced to the user for approval at the next gate.
-- **Source log entry** (optional) in `memory/project-space/decisions-log.md` when a lookup materially shaped a decision — note the URL, what it confirmed or refuted, and where the fact was applied.
+- **Source log entry** (optional) in `<ENGAGEMENT_PATH>/decisions-log.md` when a lookup materially shaped a decision — note the URL, what it confirmed or refuted, and where the fact was applied.
 
 ## Boundaries (do not cross)
 

@@ -7,7 +7,7 @@ description: Procedure for producing the Phase 3 PowerPoint deck from an approve
 
 ## When to use
 
-After the Phase 3 one-pager (`memory/project-space/one-pager-YYYY-MM-DD.md`) has been **explicitly approved** by the user. The PPTX is not auto-generated — the agent waits for explicit go-ahead.
+After the Phase 3 one-pager (at `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`) has been **explicitly approved** by the user. The PPTX is not auto-generated — the agent waits for explicit go-ahead.
 
 Use this skill when:
 
@@ -16,11 +16,18 @@ Use this skill when:
 
 ## Inputs
 
-Read these files before starting:
+**Resolve the engagement path first (before reading any files):**
 
-- `memory/project-space/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If an HTML one-pager also exists in the project root, read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
+1. Read `memory/project-space/active-engagement.md`.
+2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+4. All phase file reads use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`.
+
+Then read these files:
+
+- `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If an HTML one-pager also exists in the project root, read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
 - `memory/long-term/stakeholder-profiles.md` — the profile of the intended reader, to inform pacing, depth, and visual emphasis.
-- `memory/project-space/signals-map.md` and `action-plan.md` — for any supporting numbers, charts, or appendix material the one-pager pointed to.
+- `<ENGAGEMENT_PATH>/signals-map.md` and `<ENGAGEMENT_PATH>/action-plan.md` — for any supporting numbers, charts, or appendix material the one-pager pointed to.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand spec. Governs cover-slide aesthetic, section-divider pattern, content-card / chart / table layouts, footer text, chart series colors, and product-name capitalization.
 - `memory/long-term/brand/reference/source-pdf-notes.md` — page-by-page index of the source brand PDF, useful when picking a layout pattern.
 - `memory/long-term/brand/reference/pptx-layout-index.md` — complete catalog of the 64 named layouts in the `.pptx` template, grouped by purpose. Consult before picking a non-default layout.
