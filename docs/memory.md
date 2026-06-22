@@ -1,6 +1,6 @@
 # How memory works
 
-The workspace splits memory into two tiers with strict rules about what goes where. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
+The workspace splits memory into two tiers, with the live investigation living **inside** the client tier. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
 
 If you remember one thing: the agent reads freely from the root library on every session, and reads only the **active client's** workspace for anything client-specific. It never reads another client's folder.
 
@@ -26,6 +26,8 @@ The root library holds knowledge that is true regardless of which client is acti
 | [`brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) | Dynatrace brand specification (colors, typography, layouts, voice, footer) authoritative for Phase 3 deliverables. |
 | [`freshness-report.md`](../memory/long-term/freshness-report.md) | Operational — the doc-freshness-checker sub-agent's output. No client data. |
 
+> Two files in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier (below).
+
 ### Tier 2 — Client workspaces (`memory/clients/`)
 
 Each client has a fully isolated folder. The agent reads only the active client's folder for any client-specific context.
@@ -34,52 +36,73 @@ Each client has a fully isolated folder. The agent reads only the active client'
 memory/clients/
 ├── _template/                   ← Copy this to create a new client workspace
 └── <client-name>/
-    ├── README.md                 ← Engagement history and status
-    ├── environment.md            ← DT environment: MZs, SLOs, monitors, gaps
+    ├── README.md                 ← Engagement history and status index
+    ├── environment.md            ← DT environment: MZs, SLOs, monitors, RUM coverage, gaps
+    ├── contract.md               ← Commercial & consumption: DPS commit, renewal date, burn (confidential)
     ├── stakeholder-overlays.md   ← Named leaders (confidential to this client)
-    ├── project-space/            ← Investigation files when paused
-    └── past-investigations/      ← Archived investigations for this client only
-        └── YYYY-MM-DD-<name>/
+    └── engagements/              ← One dated subfolder per engagement
+        └── YYYY-MM-DD-<slug>/    ← All phase files for that engagement live here
 ```
 
 **How client folders are populated:**
 - `environment.md` — via `skills/environment-intake/SKILL.md` at the Phase 0 gate on first engagement.
+- `contract.md` — captured (with explicit approval) when commercial/consumption context surfaces; read by `skills/value-highlight/SKILL.md` for renewal/QBR briefs.
 - `stakeholder-overlays.md` — via `skills/stakeholder-overlay/SKILL.md` when a specific leader is named in Q7.
-- `past-investigations/` — populated automatically by `skills/investigation-reset/SKILL.md` at engagement close.
+- `engagements/` — each dated engagement folder is created by `skills/context-framing/SKILL.md` at Phase 0.
 
-### Active investigation (`memory/project-space/`)
+### The live investigation — the engagement folder
 
-The active client's investigation files live here while the engagement is open. This is the agent's working directory — it reads and writes freely during a session. The file `active-engagement.md` names which client is active.
+The active client's investigation files live in a **dated engagement folder** under that client: `memory/clients/<client>/engagements/YYYY-MM-DD-<slug>/`. This is the agent's working directory for the session — it reads and writes here freely.
+
+There is **no global pointer file and no shared `project-space/`.** The engagement folder is *self-describing*: its `current-context.md` opens with a YAML status front-matter block —
+
+```yaml
+---
+client: <client-short-name>
+slug: <slug>
+state: active        # active | paused | complete
+phase: 0             # current phase, 0–3
+opened: YYYY-MM-DD
+last-touched: YYYY-MM-DD
+---
+```
+
+The session holds the engagement path it created (at Phase 0) or resumed, and reads/writes only there. A fresh session resumes by scanning `memory/clients/*/engagements/*/current-context.md` for `state: active` or `state: paused` and letting you pick.
 
 | File | Phase | What it contains |
 |---|---|---|
-| `active-engagement.md` | — | Names the active client; maps to `memory/clients/<name>/`. |
-| `current-context.md` | 0 | Problem statement, scope, stakeholders, current phase, open questions. |
+| `current-context.md` | 0 | Status front-matter + problem statement, scope, stakeholders, current phase, open questions. |
 | `issue-tree.md` | 1 | MECE issue tree under active development. |
 | `hypotheses.md` | 1 | Ranked hypothesis table with ICE scores and status. |
 | `signals-map.md` | 1 | SLI/SLO → UX outcome → business KPI mapping. |
-| `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks. |
+| `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks, "Tensions resolved". |
 | `decisions-log.md` | all | Append-only record of every gate decision. |
+| `lessons-learned.md` | archive | Written by `investigation-reset` when the engagement is archived. |
+| `one-pager-YYYY-MM-DD.md` | 3 | The exec one-pager, if produced. |
 
-Open any of these during a session to see what the agent is working with — they're not hidden, and reading them is often faster than asking the agent to summarize.
+Open any of these during a session to see what the agent is working with — they're not hidden.
+
+## Why this prevents cross-session contamination
+
+Because each session holds its **own** dated engagement folder and no shared file decides "which engagement is active," two concurrent sessions for two different clients write to different folders and never contend. State changes (pause, complete) flip a field inside each engagement's *own* `current-context.md`, so any number of engagements can be paused at once without disturbing one another. This is the fix for the failure mode of a single shared "active" pointer that two sessions would race on.
 
 ## Engagement states
 
-Each client's investigation exists in one of three states:
+Each engagement exists in one of three states, all recorded **inside the engagement folder** — nothing ever moves:
 
-| State | Where the files are | How to get there |
+| State | Where the files are | How it's recorded |
 |---|---|---|
-| **Active** | `memory/project-space/` | Start or resume an engagement |
-| **Paused** | `memory/clients/<name>/project-space/` | Tell the agent to pause |
-| **Completed** | `memory/clients/<name>/past-investigations/<date>/` | Archive via investigation-reset skill |
+| **Active** | `engagements/<dated-slug>/` | `state: active` in `current-context.md`; the session holds its path |
+| **Paused** | Same folder — nothing moves | `state: paused` in `current-context.md` |
+| **Completed** | Same folder — nothing moves | `state: complete` in `current-context.md` + an outcome row in the client `README.md` |
 
 Use `skills/investigation-reset/SKILL.md` for all state transitions (archive, pause, resume).
 
 ## Context isolation rule
 
-At session start, the agent identifies the active client from `active-engagement.md`. For the rest of that session, client-specific reads — environment, stakeholder overlays, past investigations — come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads — environment, contract, stakeholder overlays, prior engagements — come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
 
-This is what prevents investigation context from one client polluting another. It's enforced by both the agent instructions (CLAUDE.md) and the skill procedures (context-framing, stakeholder-overlay, environment-intake all check `active-engagement.md` before reading any client file).
+This is what prevents investigation context from one client polluting another. It's enforced by both the agent instructions (CLAUDE.md) and the skill procedures (context-framing, stakeholder-overlay, environment-intake all resolve the engagement path before reading any client file).
 
 ## Why the read/write asymmetry exists
 
@@ -105,10 +128,10 @@ Vague phrases — *"this seems important"*, *"remember this"* — are logged in 
 
 | What you'll find | Where to look |
 |---|---|
-| Active client | [`memory/project-space/active-engagement.md`](../memory/project-space/active-engagement.md) |
-| Live investigation state | [`memory/project-space/`](../memory/project-space/) |
+| Active / paused engagements | scan `memory/clients/*/engagements/*/current-context.md` for `state` |
+| Live investigation state | the active engagement folder, `memory/clients/<client-name>/engagements/<dated-slug>/` |
 | Current client's environment | `memory/clients/<client-name>/environment.md` |
+| Current client's contract & consumption | `memory/clients/<client-name>/contract.md` |
 | Current client's leader profiles | `memory/clients/<client-name>/stakeholder-overlays.md` |
-| Current client's past investigations | `memory/clients/<client-name>/past-investigations/` |
 | Root library rules | [`memory/long-term/README.md`](../memory/long-term/README.md) |
 | Client workspace structure template | [`memory/clients/_template/`](../memory/clients/_template/) |

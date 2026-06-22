@@ -11,7 +11,7 @@ Before reaching for the web, the agent reads what's already on disk:
 - [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbooks cover the most common problem shapes; each one already carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
 - [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) — for Dynatrace concept definitions and the approved-sources list.
 - [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) — for terms the team has already defined.
-- [`memory/project-space/current-context.md`](../memory/project-space/current-context.md) — to scope the question to the active investigation.
+- The active engagement's `current-context.md` (at `memory/clients/<client>/engagements/<dated-slug>/current-context.md`) — to scope the question to the active investigation.
 
 The agent only fetches externally when local memory is **silent, contradictory, or stale**. This isn't just to save tokens — it's how the workspace stays grounded in the team's own institutional knowledge rather than re-discovering Dynatrace's documentation each session.
 

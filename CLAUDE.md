@@ -17,7 +17,12 @@ At session start — before Phase 0 begins — read the following files in this 
 3. `memory/long-term/frameworks.md`
 4. `memory/long-term/stakeholder-profiles.md`
 
-Then read `memory/project-space/active-engagement.md`. Extract the full path after `active: ` — this is the active engagement folder. Derive the client name as the segment between `memory/clients/` and `/engagements/`. If `active: none` and `memory/clients/` contains non-template subfolders, ask: "New engagement or resume an existing one?" Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.
+Then establish the **active engagement for this session**. There is no global pointer file; the dated engagement folder under the client *is* the session's state, and you hold its path (`ENGAGEMENT_PATH`) in working context for the whole session.
+
+- **New problem:** Phase 0 (`skills/context-framing/SKILL.md`) creates `memory/clients/<client>/engagements/<YYYY-MM-DD>-<slug>/` and you hold that path.
+- **Resuming earlier work:** scan `memory/clients/*/engagements/*/current-context.md` for a status front-matter `state:` of `active` or `paused`, present the matches (client · slug · phase · last-touched), and let the user pick one. If `memory/clients/` contains only `_template`, there is nothing to resume — proceed to a new engagement.
+
+Hold `ENGAGEMENT_PATH` and `CLIENT_NAME` (the segment between `memory/clients/` and `/engagements/`) for the rest of the session; never re-derive them from a shared file mid-session. Because each concurrent session holds its own engagement folder, two sessions for two different clients cannot collide. Use `skills/investigation-reset/SKILL.md` for all pause, archive, and resume operations.
 
 ## Phased workflow
 
@@ -26,7 +31,7 @@ Read each phase's skill file immediately before producing its artifact. Do not p
 | Phase | Artifact(s) | Skill file(s) |
 |---|---|---|
 | 0 — Context | `current-context.md` | `skills/context-framing/SKILL.md` |
-| 1 — Diagnose | `issue-tree.md` → `hypotheses.md` → `signals-map.md` | `skills/mece-decomposition/SKILL.md` → `skills/hypothesis-generation/SKILL.md` + `skills/ice-scoring/SKILL.md` → `skills/signal-mapping/SKILL.md` |
+| 1 — Diagnose | `issue-tree.md` → `hypotheses.md` → `signals-map.md` → ICE-scored hypotheses | `skills/mece-decomposition/SKILL.md` → `skills/hypothesis-generation/SKILL.md` → `skills/signal-mapping/SKILL.md` → `skills/ice-scoring/SKILL.md`. MECE lens runs on the issue tree; the Consultative lens runs as a framing pass on the issue-tree and hypotheses wording; the ICE lens runs last, after signal-mapping, on the scored hypotheses. |
 | 2 — Solution | `action-plan.md` | `skills/action-plan-builder/SKILL.md` |
 | 3 — Deliver | One-pager → deck | `skills/exec-onepager/SKILL.md` → `skills/pptx-builder/SKILL.md` |
 
@@ -46,13 +51,15 @@ Between each phase the agent **presents its output and pauses**. The user has th
 
 - **Approve** — proceed to the next phase.
 - **Redirect** — change scope, framing, or priority; the agent updates artifacts and re-presents.
-- **Iterate through a lens** — the user may ask for re-review through MECE, Optimist, ICE, Consultative, Customer, or Skeptic lenses, and the agent revises before re-presenting.
+- **Iterate through a lens** — on-demand, the user may ask for re-review through any of the six lenses (MECE, Optimist, ICE, Consultative, Customer, Skeptic), and the agent revises before re-presenting. This on-demand option is in addition to — not a substitute for — the lenses mandated per phase.
 
-The agent records every gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (where ENGAGEMENT_PATH is the full path stored in `active-engagement.md`).
+Each phase runs a specific set of critique lenses as a mandatory step, separate from the on-demand option above. `docs/lenses.md` is the authority for WHICH lenses are mandatory in each phase and WHEN each runs.
+
+The agent records every gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (where ENGAGEMENT_PATH is the engagement folder this session is working in). At each gate approval, the agent also bumps `phase:` and `last-touched:` in that engagement's `current-context.md` status front-matter so the folder stays self-describing. The decisions-log.md format follows the template in the client engagement template (`memory/clients/_template/engagements/`).
 
 ## Sub-agent lenses
 
-Six critique lenses live in `.claude/agents/`. Each has a narrow job and a defined output format. The agent invokes them on demand or on user request; the agent file is authoritative for each lens's procedure.
+Six critique lenses live in `.claude/agents/`. Each has a narrow job and a defined output format. Specific lenses are mandatory in each phase — the agent runs them as a required step, not at its discretion — and any of the six may additionally be invoked on-demand at a gate. `docs/lenses.md` is the authority for WHEN each lens runs (which are mandatory per phase, in what order); each agent file is authoritative for that lens's procedure and output format.
 
 ## Memory model
 
@@ -62,9 +69,9 @@ Two tiers with strict isolation between client data and shared knowledge.
 
 **Client workspace — `memory/clients/<client-name>/`** — fully isolated per client. Each folder contains `README.md`, `environment.md`, `stakeholder-overlays.md`, and an `engagements/` subfolder. Each engagement lives at `engagements/YYYY-MM-DD-<slug>/` and is created fresh at Phase 0. Template at `memory/clients/_template/`.
 
-**Active investigation — `memory/project-space/active-engagement.md`** — a single pointer to the active engagement folder. Format: `active: memory/clients/<client-name>/engagements/YYYY-MM-DD-<slug>/`. All phase files (current-context.md, issue-tree.md, etc.) live inside that engagement folder, not in project-space itself.
+**Active investigation — the engagement folder itself.** There is no global pointer file. Each engagement lives at `memory/clients/<client-name>/engagements/YYYY-MM-DD-<slug>/` and is **self-describing**: its `current-context.md` opens with a status front-matter block (`state: active | paused | complete`, `phase:`, `client:`, `slug:`, `opened:`, `last-touched:`). The session holds the `ENGAGEMENT_PATH` it created or resumed and reads/writes only there. All phase files (current-context.md, issue-tree.md, etc.) live inside that engagement folder. Because each concurrent session holds its own folder and no shared file decides "which engagement is active," two sessions for two different clients cannot collide, and any number of engagements can be `paused` at once.
 
-**Context isolation rule** — after loading the root library, read `active-engagement.md` and extract the full engagement path. Derive the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<that-client-name>/`. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
+**Context isolation rule** — after loading the root library, establish the session's engagement path (created at Phase 0 or selected on resume) and derive the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<that-client-name>/`. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
 
 ## What this agent does NOT do
 

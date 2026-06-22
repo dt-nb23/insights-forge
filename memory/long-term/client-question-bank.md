@@ -107,7 +107,7 @@ Two variants — match to the relationship dynamic before asking. A healthy/expa
 
 ### Prior engagement reference
 
-- *(Not a client question — the agent checks `memory/long-term/past-investigations.md` directly.)*
+- *(Not a client question — the agent checks this client's own `memory/clients/<client-name>/README.md` history and `engagements/` folders directly.)*
 - If a client mentions prior work organically — "we did something like this last year with [team]" — capture it.
 
 ---

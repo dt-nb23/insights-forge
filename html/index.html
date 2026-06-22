@@ -322,6 +322,9 @@
     </div>
 
     <div class="nav-section">Architecture</div>
+    <div class="nav-item" data-page="arch-map">
+      <div class="nav-dot" style="background:#49C2B3"></div> Architecture Graph
+    </div>
     <div class="nav-item" data-page="memory">
       <div class="nav-dot" style="background:#1966FF"></div> Memory Model
     </div>
@@ -356,34 +359,34 @@
 <!-- ══════════════ OVERVIEW ══════════════ -->
 <section class="page active" id="page-overview">
   <h1>Insights Forge</h1>
-  <p class="lead">A phased, human-in-the-loop consulting agent that structures and accelerates engineering judgment for Dynatrace engagements — without substituting for it.</p>
+  <p class="lead">An AI assistant that helps Dynatrace consulting teams turn messy reliability problems into structured analyses and polished leadership deliverables — with you in control at every step.</p>
 
   <div class="card-grid">
     <div class="card card-sm">
       <div class="tag tag-teal" style="margin-bottom:10px">Core purpose</div>
       <h3>Structure &amp; accelerate</h3>
-      <p style="font-size:13px;margin:0">Translates ambiguous reliability problems into MECE issue trees, ranked hypotheses, signal maps, and leadership-ready deliverables.</p>
+      <p style="font-size:13px;margin:0">Takes a vague problem description and helps you organize it into a clear breakdown, prioritized theories, and polished reports your leadership can act on.</p>
     </div>
     <div class="card card-sm">
       <div class="tag tag-blue" style="margin-bottom:10px">What it never does</div>
-      <h3>No live queries</h3>
-      <p style="font-size:13px;margin:0">Never generates DQL, SQL, or executable query syntax. Never executes production changes. Validation stays with the human team.</p>
+      <h3>No live system access</h3>
+      <p style="font-size:13px;margin:0">Never writes or runs queries against your Dynatrace environment. Never touches production. Your team handles the actual data lookups and configuration changes.</p>
     </div>
     <div class="card card-sm">
       <div class="tag tag-magenta" style="margin-bottom:10px">Guardrail</div>
-      <h3>Human-in-the-loop gates</h3>
-      <p style="font-size:13px;margin:0">Every phase ends with an explicit user gate. The agent never advances without approval, redirect, or lens iteration.</p>
+      <h3>You decide what happens next</h3>
+      <p style="font-size:13px;margin:0">Every phase ends with a checkpoint. The agent presents its work and waits. Nothing moves forward without your explicit go-ahead.</p>
     </div>
   </div>
 
-  <h2>Operating principles</h2>
+  <h2>How it works</h2>
   <div class="principles">
-    <div class="principle"><div class="principle-icon">🔒</div><div><strong>Explicit phases + approval gates</strong><br><span class="principle-text">No phase begins until the prior one is explicitly approved. Every gate decision is logged.</span></div></div>
-    <div class="principle"><div class="principle-icon">🚫</div><div><strong>No live query generation</strong><br><span class="principle-text">References patterns, SLIs, SLOs, and concepts only. Raw DQL stays with the engineer.</span></div></div>
-    <div class="principle"><div class="principle-icon">🔍</div><div><strong>Explicit about uncertainty</strong><br><span class="principle-text">When evidence is thin or instrumentation is missing, the agent names the gap — never buries it.</span></div></div>
-    <div class="principle"><div class="principle-icon">📐</div><div><strong>MECE-first structure</strong><br><span class="principle-text">Issue trees must be mutually exclusive and collectively exhaustive. Hypotheses must be falsifiable.</span></div></div>
-    <div class="principle"><div class="principle-icon">🎯</div><div><strong>Named exit criteria</strong><br><span class="principle-text">Every investigation phase has pre-agreed "Confirmed / Ruled out / Inconclusive" criteria before work starts.</span></div></div>
-    <div class="principle"><div class="principle-icon">🗣️</div><div><strong>Every session opens the same way</strong><br><span class="principle-text">"Describe the problem you're trying to solve." — no assumptions about problem shape.</span></div></div>
+    <div class="principle"><div class="principle-icon">🔒</div><div><strong>Step-by-step with approval gates</strong><br><span class="principle-text">Work happens in four phases. Each phase must be explicitly approved before the next one starts — no skipping ahead.</span></div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div><strong>Thinks, doesn't touch</strong><br><span class="principle-text">The agent reasons about your data and describes what to look for — but it never runs queries or touches live systems. That stays with your engineering team.</span></div></div>
+    <div class="principle"><div class="principle-icon">🔍</div><div><strong>Honest about what it doesn't know</strong><br><span class="principle-text">When data is missing or a hypothesis can't be validated, the agent says so plainly instead of filling the gap with guesswork.</span></div></div>
+    <div class="principle"><div class="principle-icon">📐</div><div><strong>Clean, complete problem structure</strong><br><span class="principle-text">Issues are broken down so that all possible causes are covered and none overlap — a technique called MECE. Every theory must be testable with a clear pass/fail signal.</span></div></div>
+    <div class="principle"><div class="principle-icon">🎯</div><div><strong>Clear success criteria upfront</strong><br><span class="principle-text">Before pursuing any theory, the agent pre-agrees what "confirmed," "ruled out," and "inconclusive" look like — so the investigation has a defined finish line.</span></div></div>
+    <div class="principle"><div class="principle-icon">🗣️</div><div><strong>Every session starts with the problem</strong><br><span class="principle-text">"Describe the problem you're trying to solve." — the agent never assumes what the issue is before you explain it.</span></div></div>
   </div>
 </section>
 
@@ -400,19 +403,20 @@
     <li><div><code>memory/long-term/stakeholder-profiles.md</code><br><span style="font-size:12px;color:var(--gray)">8 role archetypes + named-leader overlays for Phase 3 framing</span></div></li>
   </ol>
 
-  <h2>Then check active engagement</h2>
+  <h2>Then establish the active engagement</h2>
   <div class="card" style="max-width:600px">
-    <p style="margin:0;font-size:13px;color:var(--gray-lt)">Read <code>memory/project-space/active-engagement.md</code>.</p>
+    <p style="margin:0;font-size:13px;color:var(--gray-lt)">There is <strong style="color:var(--white)">no global pointer file</strong>. The session establishes its engagement folder one of two ways:</p>
     <div style="display:flex;gap:24px;margin-top:14px">
       <div style="flex:1">
-        <div class="tag tag-gray" style="margin-bottom:6px">active: none</div>
-        <p style="font-size:12px;margin:0">If <code>memory/clients/</code> has non-template subfolders → ask: <em>"New engagement or resume an existing one?"</em></p>
+        <div class="tag tag-teal" style="margin-bottom:6px">New engagement</div>
+        <p style="font-size:12px;margin:0">Phase 0 (context-framing) creates a dated folder <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code> and the session holds that path.</p>
       </div>
       <div style="flex:1">
-        <div class="tag tag-teal" style="margin-bottom:6px">active: &lt;client&gt;</div>
-        <p style="font-size:12px;margin:0">Load client workspace. All client-specific reads come only from <code>memory/clients/&lt;client-name&gt;/</code>.</p>
+        <div class="tag tag-gray" style="margin-bottom:6px">Resume</div>
+        <p style="font-size:12px;margin:0">Scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state: active</code> or <code>paused</code>; the user picks one to resume.</p>
       </div>
     </div>
+    <p style="margin:12px 0 0;font-size:12px;color:var(--gray-lt)">The client name is the segment between <code>memory/clients/</code> and <code>/engagements/</code>. All client-specific reads then come only from <code>memory/clients/&lt;client-name&gt;/</code>.</p>
   </div>
 
   <h2>Long-term memory contents</h2>
@@ -520,7 +524,7 @@
     <div class="card card-sm"><h3 style="font-size:13px">⏸ Investigation reset</h3><p style="font-size:12px;margin:0">Archive complete engagement or pause/resume in-progress one</p></div>
     <div class="card card-sm"><h3 style="font-size:13px">👤 Stakeholder overlay</h3><p style="font-size:12px;margin:0">Capture named leader profile in client workspace</p></div>
     <div class="card card-sm"><h3 style="font-size:13px">🌐 Environment intake</h3><p style="font-size:12px;margin:0">Capture persistent client Dynatrace environment facts</p></div>
-    <div class="card card-sm"><h3 style="font-size:13px">📈 Value highlight</h3><p style="font-size:12px;margin:0">QBR/renewal backward-looking value summary from prior archives</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">📈 Value highlight</h3><p style="font-size:12px;margin:0">QBR/renewal backward-looking value summary from the client's prior completed engagements + contract.md</p>
   </div>
 </section>
 
@@ -536,7 +540,6 @@
     <span class="tag tag-teal">domain-knowledge.md</span>
     <span class="tag tag-teal">terminology.md</span>
     <span class="tag tag-teal">client-question-bank.md</span>
-    <span class="tag tag-teal">active-engagement.md</span>
     <span class="tag tag-gray">prior client README (if exists)</span>
   </div>
 
@@ -712,16 +715,18 @@
     <span class="tag tag-teal">dynatrace-playbooks.md</span>
     <span class="tag tag-teal">frameworks.md</span>
     <span class="tag tag-teal">stakeholder-profiles.md</span>
+    <span class="tag tag-teal">environment.md</span>
   </div>
 
   <h2>Procedure</h2>
+  <p style="font-size:13px;color:var(--gray-lt);max-width:640px;margin-bottom:12px">A deliberate order — MECE lays out the opportunity space, the plan is drafted against it and against the client's real instrumentation, a persona <strong>council deliberates over ≥3 rounds</strong>, the agent reconciles, then ICE re-ranks. The sequence is the point.</p>
   <ol class="steps">
-    <li><div><strong>Investigation actions</strong> — for every open/validating hypothesis<br><span>Fields: what · data source · owner · exit criteria (confirmed / ruled out) · target date</span></div></li>
-    <li><div><strong>Recommended actions</strong> — ranked by impact vs effort<br><span>Fields: action · condition · owner · timeframe · notes/coordination</span></div></li>
-    <li><div><strong>Decision asks</strong> — specific decisions named leaders need to make<br><span>Not open questions. Each decision ask names the decision-maker.</span></div></li>
-    <li><div><strong>Risks &amp; tradeoffs</strong> — each risk paired with cost + mitigation<br><span>Tradeoffs appear alongside recommendations, not in a separate appendix.</span></div></li>
-    <li><div>Invoke <span class="tag tag-magenta" style="font-size:10px">Skeptic lens</span> — surfaces hidden assumptions, weak evidence, second-order risks</div></li>
-    <li><div>Revise based on lens output; write to <code>action-plan.md</code></div></li>
+    <li><div><strong>MECE on the opportunity set</strong> — invoke <span class="tag tag-magenta" style="font-size:10px">MECE lens</span><br><span>Lay out the full set of levers the plan could pull; check it is collectively exhaustive and mutually exclusive. This is the candidate pool.</span></div></li>
+    <li><div><strong>Draft the plan</strong> — investigation actions (with confirmed / ruled-out exit criteria), recommended actions, decision asks, risks + mitigations<br><span>Ground every action in <code>environment.md</code> — if the client lacks the instrumentation, rewrite it as an instrumentation work item or flag the dependency. Never recommend instrumentation the client lacks.</span></div></li>
+    <li><div><strong>Convene the persona council — over ≥3 rounds</strong> <span class="tag tag-magenta" style="font-size:10px">Skeptic</span> <span class="tag tag-magenta" style="font-size:10px">Optimist</span> <span class="tag tag-magenta" style="font-size:10px">Customer</span> <span class="tag tag-magenta" style="font-size:10px">Consultative</span><br><span>Round 1 — independent positions, in parallel and blind. Round 2 — each reacts to the others. Round 3 — each converges and flags what it won't concede. More rounds if still moving. Each panelist is grounded in the client's real instrumentation.</span></div></li>
+    <li><div><strong>Agent reconciles</strong> — rules on every material disagreement<br><span>Logs each ruling in the plan's "Tensions resolved" subsection rather than averaging it away; folds Skeptic's "questions a leader will ask" into the decision asks.</span></div></li>
+    <li><div><strong>ICE re-ranks — after the council</strong> — invoke <span class="tag tag-magenta" style="font-size:10px">ICE lens</span><br><span>Re-scored to execution semantics (Confidence = likelihood it executes; Impact = magnitude if the mitigation lands). The post-council ranking is what lands in the plan.</span></div></li>
+    <li><div>Revise and write to <code>action-plan.md</code></div></li>
   </ol>
 
   <h2>action-plan.md sections</h2>
@@ -730,6 +735,7 @@
     <div class="card card-sm"><h3 style="font-size:13px;color:var(--teal)">Recommended actions</h3><p style="font-size:12px;margin:0">Ranked by impact vs effort; each conditionally gated on evidence</p></div>
     <div class="card card-sm"><h3 style="font-size:13px;color:var(--blue)">Decision asks</h3><p style="font-size:12px;margin:0">Named leaders, named decisions — not open-ended questions</p></div>
     <div class="card card-sm"><h3 style="font-size:13px;color:var(--magenta)">Risks &amp; tradeoffs</h3><p style="font-size:12px;margin:0">Each risk has a cost and a mitigation. Never buried in a separate appendix.</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px;color:var(--magenta)">Tensions resolved</h3><p style="font-size:12px;margin:0">Each council conflict: the claim in dispute, each side's logic, and the agent's ruling. Required, not optional.</p></div>
   </div>
 
   <div class="gate-callout">
@@ -739,7 +745,7 @@
       <div class="gate-opts">
         <span class="tag tag-teal">Approve → Phase 3</span>
         <span class="tag tag-blue">Redirect → revise plan</span>
-        <span class="tag tag-magenta">Iterate → Skeptic / Optimist / Customer lens</span>
+        <span class="tag tag-magenta">Iterate → any of the six lenses on demand</span>
       </div>
     </div>
   </div>
@@ -818,7 +824,7 @@
   </div>
 
   <div class="card card-sm" style="max-width:560px;margin-top:12px;font-size:12px;color:var(--gray-lt)">
-    <strong style="color:var(--white)">Output:</strong> <code>memory/project-space/deck-YYYY-MM-DD.pptx</code><br>
+    <strong style="color:var(--white)">Output:</strong> <code>&lt;engagement folder&gt;/deck-YYYY-MM-DD.pptx</code><br>
     <strong style="color:var(--white)">Fallback:</strong> <code>deck-outline-YYYY-MM-DD.md</code> for manual build if pptx-generator fails
   </div>
 </section>
@@ -906,7 +912,7 @@
       <div class="chevron" id="chev-sk-ap">▾</div>
     </div>
     <div class="skill-body" id="body-sk-ap">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Produces four sections: investigation actions · recommended actions (ranked) · decision asks · risks & tradeoffs. Invokes Skeptic lens. Writes <code>action-plan.md</code>.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">MECE on the opportunity set → draft against the client's instrumentation → persona council (Skeptic, Optimist, Customer, Consultative) over ≥3 rounds → agent reconciles into "Tensions resolved" → ICE re-ranks. Produces five sections: investigation actions · recommended actions (ranked) · decision asks · risks & tradeoffs · Tensions resolved. Writes <code>action-plan.md</code>.</p>
     </div>
   </div>
 
@@ -960,7 +966,7 @@
       <div class="chevron" id="chev-sk-ir">▾</div>
     </div>
     <div class="skill-body" id="body-sk-ir">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Two modes: <strong style="color:var(--white)">Archive</strong> (captures lessons-learned, moves artifacts to client past-investigations, resets project-space) or <strong style="color:var(--white)">Pause</strong> (moves current project-space to client folder, resets active-engagement). Also handles Resume.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px"><strong style="color:var(--white)">Nothing ever moves.</strong> <strong style="color:var(--white)">Archive</strong> = capture lessons-learned, add an outcome row to the client README, mark <code>state: complete</code> in current-context.md. <strong style="color:var(--white)">Pause</strong> = mark <code>state: paused</code>. <strong style="color:var(--white)">Resume</strong> = scan engagement-folder statuses and flip the chosen one back to <code>state: active</code>.</p>
     </div>
   </div>
 
@@ -999,7 +1005,7 @@
       <div class="chevron" id="chev-sk-vh">▾</div>
     </div>
     <div class="skill-body" id="body-sk-vh">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">QBR/renewal brief from prior archived investigations. Requires at least one prior archive. Identifies 2–4 value narrative threads: Discovery · Improvement · Risk mitigation · Strategic insight · Instrumentation progress.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">QBR/renewal brief from the client's prior <strong style="color:var(--white)">completed engagements</strong> (their <code>engagements/</code> folders + <code>contract.md</code>). Requires at least one <code>state: complete</code> engagement. Identifies 2–4 value narrative threads: Discovery · Improvement · Risk mitigation · Strategic insight · Instrumentation progress.</p>
     </div>
   </div>
 </section>
@@ -1016,7 +1022,7 @@
         <strong>MECE lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Haiku</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> After issue tree, before user approval</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 (on the issue tree) and Phase 2 (on the opportunity set), before the work is presented.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: overlap between branches · gaps (third-party, biz process, instrumentation, deploy) · mixed abstraction levels · solution vs problem phrasing</p>
     </div>
     <div class="lens-card">
@@ -1025,7 +1031,7 @@
         <strong>ICE lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Haiku</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> After hypotheses drafted or actions need re-ranking</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 (after the signals map exists) and Phase 2 (re-rank after the persona council).</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Scores I/C/E (1–10 each); produces ranked table; flags where one dimension is doing most of the work</p>
     </div>
     <div class="lens-card">
@@ -1034,8 +1040,8 @@
         <strong>Skeptic lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing Phase 2 action plan or Phase 3 deliverable</p>
-      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: hidden assumptions · weak evidence (single signal as truth) · instrumentation gaps · scenarios where plan misleads · second-order risks</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
+      <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: hidden assumptions · weak evidence (single signal as truth) · instrumentation gaps · scenarios where plan misleads · the questions a leader will ask</p>
     </div>
     <div class="lens-card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
@@ -1043,7 +1049,7 @@
         <strong>Optimist lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing action plan or one-pager</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: overly conservative plan · upside left on table · compounding benefits not named · opportunities to parallelize</p>
     </div>
     <div class="lens-card">
@@ -1052,7 +1058,7 @@
         <strong>Consultative lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing exec one-pagers or decks</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 as a framing pass on tree + hypotheses wording, and in the Phase 2 persona council (≥3 rounds). Does <strong>not</strong> run in Phase 3.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: voice matches senior leader expectations · SLI/SLO/RUM terminology precise · tradeoffs surfaced not buried · vendor-neutral where possible</p>
     </div>
     <div class="lens-card">
@@ -1061,7 +1067,7 @@
         <strong>Customer lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Before finalizing any deliverable recommending action</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Asks: does work match user experience? Which journeys are deprioritized? Are we solving the right problem vs the easiest one?</p>
     </div>
   </div>
@@ -1070,6 +1076,54 @@
     <div class="tag tag-gray" style="margin-bottom:6px">Background agent</div>
     <strong>doc-freshness-checker</strong> <span class="tag tag-gray" style="font-size:10px">Haiku</span>
     <p style="font-size:12px;margin-top:6px;margin-bottom:0;color:var(--gray-lt)">Dispatched at Phase 0 start if last check &gt;7 days ago. Re-checks all DT doc citations in long-term memory. Writes to <code>freshness-report.md</code>. Never modifies long-term files directly. Main agent surfaces results at Phase 0 gate.</p>
+  </div>
+</section>
+
+<!-- ══════════════ ARCHITECTURE MAP ══════════════ -->
+<section class="page" id="page-arch-map">
+  <h1>Architecture graph</h1>
+  <p class="lead">The agent and everything it touches, as a live topology. Drag any node to rearrange it; hover one to trace its connections.</p>
+
+  <div style="margin:22px 0 8px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:11px;color:var(--gray)">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#cfd4dc;display:inline-block"></span>You</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:50%;background:#49C2B3;display:inline-block"></span>Agent</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#6fa8ff;display:inline-block"></span>Phase</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#C93FDB;display:inline-block"></span>Lens</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#E6A23C;display:inline-block"></span>Memory</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:transparent;border:1.5px dashed #8a93a6;display:inline-block"></span>Background</span>
+    <button id="ag-reset" style="margin-left:auto;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--gray);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit">↻ Reshuffle</button>
+  </div>
+
+  <div style="background:rgba(7,16,30,0.45);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden">
+    <svg id="arch-graph" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;touch-action:none;font-family:'DTFlow',Arial,sans-serif">
+      <defs>
+        <marker id="ag-arrow-flow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6fa8ff"/></marker>
+        <marker id="ag-arrow-disp" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#C93FDB"/></marker>
+      </defs>
+      <g id="ag-edges"></g>
+      <g id="ag-nodes"></g>
+    </svg>
+  </div>
+
+  <h2>How to read it</h2>
+  <div class="card-grid">
+    <div class="card card-sm">
+      <div class="tag tag-teal" style="margin-bottom:8px">The nodes</div>
+      <p style="font-size:13px;margin:0"><strong style="color:#49C2B3">The agent</strong> is the hub — it reads memory, runs the phases, and dispatches the lenses. <strong style="color:#cfd4dc">You</strong> bring the problem and approve every gate. <strong style="color:#6fa8ff">Phases</strong> run in sequence, <strong style="color:#C93FDB">lenses</strong> are critique sub-agents, and <strong style="color:#E6A23C">memory</strong> is two isolated tiers — the root library and per-client workspaces (the live engagement folder lives inside the active client's workspace).</p>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-magenta" style="margin-bottom:8px">The links</div>
+      <p style="font-size:13px;margin:0"><strong style="color:#cfd4dc">You ↔ Agent</strong> is your direction and gate approvals. <strong style="color:#6fa8ff">Phase → phase</strong> is the run order. <strong style="color:#C93FDB">Phase → lens</strong> shows which phase dispatches which critique. <strong style="color:#E6A23C">Agent ↔ memory</strong> is reads and writes.</p>
+    </div>
+    <div class="card card-sm">
+      <div class="tag tag-blue" style="margin-bottom:8px">Where the lenses run</div>
+      <p style="font-size:13px;margin:0"><strong style="color:var(--white)">Diagnose</strong> dispatches MECE, ICE, and Consultative (framing). <strong style="color:var(--white)">Plan</strong> runs MECE, then the persona council (Skeptic, Optimist, Customer, Consultative) over ≥3 rounds, then ICE re-ranks. <strong style="color:var(--white)">Deliver</strong> dispatches none — it just packages the approved plan.</p>
+    </div>
+  </div>
+
+  <div style="max-width:660px;margin-top:18px;padding:14px 18px;border:1px solid rgba(201,63,219,0.22);border-radius:10px;background:rgba(201,63,219,0.04)">
+    <p style="font-size:12.5px;color:var(--gray);margin:0 0 8px"><strong style="color:var(--white)">Reading the clusters.</strong> The lenses pull toward the phases that use them, so MECE, ICE, and Consultative sit between Diagnose and Plan (both dispatch them), while Skeptic, Optimist, and Customer cluster on Plan alone. The background <em>doc-freshness</em> check hangs off Phase 0 only.</p>
+    <p style="font-size:12.5px;color:var(--gray);margin:0">Deliver has no lens links by design — it inherits the council-reviewed plan and packages it. The two memory tiers stay clustered on the agent; the Client Workspace is isolated per client and never crosses to another, and the live engagement folder lives inside it.</p>
   </div>
 </section>
 
@@ -1094,36 +1148,35 @@
       <div class="mem-rule">Read freely every session.<br>Writes require explicit user approval.<br><strong>Never contains client data.</strong></div>
     </div>
 
-    <div class="mem-tier" style="border-color:rgba(25,102,255,.25);background:rgba(25,102,255,.04)">
-      <h3 style="color:#6fa8ff">Active project space</h3>
-      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/project-space/</div>
-      <span class="mem-file">active-engagement.md</span>
-      <span class="mem-file">current-context.md</span>
-      <span class="mem-file">issue-tree.md</span>
-      <span class="mem-file">hypotheses.md</span>
-      <span class="mem-file">signals-map.md</span>
-      <span class="mem-file">action-plan.md</span>
-      <span class="mem-file">decisions-log.md</span>
-      <span class="mem-file">one-pager-YYYY-MM-DD.md</span>
-      <span class="mem-file">deck-YYYY-MM-DD.pptx</span>
-      <div class="mem-rule">Active client's working directory.<br>Reset between engagements via investigation-reset skill.</div>
-    </div>
-
     <div class="mem-tier" style="border-color:rgba(201,63,219,.25);background:rgba(201,63,219,.04)">
       <h3 style="color:var(--magenta)">Client workspaces</h3>
       <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/clients/&lt;client-name&gt;/</div>
       <span class="mem-file">README.md (engagement history)</span>
       <span class="mem-file">environment.md</span>
+      <span class="mem-file">contract.md (confidential)</span>
       <span class="mem-file">stakeholder-overlays.md</span>
-      <span class="mem-file">project-space/ (if paused)</span>
-      <span class="mem-file">past-investigations/</span>
+      <span class="mem-file">engagements/&lt;YYYY-MM-DD-slug&gt;/</span>
       <div class="mem-rule">Fully isolated per client.<br>Never read unless that client is active.<br>Template at memory/clients/_template/</div>
+    </div>
+
+    <div class="mem-tier" style="border-color:rgba(25,102,255,.25);background:rgba(25,102,255,.04)">
+      <h3 style="color:#6fa8ff">Engagement folder</h3>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">…/engagements/&lt;YYYY-MM-DD-slug&gt;/</div>
+      <span class="mem-file">current-context.md (status front-matter)</span>
+      <span class="mem-file">issue-tree.md</span>
+      <span class="mem-file">hypotheses.md</span>
+      <span class="mem-file">signals-map.md</span>
+      <span class="mem-file">action-plan.md</span>
+      <span class="mem-file">decisions-log.md</span>
+      <span class="mem-file">lessons-learned.md</span>
+      <span class="mem-file">one-pager-YYYY-MM-DD.md</span>
+      <div class="mem-rule">Self-describing via <code>state:</code> in current-context.md.<br>No global pointer, no project-space.<br>Nothing moves — pause/complete flip a field.</div>
     </div>
   </div>
 
   <h2>Context isolation rule</h2>
   <div class="card" style="max-width:600px;font-size:13px;color:var(--gray-lt)">
-    After loading the root library, identify the active client from <code>active-engagement.md</code>. For the rest of the session, all client-specific reads come <strong style="color:var(--white)">only from</strong> <code>memory/clients/&lt;active-client-name&gt;/</code>. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current and resume the prior.
+    After loading the root library, the agent establishes the active engagement (created at Phase 0, or resumed by scanning engagement-folder <code>state:</code> front-matter) and derives the client name from its path. For the rest of the session, all client-specific reads come <strong style="color:var(--white)">only from</strong> <code>memory/clients/&lt;active-client-name&gt;/</code>. The agent never reads another client's folder, even if the user's question names one. There is no global pointer file, so two concurrent sessions for different clients can never collide.
   </div>
 
   <h2>Promotion path: client → long-term</h2>
@@ -1135,7 +1188,7 @@
 <!-- ══════════════ ARTIFACTS ══════════════ -->
 <section class="page" id="page-artifacts">
   <h1>Artifacts</h1>
-  <p class="lead">Every phase produces a named artifact in <code>memory/project-space/</code>. Each artifact has a fixed schema and is never overwritten — only updated with a version note.</p>
+  <p class="lead">Every phase produces a named artifact in the engagement folder <code>memory/clients/&lt;client&gt;/engagements/&lt;dated-slug&gt;/</code>. Each artifact has a fixed schema and is never overwritten — only updated with a version note.</p>
 
   <table class="artifact-table">
     <thead>
@@ -1177,14 +1230,15 @@
     </div>
   </div>
 
-  <h2>Available lenses at each gate</h2>
-  <table class="artifact-table" style="max-width:640px">
-    <thead><tr><th>Gate</th><th>Available lenses</th></tr></thead>
+  <h2>Lenses at each gate</h2>
+  <p style="font-size:13px;color:var(--gray-lt);max-width:640px;margin-bottom:10px">The mandatory lenses are part of the phase procedure — they always run. On top of them, you may invoke <strong>any</strong> of the six on demand at that phase's gate.</p>
+  <table class="artifact-table" style="max-width:680px">
+    <thead><tr><th>Gate</th><th>Mandatory lenses</th><th>On demand</th></tr></thead>
     <tbody>
-      <tr><td>Phase 0 gate</td><td>—</td></tr>
-      <tr><td>Phase 1 gate</td><td>MECE · Optimist · Skeptic · ICE · Consultative · Customer</td></tr>
-      <tr><td>Phase 2 gate</td><td>Skeptic · Optimist · Customer</td></tr>
-      <tr><td>Phase 3a gate</td><td>Consultative · Customer · Skeptic</td></tr>
+      <tr><td>Phase 0 gate</td><td>None</td><td>Any of the six</td></tr>
+      <tr><td>Phase 1 gate</td><td>MECE (tree) → Consultative (framing pass) → ICE (after signals map)</td><td>Any of the six</td></tr>
+      <tr><td>Phase 2 gate</td><td>MECE (opportunity set) → council: Skeptic · Optimist · Customer · Consultative over ≥3 rounds → agent reconciles → ICE re-ranks</td><td>Any of the six</td></tr>
+      <tr><td>Phase 3 gate</td><td>None — pure packaging</td><td>Any of the six</td></tr>
     </tbody>
   </table>
 
@@ -1293,33 +1347,30 @@
   </table>
 
   <h2>Finishing an engagement</h2>
-  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:12px">When Phase 3 deliverables are approved, archive with: <em>"Archive this investigation and reset the workspace."</em></p>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:12px">When Phase 3 deliverables are approved, close out with: <em>"Archive this investigation."</em> <strong style="color:var(--white)">Nothing moves</strong> — the engagement folder stays put.</p>
   <ol class="steps" style="max-width:520px">
     <li>Agent asks 4 lessons-learned questions: what worked, what to avoid, new knowledge, proposed memory updates</li>
-    <li>Confirm an archive name (<code>YYYY-MM-DD-&lt;short-name&gt;</code>)</li>
-    <li>All project-space files copied to <code>memory/clients/&lt;client-name&gt;/past-investigations/&lt;archive-name&gt;/</code></li>
-    <li>Client's <code>README.md</code> engagement history updated</li>
+    <li>Writes <code>lessons-learned.md</code> into the engagement folder</li>
+    <li>Adds an outcome row to the client's <code>README.md</code> engagement history</li>
     <li>Any approved root library updates executed (e.g., new playbook insights)</li>
-    <li><code>memory/project-space/</code> reset to template state</li>
+    <li>Marks the engagement <code>state: complete</code> in its <code>current-context.md</code></li>
   </ol>
 
   <h2>Working with multiple clients</h2>
   <div class="card-grid" style="max-width:560px">
     <div class="card card-sm">
       <div class="tag tag-gray" style="margin-bottom:6px">Pause</div>
-      <p style="font-size:12px;margin:0">Say: <em>"Pause this engagement and start a new one."</em> The agent moves current files to <code>memory/clients/&lt;client&gt;/project-space/</code> and clears the workspace.</p>
+      <p style="font-size:12px;margin:0">Say: <em>"Pause this engagement and start a new one."</em> The agent marks the current engagement <code>state: paused</code> — nothing moves, and any number can be paused at once.</p>
     </div>
     <div class="card card-sm">
       <div class="tag tag-teal" style="margin-bottom:6px">Resume</div>
-      <p style="font-size:12px;margin:0">Say: <em>"Resume [client name]."</em> Files copied back to project-space; agent reminds you where you left off. Client data never crosses client boundaries.</p>
+      <p style="font-size:12px;margin:0">Say: <em>"Resume [client name]."</em> The agent scans engagement-folder statuses, you pick one, it flips back to <code>state: active</code>. Client data never crosses client boundaries.</p>
     </div>
   </div>
 
   <h2>Checking where you are</h2>
   <div class="card card-sm" style="max-width:560px;font-size:12px;color:var(--gray-lt)">
-    <strong style="color:var(--white)">Active client?</strong> Read <code>memory/project-space/active-engagement.md</code>.<br>
-    <strong style="color:var(--white)">Current phase?</strong> Read <code>memory/project-space/current-context.md</code>.<br>
-    <strong style="color:var(--white)">Full audit trail?</strong> Read <code>memory/project-space/decisions-log.md</code>.<br>
+    Open the active engagement's <code>current-context.md</code> (under <code>memory/clients/&lt;client&gt;/engagements/&lt;dated-slug&gt;/</code>): its status front-matter (<code>state</code>, <code>phase</code>) tells you where it stands; <code>decisions-log.md</code> in the same folder is the full audit trail. To see all active/paused engagements, scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state</code>.<br>
     Anything stale or wrong? Ask the agent to reframe — that's a Phase 0 redirect.
   </div>
 </section>
@@ -1352,8 +1403,8 @@
   <p class="lead" style="margin-bottom:20px">Template and default content for every file the agent reads or writes. Click a file to inspect it with annotations.</p>
   <div class="two-panel">
     <div class="panel-left" id="files-nav">
-      <div class="panel-group">Active workspace</div>
-      <div class="panel-item active panel-item-mono" data-file="active-engagement" onclick="selectFile(this,'active-engagement')">active-engagement.md</div>
+      <div class="panel-group">Engagement folder</div>
+      <div class="panel-item active panel-item-mono" data-file="active-engagement" onclick="selectFile(this,'active-engagement')">status front-matter</div>
       <div class="panel-item panel-item-mono" data-file="current-context" onclick="selectFile(this,'current-context')">current-context.md</div>
       <div class="panel-item panel-item-mono" data-file="issue-tree" onclick="selectFile(this,'issue-tree')">issue-tree.md</div>
       <div class="panel-item panel-item-mono" data-file="hypotheses" onclick="selectFile(this,'hypotheses')">hypotheses.md</div>
@@ -1363,6 +1414,7 @@
       <div class="panel-group">Client template</div>
       <div class="panel-item panel-item-mono" data-file="client-readme" onclick="selectFile(this,'client-readme')">README.md</div>
       <div class="panel-item panel-item-mono" data-file="environment" onclick="selectFile(this,'environment')">environment.md</div>
+      <div class="panel-item panel-item-mono" data-file="contract" onclick="selectFile(this,'contract')">contract.md</div>
       <div class="panel-item panel-item-mono" data-file="stakeholder-overlays" onclick="selectFile(this,'stakeholder-overlays')">stakeholder-overlays.md</div>
     </div>
     <div class="panel-right" id="file-panel">
@@ -1449,9 +1501,9 @@ Before diving into setup, it helps to understand how memory is organized. It has
 
 **Root library (`memory/long-term/`)** — universal knowledge: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic stakeholder archetypes. This knowledge applies to every client. The agent reads it on every session. **You never put client-specific information here.**
 
-**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile, named leader profiles, and all archived investigations. The agent only reads the active client's folder — never another client's.
+**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile (`environment.md`), commercial/consumption context (`contract.md`), named leader profiles (`stakeholder-overlays.md`), and every engagement under `engagements/`. The agent only reads the active client's folder — never another client's.
 
-**Active investigation (`memory/project-space/`)** — the working directory for the currently open engagement. Think of it as "you are here."
+**Active investigation — the engagement folder.** The currently open engagement's files live in its dated folder under the client, `memory/clients/<client-name>/engagements/<YYYY-MM-DD-slug>/`. There is no separate "active project" location and no global pointer — the engagement folder is the session's working directory, and a status front-matter block in its `current-context.md` marks it `active`. Because each session works in its own dated folder, running two clients at once never crosses wires.
 
 See memory.md for the full architecture.
 
@@ -1510,7 +1562,7 @@ The agent walks you through up to nine clarifying questions, one at a time, in a
 
 ### Step 3 — Phase 0 gate
 
-The agent presents a reframed engagement summary and writes it to `memory/project-space/current-context.md`. At this gate you have three options:
+The agent presents a reframed engagement summary and writes it to `current-context.md` inside the new engagement folder (`memory/clients/<client>/engagements/<dated-slug>/`). At this gate you have three options:
 
 - **Approve** — proceed to Phase 1.
 - **Redirect** — change scope, framing, or priority. The agent updates and re-presents.
@@ -1524,15 +1576,16 @@ Each phase has its own gate and its own set of artifacts. Don't skip phases — 
 
 When Phase 3 deliverables are approved, use the investigation-reset skill to close out:
 
-> *"Archive this investigation and reset the workspace."*
+> *"Archive this investigation."*
 
 The agent will:
 1. Ask you four lessons-learned questions (what worked, what to avoid, new knowledge, proposed memory updates).
-2. Ask you to confirm an archive name (`YYYY-MM-DD-<short-name>`).
-3. Copy all project-space files to `memory/clients/<client-name>/past-investigations/<archive-name>/`.
-4. Update the client's `README.md` engagement history.
-5. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
-6. Reset `memory/project-space/` to template state.
+2. Write `lessons-learned.md` into the engagement folder.
+3. Update the client's `README.md` engagement history with an outcome row.
+4. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
+5. Mark the engagement `state: complete` in its `current-context.md`.
+
+Nothing moves — the engagement folder stays at `memory/clients/<client-name>/engagements/<dated-slug>/`. The client's environment profile, contract, stakeholder overlays, and every past engagement remain in `memory/clients/<client-name>/` for the next engagement.
 
 ## Working with multiple clients
 
@@ -1540,15 +1593,15 @@ If you need to set aside one client and work on another:
 
 > *"Pause this engagement and start a new one."*
 
-The agent moves the current investigation files to `memory/clients/<current-client>/project-space/` (paused, not archived) and clears project-space. When you come back:
+The agent marks the current engagement `state: paused` in its `current-context.md` — nothing moves, and any number of engagements can be paused at once. When you come back:
 
 > *"Resume [client name]."*
 
-The agent copies the paused files back into project-space and reminds you where you left off. Client data never crosses client boundaries.
+The agent scans engagement folders for paused/active status, you pick one, it flips that engagement back to `state: active` and reminds you where you left off. Client data never crosses client boundaries.
 
 ## Checking where you are
 
-Read `memory/project-space/active-engagement.md` to see which client is active. Read `memory/project-space/current-context.md` to see the current phase and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
+Open the active engagement's `current-context.md` (under `memory/clients/<client>/engagements/<dated-slug>/`) to see its status front-matter (`state`, `phase`), the current phase, and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
 
 ## Look inside
 
@@ -1556,9 +1609,9 @@ Read `memory/project-space/active-engagement.md` to see which client is active. 
 |---|---|
 | Operating manual | `CLAUDE.md` |
 | Phase 0 procedure | `skills/context-framing/SKILL.md` |
-| Active client | `memory/project-space/active-engagement.md` |
+| Active / resumable engagements | scan `memory/clients/*/engagements/*/current-context.md` for `state` |
 | Client environment (if populated) | `memory/clients/<client-name>/environment.md` |
-| Live investigation state | files under `memory/project-space/` |
+| Live investigation state | the active engagement folder, `memory/clients/<client>/engagements/<dated-slug>/` |
 </script>
 
 <script type="text/plain" id="raw-workflow">
@@ -1583,7 +1636,7 @@ The canonical phase rules live in `CLAUDE.md`. This page expands on what each ph
 - `memory/long-term/terminology.md` — to use language consistent with the team.
 - `memory/long-term/client-question-bank.md` — when you tell it the discovery is happening **live with the customer**, it switches to the client-facing phrasings.
 
-**What lands on disk.** `memory/project-space/current-context.md`. Open it during Phase 0 to see the agent's running understanding of the problem.
+**What lands on disk.** `current-context.md` inside the engagement folder — `memory/clients/<client>/engagements/<YYYY-MM-DD-slug>/`. Open it during Phase 0 to see the agent's running understanding of the problem. It opens with a status front-matter block (`state`, `phase`, …) that makes the engagement self-describing.
 
 **The gate question.** *"Does this framing match what you actually need?"*
 
@@ -1606,9 +1659,9 @@ You'll feel three distinct shifts during this phase:
 
 **What lands on disk.**
 
-- `memory/project-space/issue-tree.md`
-- `memory/project-space/hypotheses.md`
-- `memory/project-space/signals-map.md`
+- `<engagement folder>/issue-tree.md`
+- `<engagement folder>/hypotheses.md`
+- `<engagement folder>/signals-map.md`
 
 **Lenses the agent runs by default before presenting.** MECE and ICE. You can ask for any of the others on top.
 
@@ -1622,9 +1675,9 @@ This is the phase where the **Dynatrace playbooks** become load-bearing. The age
 
 **The skill the agent reads.** `skills/action-plan-builder/SKILL.md`.
 
-**What lands on disk.** `memory/project-space/action-plan.md`.
+**What lands on disk.** `<engagement folder>/action-plan.md`.
 
-**Lenses the agent runs by default before presenting.** Skeptic. Ask for Optimist if the plan feels too defensive, or Customer if you want a sanity check that the proposed work actually maps to something users experience.
+**Lenses the phase runs (all mandatory).** MECE on the opportunity set first, then a **deliberating persona council over at least three rounds** — Skeptic, Optimist, Customer, Consultative. **Round 1** each gives an independent position in parallel, blind to the others; **Round 2** each reacts to the others' positions; **Round 3** each converges and flags what it won't concede (more rounds if still moving). Every panelist is grounded in the client's real instrumentation (`environment.md`). Then the **agent reconciles** every material disagreement — logging each in the plan's "Tensions resolved" section — and finally ICE re-ranks. You can ask for any of the six on top at the gate.
 
 **The gate question.** *"Is this the right plan, with the right exit criteria, and are the decision asks clear?"*
 
@@ -1658,7 +1711,7 @@ At each gate the agent **stops and presents**. You always have three responses a
 | **Redirect** | You change scope, framing, or priority. Agent updates artifacts and re-presents. |
 | **Iterate through a lens** | You ask for re-review through one of the six lenses. Agent revises before re-presenting. |
 
-Every gate decision is appended to `memory/project-space/decisions-log.md`. That file is the audit trail.
+Every gate decision is appended to `<engagement folder>/decisions-log.md`. That file is the audit trail.
 </script>
 
 <script type="text/plain" id="raw-skills">
@@ -1722,9 +1775,9 @@ Used by any other skill when local memory is silent, contradictory, or stale. De
 
 ### investigation-reset
 
-Archives the current engagement and resets the workspace for the next one — or pauses it to work on a different client. Runs the four lessons-learned questions before archiving.
+Handles all engagement state transitions — nothing ever moves. **Archive:** runs the four lessons-learned questions, writes `lessons-learned.md` into the engagement folder, adds an outcome row to the client `README.md`, and marks the engagement `state: complete` in its `current-context.md`. **Pause:** marks `state: paused`. **Resume:** scans `memory/clients/*/engagements/*/current-context.md` for `state: active` or `paused`, lets you pick, and flips the chosen one back to `state: active`.
 
-**Trigger:** "Archive this investigation," "Reset the workspace," "Pause this engagement," or "Resume [client name]."
+**Trigger:** "Archive this investigation," "Pause this engagement," or "Resume [client name]."
 
 ### stakeholder-overlay
 
@@ -1742,9 +1795,9 @@ Captures client-specific Dynatrace environment details that persist across engag
 
 ### value-highlight
 
-Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads prior investigation archives from the active client's `past-investigations/` folder.
+Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads the active client's prior **completed engagements** from their `engagements/` folders (plus `contract.md` for the commercial picture).
 
-**Prerequisite:** At least one completed investigation must be archived for the active client.
+**Prerequisite:** At least one completed engagement (`state: complete`) must exist for the active client.
 
 ## How skills are triggered
 
@@ -1758,9 +1811,9 @@ The workspace ships with six sub-agents whose only job is to **critique work pro
 
 You'll meet them in three situations:
 
-1. **Automatically before a gate.** The main agent invokes the default lenses for each phase before presenting.
-2. **On demand at any gate.** You can always say *"run this through the Skeptic lens"* or *"check this issue tree with MECE"*.
-3. **In parallel for Phase 3.** When three or more lenses can review independently (Consultative + Customer + Skeptic on a one-pager is the typical case), the agent dispatches them in parallel.
+1. **Mandatory within a phase.** Phases 1 and 2 each run a fixed set of lenses as part of the phase procedure — they are not optional. The per-phase table below is the authority for which run when. Phase 0 and Phase 3 run **no** critique lens automatically.
+2. **On demand at any gate.** You can always say *"run this through the Skeptic lens"* or *"check this issue tree with MECE"* — any of the six, regardless of phase.
+3. **In parallel when several can review independently.** When three or more lenses can review the same artifact independently (Consultative + Customer + Skeptic on a one-pager you ask for in Phase 3 is the typical case), the agent dispatches them in parallel.
 
 ## Meet the six
 
@@ -1810,20 +1863,30 @@ A common failure mode this lens catches: a 30% improvement to a metric the user 
 
 If you're going to be in a room defending the work, Skeptic is the lens that simulates the room first.
 
-## Default invocations per phase
+## When each lens runs
 
-| Phase | Lenses invoked by default | Lenses available on request |
+This table is the single source of truth for which lenses are mandatory in which phase. On top of them, you may invoke **any** of the six on demand at that phase's gate.
+
+| Phase | Mandatory lenses (part of the phase) | Also available on demand |
 |---|---|---|
-| 0 — Context | — | Any |
-| 1 — Diagnose | MECE, ICE | Optimist, Skeptic |
-| 2 — Solution | Skeptic | Optimist, ICE, Customer |
-| 3 — Deliver | Consultative, Customer, Skeptic | Optimist |
+| 0 — Context | None (a background doc-freshness check runs conditionally, but it is not a critique lens) | Any of the six |
+| 1 — Diagnose | MECE on the issue tree, then Consultative as a framing pass on the tree + hypotheses wording, then ICE on scoring (**after** the signals map exists) | Any of the six |
+| 2 — Solution | MECE on the opportunity set, then the **persona council** — Skeptic, Optimist, Customer, Consultative — deliberating over **≥3 rounds** (independent → cross-examination → convergence), then the agent reconciles, then ICE re-ranks **after** the council | Any of the six |
+| 3 — Deliver | **None.** Pure packaging of the already-reviewed plan plus mechanical gates (one-page constraint, brand conformance, HTML legibility) | Any of the six |
 
-## Running lenses in parallel
+## The Phase 2 council runs in rounds
 
-If three or more lenses can run independently against the same artifact (typical for Phase 3), invoke them in parallel rather than sequentially. The main agent should already do this automatically; you can also ask explicitly:
+The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over at least three rounds:
 
-> *"Run this one-pager through Consultative, Customer, and Skeptic in parallel."*
+1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** — each reads only the draft plan (plus the client's `environment.md`) and gives its own position, having seen none of the others.
+2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
+3. **Round 3 — convergence.** Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. More rounds run if positions are still moving.
+
+Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. You can also ask for this council explicitly at any gate:
+
+> *"Run the action plan through the Skeptic, Optimist, Customer, and Consultative council."*
+
+(Phase 3 lens passes are unchanged: when you invoke Consultative, Customer, and Skeptic on a one-pager on demand, they can still run in parallel.)
 
 ## The background agent
 
@@ -1858,51 +1921,73 @@ The root library holds knowledge that is true regardless of which client is acti
 | `client-question-bank.md` | Client-facing phrasings of the Phase 0 clarifying questions. |
 | `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer). |
 
+> Two items in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier.
+
 ### Tier 2 — Client workspaces (memory/clients/)
 
-Each client has a fully isolated folder. The agent reads only the active client's folder for any client-specific context.
+Each client has a fully isolated folder, and the live investigation lives **inside** it. The agent reads only the active client's folder for any client-specific context.
 
 ```
 memory/clients/
-├── _template/                   ← Copy this to create a new client workspace
+├── _template/                       ← Copy this to create a new client workspace
 └── <client-name>/
-    ├── README.md                 ← Engagement history and status
-    ├── environment.md            ← DT environment: MZs, SLOs, monitors, gaps
-    ├── stakeholder-overlays.md   ← Named leaders (confidential to this client)
-    ├── project-space/            ← Investigation files when paused
-    └── past-investigations/      ← Archived investigations for this client only
+    ├── README.md                     ← Engagement history and status index
+    ├── environment.md                ← DT environment: MZs, SLOs, monitors, gaps
+    ├── contract.md                   ← Commercial & consumption: DPS commit, renewal date, burn (confidential)
+    ├── stakeholder-overlays.md       ← Named leaders (confidential to this client)
+    └── engagements/                  ← One dated subfolder per engagement
+        └── YYYY-MM-DD-<slug>/        ← ALL phase files for that engagement live here
 ```
 
 **How client folders are populated:**
 - `environment.md` — via `skills/environment-intake/SKILL.md` at the Phase 0 gate on first engagement.
+- `contract.md` — captured (with explicit approval) when commercial/consumption context surfaces; read by `skills/value-highlight/SKILL.md` for renewal/QBR briefs.
 - `stakeholder-overlays.md` — via `skills/stakeholder-overlay/SKILL.md` when a specific leader is named in Q7.
-- `past-investigations/` — populated automatically by `skills/investigation-reset/SKILL.md` at engagement close.
+- `engagements/` — each dated engagement folder is created by `skills/context-framing/SKILL.md` at Phase 0.
 
-### Active investigation (memory/project-space/)
+### The live investigation — the engagement folder
 
-The active client's investigation files live here while the engagement is open.
+The active client's investigation files live in a **dated engagement folder**: `memory/clients/<client>/engagements/YYYY-MM-DD-<slug>/`. There is **no global pointer file and no shared `memory/project-space/`.** The engagement folder is *self-describing*: its `current-context.md` opens with a YAML status front-matter block —
+
+```yaml
+---
+client: <client-short-name>
+slug: <slug>
+state: active        # active | paused | complete
+phase: 0             # current phase, 0–3
+opened: YYYY-MM-DD
+last-touched: YYYY-MM-DD
+---
+```
+
+The session holds the engagement path it created (at Phase 0) or resumed, and reads/writes only there. A fresh session resumes by scanning `memory/clients/*/engagements/*/current-context.md` for `state: active` or `state: paused`.
 
 | File | Phase | What it contains |
 |---|---|---|
-| `active-engagement.md` | — | Names the active client; maps to `memory/clients/<name>/`. |
-| `current-context.md` | 0 | Problem statement, scope, stakeholders, current phase, open questions. |
+| `current-context.md` | 0 | Status front-matter + problem statement, scope, stakeholders, current phase, open questions. |
 | `issue-tree.md` | 1 | MECE issue tree under active development. |
 | `hypotheses.md` | 1 | Ranked hypothesis table with ICE scores and status. |
 | `signals-map.md` | 1 | SLI/SLO → UX outcome → business KPI mapping. |
-| `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks. |
+| `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks, "Tensions resolved". |
 | `decisions-log.md` | all | Append-only record of every gate decision. |
+| `lessons-learned.md` | archive | Written by `investigation-reset` when the engagement is archived. |
+| `one-pager-YYYY-MM-DD.md` | 3 | The exec one-pager, if produced. |
 
 ## Engagement states
 
-| State | Where the files are | How to get there |
+Each engagement exists in one of three states, all recorded **inside the engagement folder** — nothing ever moves:
+
+| State | Where the files are | How it's recorded |
 |---|---|---|
-| **Active** | `memory/project-space/` | Start or resume an engagement |
-| **Paused** | `memory/clients/<name>/project-space/` | Tell the agent to pause |
-| **Completed** | `memory/clients/<name>/past-investigations/<date>/` | Archive via investigation-reset skill |
+| **Active** | `engagements/<dated-slug>/` | `state: active` in `current-context.md`; the session holds its path |
+| **Paused** | Same folder — nothing moves | `state: paused` in `current-context.md` |
+| **Completed** | Same folder — nothing moves | `state: complete` in `current-context.md` + an outcome row in the client `README.md` |
+
+Because each session holds its own dated folder and no shared file decides "which is active," two concurrent sessions for different clients cannot collide, and any number of engagements can be paused at once.
 
 ## Context isolation rule
 
-At session start, the agent identifies the active client from `active-engagement.md`. For the rest of that session, client-specific reads come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
 
 ## Why the read/write asymmetry exists
 
@@ -2106,11 +2191,11 @@ Open `memory/long-term/brand/brand-spec.md`.
 
 Refresh when the Dynatrace brand template changes. The spec is sourced from the official PowerPoint template.
 
-### 8. Past-investigations index
+### 8. Prior-engagement detection
 
-Open `memory/long-term/past-investigations.md`.
+Prior-engagement detection is **per-client**: in Phase 0 the agent reads the active client's own `README.md` engagement-history table to spot earlier work on the same customer and surface its key lessons.
 
-This is a curated index of completed investigations and the lessons each surfaced. The agent scans it in Phase 0 to detect prior engagements on the same customer, vertical, or problem shape.
+> The old shared `memory/long-term/past-investigations.md` index is **deprecated** — it carries a "do not use" banner and is read by no skill. Don't add to it.
 
 ## The tools/ boundary
 
@@ -2124,19 +2209,32 @@ Any tool added to `tools/` must respect the operating principles in `CLAUDE.md`:
 ## What you should NOT customize lightly
 
 - **The four-phase workflow.** Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee.
-- **The memory split.** Auto-promoting project-space findings into long-term memory was an explicit *non*-design.
+- **The memory split.** Auto-promoting engagement-folder findings into long-term memory was an explicit *non*-design.
 - **The external allowlist.** Adding a new domain requires explicit user approval per investigation, not a silent edit.
 </script>
 
 <!-- ══ File content ══ -->
 <script type="text/plain" id="raw-active-engagement">
-active: none
-# Set this to the client name when an engagement is open:
-# active: acme-corp
+---
+client: acme-corp
+slug: checkout
+state: active        # active | paused | complete
+phase: 1             # current phase, 0–3
+opened: 2026-06-18
+last-touched: 2026-06-22
+---
+
+# There is NO global pointer file and NO memory/project-space/.
+# Each engagement is self-describing: this YAML status block opens its
+# own current-context.md, inside memory/clients/<client>/engagements/<YYYY-MM-DD-slug>/.
 #
-# This tells the agent which memory/clients/<name>/ folder to use for
-# environment, stakeholder overlays, and past investigations.
-# Use skills/investigation-reset/SKILL.md to pause, archive, or resume.
+# The session holds the engagement folder it created at Phase 0 (or resumed),
+# and reads/writes only there. A fresh session resumes by scanning
+# memory/clients/*/engagements/*/current-context.md for state: active or paused.
+#
+# Pause = set state: paused. Complete = set state: complete + an outcome row in
+# the client README. Nothing ever moves. Use skills/investigation-reset/SKILL.md
+# for all state transitions.
 </script>
 
 <script type="text/plain" id="raw-current-context">
@@ -2396,8 +2494,9 @@ Each entry must include:
 ## Quick links
 
 - [environment.md](environment.md) — DT environment profile
+- [contract.md](contract.md) — commercial & consumption (confidential)
 - [stakeholder-overlays.md](stakeholder-overlays.md) — named leaders
-- [past-investigations/](past-investigations/) — archived engagements
+- [engagements/](engagements/) — one dated folder per engagement (state recorded in each current-context.md)
 </script>
 
 <script type="text/plain" id="raw-environment">
@@ -2439,6 +2538,29 @@ Each entry must include:
 
 ## OneAgent coverage
 <!-- Full / incremental rollout / known uncovered services -->
+</script>
+
+<script type="text/plain" id="raw-contract">
+# [Client Name] — Commercial & Consumption
+
+**Confidential.** Read only when this client is active. Captured (and updated) only on explicit user approval. Read by `skills/value-highlight/SKILL.md` for renewal/QBR briefs.
+
+**Last updated:** YYYY-MM-DD
+
+## DPS commitment
+<!-- Annual Dynatrace Platform Subscription commit ($ / capability mix), or "unknown" -->
+
+## Renewal
+<!-- Renewal date; notice window; owner on both sides -->
+
+## On-demand / overage burn
+<!-- Current burn vs commit; trend; headroom or overage risk -->
+
+## Capability entitlements
+<!-- Which DPS capabilities are licensed vs available to expand into -->
+
+## Commercial notes
+<!-- Expansion conversations in flight, contractual constraints, or "none noted" -->
 </script>
 
 <script type="text/plain" id="raw-stakeholder-overlays">
@@ -2489,10 +2611,176 @@ function navTo(page) {
   if (page === 'docs') initDocs();
   if (page === 'files') initFiles();
   if (page === 'source-files') initSourceFiles();
+  if (page === 'arch-map') ensureArchGraph(); else pauseArchGraph();
 }
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => navTo(item.dataset.page));
 });
+
+// ── Architecture force-directed graph (self-contained, no deps) ──
+let archGraph = null;
+function ensureArchGraph(){ if(!archGraph) archGraph = buildArchGraph(); if(archGraph) archGraph.start(); }
+function pauseArchGraph(){ if(archGraph) archGraph.stop(); }
+
+function buildArchGraph(){
+  const svg = document.getElementById('arch-graph');
+  if(!svg) return null;
+  const NS = 'http://www.w3.org/2000/svg';
+  const W = 900, H = 620, CX = W/2, CY = H/2;
+  const COL  = {human:'#cfd4dc', agent:'#49C2B3', phase:'#6fa8ff', lens:'#C93FDB', mem:'#E6A23C', bg:'#8a93a6'};
+  const ECOL = {gate:'#cfd4dc', flow:'#6fa8ff', disp:'#C93FDB', mem:'#E6A23C'};
+
+  const NODES = [
+    {id:'you',          label:'You',                  type:'human', r:20},
+    {id:'agent',        label:'Insights Forge agent', type:'agent', r:30},
+    {id:'p0',           label:'Phase 0 · Context',    type:'phase', r:21},
+    {id:'p1',           label:'Phase 1 · Diagnose',   type:'phase', r:21},
+    {id:'p2',           label:'Phase 2 · Plan',       type:'phase', r:21},
+    {id:'p3',           label:'Phase 3 · Deliver',    type:'phase', r:21},
+    {id:'mece',         label:'MECE',                 type:'lens',  r:14},
+    {id:'ice',          label:'ICE',                  type:'lens',  r:14},
+    {id:'skeptic',      label:'Skeptic',              type:'lens',  r:14},
+    {id:'optimist',     label:'Optimist',             type:'lens',  r:14},
+    {id:'customer',     label:'Customer',             type:'lens',  r:14},
+    {id:'consultative', label:'Consultative',         type:'lens',  r:14},
+    {id:'fresh',        label:'doc-freshness',        type:'bg',    r:13},
+    {id:'root',         label:'Root Library',         type:'mem',   r:18},
+    {id:'proj',         label:'Engagement folder',    type:'mem',   r:18},
+    {id:'client',       label:'Client Workspace',     type:'mem',   r:18},
+  ];
+  const EDGES = [
+    {s:'you',t:'agent',type:'gate'},
+    {s:'agent',t:'p0',type:'flow'},{s:'p0',t:'p1',type:'flow'},{s:'p1',t:'p2',type:'flow'},{s:'p2',t:'p3',type:'flow'},
+    {s:'agent',t:'root',type:'mem'},{s:'agent',t:'proj',type:'mem'},{s:'agent',t:'client',type:'mem'},
+    {s:'p0',t:'fresh',type:'disp'},
+    {s:'p1',t:'mece',type:'disp'},{s:'p1',t:'ice',type:'disp'},{s:'p1',t:'consultative',type:'disp'},
+    {s:'p2',t:'mece',type:'disp'},{s:'p2',t:'skeptic',type:'disp'},{s:'p2',t:'optimist',type:'disp'},
+    {s:'p2',t:'customer',type:'disp'},{s:'p2',t:'consultative',type:'disp'},{s:'p2',t:'ice',type:'disp'},
+  ];
+  const REST = {gate:120, flow:115, disp:88, mem:96};
+
+  const byId = {}; NODES.forEach(n => byId[n.id] = n);
+  const adj  = {}; NODES.forEach(n => adj[n.id] = new Set());
+  EDGES.forEach(e => { adj[e.s].add(e.t); adj[e.t].add(e.s); });
+
+  function seed(){
+    NODES.forEach((n,i) => {
+      const a = i / NODES.length * Math.PI * 2;
+      n.x = CX + Math.cos(a)*200 + (Math.random()-0.5)*50;
+      n.y = CY + Math.sin(a)*165 + (Math.random()-0.5)*50;
+      n.vx = 0; n.vy = 0; n.fixed = false;
+    });
+    byId.agent.x = CX; byId.agent.y = CY;
+  }
+  seed();
+
+  const gE = document.getElementById('ag-edges'), gN = document.getElementById('ag-nodes');
+  gE.innerHTML = ''; gN.innerHTML = '';
+
+  EDGES.forEach(e => {
+    const l = document.createElementNS(NS,'line');
+    l.setAttribute('stroke', ECOL[e.type]);
+    l.setAttribute('stroke-width', (e.type==='gate'||e.type==='flow') ? 2 : 1.3);
+    l.setAttribute('stroke-opacity','0.4');
+    l.setAttribute('stroke-linecap','round');
+    if(e.type==='mem') l.setAttribute('stroke-dasharray','4,4');
+    if(e.type==='disp'){ l.setAttribute('stroke-dasharray','1,4'); l.setAttribute('marker-end','url(#ag-arrow-disp)'); }
+    if(e.type==='flow') l.setAttribute('marker-end','url(#ag-arrow-flow)');
+    e.el = l; gE.appendChild(l);
+  });
+
+  NODES.forEach(n => {
+    const g = document.createElementNS(NS,'g'); g.style.cursor = 'grab';
+    const c = document.createElementNS(NS,'circle');
+    c.setAttribute('r', n.r);
+    c.setAttribute('fill', COL[n.type]);
+    c.setAttribute('fill-opacity', n.type==='bg' ? '0.16' : '0.24');
+    c.setAttribute('stroke', COL[n.type]);
+    c.setAttribute('stroke-width', n.type==='agent' ? 2.5 : 1.6);
+    if(n.type==='bg') c.setAttribute('stroke-dasharray','4,3');
+    const t = document.createElementNS(NS,'text');
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('fill', n.type==='agent' ? '#eafffb' : '#cdd2da');
+    t.setAttribute('font-size', n.type==='agent' ? 12 : (n.type==='phase' ? 11 : 10));
+    t.setAttribute('font-weight', (n.type==='agent'||n.type==='phase') ? '500' : '400');
+    t.setAttribute('dy', n.r + 14);
+    t.textContent = n.label;
+    g.appendChild(c); g.appendChild(t);
+    n.gEl = g;
+    g.addEventListener('mouseenter', () => highlight(n.id));
+    g.addEventListener('mouseleave', () => highlight(null));
+    g.addEventListener('pointerdown', ev => startDrag(ev, n));
+    gN.appendChild(g);
+  });
+
+  function highlight(id){
+    NODES.forEach(n => { n.gEl.style.opacity = (id===null || n.id===id || adj[id].has(n.id)) ? 1 : 0.12; });
+    EDGES.forEach(e => {
+      const on = id!==null && (e.s===id || e.t===id);
+      e.el.setAttribute('stroke-opacity', id===null ? 0.4 : (on ? 0.95 : 0.05));
+    });
+  }
+
+  let drag = null;
+  function toSvg(ev){
+    const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    const m = svg.getScreenCTM(); if(!m) return {x:CX,y:CY};
+    const r = pt.matrixTransform(m.inverse()); return {x:r.x, y:r.y};
+  }
+  function startDrag(ev, n){ drag = n; n.fixed = true; n.gEl.style.cursor='grabbing'; reheat(); ev.preventDefault(); }
+  window.addEventListener('pointermove', ev => { if(!drag) return; const p = toSvg(ev); drag.x = p.x; drag.y = p.y; drag.vx = 0; drag.vy = 0; });
+  window.addEventListener('pointerup', () => { if(drag){ drag.fixed = false; drag.gEl.style.cursor='grab'; drag = null; } });
+
+  let alpha = 1, running = false, raf = null;
+  function reheat(){ alpha = Math.max(alpha, 0.5); start(); }
+  function start(){ if(running) return; running = true; raf = requestAnimationFrame(tick); }
+  function stop(){ running = false; if(raf) cancelAnimationFrame(raf); raf = null; }
+
+  function tick(){
+    if(!running) return;
+    alpha += (0 - alpha) * 0.012;
+    const A = alpha;
+    for(let i=0;i<NODES.length;i++){
+      const a = NODES[i];
+      for(let j=i+1;j<NODES.length;j++){
+        const b = NODES[j];
+        let dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy; if(d2<1) d2=1;
+        const d = Math.sqrt(d2), f = 3600/d2 * A, ux = dx/d, uy = dy/d;
+        a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
+      }
+    }
+    EDGES.forEach(e => {
+      const a = byId[e.s], b = byId[e.t];
+      let dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy)||1;
+      const f = (d - (REST[e.type]||100)) * 0.03 * A, ux = dx/d, uy = dy/d;
+      a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
+    });
+    NODES.forEach(n => {
+      const cf = (n.id==='agent' ? 0.03 : 0.006) * A;
+      n.vx += (CX - n.x)*cf; n.vy += (CY - n.y)*cf;
+      n.vx *= 0.85; n.vy *= 0.85;
+      if(!n.fixed){ n.x += n.vx; n.y += n.vy; }
+      n.x = Math.max(n.r+8, Math.min(W-n.r-8, n.x));
+      n.y = Math.max(n.r+8, Math.min(H-n.r-24, n.y));
+    });
+    EDGES.forEach(e => {
+      const a = byId[e.s], b = byId[e.t];
+      let dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy)||1, ux = dx/d, uy = dy/d;
+      const pad = (e.type==='flow'||e.type==='disp') ? 6 : 0;
+      e.el.setAttribute('x1', (a.x + ux*a.r).toFixed(1)); e.el.setAttribute('y1', (a.y + uy*a.r).toFixed(1));
+      e.el.setAttribute('x2', (b.x - ux*(b.r+pad)).toFixed(1)); e.el.setAttribute('y2', (b.y - uy*(b.r+pad)).toFixed(1));
+    });
+    NODES.forEach(n => n.gEl.setAttribute('transform','translate('+n.x.toFixed(1)+','+n.y.toFixed(1)+')'));
+    if(alpha < 0.004 && !drag){ running = false; raf = null; return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function reshuffle(){ seed(); alpha = 1; start(); }
+  const resetBtn = document.getElementById('ag-reset');
+  if(resetBtn) resetBtn.addEventListener('click', reshuffle);
+
+  return { start, stop, reheat, reshuffle };
+}
 
 function toggleSkill(id) {
   const body = document.getElementById('body-' + id);
@@ -2542,16 +2830,17 @@ function selectDoc(el, key) {
 // ── File viewer ──
 const FILE_DEFS = {
   'active-engagement': {
-    path: 'memory/project-space/active-engagement.md',
-    desc: 'Identifies which client engagement is currently active. The agent reads this at session start to load the correct client workspace.',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/current-context.md (status front-matter)',
+    desc: 'There is no global pointer file. Each engagement is self-describing: its current-context.md opens with a YAML status block (state, phase, opened, last-touched). The session holds the engagement folder it created at Phase 0 or resumed; a fresh session scans memory/clients/*/engagements/*/current-context.md for state: active or paused.',
     raw: 'raw-active-engagement',
     ann: [
-      ['active:', 'Set to the client folder name (e.g., acme-corp) when an engagement is open. Set to "none" when no engagement is active.'],
-      ['# active: acme-corp', 'Example showing how to activate a specific client. The value must match the folder name under memory/clients/.'],
+      ['state:', 'active | paused | complete. Pause flips this to paused; complete flips it to complete (and adds an outcome row to the client README). Nothing ever moves.'],
+      ['phase:', 'Current phase, 0–3. Lets a resumed session pick up exactly where it left off.'],
+      ['Resume', 'A fresh session scans engagement folders for state: active or paused and lets you pick. No shared "active" file two sessions could race on.'],
     ]
   },
   'current-context': {
-    path: 'memory/project-space/current-context.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/current-context.md',
     desc: 'Single source of truth for the active investigation\'s framing. The agent updates this at every phase gate. Read it any time to see the agent\'s current understanding.',
     raw: 'raw-current-context',
     ann: [
@@ -2565,7 +2854,7 @@ const FILE_DEFS = {
     ]
   },
   'issue-tree': {
-    path: 'memory/project-space/issue-tree.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/issue-tree.md',
     desc: 'The MECE decomposition of the active problem. Branches are problem spaces, never solutions. Reviewed by the MECE lens before presentation.',
     raw: 'raw-issue-tree',
     ann: [
@@ -2578,7 +2867,7 @@ const FILE_DEFS = {
     ]
   },
   'hypotheses': {
-    path: 'memory/project-space/hypotheses.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/hypotheses.md',
     desc: 'Ranked candidate hypotheses per branch, with ICE scores and status. The central diagnostic artifact for Phases 1–2.',
     raw: 'raw-hypotheses',
     ann: [
@@ -2590,7 +2879,7 @@ const FILE_DEFS = {
     ]
   },
   'signals-map': {
-    path: 'memory/project-space/signals-map.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/signals-map.md',
     desc: 'The chain linking technical signals → UX outcomes → business KPIs. Shows where the chain is broken (instrumentation gaps). Critical for Phase 3 business-impact framing.',
     raw: 'raw-signals-map',
     ann: [
@@ -2601,7 +2890,7 @@ const FILE_DEFS = {
     ]
   },
   'action-plan': {
-    path: 'memory/project-space/action-plan.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/action-plan.md',
     desc: 'The Phase 2 deliverable. Two types of actions: investigation (what to learn) and recommended (what to do once learned). Each action has owners, exit criteria, and timeframes.',
     raw: 'raw-action-plan',
     ann: [
@@ -2613,7 +2902,7 @@ const FILE_DEFS = {
     ]
   },
   'decisions-log': {
-    path: 'memory/project-space/decisions-log.md',
+    path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/decisions-log.md',
     desc: 'Append-only audit trail of every gate decision. If anyone asks "why did we pursue that hypothesis?" — the answer is here. Never edited or deleted.',
     raw: 'raw-decisions-log',
     ann: [
@@ -2645,6 +2934,17 @@ const FILE_DEFS = {
       ['## RUM coverage', 'Determines which frontend hypotheses can be validated and whether funnel analysis is possible.'],
       ['## Instrumentation gaps', 'Persistent gaps that carry over from engagement to engagement. Avoids rediscovering the same gaps in every Phase 1.'],
       ['## DPS quota', 'Scopes what additional instrumentation is feasible within the client\'s contract.'],
+    ]
+  },
+  'contract': {
+    path: 'memory/clients/_template/contract.md',
+    desc: 'Confidential commercial & consumption context for this client: DPS commit, renewal date, on-demand burn, capability entitlements. Captured only on explicit approval. Read by value-highlight for renewal/QBR briefs.',
+    raw: 'raw-contract',
+    ann: [
+      ['## DPS commitment', 'The annual Dynatrace Platform Subscription commit and capability mix. Anchors the renewal conversation.'],
+      ['## Renewal', 'Renewal date, notice window, and owners — the calendar that drives value-highlight timing.'],
+      ['## On-demand / overage burn', 'Burn vs commit and trend. Surfaces headroom for expansion or overage risk to flag.'],
+      ['## Capability entitlements', 'What is licensed vs what the client could expand into — feeds expansion narratives.'],
     ]
   },
   'stakeholder-overlays': {

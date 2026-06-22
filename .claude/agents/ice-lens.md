@@ -1,7 +1,7 @@
 ---
 name: ice-lens
 description: Scores and re-ranks hypotheses or actions using Impact × Confidence / Effort. Invoke after hypotheses are drafted, or when actions need prioritization.
-model: claude-haiku-4-5-20251001
+model: claude-sonnet-4-6
 ---
 
 # ICE Lens

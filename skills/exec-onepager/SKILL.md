@@ -19,9 +19,9 @@ Use this skill when:
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` already established for this session. The agent fixes it once — when Phase 0 (`context-framing`) creates the engagement folder, or when a paused/active engagement is resumed — and holds it in working context for the rest of the session. There is **no shared pointer file** to read; nothing depends on a global "active" file a second concurrent session could overwrite.
+2. If no engagement is established yet (a fresh session picking up earlier work), resolve it with the resume procedure in `skills/investigation-reset/SKILL.md`: scan `memory/clients/*/engagements/*/current-context.md` for a `state:` of `active` or `paused`, present the matches, and have the user pick one. If none, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = the established/selected path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`). CLIENT_NAME = the segment between `memory/clients/` and `/engagements/`.
 4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/action-plan.md`.
 
 Then read these files:
@@ -62,7 +62,7 @@ A one-pager has five sections, in this order, and fits on a single page.
 - **Match the tone to the named stakeholder profile.** A Director of Reliability tolerates more technical depth than a VP of Engineering; a Head of Data Analytics expects time windows and segmentations stated explicitly. Read the profile first.
 - **Tradeoffs in the same paragraph as recommendations.** Never put the cost of an action in a separate "appendix" section. If it costs something, say so where you say what to do.
 - **No hedging language.** "May possibly indicate" is noise. State the finding; state the confidence; let the reader decide.
-- **Cite externally sourced facts in a footnotes block.** Any fact pulled from `docs.dynatrace.com` or `community.dynatrace.com` (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date — but in an exec one-pager, those references live in a short "Sources" footnote block at the bottom of the page, not inline, so the prose reads clean. The Skeptic lens will check that load-bearing claims trace back to a source.
+- **Cite externally sourced facts in a footnotes block.** Any fact pulled from `docs.dynatrace.com` or `community.dynatrace.com` (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date — but in an exec one-pager, those references live in a short "Sources" footnote block at the bottom of the page, not inline, so the prose reads clean. Every load-bearing claim must trace back to a source — carry through the citation the Phase 2 plan already holds rather than asserting it fresh here.
 
 ## Brand conformance
 
@@ -153,17 +153,29 @@ Apply these standards during initial build, not as a post-hoc pass.
 - Add `aria-label` to role abbreviations and icon-only groups so screen readers receive the full label
 - Add `role="list"` and `role="listitem"` to visual card groups that function as lists
 
-## Quality gates
+## Finalizing
 
-Before finalizing, run three lenses in this order:
+Phase 3 is **packaging, not re-review.** The substance, framing, priorities, and risks were settled by the persona panel on the Phase 2 plan, which arrives here already approved. Do not re-open findings, re-rank recommendations, or re-litigate the message — summarize the approved plan into the one-pager faithfully. No critique lens runs in Phase 3; the deliverable inherits the panel-reviewed plan.
 
-1. **Consultative lens** (`.claude/agents/consultative-lens.md`) — verifies the voice matches the named stakeholder **and conforms to the brand voice rules in `memory/long-term/brand/brand-spec.md` §6** (sentence case, active voice, plain language, serial commas, American English, approved product names per §7). Apply suggested rewrites.
-2. **Customer lens** (`.claude/agents/customer-lens.md`) — verifies the document actually addresses what users experience, not just what the systems team measured. Apply suggested edits.
-3. **Skeptic lens** (`.claude/agents/skeptic-lens.md`) — surfaces the "questions a leader will ask" that the current draft does not answer. For each, either incorporate the answer into the one-pager or surface it as a decision ask.
+These mechanical gates remain — they are formatting, legibility, and fidelity checks, not critique. Run each as a checklist; do not treat a screenshot glance as sufficient.
 
-After the lenses, do a final read for the one-page constraint. Cut, don't compress.
+- **One-page constraint.** After drafting, read the whole page once. If it does not fit on a single page, cut — do not compress. If it will not cut to one page, the underlying plan was not sharp enough; that is a Phase 2 problem, not a wording problem.
 
-**HTML only:** after lenses, screenshot the full rendered page and both text-heavy sections (header and any dark strip) at actual size. Confirm every text element is legible before marking the deliverable done.
+- **Plan-fidelity gate.** Read `<ENGAGEMENT_PATH>/action-plan.md` and the drafted one-pager side by side and confirm:
+  1. **Identical recommendation rank order.** The recommended-actions section lists actions in the same order the action plan ranks them. No silent re-ordering, promotion, or demotion.
+  2. **Tradeoff in the same paragraph.** Every recommendation carries its cost or risk on the same line, not in a separate risks section.
+  3. **Business-impact-first opening.** The first sentence states what changed in the business, not what was observed in telemetry.
+  4. **Open hypotheses keep their uncertainty qualifier.** Any hypothesis carried in from `hypotheses.md` with Status "open" must read as open in the one-pager — "if confirmed," "pending H-01 validation," or the action gated on confirmation. The no-hedging brand rule strips *weasel words* ("may possibly indicate"); it does **not** license upgrading an open hypothesis to a confident claim. Confirmed reads confirmed; open reads open.
+
+- **Brand and accessibility gate.** Verify each item below explicitly, not by a single screenshot glance:
+  - **WCAG AA contrast on every colored text instance** (not just body copy). White on brand teal `#49C2B3` is ~2.5:1 and fails — use darkened teal `#1A7A70` (5.8:1) for teal text on light backgrounds. Teal `#49C2B3` as an eyebrow on `#1A2440` navy is ~2.2:1 and fails — use `rgba(255,255,255,0.8)`. Normal text needs ≥4.5:1; large text (≥18px regular or ≥14px bold) needs ≥3:1.
+  - **No `dataflow` particle wave behind body text.** Confirm every text-dense section uses `datalargebeam` or `datatrail`; the scattered dots fragment letterforms at ≤13px in the thin-overlay right-side zones.
+  - **Required aria attributes present.** `aria-hidden="true"` on all decorative elements (wave backgrounds, dividers, icon glyphs, orbs); `aria-label` on role abbreviations and icon-only groups; `role="list"`/`role="listitem"` on visual card groups that function as lists.
+  - **Brand text rules.** Sentence-case headings, serial commas, and `®` on first formal mention of **Dynatrace®**, **OneAgent®**, **Smartscape®**, **Grail®**. Approved product-name capitalization per brand-spec §7.
+
+- **HTML legibility.** Screenshot the full rendered page and both text-heavy sections (header and any dark strip) at actual size. Confirm every text element is legible before marking the deliverable done. This is the visual confirmation of the contrast and wave checks above, not a substitute for them.
+
+- **Handoff gate.** If only the HTML was produced, write the companion `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` **before** the deck step — pptx-builder reads only the markdown file. The companion must carry forward the HTML design decisions (wave series chosen, color assignments for confirmed findings vs. open hypotheses vs. risks, the safe-contrast color substitutions) so the deck stays consistent with the rendered one-pager.
 
 ## Output
 
@@ -179,7 +191,7 @@ The agent then **prompts the user to approve PPTX generation** — it does not a
 - **Opening with telemetry instead of business impact.** "p95 latency on cart-service rose 200ms" buries the lede. Start with "checkout conversion dropped 8% week-over-week; here is what's driving it."
 - **Burying tradeoffs in a risks-appendix.** Pair them with the recommendations they belong to.
 - **Skipping the stakeholder profile.** Every leader reads differently. Read the profile before drafting, not after.
-- **Treating the lens passes as optional.** They are the quality gate. Skipping them is how good drafts become bad final documents.
+- **Re-opening the message in Phase 3.** The one-pager summarizes a plan the persona panel already reviewed and you already had approved at the Phase 2 gate. Do not introduce new findings, re-rank recommendations, or re-frame the argument here — that work belongs to Phase 2. If the summary surfaces a genuine new problem, that is a signal to reopen Phase 2, not to patch it in the one-pager.
 - **Auto-generating the PPTX.** The Phase 3 gate is the one-pager. Wait for explicit user approval before invoking the pptx skill.
 - **Using a particle wave (dataflow series) behind body text.** The scattered dots compete with letterforms at ≤13px and fail readability in the text-dense right-side zones where the overlay is thinnest. Use `datalargebeam` or `datatrail` for any section containing small text.
 - **Using a text approximation for the Insights lockup.** The actual REV SVG is in `DT Insights Lockup RGB/`. Use it. Custom cube-glyph approximations are not brand-compliant.

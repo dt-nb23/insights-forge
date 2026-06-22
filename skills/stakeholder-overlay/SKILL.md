@@ -11,15 +11,15 @@ description: Captures a named client leader as a stakeholder overlay in the acti
 - A Phase 3 deliverable needs to be tailored to a specific named leader not yet profiled.
 - The user says "add this stakeholder" or "create a profile for [name]."
 
-**This skill writes to `memory/clients/<active-client-name>/stakeholder-overlays.md` — the client's isolated workspace. It never writes named individuals to `memory/long-term/stakeholder-profiles.md`, which contains only generic title-type overlays. Always get explicit user approval before writing.**
+**This skill writes to `memory/clients/<active-client-name>/stakeholder-overlays.md` — the client's isolated workspace. It never writes named individuals to `memory/long-term/stakeholder-profiles.md`, which contains only generic title-type overlays. Always gate the write with the binary approval pattern — write only on an explicit yes/approve, never on "looks good" or silence.**
 
 ## Inputs
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` already established for this session. The agent fixes it once — when Phase 0 (`context-framing`) creates the engagement folder, or when a paused/active engagement is resumed — and holds it in working context for the rest of the session. There is **no shared pointer file** to read; nothing depends on a global "active" file a second concurrent session could overwrite.
+2. If no engagement is established yet (a fresh session picking up earlier work), resolve it with the resume procedure in `skills/investigation-reset/SKILL.md`: scan `memory/clients/*/engagements/*/current-context.md` for a `state:` of `active` or `paused`, present the matches, and have the user pick one. If none, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = the established/selected path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
 4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
 5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
 
@@ -89,7 +89,7 @@ Vertical: [from current-context.md]
 **Phase 3 notes:** [1–2 sentences on how to frame a deliverable for this person — derived, not asked]
 ```
 
-Present the draft to the consultant and ask: "Does this capture [name] accurately? Any corrections before I save it?"
+Present the draft and gate the write with the binary pattern: **"Proposed addition to `memory/clients/<CLIENT_NAME>/stakeholder-overlays.md`: overlay for [name], [title]. Approve?"** Write **only** on an explicit yes/approve/equivalent — never on "looks good" or silence.
 
 ### Step 5 — Write to client workspace (on approval only)
 
@@ -107,7 +107,7 @@ A named-leader overlay appended to `memory/clients/<CLIENT_NAME>/stakeholder-ove
 
 ## Common pitfalls
 
-- **Writing without approval.** This skill modifies long-term memory. Never write until the consultant explicitly says "looks good," "approved," or equivalent.
+- **Writing without approval.** This skill modifies durable, cross-engagement client memory. Never write until the consultant answers the binary gate with an explicit "yes," "approve," or equivalent. "Looks good" and silence are **not** approval — re-ask the gate.
 - **Over-asking.** If the consultant has already described this person in detail during Q7, use what was said and ask only for the gaps. Re-asking questions already answered wastes time.
 - **Generic Phase 3 notes.** The "Phase 3 notes" field is the most valuable field in the overlay — it should say something specific about how to frame a deliverable for this person, not just repeat what they care about. Derive it from the combination of Information preference, KPI vocabulary, and Sensitivities.
 - **Skipping the archetype match.** The overlay layers on top of an archetype. If the archetype is wrong, the overlay inherits the wrong defaults. Always name the parent archetype explicitly.

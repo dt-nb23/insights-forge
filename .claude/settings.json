@@ -5,7 +5,6 @@
       "Read(memory/**)",
       "Read(skills/**)",
       "Read(.claude/**)",
-      "Write(memory/project-space/**)",
       "Write(memory/long-term/freshness-report.md)",
       "Write(memory/clients/**)",
       "Bash(python3 tools/pptx-generator.py*)"

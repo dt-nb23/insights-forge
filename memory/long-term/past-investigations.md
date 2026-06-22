@@ -2,8 +2,8 @@
 
 Past investigation archives have moved to the per-client workspace architecture to prevent cross-client context pollution.
 
-**The correct location for archived investigations is:**
-`memory/clients/<client-name>/past-investigations/<date-name>/`
+**The correct location for engagement artifacts is:**
+`memory/clients/<client-name>/engagements/<YYYY-MM-DD-slug>/` (nothing is moved on archive — the folder is marked `state: complete`)
 
 **The correct location for a client's engagement history index is:**
 `memory/clients/<client-name>/README.md`

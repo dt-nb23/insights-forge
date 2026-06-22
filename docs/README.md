@@ -29,7 +29,7 @@ These four cover the *why* behind the workspace's design rules and how to safely
 | Topic | Read the docs page | Read the source |
 |---|---|---|
 | Agent operating principles | [workflow.md](workflow.md) | [`CLAUDE.md`](../CLAUDE.md) |
-| Live investigation memory | [memory.md](memory.md) | [`memory/project-space/README.md`](../memory/project-space/README.md) |
+| Live investigation memory | [memory.md](memory.md) | [`memory/clients/README.md`](../memory/clients/README.md) |
 | Durable knowledge | [memory.md](memory.md) | [`memory/long-term/README.md`](../memory/long-term/README.md) |
 | Phase procedures | [skills.md](skills.md) | individual [`SKILL.md`](../skills/) files |
 | Critique-lens behavior | [lenses.md](lenses.md) | individual files in [`.claude/agents/`](../.claude/agents/) |

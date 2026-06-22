@@ -26,14 +26,14 @@ Before diving into setup, it helps to understand how memory is organized. It has
 
 ```
 memory/clients/<client-name>/
-├── README.md                    (engagement history)
+├── README.md                    (engagement history + status index)
 ├── environment.md               (DT environment facts)
+├── contract.md                  (commercial & consumption — confidential)
 ├── stakeholder-overlays.md      (named leaders at this client)
-├── project-space/               (investigation files when paused)
-└── past-investigations/         (archived investigations)
+└── engagements/                 (one dated folder per engagement; all phase files live here)
 ```
 
-**Active investigation (`memory/project-space/`)** — the working directory for the currently open engagement. Think of it as "you are here." When a client engagement is active, their investigation files live here.
+**Active investigation — the engagement folder.** The currently open engagement's files live in its dated folder under the client, `memory/clients/<client-name>/engagements/<YYYY-MM-DD-slug>/`. There is no separate "active project" location and no global pointer — the engagement folder is the session's working directory, and a status front-matter block in its `current-context.md` marks it `active`. Because each session works in its own dated folder, running two clients at once never crosses wires.
 
 See [memory.md](memory.md) for the full architecture.
 
@@ -55,7 +55,7 @@ Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowled
 
 [`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
 
-You do **not** need to populate `memory/project-space/` — those files are managed by the agent during an engagement and reset between engagements.
+You do **not** need to pre-create any engagement files — the agent creates each engagement's dated folder and its files at Phase 0.
 
 ## Before your first engagement with a new client
 
@@ -76,7 +76,7 @@ In the Claude Code chat, start with:
 
 …or just describe the problem and client directly. The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
 - Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
-- Checks `memory/project-space/active-engagement.md` to identify the active client
+- Establishes the active engagement — the one this session creates at Phase 0, or one you resume (the agent scans engagement folders' status front-matter to offer resumable ones)
 - Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)
 - Conditionally dispatches the doc-freshness-checker background sub-agent (only if the last check was ≥ 7 days ago)
 
@@ -100,7 +100,7 @@ If you name a specific leader in Q7 and no overlay exists for them, the agent wi
 
 ### Step 3 — Phase 0 gate
 
-The agent presents a reframed engagement summary and writes it to `memory/project-space/current-context.md`. At this gate you have three options:
+The agent presents a reframed engagement summary and writes it to `current-context.md` inside the new engagement folder (`memory/clients/<client>/engagements/<dated-slug>/`). At this gate you have three options:
 
 - **Approve** — proceed to Phase 1.
 - **Redirect** — change scope, framing, or priority. The agent updates and re-presents.
@@ -120,13 +120,12 @@ When Phase 3 deliverables are approved, use the investigation-reset skill to clo
 
 The agent will:
 1. Ask you four lessons-learned questions (what worked, what to avoid, new knowledge, proposed memory updates).
-2. Ask you to confirm an archive name (`YYYY-MM-DD-<short-name>`).
-3. Copy all project-space files to `memory/clients/<client-name>/past-investigations/<archive-name>/`.
-4. Update the client's `README.md` engagement history.
-5. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
-6. Reset `memory/project-space/` to template state.
+2. Write `lessons-learned.md` into the engagement folder.
+3. Update the client's `README.md` engagement history with an outcome row.
+4. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
+5. Mark the engagement `state: complete` in its `current-context.md`.
 
-The next session starts fresh, but the client's environment profile, stakeholder overlays, and past investigation history are preserved in `memory/clients/<client-name>/` for the next engagement with the same client.
+Nothing moves — the engagement folder stays at `memory/clients/<client-name>/engagements/<dated-slug>/`. The next session starts fresh, and the client's environment profile, contract, stakeholder overlays, and every past engagement remain in `memory/clients/<client-name>/` for the next engagement with the same client.
 
 ## Working with multiple clients
 
@@ -134,15 +133,15 @@ If you need to set aside one client and work on another:
 
 > *"Pause this engagement and start a new one."*
 
-The agent moves the current investigation files to `memory/clients/<current-client>/project-space/` (paused, not archived) and clears project-space. When you come back:
+The agent marks the current engagement `state: paused` in its `current-context.md` — nothing moves, and any number of engagements can be paused at once. When you come back:
 
 > *"Resume [client name]."*
 
-The agent copies the paused files back into project-space and reminds you where you left off. Client data never crosses client boundaries — each client's workspace is read only when that client is active.
+The agent scans engagement folders for paused/active status, you pick the one to resume, it flips that engagement back to `state: active`, and reminds you where you left off. Client data never crosses client boundaries — each client's workspace is read only when that client is active.
 
 ## Checking where you are
 
-Read `memory/project-space/active-engagement.md` to see which client is active. Read `memory/project-space/current-context.md` to see the current phase and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
+Open the active engagement's `current-context.md` (under `memory/clients/<client>/engagements/<dated-slug>/`) to see its status front-matter (`state`, `phase`), the current phase, and open questions. If anything looks stale or wrong, ask the agent to reframe — that's a Phase 0 redirect.
 
 ## Look inside
 
@@ -150,7 +149,7 @@ Read `memory/project-space/active-engagement.md` to see which client is active. 
 |---|---|
 | Operating manual | [`CLAUDE.md`](../CLAUDE.md) |
 | Phase 0 procedure | [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) |
-| Active client | [`memory/project-space/active-engagement.md`](../memory/project-space/active-engagement.md) |
+| Active / resumable engagements | scan `memory/clients/*/engagements/*/current-context.md` for `state` |
 | Client environment (if populated) | `memory/clients/<client-name>/environment.md` |
 | Client stakeholder overlays | `memory/clients/<client-name>/stakeholder-overlays.md` |
-| Live investigation state | files under [`memory/project-space/`](../memory/project-space/) |
+| Live investigation state | the active engagement folder, `memory/clients/<client>/engagements/<dated-slug>/` |
