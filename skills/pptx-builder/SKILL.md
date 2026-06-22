@@ -18,9 +18,9 @@ Use this skill when:
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` already established for this session. The agent fixes it once — when Phase 0 (`context-framing`) creates the engagement folder, or when a paused/active engagement is resumed — and holds it in working context for the rest of the session. There is **no shared pointer file** to read; nothing depends on a global "active" file a second concurrent session could overwrite.
+2. If no engagement is established yet (a fresh session picking up earlier work), resolve it with the resume procedure in `skills/investigation-reset/SKILL.md`: scan `memory/clients/*/engagements/*/current-context.md` for a `state:` of `active` or `paused`, present the matches, and have the user pick one. If none, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = the established/selected path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`). CLIENT_NAME = the segment between `memory/clients/` and `/engagements/`.
 4. All phase file reads use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`.
 
 Then read these files:
@@ -101,11 +101,11 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 1. **Check for the standard pptx skill** at `/mnt/skills/public/pptx/SKILL.md`. If it exists, plan to invoke it; if not, plan a structured markdown outline.
 2. **Read `memory/long-term/brand/brand-spec.md`.** Carry the exact HEX values, font names (DT Flow Medium / DT Flow Light, Arial fallback), and footer text into whatever you produce next — outline notes for the human renderer, or parameters to the standard pptx skill.
 3. **Map the one-pager content into the six-section structure** above. Each section becomes one or more slides per the stakeholder profile and adopts the brand pattern keyed in the table.
-4. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the project space, flag it and ask the user. Chart series colors follow brand-spec §5 — never use red or green.
+4. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the engagement folder, flag it and ask the user. Chart series colors follow brand-spec §5 — never use red or green.
 5. **Adapt language for slide format.** Sentences become bullet fragments. Definitions move to footnotes. Long lists of caveats become a single qualifier or move to appendix. Headings remain sentence case (brand-spec §3 and §6); product names follow §7.
 6. **Preserve the quality-gate outputs.** The Consultative-lens rewrites, the Customer-lens framings, and the Skeptic-lens "questions a leader will ask" are all baked into the one-pager already — do not undo them when adapting to slide format.
 7. **Carry citations into a "Sources" slide or footer.** Any externally sourced fact in the one-pager (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date. Put them on a final "Sources" slide for VP audiences who skim, or in a small footer on each slide where the fact appears for Director audiences who scrutinize. Do not drop citations during the adaptation.
-8. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `memory/project-space/deck-outline-YYYY-MM-DD.md` for the team to render manually. When the team renders manually, instruct them to start from the official Dynatrace `.potx` (the file the brand PDF documents) rather than a blank deck — the theme colors and theme fonts are programmed into it.
+8. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md` for the team to render manually. When the team renders manually, instruct them to start from the official Dynatrace `.potx` (the file the brand PDF documents) rather than a blank deck — the theme colors and theme fonts are programmed into it.
 
 ## Output
 
@@ -117,18 +117,18 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 
   ```bash
   # Generate the deck
-  python3 tools/pptx-generator.py memory/project-space/deck-spec-YYYY-MM-DD.json
+  python3 tools/pptx-generator.py <ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json
 
   # List all available layout names
   python3 tools/pptx-generator.py --list-layouts
   ```
 
-  Write the spec to `memory/project-space/deck-spec-YYYY-MM-DD.json` before running.
-  The output `.pptx` saves to `memory/project-space/deck-YYYY-MM-DD.pptx` by default.
+  Write the spec to `<ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json` before running.
+  The output `.pptx` saves to `<ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx` by default.
   See `tools/pptx-spec-example.json` for the full spec format with comments.
 
 - **Fallback (if python-pptx is unavailable):** write a structured
-  slide-by-slide outline to `memory/project-space/deck-outline-YYYY-MM-DD.md`
+  slide-by-slide outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`
   using the same spec fields, so a human can build it manually from the template.
 
 ## Common pitfalls

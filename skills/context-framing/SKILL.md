@@ -19,11 +19,10 @@ Use this skill when:
 
 ## Inputs
 
-**Session pointer check (before reading any client files):**
+**Establish the engagement for this session (before reading any client files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. If `active: <full-path>` — an engagement is already active (reframing scenario). Set ENGAGEMENT_PATH = that value. CLIENT_NAME = segment between `memory/clients/` and `/engagements/`. Skip the folder-creation step (new Step 3 below) since the folder already exists.
-3. If `active: none` — this is a new engagement. ENGAGEMENT_PATH and CLIENT_NAME will be set in new Step 3 after Q1 is answered.
+1. If this session is already working an engagement you created or resumed earlier in the conversation and the user is asking to reframe it, reuse that `ENGAGEMENT_PATH` and `CLIENT_NAME` and skip the folder-creation step (Step 3 below) — the folder exists; you overwrite `current-context.md` in place, preserving its status front-matter and bumping `last-touched`.
+2. Otherwise this is a new engagement: `ENGAGEMENT_PATH` and `CLIENT_NAME` are set in Step 3 once Q1 (client name) is answered. There is **no global pointer file** — the dated engagement folder you create *is* the session's state, and you hold its path in working context for the rest of the session.
 
 Then read these files:
 
@@ -206,19 +205,16 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
    b. Extract a 2–3 word problem slug from the opening description or Q3-Intent: lowercase, hyphen-separated (e.g., "API latency degrading checkout" → `api-latency`).
    c. Construct the engagement path: `memory/clients/<client-short-name>/engagements/<YYYY-MM-DD>-<slug>/` using today's date.
    d. If that folder already exists (same client, date, and slug), append `-2`, `-3`, etc.
-   e. Check whether `memory/clients/<client-short-name>/` exists. If not, create it by copying the template: `memory/clients/_template/README.md`, `memory/clients/_template/environment.md`, `memory/clients/_template/stakeholder-overlays.md`, and `memory/clients/_template/engagements/README.md`.
+   e. Check whether `memory/clients/<client-short-name>/` exists. If not, create it by copying the template: `memory/clients/_template/README.md`, `memory/clients/_template/environment.md`, `memory/clients/_template/contract.md`, `memory/clients/_template/stakeholder-overlays.md`, and `memory/clients/_template/engagements/README.md`.
    f. Create the engagement folder.
-   g. Write `memory/project-space/active-engagement.md`:
-      ```
-      active: memory/clients/<client-short-name>/engagements/<YYYY-MM-DD>-<slug>/
-      ```
-   h. Set ENGAGEMENT_PATH and CLIENT_NAME in working context. Confirm briefly: "Engagement folder created at `<path>`."
+   g. Set ENGAGEMENT_PATH and CLIENT_NAME in working context and **hold them for the rest of this session** — every later skill uses this held value, not a shared file. There is no global pointer to write; the engagement folder is the state, and its `current-context.md` status front-matter (written in Step 8) records that it is active.
+   h. Confirm briefly: "Engagement folder created at `<path>`."
 
 4. **Check past engagements for this client.** Read `memory/clients/<CLIENT_NAME>/README.md` for prior engagement history. Surface the key lesson from the most recent engagement if found. Do not read other clients' folders — context isolation is strict.
 5. **Reframe the engagement** as a clear consulting objective: what insight will be surfaced, for whom, and to what end. Write this under "Consulting objective" in `current-context.md`. Example: *"Surface underutilized RUM and Davis AI insights for [Customer]'s Executive Sponsor ahead of their Q3 renewal, demonstrating measurable value from their Full-Stack and RUM investment."*
 6. **Surface 3–5 orientation hypotheses** about where value is likely hiding in the environment, given the active capabilities and vertical. Label them clearly as pre-scoring candidates — not findings. Pull from the tech → UX → business linkages in `domain-knowledge.md` and the vertical context. Example: *"Davis AI may be grouping related problems in ways the team hasn't reviewed, understating incident volume and MTTR improvement."*
 7. **Confirm scope** — what this engagement will cover and what it will not. Name any capability gaps (e.g., RUM not enabled) that limit the insight surface.
-8. **Write `<ENGAGEMENT_PATH>/current-context.md`** fully populated. Every MUST-HAVE row carries a real value. SHOULD-HAVE rows carry either the consultant's answer or the literal string `"not provided (declined at gate)"` if they skipped the confirmation in Step 9. NICE-TO-HAVE rows are written when known and omitted otherwise. No `"TBD"`, no bracketed placeholders.
+8. **Write `<ENGAGEMENT_PATH>/current-context.md`** fully populated, **beginning with the status front-matter block** described under Output (set `state: active`, `phase: 0`, and today's date for both `opened` and `last-touched`). This front-matter is what `investigation-reset` and any resuming session read to find this engagement and track its lifecycle — it is required, not optional. **Pre-write MUST-HAVE scan (run before writing anything):** walk every MUST-HAVE row and scan its value for `[TBD]`, `"TBD"`, any bracketed placeholder, an empty value, or `"not provided"`. If any MUST-HAVE row trips the scan, do **not** write the file — loop back to the corresponding clarifying question, capture a real value, then re-run the scan. Write only after the scan finds zero MUST-HAVE placeholders. Every MUST-HAVE row carries a real value. SHOULD-HAVE rows carry either the consultant's answer or the literal string `"not provided (declined at gate)"` if they skipped the confirmation in Step 9 — the scan does not block on SHOULD-HAVE or NICE-TO-HAVE rows. NICE-TO-HAVE rows are written when known and omitted otherwise. No `"TBD"`, no bracketed placeholders.
 9. **Verify the exit-criteria rubric.** Walk the rubric table top-to-bottom. Every MUST-HAVE must be populated with a real value before proceeding. For each unfilled SHOULD-HAVE, ask the consultant a short confirming question framed as helpful-not-blocking — e.g., *"Not required to proceed, but do you happen to know [field]? It would help sharpen the framing."* Record their answer (including "don't know" or "skip") and move on. Do not loop on a SHOULD-HAVE the consultant has declined.
 10. **Check freshness results (if dispatch occurred in Step 1).** If the sub-agent was dispatched, read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation — e.g., *"The freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note results will be surfaced at the next phase gate. If the dispatch was **skipped** (last check < 7 days, no Drifted/Unreachable), state at the gate: "Doc citations last verified [date from report] — current, no refresh needed."
 11. **Present and pause at the gate.** State clearly:
@@ -231,7 +227,20 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 
 ## Output
 
-`<ENGAGEMENT_PATH>/current-context.md`, fully populated:
+`<ENGAGEMENT_PATH>/current-context.md`, fully populated. The file **opens with a YAML status front-matter block** that makes the engagement self-describing — there is no external pointer file, so this block is how a resuming session finds the engagement and how its lifecycle state is tracked:
+
+```yaml
+---
+client: <client-short-name>
+slug: <slug>
+state: active        # active | paused | complete
+phase: 0             # current phase, 0–3; bump at each gate approval
+opened: <YYYY-MM-DD>
+last-touched: <YYYY-MM-DD>
+---
+```
+
+Below the front-matter, the body sections:
 
 | Section | Contents |
 |---|---|
@@ -262,3 +271,4 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 - **Presenting orientation hypotheses as findings.** Label them clearly as pre-scoring candidates. They are navigation aids, not conclusions.
 - **Leaving stakeholder profile gaps unflagged.** If the Phase 3 reader doesn't match any of the eight role archetypes closely enough, Phase 3 will be generic. Flag the gap now and ask the consultant whether to create a new profile.
 - **Skipping the past engagement check.** If the team has worked with this customer or vertical before, the lessons from that archive save Phase 1 time and prevent repeated mistakes.
+- **Omitting the status front-matter in `current-context.md`.** It is the only thing that makes the engagement discoverable — a resuming session scans for it, and `investigation-reset` flips its `state:` on pause/complete. No front-matter means a lost engagement.

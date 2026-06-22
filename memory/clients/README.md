@@ -8,6 +8,7 @@ Each subfolder in this directory is a fully isolated workspace for one client. A
 memory/clients/<client-name>/
 ├── README.md                    (engagement summary and history index)
 ├── environment.md               (DT environment facts: MZs, SLOs, synthetic monitors, gaps)
+├── contract.md                  (commercial & consumption: DPS commit, renewal date, burn — confidential)
 ├── stakeholder-overlays.md      (named leaders for this client only)
 └── engagements/                 (one subfolder per engagement, created at Phase 0)
     └── YYYY-MM-DD-<slug>/
@@ -25,13 +26,15 @@ The engagement folder is created by `context-framing` at Phase 0. The slug is a 
 
 ## Engagement states
 
-| State | Where files live | Pointer in active-engagement.md |
-|---|---|---|
-| **Active** | `memory/clients/<name>/engagements/<dated-slug>/` | `active: memory/clients/<name>/engagements/<dated-slug>/` |
-| **Paused** | Same folder — nothing moves | `active: none` + `paused: memory/clients/<name>/engagements/<dated-slug>/` |
-| **Completed** | Same folder — nothing moves | `active: none` (README updated with outcome row) |
+State lives in each engagement's own `current-context.md` status front-matter (`state:`), not in any shared file — so any number of engagements can be paused at once, and two concurrent sessions never contend over a global pointer.
 
-`memory/project-space/active-engagement.md` is the session pointer. It stores the full path to the active engagement folder, not just the client name.
+| State | Where files live | How it's recorded |
+|---|---|---|
+| **Active** | `memory/clients/<name>/engagements/<dated-slug>/` | `state: active` in that engagement's `current-context.md`; the session holds its path |
+| **Paused** | Same folder — nothing moves | `state: paused` in that engagement's `current-context.md` |
+| **Completed** | Same folder — nothing moves | `state: complete` in `current-context.md` + README outcome row |
+
+There is **no global pointer file**. A resuming session finds engagements by scanning `memory/clients/*/engagements/*/current-context.md` for `state: active` or `state: paused`.
 
 ## Context isolation rule
 
@@ -44,5 +47,6 @@ A client folder is created automatically by `context-framing` at Phase 0 start (
 ## How to populate client-specific files
 
 - **environment.md** — use `skills/environment-intake/SKILL.md` at the Phase 0 gate.
+- **contract.md** — capture commercial/consumption context (DPS commit, renewal date, on-demand burn, commercial owner) when it surfaces, with explicit user approval. Treated as confidential client data; never promoted to long-term.
 - **stakeholder-overlays.md** — use `skills/stakeholder-overlay/SKILL.md` when a named leader is identified in Q7.
 - **engagements/** — populated automatically by `context-framing` (Phase 0) and phase skills throughout the investigation.

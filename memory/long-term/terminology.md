@@ -24,7 +24,7 @@ Glossary of recurring terms used across investigations. Two-line definitions eac
 
 - **Phase gate** — The approval point at the end of each phase where the user must approve, redirect, or iterate before the agent proceeds.
 - **Lens** — A specialized sub-agent that critiques a draft along one specific dimension (MECE, Optimist, ICE, Consultative, Customer, Skeptic). Invoked on demand, not on every artifact.
-- **Project space** — `memory/project-space/`. The live investigation memory. Read and written every session; reset between investigations.
+- **Engagement folder** — `memory/clients/<client>/engagements/YYYY-MM-DD-<slug>/`. The live investigation memory for one engagement: all phase files (current-context, issue-tree, hypotheses, signals-map, action-plan, decisions-log) live here. Created at Phase 0, never moved; its `current-context.md` status front-matter tracks `active | paused | complete`. There is no shared project-space and no global pointer file.
 - **Long-term memory** — `memory/long-term/`. Durable knowledge that persists across investigations. Read freely; written only on explicit user approval.
 
 ## Dynatrace platform

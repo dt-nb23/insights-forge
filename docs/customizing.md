@@ -60,10 +60,8 @@ Refresh when the Dynatrace brand template changes. The spec is sourced from the 
 
 See [deliverables.md](deliverables.md) for how the brand spec gets used during Phase 3.
 
-### 8. Past-investigations index
-Open [`memory/long-term/past-investigations.md`](../memory/long-term/past-investigations.md).
-
-This is a curated index of completed investigations and the lessons each surfaced. The agent scans it in Phase 0 to detect prior engagements on the same customer, vertical, or problem shape — so the more populated it is, the more value Phase 0 delivers.
+### 8. Prior-engagement history (per client)
+There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared `memory/long-term/past-investigations.md` is deprecated; do not use it.)
 
 ## The `tools/` boundary
 
@@ -82,7 +80,7 @@ The full rule, including suggested future integrations: [`tools/README.md`](../t
 A few load-bearing design decisions exist for non-obvious reasons. Before changing them, read the linked source carefully.
 
 - **The four-phase workflow.** The phase boundaries and the gate-between-phases pattern are the workspace's load-bearing structure. Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee that the entire workspace is designed around.
-- **The memory split.** Auto-promoting project-space findings into long-term memory was an explicit *non*-design. The full reasoning is in [memory.md](memory.md). Don't quietly add a script that does this.
+- **The memory split.** Auto-promoting per-engagement findings into long-term memory was an explicit *non*-design. The full reasoning is in [memory.md](memory.md). Don't quietly add a script that does this.
 - **The external allowlist.** Adding a new domain to [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) requires explicit user approval per investigation, not a silent edit. See [research.md](research.md).
 
 ## Look inside

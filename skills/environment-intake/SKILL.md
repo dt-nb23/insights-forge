@@ -11,7 +11,7 @@ description: Captures client-specific Dynatrace environment details that persist
 - An existing client's environment has changed significantly (new Management Zones, SLOs added, DPS tier change, major instrumentation expansion).
 - The consultant explicitly says "update the environment profile" or "capture their environment setup."
 
-**This skill writes to `memory/clients/<client-name>/environment.md` — always get explicit user approval before writing.**
+**This skill writes to `memory/clients/<client-name>/environment.md` — durable, cross-engagement client memory. Always gate the write with the binary approval pattern; write only on an explicit yes/approve, never on "looks good" or silence.**
 
 ## Why this matters
 
@@ -21,9 +21,9 @@ Each engagement's `current-context.md` captures environment facts during Phase 0
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` already established for this session. The agent fixes it once — when Phase 0 (`context-framing`) creates the engagement folder, or when a paused/active engagement is resumed — and holds it in working context for the rest of the session. There is **no shared pointer file** to read; nothing depends on a global "active" file a second concurrent session could overwrite.
+2. If no engagement is established yet (a fresh session picking up earlier work), resolve it with the resume procedure in `skills/investigation-reset/SKILL.md`: scan `memory/clients/*/engagements/*/current-context.md` for a `state:` of `active` or `paused`, present the matches, and have the user pick one. If none, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = the established/selected path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
 4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
 5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
 
@@ -104,7 +104,7 @@ Write a draft profile in this format:
 [Full coverage / incremental rollout status / known uncovered services]
 ```
 
-Present the draft to the consultant. Ask: "Does this capture their environment accurately? Any corrections or additions before I save it?"
+Present the draft and gate the write with the binary pattern: **"Proposed addition to `memory/clients/<CLIENT_NAME>/environment.md`: environment profile for [client]. Approve?"** Write **only** on an explicit yes/approve/equivalent — never on "looks good" or silence.
 
 ### Step 4 — Write on approval
 
@@ -120,7 +120,7 @@ Only after the consultant approves:
 
 ## Common pitfalls
 
-- **Writing without approval.** This is long-term memory. Never write until the consultant explicitly approves.
+- **Writing without approval.** This is durable, cross-engagement client memory. Never write until the consultant answers the binary gate with an explicit "yes," "approve," or equivalent. "Looks good" and silence are **not** approval — re-ask the gate.
 - **Re-asking what's already in current-context.md.** Tenant type and active capabilities are already captured in Phase 0 Q4/Q5. Read `current-context.md` before asking anything.
 - **Capturing too little.** The value of this file is its specificity. "RUM is active" is unhelpful; "RUM active on web app; custom actions on checkout and account creation; no business events" is what makes Phase 1 hypotheses sharp.
 - **Capturing too much.** This is a persistent reference file, not a one-pager. Keep each section to the facts that will matter in Phase 1 hypothesis generation and Phase 2 action planning — what signals are available, what gaps exist, what's known to be noisy.

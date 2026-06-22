@@ -26,12 +26,12 @@ The agent works in **explicit phases with a human approval gate between each pha
 
 | Phase | Purpose | Artifact |
 |---|---|---|
-| 0 — Context | Frame the problem; confirm scope and stakeholders | [`current-context.md`](memory/project-space/current-context.md) |
-| 1 — Diagnose | MECE issue tree, ranked hypotheses, signals map | [`issue-tree.md`](memory/project-space/issue-tree.md), [`hypotheses.md`](memory/project-space/hypotheses.md), [`signals-map.md`](memory/project-space/signals-map.md) |
-| 2 — Solution | Investigation plan, recommended actions, decision asks | [`action-plan.md`](memory/project-space/action-plan.md) |
+| 0 — Context | Frame the problem; confirm scope and stakeholders | `current-context.md` |
+| 1 — Diagnose | MECE issue tree, ranked hypotheses, signals map | `issue-tree.md`, `hypotheses.md`, `signals-map.md` |
+| 2 — Solution | Investigation plan, recommended actions, decision asks | `action-plan.md` |
 | 3 — Deliver | Exec one-pager and PowerPoint deck | one-pager + deck (generated) |
 
-At each gate the user can **approve**, **redirect**, or **iterate through a critique lens**. Full detail in [docs/workflow.md](docs/workflow.md).
+All phase artifacts live in the engagement's own folder, `memory/clients/<client>/engagements/<YYYY-MM-DD-slug>/`. At each gate the user can **approve**, **redirect**, or **iterate through a critique lens**. Full detail in [docs/workflow.md](docs/workflow.md).
 
 ## How it installs
 
@@ -46,7 +46,7 @@ The `skills/` files are **not** slash commands. The main agent reads them as ref
 
 ## Quickstart
 
-1. Open this workspace in **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. The VS Code extension is the recommended surface — you can watch the agent write artifacts into `memory/project-space/` in the file explorer as it works. Claude Code in a terminal works too.
+1. Open this workspace in **VS Code** with the **[Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** installed. The VS Code extension is the recommended surface — you can watch the agent write artifacts into the engagement folder under `memory/clients/` in the file explorer as it works. Claude Code in a terminal works too.
 2. Follow the one-time setup in [docs/getting-started.md](docs/getting-started.md) — takes about 15 minutes.
 3. Begin an investigation in the Claude Code sidebar chat:
 
@@ -103,10 +103,10 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │   └── value-highlight/          # QBR / renewal value brief
 ├── memory/
 │   ├── long-term/                # Root library — universal knowledge only, no client data
-│   ├── project-space/            # Active client's working directory (read/write)
-│   └── clients/                  # Per-client isolated workspaces
+│   └── clients/                  # Per-client isolated workspaces (live + past engagements)
 │       ├── _template/            # Copy this to create a new client workspace
-│       └── <client-name>/        # environment.md, stakeholder-overlays.md, past-investigations/
+│       └── <client-name>/        # README, environment.md, contract.md, stakeholder-overlays.md,
+│                                 #   engagements/<YYYY-MM-DD-slug>/  (all phase files live here)
 ├── docs/                         # Human-readable documentation
 └── tools/                        # pptx-generator.py and future integrations
 ```

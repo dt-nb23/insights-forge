@@ -18,7 +18,7 @@ description: Archives or pauses the current investigation. Archive captures less
 | Mode | What happens | Where files go |
 |---|---|---|
 | **Archive (complete)** | Investigation is done; capture lessons and update the engagement history | Files stay in their engagement folder — nothing moves. The client README is updated with the outcome row. |
-| **Pause** | Investigation is in progress but needs to yield to another client | Files stay in their engagement folder — nothing moves. The session pointer is cleared. |
+| **Pause** | Investigation is in progress but needs to yield to another client | Files stay in their engagement folder — nothing moves. The engagement's `current-context.md` is marked `state: paused`. |
 
 Ask the user which mode they want before proceeding.
 
@@ -26,9 +26,9 @@ Ask the user which mode they want before proceeding.
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found — nothing to archive or pause."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` for the engagement being archived or paused. If this session is actively working an engagement, that is the one — use the path held in working context. If the user named a different engagement ("archive the Acme checkout one") or no engagement is held, scan `memory/clients/*/engagements/*/current-context.md`, match on the front-matter `client`/`slug`, and confirm the target with the user.
+2. If no engagement can be resolved, stop: "No engagement found — nothing to archive or pause."
+3. ENGAGEMENT_PATH = the resolved path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
 4. CLIENT_NAME = the path segment between `memory/clients/` and `/engagements/`
 5. Phase file reads use `<ENGAGEMENT_PATH>/<file>`. Client-root files use `memory/clients/<CLIENT_NAME>/<file>`.
 
@@ -84,12 +84,9 @@ For each proposed update, present it to the user and ask for explicit approval b
 
 If no updates were proposed, skip this step.
 
-### Step 5 — Clear the session pointer
+### Step 5 — Mark the engagement complete
 
-Write `memory/project-space/active-engagement.md` to:
-```
-active: none
-```
+In `<ENGAGEMENT_PATH>/current-context.md`, set the status front-matter `state: complete` and update `last-touched:` to today. That is the only state change — there is no global pointer to clear. The session simply stops treating this engagement as active.
 
 No files are moved or deleted — the engagement folder at ENGAGEMENT_PATH remains intact with all its files.
 
@@ -101,7 +98,7 @@ Present a summary to the user:
 > Lessons-learned captured at `<ENGAGEMENT_PATH>/lessons-learned.md`.
 > Engagement history updated in `memory/clients/<CLIENT_NAME>/README.md`.
 > Long-term memory updates: [list, or "none"].
-> Session pointer cleared.
+> Engagement marked `complete`.
 > To start a new engagement, describe the problem you're trying to solve."
 
 ---
@@ -112,33 +109,24 @@ Use this when the user wants to set aside the current engagement to work on a di
 
 ### Step 1 — Confirm pause
 
-Confirm the engagement to be paused (from `<ENGAGEMENT_PATH>/current-context.md`). Update `memory/project-space/active-engagement.md` to:
+Confirm the engagement to be paused (from `<ENGAGEMENT_PATH>/current-context.md`). In that file's status front-matter, set `state: paused` and update `last-touched:` to today.
 
-```
-active: none
-paused: <ENGAGEMENT_PATH>
-```
-
-No files are moved or deleted. The engagement folder remains exactly where it is.
+No files are moved or deleted, and there is no global pointer to update. Because state lives in the engagement's own front-matter, any number of engagements can be paused at once — pausing one never disturbs another.
 
 ### Step 2 — Confirm
 
-> "Engagement paused at `<ENGAGEMENT_PATH>`.
-> Workspace is clear. To resume this engagement later, say 'resume [engagement name].' To start a new one, describe the problem you're trying to solve."
+> "Engagement paused at `<ENGAGEMENT_PATH>` (marked `state: paused`).
+> To resume it later, say 'resume [engagement name].' To start a new one, describe the problem you're trying to solve."
 
 ---
 
 ## Resuming a paused engagement
 
-When the user says "resume [engagement name]" or session start finds a `paused:` line in `active-engagement.md`:
+When the user says "resume [engagement name]" or a fresh session needs to pick up prior work:
 
-1. Read `memory/project-space/active-engagement.md`. If a `paused:` line exists, use that path. Otherwise, scan `memory/clients/` for all engagement folders across all clients and present the list.
+1. Scan `memory/clients/*/engagements/*/current-context.md` for status front-matter with `state: active` or `state: paused`. Present the matches (client · slug · phase · last-touched). If the user named a specific engagement, match it directly.
 2. User selects which engagement to resume.
-3. Update `memory/project-space/active-engagement.md`:
-   ```
-   active: memory/clients/<client-name>/engagements/<dated-slug>/
-   ```
-   Remove the `paused:` line (set the file to only the `active:` line).
+3. In the selected engagement's `current-context.md`, set the status front-matter `state: active` and update `last-touched:` to today. Hold its ENGAGEMENT_PATH in working context for the rest of the session. There is no global pointer to update.
 4. Read `<ENGAGEMENT_PATH>/decisions-log.md` to remind the user where the investigation was last paused.
 5. Present: "Engagement `<dated-slug>` for [client] resumed at Phase [N]. [Last gate decision from decisions-log.md.] Ready to continue."
 
@@ -151,4 +139,4 @@ No files are copied — the engagement folder was always in the client workspace
 - **Skipping lessons-learned.** This is the highest-value step. Never skip it — if the user declines to answer, record "declined" explicitly so the archive is honest about what was captured.
 - **Archiving without confirming phase completion.** If Phase 3 was never approved, the investigation is incomplete. Label it so.
 - **Promoting long-term memory without approval.** Every write to `dynatrace-playbooks.md`, `domain-knowledge.md`, or `stakeholder-profiles.md` requires explicit user confirmation per the Memory model rules in `CLAUDE.md`.
-- **Expecting to find files in `memory/project-space/`.** Phase files now live in the engagement folder, not in `project-space/`. If you are looking for `current-context.md`, it is at `<ENGAGEMENT_PATH>/current-context.md`.
+- **Looking for a global pointer or `memory/project-space/`.** There is none — it was removed. An engagement's state lives in its own `current-context.md` front-matter (`state:`), and its phase files live in the engagement folder. If you are looking for `current-context.md`, it is at `<ENGAGEMENT_PATH>/current-context.md`.

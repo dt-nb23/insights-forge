@@ -1,13 +1,13 @@
 ---
 name: external-research
-description: Procedure for consulting domain knowledge and approved external references (Dynatrace docs, community posts) during an investigation. Use whenever a Dynatrace concept, feature, or terminology question arises that cannot be answered from project-space alone.
+description: Procedure for consulting domain knowledge and approved external references (Dynatrace docs, community posts) during an investigation. Use whenever a Dynatrace concept, feature, or terminology question arises that cannot be answered from the engagement folder alone.
 ---
 
 # External Research
 
 ## When to use
 
-Use this skill any time the investigation needs authoritative reference material that is **not already captured** in `memory/long-term/` or `memory/project-space/`. Typical triggers:
+Use this skill any time the investigation needs authoritative reference material that is **not already captured** in `memory/long-term/` or the engagement folder. Typical triggers:
 
 - A stakeholder uses a Dynatrace concept the agent is not sure it has defined correctly (e.g., Grail retention, DPS billing units, Davis problem grouping, Smartscape topology semantics).
 - A hypothesis or signal mapping depends on the precise behavior of a Dynatrace feature (RUM session capture, OneAgent vs OpenTelemetry ingest, DQL operators).
@@ -20,9 +20,9 @@ If the answer is already in `memory/long-term/domain-knowledge.md` or `memory/lo
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, use global long-term memory only — no engagement-scoped reads.
-3. ENGAGEMENT_PATH = that value (if active). Phase file reads use `<ENGAGEMENT_PATH>/<file>`.
+1. Use the `ENGAGEMENT_PATH` already established for this session (set by Phase 0 or on resume; held in working context). There is no shared pointer file to read.
+2. If no engagement is established (research outside any engagement), use global long-term memory only — no engagement-scoped reads.
+3. When an engagement is established, phase file reads use `<ENGAGEMENT_PATH>/<file>`.
 
 Then read these files:
 
@@ -68,7 +68,7 @@ The agent does **not** use these tools to fetch from arbitrary domains. If a sea
    Capturing the page's own last-updated date lets the freshness routine (see below) detect drift — "the page was rewritten since we cited it" — without re-reading every sentence.
 
 7. **Distinguish vendor doc from community report.** When citing community threads, label them as practitioner reports (e.g., "community thread; not vendor-confirmed"). Do not promote a community post to documentation-level confidence without corroboration.
-8. **Offer to update long-term memory.** If a lookup surfaces a durable fact the team will want again — a Dynatrace concept definition, a quota, a known issue — propose adding it to `memory/long-term/domain-knowledge.md` or `terminology.md`. **Do not write to long-term memory without the user's explicit approval** (per the rule in `memory/long-term/README.md`).
+8. **Gate any long-term memory update.** If a lookup surfaces a durable fact the team will want again — a Dynatrace concept definition, a quota, a known issue — present the binary approval gate: **"Proposed addition to `memory/long-term/domain-knowledge.md` [or `terminology.md`]: [one-line summary of the fact]. Approve?"** Write **only** on an explicit yes/approve/equivalent. Never write on "looks good" or on silence (per the rule in `memory/long-term/README.md`).
 
 ## Freshness and refresh
 
@@ -123,7 +123,7 @@ The main agent dispatches the same `doc-freshness-checker` sub-agent and present
 This skill does not produce a dedicated artifact. Its outputs are:
 
 - **Inline citations** in whatever phase artifact the lookup supported.
-- **Proposed updates** to `memory/long-term/domain-knowledge.md` or `terminology.md`, surfaced to the user for approval at the next gate.
+- **Proposed updates** to `memory/long-term/domain-knowledge.md` or `terminology.md`, surfaced to the user via the binary approval gate ("Proposed addition to [file]: [summary]. Approve?") at the next gate — written only on an explicit yes/approve, never on "looks good" or silence.
 - **Source log entry** (optional) in `<ENGAGEMENT_PATH>/decisions-log.md` when a lookup materially shaped a decision — note the URL, what it confirmed or refuted, and where the fact was applied.
 
 ## Boundaries (do not cross)
@@ -142,4 +142,4 @@ This skill does not produce a dedicated artifact. Its outputs are:
 - **Ignoring the freshness report at session start.** The weekly routine writes to `memory/long-term/freshness-report.md`. If the agent starts a session without checking it, drifted citations make it into deliverables. Always check on session start.
 - **Treating community threads as vendor commitment.** A community workaround can be load-bearing for an action plan, but it should be labeled as such and ideally corroborated with documentation or the team's own test.
 - **Silent allowlist expansion.** Following a search-result link to a third-party blog and quoting it as if it were sanctioned. If it is not on the allowlist, ask first.
-- **Auto-promoting findings into long-term memory.** Lookups land in the artifact and stay there. Long-term memory updates require the user's explicit go-ahead.
+- **Auto-promoting findings into long-term memory.** Lookups land in the artifact and stay there. Long-term memory updates require the binary approval gate and an explicit yes/approve — never a write on "looks good" or silence.

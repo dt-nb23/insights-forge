@@ -35,7 +35,7 @@ Candidate improvements surfaced during the 2026-05-26 architecture review sessio
 ## Tier 2 — Medium impact, build as archive grows
 
 ### Semantic search over past investigations
-**What**: `tools/investigation-search.py` that indexes `lessons-learned.md` and `hypotheses.md` files across all `memory/clients/<client-name>/past-investigations/` subfolders using the Anthropic embeddings endpoint (or a local model). Returns semantically relevant chunks during Phase 0 when generating orientation hypotheses.
+**What**: `tools/investigation-search.py` that indexes `lessons-learned.md` and `hypotheses.md` files across all `memory/clients/<client-name>/engagements/` subfolders (filtered to `state: complete`) using the Anthropic embeddings endpoint (or a local model). Returns semantically relevant chunks during Phase 0 when generating orientation hypotheses.
 
 **Why**: The current past-investigation lookup reads a flat `README.md` index per client. As the archive grows across verticals and problem types, keyword matching misses relevant prior work. Semantic matching — "surface any investigation where Davis AI problem correlation was a confirmed hypothesis" — would meaningfully improve Phase 1 seeding.
 
@@ -66,12 +66,12 @@ Candidate improvements surfaced during the 2026-05-26 architecture review sessio
 ## Tier 3 — Low effort, high consistency value
 
 ### Auto-save hook on agent Stop
-**What**: A `Stop` hook in `.claude/settings.json` that runs `git add memory/project-space/ && git commit -m "Auto-save investigation state $(date +%Y-%m-%dT%H:%M)"` after every agent response.
+**What**: A `Stop` hook in `.claude/settings.json` that runs `git add memory/clients/ && git commit -m "Auto-save investigation state $(date +%Y-%m-%dT%H:%M)"` after every agent response.
 
-**Why**: Investigation state is written to `memory/project-space/` across multiple sessions. If a session crashes or the workspace is closed mid-investigation, the last committed state is the recovery point. Without the hook, that recovery point is whenever the consultant last ran `git commit` manually — which in practice is rarely.
+**Why**: Investigation state is written to the engagement folder under `memory/clients/` across multiple sessions. If a session crashes or the workspace is closed mid-investigation, the last committed state is the recovery point. Without the hook, that recovery point is whenever the consultant last ran `git commit` manually — which in practice is rarely.
 
 **Implementation notes**:
-- Hook runs only when `active-engagement.md` names an active client (avoid committing empty project-space)
+- Hook runs only when an engagement is active (avoid committing an empty workspace)
 - Commit message should include the active client name for traceability
 - Can be configured in `.claude/settings.json` under `hooks.Stop`
 
@@ -84,7 +84,7 @@ Candidate improvements surfaced during the 2026-05-26 architecture review sessio
 
 **Implementation notes**:
 - Playwright preferred (handles CSS backgrounds correctly)
-- Input: `*.html` file in project root or `memory/project-space/`
+- Input: `*.html` file in project root or the engagement folder
 - Output: `*.pdf` alongside the source HTML
 - Add to pptx-builder skill as a parallel option ("generate PDF" vs "generate PPTX")
 

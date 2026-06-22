@@ -7,9 +7,9 @@ description: Procedure for scoring and ranking hypotheses or actions using Impac
 
 ## When to use
 
-- After new hypotheses are drafted in the active engagement's `hypotheses.md` and the table needs ranking.
-- After new evidence arrives that materially changes Confidence on one or more hypotheses.
-- When the Phase 2 action plan needs prioritization across recommended actions.
+- In Phase 1, **after `signal-mapping` has written `signals-map.md`** — not immediately after hypotheses are drafted. ICE runs last in the Phase 1 sequence because Impact anchors on the business KPIs in `signals-map.md` and Step 0 reads its "Instrumentation gaps" section. If `signals-map.md` does not yet exist, stop and run `signal-mapping` first.
+- After new evidence arrives that materially changes Confidence or Status on one or more hypotheses.
+- In Phase 2, to re-rank the opportunity set after the persona panel — recalibrating the Phase 1 scores into Phase 2 terms (see "Recalibration when re-ranking for Phase 2" below).
 
 The ICE formula is:
 
@@ -23,9 +23,9 @@ All dimensions scored 1–10. Higher ICE = higher priority. Use the ranking as a
 
 **Resolve the engagement path first (before reading any files):**
 
-1. Read `memory/project-space/active-engagement.md`.
-2. Extract the value after `active: `. If `none`, stop: "No active engagement found. Start a new engagement or resume a paused one."
-3. ENGAGEMENT_PATH = that value (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`)
+1. Use the `ENGAGEMENT_PATH` already established for this session. The agent fixes it once — when Phase 0 (`context-framing`) creates the engagement folder, or when a paused/active engagement is resumed — and holds it in working context for the rest of the session. There is **no shared pointer file** to read; nothing depends on a global "active" file a second concurrent session could overwrite.
+2. If no engagement is established yet (a fresh session picking up earlier work), resolve it with the resume procedure in `skills/investigation-reset/SKILL.md`: scan `memory/clients/*/engagements/*/current-context.md` for a `state:` of `active` or `paused`, present the matches, and have the user pick one. If none, stop: "No active engagement found. Start a new engagement or resume a paused one."
+3. ENGAGEMENT_PATH = the established/selected path (e.g., `memory/clients/acme-corp/engagements/2026-06-18-api-latency/`). CLIENT_NAME = the segment between `memory/clients/` and `/engagements/`.
 4. All phase file reads/writes use ENGAGEMENT_PATH as the base — e.g., `<ENGAGEMENT_PATH>/hypotheses.md`.
 
 Then read these files:
@@ -36,6 +36,12 @@ Then read these files:
 
 ## Steps
 
+0. **Check measurability before scoring Impact.** For each item, read its Status in `hypotheses.md` and cross-reference the "Instrumentation gaps" section of `signals-map.md`. If validation depends on a gap that is not yet closed — i.e. the hypothesis is `blocked: instrumentation`, or its KPI link cannot be measured today — adjust the scores accordingly:
+   - **Raise Effort** to fold in the instrumentation work required before the item can even be validated or executed.
+   - **Lower Confidence** — confirmation is currently impossible, so Confidence cannot reflect strong belief regardless of how plausible the claim feels.
+   - **Lower Impact** if the KPI link cannot be quantified with today's telemetry; an unquantifiable impact cannot anchor a high score.
+   - **Note the adjustment in the justification cell**, naming the specific gap (e.g., "Effort raised + C lowered: no RUM error attribution by route until SDK 4.13 ships").
+   Calibration reminder: Impact and Effort must reflect **measurability**, not just the underlying engineering merit. A high-merit item the team cannot yet measure or validate ranks below one it can act on now.
 1. **Score Impact (1–10)** for each item based on the magnitude of the business outcome if the hypothesis is confirmed or the action is executed. Anchor the score to the business KPI in `signals-map.md`. State the KPI and the directional effect in the justification cell.
 2. **Score Confidence (1–10)** based on the strength of prior evidence. Confidence is a function of *independent* signals. Three dashboards drawing from the same telemetry source = one signal. State which signals are supporting the Confidence score.
 3. **Score Effort (1–10)** based on the engineering and analytics cost to validate the hypothesis or execute the action. Include cross-team coordination cost, not just developer-hours. State the rough timeline (hours / days / weeks / quarters).
@@ -55,3 +61,12 @@ Updates `<ENGAGEMENT_PATH>/hypotheses.md` with Impact, Confidence, Effort, and I
 - **Confidence** is anchored to independent supporting signals, not to how confident the author feels.
 - **Effort** includes cross-team coordination, not just engineering hours.
 - An ICE score is a **ranking tool, not a verdict**. The team makes the final call.
+
+## Recalibration when re-ranking for Phase 2
+
+Phase 1 and Phase 2 score the same dimensions against different questions. Do not carry Phase 1 numbers over unchanged when re-ranking the opportunity set in Phase 2 — recalibrate:
+
+- **Confidence.** Phase 1 Confidence = likelihood the hypothesis is **validated by telemetry**. Phase 2 Confidence = likelihood the action **executes given coordination and risk**. A hypothesis the data strongly supports may still face hard cross-team or rollout risk as an action.
+- **Impact.** Phase 1 Impact = magnitude **if the hypothesis is confirmed**. Phase 2 Impact = magnitude **if the mitigation is executed** — so a partial fix scores *below* the problem it addresses, because it only recovers part of the at-stake KPI.
+
+Worked example: H-01 enters Phase 1 with Confidence 7 (telemetry strongly supports the latency-regression hypothesis). Its mitigation A-01 carries real coordination risk across two teams and a release-train dependency, so its Phase 2 Confidence drops to 5 — the evidence is solid, but executing the fix is less certain. Annotate the change in the justification cell (e.g., "C: 7 → 5, recalibrated for Phase 2 coordination risk across platform + payments") rather than silently overwriting it.

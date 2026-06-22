@@ -28,4 +28,17 @@ YYYY-MM-DD-<slug>/
 
 ## Status
 
-Engagement status is tracked by the pointer in `memory/project-space/active-engagement.md` and by the engagement history table in this client's `README.md`. The folder itself is never deleted or moved — it remains here whether the engagement is active, paused, or complete.
+Each engagement is **self-describing**. `current-context.md` opens with a YAML status front-matter block:
+
+```yaml
+---
+client: <client-short-name>
+slug: <slug>
+state: active        # active | paused | complete
+phase: 0             # current phase, 0–3
+opened: YYYY-MM-DD
+last-touched: YYYY-MM-DD
+---
+```
+
+`state` and `phase` are how the agent finds and resumes this engagement — a resuming session scans `current-context.md` front-matter across all engagement folders for `state: active | paused` — and how `investigation-reset` pauses or completes it. There is **no global pointer file**; the engagement history table in this client's `README.md` carries the human-readable summary. The folder itself is never deleted or moved — it remains here whether the engagement is active, paused, or complete.

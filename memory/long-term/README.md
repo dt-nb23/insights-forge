@@ -8,7 +8,7 @@ This folder is the **root library** — knowledge that applies to every client a
 - Client names, company names, or organization-identifying information
 - Named individuals from a client (stakeholder overlays go in `memory/clients/<client-name>/stakeholder-overlays.md`)
 - Client-specific Dynatrace environment details (environment profiles go in `memory/clients/<client-name>/environment.md`)
-- Investigation artifacts from a specific engagement (archives go in `memory/clients/<client-name>/past-investigations/`)
+- Investigation artifacts from a specific engagement (these live in `memory/clients/<client-name>/engagements/<dated-slug>/`)
 
 If client data ends up here, it bleeds into every future engagement. That is the failure mode this design prevents.
 
@@ -44,4 +44,4 @@ For client-specific data, use the appropriate skill instead: `skills/environment
 ## Deprecated files in this folder
 
 - `client-environments/README.md` — marked deprecated. Client environment profiles moved to `memory/clients/<client-name>/environment.md`.
-- `past-investigations.md` — marked deprecated. Client investigation archives moved to `memory/clients/<client-name>/past-investigations/`.
+- `past-investigations.md` — marked deprecated. Engagement artifacts now live in `memory/clients/<client-name>/engagements/<dated-slug>/`; nothing is moved on archive (the folder is marked `state: complete`).

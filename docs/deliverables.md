@@ -50,13 +50,12 @@ The pptx skill is an adapter: it delegates to the standard pptx skill when avail
 
 ## Voice and tone
 
-Voice comes from `styleguide.dynatrace.com/docs/best-practices/top-10-tips` and from the matching stakeholder profile. The three Phase 3 lenses do most of the enforcement:
+Voice comes from `styleguide.dynatrace.com/docs/best-practices/top-10-tips` and from the matching stakeholder profile. **No critique lens runs in Phase 3** — the voice and framing were already enforced upstream, while the work could still change:
 
-- The [Consultative lens](../.claude/agents/consultative-lens.md) is run by default to make sure the deliverable reads as the firm's voice for a technical-leadership audience.
-- The [Customer lens](../.claude/agents/customer-lens.md) checks that the deliverable matches what users actually experience.
-- The [Skeptic lens](../.claude/agents/skeptic-lens.md) stress-tests for hostile leadership questions before send.
+- The [Consultative lens](../.claude/agents/consultative-lens.md) ran a framing pass on the issue tree and hypotheses in Phase 1, and reviewed the action plan as a panel member in Phase 2, so the firm's voice is baked into the plan the one-pager summarizes.
+- The [Customer lens](../.claude/agents/customer-lens.md) and [Skeptic lens](../.claude/agents/skeptic-lens.md) were both on the Phase 2 persona panel, so user-impact grounding and the hostile-leadership questions are already answered in the approved plan.
 
-If you want to know exactly which lens catches what, [lenses.md](lenses.md) has the full breakdown.
+Phase 3 inherits that reviewed plan and packages it faithfully — it does not re-open the message. The deliverable stays in voice because the plan it summarizes was already in voice. You can still ask for any lens on demand at the Phase 3 gate, but none runs automatically. If you want to know exactly which lens catches what and when it runs, [lenses.md](lenses.md) has the full breakdown.
 
 ## Spot-checking before you send
 
