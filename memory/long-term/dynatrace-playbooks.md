@@ -57,7 +57,7 @@ A hypothesis names elevated p95/p99 latency on a specific service or call path. 
 
 - https://docs.dynatrace.com/docs/observe/application-observability/distributed-traces/analysis/get-started — page last-updated 2024-08-13; retrieved 2026-05-20.
 - https://docs.dynatrace.com/docs/observe/application-observability/distributed-tracing/use-traces-and-dql-to-spot-patterns — page last-updated 2025-11-20; retrieved 2026-05-20.
-- https://docs.dynatrace.com/docs/observe/application-observability/services/services-app — page last-updated 2026-05-19; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/application-observability/services/services-app — page last-updated 2026-05-29; retrieved 2026-06-29.
 
 ---
 
@@ -236,7 +236,7 @@ A hypothesis names a deploy, release, or configuration change as the suspected c
 
 - https://docs.dynatrace.com/docs/deliver/release-monitoring/monitor-releases-with-dynatrace — page last-updated 2025-08-11; retrieved 2026-05-20.
 - https://docs.dynatrace.com/docs/deliver/release-monitoring/version-detection-strategies — page last-updated 2025-08-11; retrieved 2026-05-20.
-- https://docs.dynatrace.com/docs/deliver/pipeline-observability-sdlc-events — page last-updated 2025-05-04; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/deliver/pipeline-observability-sdlc-events — page last-updated 2026-06-09; retrieved 2026-06-29.
 
 ---
 
@@ -269,7 +269,7 @@ A hypothesis names an external dependency — payment processor, identity provid
 
 ### Source
 
-- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring — page last-updated unknown; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring — page last-updated 2018-09-25; retrieved 2026-06-29.
 - https://docs.dynatrace.com/docs/observe/digital-experience/synthetic-monitoring/network-availability-monitors/network-availability-monitoring — page last-updated 2024-08-08; retrieved 2026-05-20.
 - https://docs.dynatrace.com/docs/observe/applications-and-microservices/services/service-detection-v1/monitor-3rd-party-services — page last-updated 2023-02-21; retrieved 2026-05-20.
 
@@ -304,7 +304,7 @@ The investigation starts from an open Davis problem (the team was paged, the Pro
 
 ### Source
 
-- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/davis-problems-app — page last-updated 2026-04-08; retrieved 2026-05-20.
+- https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/davis-problems-app — page last-updated 2026-06-19; retrieved 2026-06-29.
 - https://docs.dynatrace.com/docs/platform/davis-ai/problem-and-root-cause — page last-updated 2026-01-28; retrieved 2026-05-20.
 - https://docs.dynatrace.com/docs/discover-dynatrace/platform/davis-ai/root-cause-analysis/concepts/events — page last-updated 2026-05-04; retrieved 2026-05-20.
 
