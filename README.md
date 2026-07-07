@@ -17,7 +17,7 @@ The agent works in **explicit phases with a human approval gate between each pha
 ## What it does NOT do
 
 - **No live queries** against Dynatrace, data warehouses, or any production system.
-- **No raw DQL, SQL, or executable query syntax** — references signals; never generates queries.
+- **No live query execution** — describes query logic structurally; any illustrative query example in a markdown deliverable is labeled "unvalidated — verify before use" and version-gated (DQL for Grail/Gen3 only, USQL for Classic RUM).
 - **No production changes**, deploys, or configuration updates.
 - **No replacing** engineering or analytics judgment.
 - **No bypassing review gates** — every phase ends with an explicit user approval.
