@@ -180,6 +180,8 @@ Also in CLAUDE.md: one line noting Phase 1 checkpoint mode and the Phase 2 direc
 
 **Phase 2 direction check.** `action-plan-builder/SKILL.md` gains a step before the persona council: draft a one-screen skeleton — headline framing, wave/phase structure, candidate action list (titles only, no detail) — and pause for confirmation using the gate template. Only after confirmation does the full draft + 3-round council + ICE re-rank run. Redirects at the skeleton cost minutes, not a rebuilt plan (Ben's "reduce upfront over-creation").
 
+**Phase 2 council round checkpoints.** After each council round completes (Round 1 independent positions, Round 2 cross-examination, Round 3 convergence, any extra rounds), the agent pauses and presents a round summary using the gate/question template: 2–3 bullets per lens on its material position or what shifted this round, where the live tensions stand, and what the next round will do. The user then chooses: **continue** (run the next round as planned), **steer** (give emphasis, constraints, or context — injected verbatim into every lens's briefing for the next round), or — after the final round — **proceed** to reconciliation and ICE re-rank. These checkpoints add visibility and steering, not skipping: the ≥3-round minimum and the full four-lens set still always run (consistent with the no-opt-out ruling). Lives in `action-plan-builder/SKILL.md` step 6, with the council description in `docs/lenses.md` updated to match.
+
 ---
 
 ## 5. Deliverable consistency — `skills/exec-onepager/SKILL.md` (+ pptx-builder note)
@@ -214,7 +216,8 @@ Content-structure changes:
 | `skills/mece-decomposition/SKILL.md` | Checkpoint step |
 | `skills/hypothesis-generation/SKILL.md` | Checkpoint step |
 | `skills/signal-mapping/SKILL.md` | Checkpoint step |
-| `skills/action-plan-builder/SKILL.md` | Direction-check skeleton step |
+| `skills/action-plan-builder/SKILL.md` | Direction-check skeleton step + council round checkpoints |
+| `docs/lenses.md` | Council description updated with round checkpoints (light) |
 | `skills/exec-onepager/SKILL.md` | TL;DR, 30/60/90, word target, fixed order, exemplar |
 | `skills/pptx-builder/SKILL.md` | 30/60/90 inheritance note (light) |
 | `memory/long-term/domain-knowledge.md` | Capability generations section (approval-gated) |
