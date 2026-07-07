@@ -4,6 +4,21 @@ Candidate improvements surfaced during the 2026-05-26 architecture review sessio
 
 ---
 
+## Pilot round 2 — rulings and committed changes (2026-07-06)
+
+Implemented per `docs/superpowers/specs/2026-07-06-pilot-round2-intake-and-guardrails-design.md`. Four rulings are settled — do not re-litigate without new evidence:
+
+| Decision | Ruling |
+|---|---|
+| v1 intake form scope | All four use cases in one form; the pilot may still be run narrowly by instruction. |
+| Input depth enforcement | Tiered form + agent probes: required core blocks generation; thin answers get one follow-up max, then the gap is recorded. |
+| Raw query examples | Structural pseudo-queries in conversation; illustrative editable examples allowed in markdown deliverables, labeled "unvalidated — verify before use"; DQL = Grail/Gen3 only, USQL = Classic RUM. |
+| Early exit from mandatory lenses | No opt-out. Checkpoints add steering and visibility, never skipping. |
+
+Process notes (organizational, not codebase): leadership reviews outputs before any customer-facing use; license expansion (8 seats requested) and Salesforce/Slack integration remain open — the latter stays Tier 1 below. Phase success criterion: "would we sign off on this plan for any analyst," not customer execution.
+
+---
+
 ## Tier 1 — High impact, pursue next
 
 ### Dynatrace API read-only context fetcher
