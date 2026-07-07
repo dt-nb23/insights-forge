@@ -80,7 +80,7 @@ In the Claude Code chat, start with:
 - Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)
 - Conditionally dispatches the doc-freshness-checker background sub-agent (only if the last check was ≥ 7 days ago)
 
-**Or start from the intake form.** Open `html/intake-form.html` in a browser, fill in what you know (required fields unlock generation; optional depth upgrades the output tier), and paste the generated brief as your first message. The agent skips every question the brief already answers and probes only the gaps — one follow-up per thin answer, never a wall.
+**Or start from the intake form.** Open `html/intake-form.html` in a browser, fill in what you know (required fields unlock generation; optional depth upgrades the output tier), and paste the generated brief as your first message. The agent skips every question the brief already answers and probes only the gaps — one follow-up per thin answer, never a wall. A hosted copy lives at <https://claude.ai/code/artifact/095ea29f-1471-4ead-9a6a-407ff55ef3e5> for analysts without the repo.
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
