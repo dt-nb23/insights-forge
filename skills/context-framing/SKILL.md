@@ -40,6 +40,19 @@ If the consultant has not yet described the engagement, open with:
 
 Do not ask multiple questions at once. Let each answer drive the next question.
 
+## Seeded intake (form brief detected)
+
+If the first user message contains the header `# Insights Forge intake brief`, the analyst pre-filled the intake form (`html/intake-form.html`). Do not open with the standard prompt or walk Q1–Q9 serially. Instead:
+
+1. **Parse every brief field onto the Q1–Q9 / C.S.I.R. structure.** A field with a real value is answered — do not re-ask it. A field reading `not provided` is unanswered.
+2. **Run the thin-answer check on pre-filled MUST-HAVE fields.** An answer of only a few words does not count as satisfied. Ask **at most one follow-up per thin field** — e.g., "You gave me three words about session replay — tell me more: what are users doing when it matters?" Whatever comes back, including "that's all I know," is accepted; record the residual gap under "Known context gaps" in `current-context.md`. Never loop on the same field. This is the anti-wall rule.
+3. **Batch SHOULD-HAVE confirmations into the gate message** (the existing "not required to proceed, but…" phrasing) instead of asking them one at a time.
+4. **Record the intake meta** in `current-context.md`: use case, analyst experience, account familiarity, customer domain fluency, and output tier (Simple or Advanced).
+5. **Bind the Phase 3 deliverable now** from the use case: Executive one-pager / Customer action plan → `exec-onepager` (plan-first path); Analyst execution guide → action-plan detail emphasis; QBR / renewal brief → `value-highlight`. Downstream skills read the output tier to scale sophistication, and analyst experience to calibrate how much the agent explains and how often it checkpoints (new → more of both).
+6. **The exit-criteria rubric is unchanged.** A seeded brief pre-populates the rubric; every MUST-HAVE must still hold a real value before the gate closes.
+
+Unseeded sessions run the standard flow below — and the same thin-answer rule applies to conversational answers: a MUST-HAVE answered in a few words gets exactly one follow-up, then the residual gap is recorded.
+
 ## Clarifying questions
 
 Ask **one question at a time**, in adaptive order — if the consultant's opening description already answers a question, skip it and move to the next unknown. Stop asking when every **MUST-HAVE** field in the Exit-criteria rubric below is populated with a non-placeholder value.
@@ -110,9 +123,9 @@ Present as a multi-select checklist — do not pre-check anything:
 - [ ] Application Performance Monitoring (APM / Distributed Tracing)
 
 **User experience**
-- [ ] Real User Monitoring — Web
-- [ ] Real User Monitoring — Mobile
-- [ ] Session Replay
+- [ ] Real User Monitoring — Web (Classic / Grail / both / unsure)
+- [ ] Real User Monitoring — Mobile (Classic / Grail / both / unsure)
+- [ ] Session Replay (Classic / Grail / both / unsure)
 - [ ] Synthetic Monitoring
 
 **Data & logs**
@@ -132,9 +145,12 @@ Present as a multi-select checklist — do not pre-check anything:
 **Platform**
 - [ ] Grail (data lakehouse)
 - [ ] Site Reliability Guardian
-- [ ] Dashboards & Notebooks
+- [ ] Dashboards (Gen2 / Gen3 / both / unsure)
+- [ ] Notebooks
 
 Record the checked items in `current-context.md` under "Active capabilities". This list is the boundary of what insights can be surfaced in Phase 1.
+
+For every generation-split capability (RUM, Session Replay, Dashboards), record which generation is active — Classic and Grail can both be live on the same client at once, and they differ in what is queryable (see "Capability generations" in `memory/long-term/domain-knowledge.md`).
 
 **Environment intake check:** After Q5 and Q6, check `memory/clients/<CLIENT_NAME>/environment.md`. If found, read it now — it contains environment-specific facts (Management Zones, defined SLOs, instrumentation gaps, DPS quota) that persist across engagements and should inform orientation hypotheses in Step 5. If no file exists, note that `skills/environment-intake/SKILL.md` should be run at the Phase 0 gate to capture these facts for future engagements.
 
@@ -245,6 +261,8 @@ Below the front-matter, the body sections:
 | Section | Contents |
 |---|---|
 | Engagement Framing (C.S.I.R.) | **C** — Customer name/label, business description, consultant role; **S** — Known constraints, environment facts, contract phase, prior outcomes; **I** — Consultant's goal and customer's expected outcome; **R** — Deliverable format, primary audience, tone/length constraints |
+| Intake meta | Use case; analyst experience; account familiarity; customer domain fluency; output tier (Simple/Advanced). Populated from a seeded intake brief; recorded as `not provided` otherwise |
+| Known context gaps | Fields where the analyst could not go deeper after one follow-up — carried forward so downstream phases treat them as open, not answered |
 | Customer | Name / label, industry, size |
 | Vertical | Named vertical |
 | Tenant type | SaaS or Managed |
@@ -272,3 +290,5 @@ Below the front-matter, the body sections:
 - **Leaving stakeholder profile gaps unflagged.** If the Phase 3 reader doesn't match any of the eight role archetypes closely enough, Phase 3 will be generic. Flag the gap now and ask the consultant whether to create a new profile.
 - **Skipping the past engagement check.** If the team has worked with this customer or vertical before, the lessons from that archive save Phase 1 time and prevent repeated mistakes.
 - **Omitting the status front-matter in `current-context.md`.** It is the only thing that makes the engagement discoverable — a resuming session scans for it, and `investigation-reset` flips its `state:` on pause/complete. No front-matter means a lost engagement.
+- **Re-asking a field the intake brief already answered.** The brief is the analyst's context, gathered once. Re-asking it burns goodwill and makes the form pointless. Parse first; ask only about `not provided` and thin fields.
+- **Looping on a thin answer.** One follow-up per thin field, then accept and record the gap. An analyst who cannot go deeper is telling you the context boundary — respect it and name the gap in the artifact instead.
