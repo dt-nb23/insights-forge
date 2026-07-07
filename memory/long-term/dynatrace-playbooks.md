@@ -16,7 +16,7 @@ Playbook content was originally sourced from `docs.dynatrace.com` on 2026-05-12;
 |---|---|
 | Latency degradation on a backend service | [Latency on a backend service](#latency-on-a-backend-service) |
 | Error rate / failure spike on a service | [Service failure spike](#service-failure-spike) |
-| User-visible slowness or errors in the browser/app | [Frontend / UX regression in RUM](#frontend--ux-regression-in-rum) |
+| User-visible slowness or errors in the browser/app | [Frontend / UX regression in RUM (RUM on Grail)](#frontend--ux-regression-in-rum-rum-on-grail) |
 | Anomalous behavior in logs (volume, errors, content) | [Log investigation in Grail](#log-investigation-in-grail) |
 | SLO at risk or breached | [SLO breach / error-budget burn](#slo-breach--error-budget-burn) |
 | Regression correlated with a deploy | [Deploy / release correlation](#deploy--release-correlation) |
@@ -97,7 +97,7 @@ A hypothesis names elevated error rate (5xx, gRPC errors, span-status errors, or
 
 ---
 
-## Frontend / UX regression in RUM
+## Frontend / UX regression in RUM (RUM on Grail)
 
 ### When this applies
 

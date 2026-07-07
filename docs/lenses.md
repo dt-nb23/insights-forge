@@ -76,6 +76,8 @@ The Phase 2 persona panel is a **deliberating council**, not a single pass. It r
 2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
 3. **Round 3 — convergence.** Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. More rounds run if positions are still moving.
 
+After every round the agent pauses with a round summary — each lens's position or shift, the live tensions, what the next round will do — and you can **continue**, **steer** (your guidance goes verbatim into every lens's next-round briefing), or, after the final round, **proceed** to reconciliation. The checkpoints never skip anything: three rounds is still the floor and all four lenses always run.
+
 Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. `skills/action-plan-builder/SKILL.md` step 6 is the authoritative procedure. You can also ask for this council explicitly at any gate:
 
 > *"Run the action plan through the Skeptic, Optimist, Customer, and Consultative council."*

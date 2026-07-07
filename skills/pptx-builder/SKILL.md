@@ -61,6 +61,8 @@ A six-section deck adapted from the one-pager. Adjust slide counts to match the 
 
 Alternative layouts (`Agenda`, `Quote`, `Customer story`, `Hero image+...`, image-led variants, `Blank_graphic`/`Blank_black`) are catalogued in `memory/long-term/brand/reference/pptx-layout-index.md`. Substitute when content warrants — never improvise on the slide master.
 
+The recommended-actions slide(s) inherit the one-pager's 30/60/90-day blocks — Days 0–30, Days 31–60, Days 61–90 — in the same order and block assignment. Do not flatten them back into a single list.
+
 Every body slide carries the footer from brand-spec §8: `© 2026 Dynatrace, LLC.   Confidential` at lower-left in Light 2 gray (`#6F747F`); Dynatrace cube mark + ` | ` + page number at lower-right. Insights Forge deliverables are Confidential by default — do not relabel without explicit user instruction.
 
 ## Lockup selection by slide type
