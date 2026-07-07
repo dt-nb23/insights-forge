@@ -46,13 +46,17 @@ The HTML format is preferred when the one-pager will be projected or shared in a
 
 ## Content structure
 
-A one-pager has five sections, in this order, and fits on a single page.
+Every one-pager uses this fixed section order — identical for every analyst and engagement. Consistency is a pilot requirement: deliverables must be recognizable at a glance and attachable in Salesforce without re-explanation.
 
-1. **Problem summary (2–3 sentences).** What is the problem? What is the urgency? What is the audience being asked to decide? Lead with what changed in the business, not with what was observed in telemetry.
-2. **Business impact.** Quantify where possible. "Conversion on iOS checkout has declined 8% week-over-week. At current volume, this is approximately $X/week in revenue at risk." If the numbers carry confidence intervals or assumptions, name them in one short clause. Avoid false precision.
-3. **Top findings (3–5 bullets).** The confirmed hypotheses, the open ones with high ICE, and the instrumentation gaps that matter. Each finding is a sentence — what was found and what evidence supports it. No more than five bullets.
-4. **Recommended actions.** Each with an **owner** and a **timeframe**. Pair every recommendation with the cost or risk in the same line. "Roll back iOS payment SDK to 4.11 — Mobile platform lead, within 24h of H-01 confirmation. Cost: reintroduces a known checkout bug fixed in 4.12; mitigation is targeted patch if vendor can ship in <72h."
-5. **Risks and decision asks.** One short paragraph or three bullets. Surface the questions the leader needs to answer. End with the specific decision being requested.
+**Density target: 450–550 words of prose — a 2–3 minute read.** The one-page constraint alone does not control density; count the words. Over target → cut, don't compress.
+
+1. **TL;DR (one bold sentence).** What is happening and what the reader is being asked to decide. Written last, placed first.
+2. **Situation (2–3 sentences).** What is the problem, what is the urgency, what changed in the business — not what was observed in telemetry.
+3. **Business impact.** Quantify where possible. "Conversion on iOS checkout has declined 8% week-over-week — approximately $X/week in revenue at risk." Name confidence intervals or assumptions in one short clause. Avoid false precision.
+4. **Key findings (3–5 bullets).** Confirmed hypotheses, high-ICE open ones, and the instrumentation gaps that matter. One sentence each — what was found and what evidence supports it.
+5. **Recommended actions — 30/60/90-day plan.** Three labeled blocks: **Days 0–30**, **Days 31–60**, **Days 61–90**. Every action carries an **owner**, a **timeframe**, and its **cost or risk on the same line**. Rank order within each block mirrors `action-plan.md` — no silent re-ordering, and block assignment is part of plan fidelity.
+6. **Risks and decision asks.** One short paragraph or three bullets: the questions the leader needs to answer, ending with the specific decision being requested.
+7. **Sources.** The footnote block — externally sourced facts keep URL + retrieval date here, not inline.
 
 ## Style rules
 
@@ -161,8 +165,10 @@ These mechanical gates remain — they are formatting, legibility, and fidelity 
 
 - **One-page constraint.** After drafting, read the whole page once. If it does not fit on a single page, cut — do not compress. If it will not cut to one page, the underlying plan was not sharp enough; that is a Phase 2 problem, not a wording problem.
 
+- **Word-count gate.** Count the prose words (body text; exclude header metadata and the sources block). Target 450–550. Over 550 → cut, don't compress; under 450 is fine if the story is complete. Report the count when presenting the deliverable.
+
 - **Plan-fidelity gate.** Read `<ENGAGEMENT_PATH>/action-plan.md` and the drafted one-pager side by side and confirm:
-  1. **Identical recommendation rank order.** The recommended-actions section lists actions in the same order the action plan ranks them. No silent re-ordering, promotion, or demotion.
+  1. **Identical recommendation rank order.** The recommended-actions section lists actions in the same order the action plan ranks them, and each action sits in the correct 30/60/90 block for its timeframe. No silent re-ordering, promotion, demotion, or block reassignment.
   2. **Tradeoff in the same paragraph.** Every recommendation carries its cost or risk on the same line, not in a separate risks section.
   3. **Business-impact-first opening.** The first sentence states what changed in the business, not what was observed in telemetry.
   4. **Open hypotheses keep their uncertainty qualifier.** Any hypothesis carried in from `hypotheses.md` with Status "open" must read as open in the one-pager — "if confirmed," "pending H-01 validation," or the action gated on confirmation. The no-hedging brand rule strips *weasel words* ("may possibly indicate"); it does **not** license upgrading an open hypothesis to a confident claim. Confirmed reads confirmed; open reads open.
@@ -199,3 +205,36 @@ The agent then **prompts the user to approve PPTX generation** — it does not a
 - **Skipping the readability screenshot check.** The wave background gradient overlay looks sufficient in the CSS but the right-side stats and action cards are the failure zones — always verify visually at render size, not by reading the CSS opacity values.
 - **Column imbalance from redundant paragraphs.** A section title that states the claim + cards/bullets that provide evidence does not need a paragraph repeating both. When the left column runs long, look for this pattern first before restructuring the layout.
 - **Not producing a markdown companion when only HTML is delivered.** The pptx-builder skill requires `one-pager-YYYY-MM-DD.md` as its input. If the user later asks for a deck, the absence of the markdown file will block that step.
+
+## Structural exemplar (anonymized)
+
+The shape below is extracted from the strongest pilot deliverable. Client content removed — follow the shape, not the words. Color assignments per brand spec: teal = confirmed/available, royal blue = open/requires action, magenta = gap/risk.
+
+```text
+TL;DR: [Customer] can answer three of its four digital-experience questions today —
+the fourth needs a one-time configuration sprint leadership must approve.
+
+SITUATION (2–3 sentences)
+Since [transition/event], [what the business can't do]. [Who is affected and how].
+
+BUSINESS IMPACT
+[Quantified where possible; assumption named in one clause.]
+
+KEY FINDINGS (3–5, one sentence each, color-coded)
+• Available today — [capability] answers [question] with no new instrumentation. (teal)
+• Configuration required — [outcome] needs [one-time work]; cost of delay: [what stays broken]. (blue)
+• Platform advantage — [what this platform does that the old one could not]. (teal, with caveat if conditional)
+• Known gap — [capability] is not available; [honest workaround]. (magenta)
+
+RECOMMENDED ACTIONS — 30/60/90
+Days 0–30:  [action] — [owner] · [timeframe] · Cost/risk: [same line]
+Days 31–60: [action] — [owner] · [timeframe] · Cost/risk: [same line]
+Days 61–90: [action] — [owner] · [timeframe] · Cost/risk: [same line]
+
+RISKS AND DECISION ASKS
+DA-1: [specific approval needed and from whom]
+DA-2: [specific approval needed and from whom]
+
+SOURCES
+[URL + retrieval date footnotes]
+```

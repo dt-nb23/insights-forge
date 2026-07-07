@@ -36,6 +36,8 @@ Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md).
 
 Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks. The skill defines the exact section order and word-budget guidance — open the `SKILL.md` if you want to see the template.
 
+Structure is fixed across every engagement: a one-sentence TL;DR up top, then situation, business impact, key findings, a 30/60/90-day action plan, decision asks, and sources. Density target is 450–550 words of prose — a 2–3 minute read — enforced at the finalizing gate alongside the one-page constraint.
+
 ## What the deck looks like
 
 Produced by [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md), **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.
