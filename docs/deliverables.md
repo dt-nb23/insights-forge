@@ -34,9 +34,7 @@ Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md).
 - VP of Reliability — error-budget framing, SLO impact, on-call burden, post-incident learnings.
 - VP of Product — feature impact, customer-experience surface, release velocity, competitive considerations.
 
-Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks. The skill defines the exact section order and word-budget guidance — open the `SKILL.md` if you want to see the template.
-
-Structure is fixed across every engagement: a one-sentence TL;DR up top, then situation, business impact, key findings, a 30/60/90-day action plan, decision asks, and sources. Density target is 450–550 words of prose — a 2–3 minute read — enforced at the finalizing gate alongside the one-page constraint.
+Structure is fixed across every engagement: a one-sentence TL;DR up top, then situation, business impact, key findings, a 30/60/90-day action plan, decision asks, and sources. Density target is 450–550 words of prose — a 2–3 minute read — enforced at the finalizing gate alongside the one-page constraint. The skill defines the exact section order and word-budget guidance — open the `SKILL.md` if you want to see the template.
 
 ## What the deck looks like
 
