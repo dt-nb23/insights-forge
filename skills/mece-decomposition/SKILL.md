@@ -43,6 +43,7 @@ If a Dynatrace concept needed to shape a branch (e.g., Smartscape grouping, Mana
    - **Stakeholder/team boundary** (frontend → backend → payments → analytics).
    - **Time** (pre-deploy vs post-deploy; before vs after a known event).
    Use the axis that maps cleanly to where the problem might live. Do not mix axes inside a single level of the tree.
+   If two axes fit comparably well, present both with one line on what each surfaces best and ask (per the CLAUDE.md communication protocol) rather than picking silently — this is a Phase 1 checkpoint mode behavior.
 3. **Draft 4–7 branches.** Fewer than 4 is usually under-decomposed; more than 7 usually means abstraction is mixed. Branches should be problem spaces, not solutions and not conclusions.
 4. **For each branch, write the "what we'd see if this is the cause" line.** This forces the branch to be concrete and seeds the hypothesis generation step.
 5. **Check each pair of branches for overlap.** For every pair, name a plausible cause and ask: "Where does this go?" If the answer is "either branch", you have overlap. Rename or restructure.
@@ -51,6 +52,7 @@ If a Dynatrace concept needed to shape a branch (e.g., Smartscape grouping, Mana
 8. **Invoke the MECE lens** (`.claude/agents/mece-lens.md`) for critique. Capture the findings in the "MECE check" section of `issue-tree.md`.
 9. **Revise** based on the lens output. Re-invoke if the revision was substantial.
 10. **Write to `<ENGAGEMENT_PATH>/issue-tree.md`.** Append a "Version history" entry describing what changed.
+11. **Checkpoint (Phase 1 checkpoint mode — default ON).** Before hypothesis generation begins, pause and present per the CLAUDE.md communication protocol: a 2–3 sentence summary of the tree and its axis, the choice (confirm / adjust / name a lens), and a pointer to `issue-tree.md`. Skip this step only if the user has explicitly turned Phase 1 checkpoint mode off for the session.
 
 ## Output
 

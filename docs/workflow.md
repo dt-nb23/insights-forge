@@ -37,6 +37,8 @@ The phase runs in a fixed order, and the order resolves a real dependency — IC
 
 In Phase 1, ICE Confidence means *the likelihood the hypothesis is validated by telemetry* and Impact means *the magnitude if it is confirmed*. (Phase 2 re-scores both against execution — see below.)
 
+**Phase 1 checkpoint mode (default ON).** The agent pauses for a quick confirmation after each of the three artifacts rather than running the whole phase to a single gate — and when a structuring call is genuinely ambiguous (which decomposition axis, which playbook match), it asks instead of silently choosing. Once the team trusts the agent's judgment on these calls, tell it to turn Phase 1 checkpoint mode off and it reverts to the single end-of-phase gate.
+
 **What lands on disk.**
 
 - `<engagement folder>/issue-tree.md`
