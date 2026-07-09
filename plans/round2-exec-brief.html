@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Insights Forge — Round 2 Executive Brief</title>
+<style>
+  :root {
+    --bg:        #EFF1F6;
+    --surface:   #FFFFFF;
+    --surface2:  #F6F7FA;
+    --border:    #D8DCE8;
+    --text:      #1A1E2E;
+    --text-2:    #4A5068;
+    --text-3:    #6E7890;
+    --accent:    #3F68E8;
+    --accent-bg: #EBF0FE;
+    --good:      #1A7A55;
+    --good-bg:   #E7F5EF;
+    --warn:      #C06820;
+    --warn-bg:   #FDF0E5;
+    --mono:  'SF Mono','Cascadia Code','Fira Mono','Consolas',monospace;
+    --serif: 'Garamond','EB Garamond','Palatino Linotype','Palatino',Georgia,serif;
+    --sans:  'Helvetica Neue','Arial',system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --bg:#111622;--surface:#1A1E2E;--surface2:#151928;--border:#282E42;
+    --text:#DDE2F0;--text-2:#9BA5C0;--text-3:#6B768A;
+    --accent:#6B92FF;--accent-bg:#1A2248;
+    --good:#2DB87A;--good-bg:#0D2A1E;--warn:#E08040;--warn-bg:#2A1A0C;
+  }}
+  :root[data-theme="light"] {
+    --bg:#EFF1F6;--surface:#FFFFFF;--surface2:#F6F7FA;--border:#D8DCE8;
+    --text:#1A1E2E;--text-2:#4A5068;--text-3:#6E7890;
+    --accent:#3F68E8;--accent-bg:#EBF0FE;
+    --good:#1A7A55;--good-bg:#E7F5EF;--warn:#C06820;--warn-bg:#FDF0E5;
+  }
+  :root[data-theme="dark"] {
+    --bg:#111622;--surface:#1A1E2E;--surface2:#151928;--border:#282E42;
+    --text:#DDE2F0;--text-2:#9BA5C0;--text-3:#6B768A;
+    --accent:#6B92FF;--accent-bg:#1A2248;
+    --good:#2DB87A;--good-bg:#0D2A1E;--warn:#E08040;--warn-bg:#2A1A0C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .page { max-width: 720px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 0.75rem;
+  }
+  h1 {
+    font-family: var(--serif); font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    font-weight: normal; line-height: 1.12; text-wrap: balance;
+    margin-bottom: 1rem;
+  }
+  .lead {
+    font-size: 1.05rem; color: var(--text-2); line-height: 1.7;
+    margin-bottom: 2.2rem; text-wrap: pretty;
+  }
+  .lead strong { color: var(--text); }
+
+  h2 {
+    font-family: var(--serif); font-size: 1.35rem; font-weight: normal;
+    margin: 2.2rem 0 0.9rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--border);
+  }
+  p { font-size: 0.95rem; color: var(--text-2); margin-bottom: 0.9rem; }
+  p strong { color: var(--text); }
+
+  .findings { display: flex; flex-direction: column; gap: 0.6rem; margin: 1.1rem 0; }
+  .finding {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.85rem 1.1rem; font-size: 0.92rem; color: var(--text-2); line-height: 1.6;
+  }
+  .finding strong { color: var(--text); }
+
+  .themes { display: flex; flex-direction: column; gap: 0.7rem; margin: 1.1rem 0; counter-reset: thm; }
+  .theme {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.95rem 1.15rem 0.95rem 3.1rem; position: relative; counter-increment: thm;
+  }
+  .theme::before {
+    content: counter(thm);
+    position: absolute; left: 1rem; top: 1rem;
+    width: 1.5rem; height: 1.5rem; border-radius: 50%;
+    background: var(--accent-bg); color: var(--accent);
+    font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .theme-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+  .theme-body { font-size: 0.92rem; color: var(--text-2); line-height: 1.6; }
+  .theme-anchor { font-size: 0.8rem; color: var(--text-3); font-style: italic; margin-top: 0.35rem; }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.6rem; margin: 1.1rem 0;
+  }
+  .fact {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.8rem 1rem; text-align: center;
+  }
+  .fact-val { font-family: var(--serif); font-size: 1.5rem; color: var(--text); }
+  .fact-lbl { font-size: 0.72rem; color: var(--text-3); line-height: 1.4; margin-top: 0.15rem; }
+
+  .asks { margin: 1.1rem 0; }
+  .ask {
+    display: flex; gap: 0.8rem; padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border); font-size: 0.93rem;
+  }
+  .ask:last-child { border-bottom: none; }
+  .ask-marker { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .ask-body { color: var(--text-2); line-height: 1.6; }
+  .ask-body strong { color: var(--text); }
+
+  .oos-note {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.85rem 1.1rem; font-size: 0.88rem; color: var(--text-2);
+    line-height: 1.65; margin: 1.1rem 0;
+  }
+  .oos-note strong { color: var(--text); }
+
+  .footer {
+    margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--text-3); line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <p class="eyebrow">Insights Forge · pilot round 2 · for leadership review · 3-minute read</p>
+  <h1>What round 1 taught us, and what round 2 delivers</h1>
+
+  <p class="lead">
+    Round 1 proved the concept: on real accounts, Insights Forge produced customer-ready engagement plans — U-Haul being the reference. It also showed why results varied: <strong>quality depended on who was driving and how they asked</strong>. Round 2 fixes that systematically. Every piece of pilot feedback traces to a specific, verified change — and nothing has been modified yet. Implementation starts on approval.
+  </p>
+
+  <h2>Three findings from round 1</h2>
+  <div class="findings">
+    <div class="finding"><strong>Good results required an experienced driver.</strong> Open-ended intake meant experienced analysts fed the tool well and newer ones didn't — and thin input produced thin plans without pushback.</div>
+    <div class="finding"><strong>The tool's standards weren't enforced.</strong> The brand and quality rules existed all along, but applying them was voluntary. Deliverables produced off the intended path skipped every check — that's where the inconsistency came from.</div>
+    <div class="finding"><strong>Hours were invested before direction was confirmed.</strong> With no lightweight "is this right?" checkpoint, an early wrong turn cost an afternoon instead of a minute.</div>
+  </div>
+
+  <h2>What round 2 delivers</h2>
+  <div class="themes">
+    <div class="theme">
+      <div class="theme-title">Same inputs, same quality — regardless of who's driving</div>
+      <div class="theme-body">A structured intake form generates the engagement brief, the agent challenges thin answers instead of accepting them, and the analyst's experience and account familiarity calibrate how it explains and probes. New analysts get more guidance; experts get less friction.</div>
+      <div class="theme-anchor">Ben &amp; Julie's consistency asks · Angie's form advantage · Paul's variance question</div>
+    </div>
+    <div class="theme">
+      <div class="theme-title">Direction confirmed before investment</div>
+      <div class="theme-body">Every engagement passes a Direction Check the analyst approves before deep analysis begins, and the agent asks focused questions at defined points so account knowledge shapes the work early instead of correcting it late.</div>
+      <div class="theme-anchor">Ben's confirm-before-assets ask · the wrong-direction failure mode</div>
+    </div>
+    <div class="theme">
+      <div class="theme-title">One deliverable, done to one standard</div>
+      <div class="theme-body">Exactly what was agreed: a 30/60/90-day Customer Action Plan — every gap cited to evidence, every action sequenced — as an executive one-pager with optional deck. Quality rules now apply automatically, and the deck is inspected before it's ever called done.</div>
+      <div class="theme-anchor">Jeremy's narrowed scope · Angie's deck-quality complaint</div>
+    </div>
+    <div class="theme">
+      <div class="theme-title">Trustworthy by construction</div>
+      <div class="theme-body">Every claim carries its evidence status — measured from client telemetry, reported by a named stakeholder, or an industry assumption — and confidence scores anchor to it. Recommendations outside agreed scope need the analyst's explicit yes. Any reviewer can judge any analyst's output by one standard.</div>
+      <div class="theme-anchor">Barnes' scope drift · Chase's trust concern · Ben's sign-off criterion</div>
+    </div>
+    <div class="theme">
+      <div class="theme-title">The analyst stays in control — and moves faster</div>
+      <div class="theme-body">One command starts or re-enters any engagement at the right point. The analyst chooses which findings the plan focuses on, can accept the review panel's first pass, and gets a short reading list at each checkpoint. Client pushback after delivery reopens the engagement cleanly.</div>
+      <div class="theme-anchor">Julie's "less, faster" · Wil's "more detailed than needed" · Barnes' management burden</div>
+    </div>
+    <div class="theme">
+      <div class="theme-title">Ready to operate as a team</div>
+      <div class="theme-body">A local viewer lets a manager review any engagement's artifacts as they're produced; session notes and a complete reasoning record are captured automatically; documentation is rewritten in plain English for newer analysts; and the model configuration now tracks current releases so the system never falls a generation behind again.</div>
+      <div class="theme-anchor">Julie's review requirement · the phase-2 newer-analyst rollout</div>
+    </div>
+  </div>
+
+  <h2>Scale of the change</h2>
+  <div class="facts">
+    <div class="fact"><div class="fact-val">14</div><div class="fact-lbl">workstreams, fully specified</div></div>
+    <div class="fact"><div class="fact-val">26</div><div class="fact-lbl">verification passes against the system as-built</div></div>
+    <div class="fact"><div class="fact-val">~175</div><div class="fact-lbl">changes — configuration &amp; instructions, no app code</div></div>
+    <div class="fact"><div class="fact-val">0</div><div class="fact-lbl">changes made so far — all awaiting approval</div></div>
+  </div>
+  <p>No new licenses, infrastructure, or budget. Roughly one week of sequenced implementation, ending in a full dry run before any analyst touches it.</p>
+
+  <h2>Three asks of leadership</h2>
+  <div class="asks">
+    <div class="ask"><span class="ask-marker">1</span><span class="ask-body"><strong>Ratify the plan at the team review.</strong> Twenty-five decisions are teed up with recommendations — mostly confirmations of direction already discussed, including manager sign-off before customer-facing output.</span></div>
+    <div class="ask"><span class="ask-marker">2</span><span class="ask-body"><strong>Keep round 2 with the same cohort.</strong> The experienced group proves the consistency features; the newer-analyst rollout is staged behind it with onboarding materials built into this plan.</span></div>
+    <div class="ask"><span class="ask-marker">3</span><span class="ask-body"><strong>Progress the org-level decisions in parallel.</strong> Licensing, data governance, and Salesforce/Slack integration sit deliberately outside this plan — it doesn't block on them, and the integration groundwork is already laid.</span></div>
+  </div>
+
+  <div class="oos-note"><strong>Measure of success, unchanged:</strong> Ben's round-1 criterion — would we sign off on this output for <em>any</em> analyst? Round 2 runs the same engagement flow, same cohort, with the variance sources closed.</div>
+
+  <p class="footer">Prepared July 8, 2026 · Nathon Burwick. Companions: the full change plan (per-file specifications, feedback traceability for all ten pilot voices) and the implementation runbook. Sources: round-1 debrief, the U-Haul reference engagement, 26 verification passes.</p>
+
+</div>
+
+</body>
+</html>

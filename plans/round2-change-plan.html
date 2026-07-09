@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Insights Forge — Round 2 Change Plan</title>
+<style>
+  :root {
+    --bg:        #EFF1F6;
+    --surface:   #FFFFFF;
+    --surface2:  #F6F7FA;
+    --border:    #D8DCE8;
+    --text:      #1A1E2E;
+    --text-2:    #4A5068;
+    --text-3:    #6E7890;
+    --accent:    #3F68E8;
+    --accent-bg: #EBF0FE;
+    --good:      #1A7A55;
+    --good-bg:   #E7F5EF;
+    --good-mid:  #2FA072;
+    --warn:      #C06820;
+    --warn-bg:   #FDF0E5;
+    --warn-mid:  #E07838;
+    --crit:      #A83040;
+    --crit-bg:   #FDEAED;
+    --crit-mid:  #C84050;
+    --mono:  'SF Mono','Cascadia Code','Fira Mono','Consolas',monospace;
+    --serif: 'Garamond','EB Garamond','Palatino Linotype','Palatino',Georgia,serif;
+    --sans:  'Helvetica Neue','Arial',system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --bg:#111622;--surface:#1A1E2E;--surface2:#151928;--border:#282E42;
+    --text:#DDE2F0;--text-2:#9BA5C0;--text-3:#6B768A;
+    --accent:#6B92FF;--accent-bg:#1A2248;
+    --good:#2DB87A;--good-bg:#0D2A1E;--good-mid:#24A068;
+    --warn:#E08040;--warn-bg:#2A1A0C;--warn-mid:#C87030;
+    --crit:#E06070;--crit-bg:#2A0F14;--crit-mid:#C85060;
+  }}
+  :root[data-theme="light"] {
+    --bg:#EFF1F6;--surface:#FFFFFF;--surface2:#F6F7FA;--border:#D8DCE8;
+    --text:#1A1E2E;--text-2:#4A5068;--text-3:#6E7890;
+    --accent:#3F68E8;--accent-bg:#EBF0FE;
+    --good:#1A7A55;--good-bg:#E7F5EF;--good-mid:#2FA072;
+    --warn:#C06820;--warn-bg:#FDF0E5;--warn-mid:#E07838;
+    --crit:#A83040;--crit-bg:#FDEAED;--crit-mid:#C84050;
+  }
+  :root[data-theme="dark"] {
+    --bg:#111622;--surface:#1A1E2E;--surface2:#151928;--border:#282E42;
+    --text:#DDE2F0;--text-2:#9BA5C0;--text-3:#6B768A;
+    --accent:#6B92FF;--accent-bg:#1A2248;
+    --good:#2DB87A;--good-bg:#0D2A1E;--good-mid:#24A068;
+    --warn:#E08040;--warn-bg:#2A1A0C;--warn-mid:#C87030;
+    --crit:#E06070;--crit-bg:#2A0F14;--crit-mid:#C85060;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1.25rem 5rem;
+  }
+  .page { max-width: 880px; margin: 0 auto; }
+  a { color: var(--accent); }
+
+  /* ── header ── */
+  .report-header { border-bottom: 1px solid var(--border); padding-bottom: 1.75rem; margin-bottom: 2rem; }
+  .report-eyebrow {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 0.6rem;
+  }
+  .report-title {
+    font-family: var(--serif); font-size: clamp(1.8rem, 3.8vw, 2.5rem);
+    font-weight: normal; line-height: 1.15; color: var(--text);
+    text-wrap: balance; margin-bottom: 0.5rem;
+  }
+  .report-meta { font-size: 0.8rem; color: var(--text-3); margin-bottom: 1.1rem; }
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .stat-pill {
+    font-size: 0.74rem; padding: 0.22rem 0.7rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 2rem; color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-pill strong { color: var(--text); font-weight: 600; }
+  .stat-pill.hold { border-color: var(--warn-mid); color: var(--warn); }
+
+  /* ── intro ── */
+  .intro {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem; margin-bottom: 2.5rem;
+    font-size: 0.9rem; color: var(--text-2); line-height: 1.7;
+  }
+  .intro strong { color: var(--text); }
+
+  /* ── section ── */
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.1rem; }
+  .section-title { font-family: var(--serif); font-size: 1.3rem; font-weight: normal; color: var(--text); }
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+  .section-sub { font-size: 0.82rem; color: var(--text-3); line-height: 1.6; margin-bottom: 1.1rem; }
+
+  /* ── alignment table ── */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.8rem; }
+  th {
+    font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-3); text-align: left;
+    padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border);
+    background: var(--surface2); white-space: nowrap;
+  }
+  td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; line-height: 1.5; }
+  tr:last-child td { border-bottom: none; }
+  td strong { color: var(--text); }
+  td code, .ws-body code, li code {
+    font-family: var(--mono); font-size: 0.74rem;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 3px; padding: 0.04rem 0.28rem; color: var(--text);
+    white-space: nowrap;
+  }
+  .ws-ref { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+
+  /* ── sequence rail ── */
+  .seq { display: flex; flex-direction: column; gap: 0; margin-top: 0.5rem; }
+  .seq-item { display: flex; gap: 0.9rem; position: relative; padding-bottom: 1.1rem; }
+  .seq-item:last-child { padding-bottom: 0; }
+  .seq-marker {
+    flex-shrink: 0; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+    background: var(--accent-bg); color: var(--accent);
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--accent); z-index: 1;
+  }
+  .seq-item::before {
+    content: ''; position: absolute; left: 0.82rem; top: 1.7rem; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .seq-item:last-child::before { display: none; }
+  .seq-body { font-size: 0.83rem; color: var(--text-2); line-height: 1.55; padding-top: 0.15rem; }
+  .seq-body strong { color: var(--text); }
+
+  /* ── workstream cards ── */
+  .ws {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; margin-bottom: 1.25rem; overflow: hidden;
+  }
+  .ws-head {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+    padding: 1rem 1.25rem 0.75rem;
+  }
+  .ws-id { font-family: var(--mono); font-size: 0.7rem; color: var(--text-3); margin-bottom: 0.2rem; }
+  .ws-title { font-family: var(--serif); font-size: 1.12rem; color: var(--text); line-height: 1.3; }
+  .chips { display: flex; gap: 0.3rem; flex-shrink: 0; }
+  .chip {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.14rem 0.45rem; border-radius: 3px; font-weight: 500; white-space: nowrap;
+  }
+  .chip.effort  { background: var(--accent-bg); color: var(--accent); }
+  .chip.decide  { background: var(--warn-bg); color: var(--warn); }
+  .ws-body { padding: 0 1.25rem 1.1rem; font-size: 0.84rem; color: var(--text-2); line-height: 1.65; }
+  .ws-body p { margin-bottom: 0.7rem; }
+  .ws-body p:last-child { margin-bottom: 0; }
+  .ws-calls { margin: 0.6rem 0 0.9rem; padding-left: 1.1rem; }
+  .ws-calls li { margin-bottom: 0.45rem; font-size: 0.82rem; }
+  .ws-calls li:last-child { margin-bottom: 0; }
+  .ws-calls li strong { color: var(--text); }
+  .ws-files {
+    margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px dashed var(--border);
+    font-size: 0.76rem; color: var(--text-3); line-height: 1.7;
+  }
+  .ws-files .lbl {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-3); display: block; margin-bottom: 0.25rem;
+  }
+
+  /* ── code / contract block ── */
+  .contract {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.9rem 1.1rem; margin: 0.75rem 0; overflow-x: auto;
+  }
+  .contract pre {
+    font-family: var(--mono); font-size: 0.72rem; line-height: 1.65;
+    color: var(--text-2); white-space: pre;
+  }
+  .contract .k { color: var(--accent); }
+
+  /* ── callout ── */
+  .callout {
+    background: var(--warn-bg); border: 1px solid var(--warn-mid); border-radius: 6px;
+    padding: 0.8rem 1.1rem; margin: 0.9rem 0; font-size: 0.82rem;
+    color: var(--text-2); line-height: 1.6;
+  }
+  .callout strong { color: var(--warn); }
+  .callout.good { background: var(--good-bg); border-color: var(--good-mid); }
+  .callout.good strong { color: var(--good); }
+
+  /* ── decisions ── */
+  .decision-list { display: flex; flex-direction: column; gap: 0.5rem; counter-reset: dec; }
+  .decision {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.85rem 1.1rem 0.85rem 3rem; position: relative; counter-increment: dec;
+  }
+  .decision::before {
+    content: "D" counter(dec);
+    position: absolute; left: 0.9rem; top: 0.95rem;
+    font-family: var(--mono); font-size: 0.68rem; color: var(--accent);
+    font-weight: 600;
+  }
+  .decision-q { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; line-height: 1.4; }
+  .decision-rec { font-size: 0.8rem; color: var(--text-2); line-height: 1.55; }
+  .decision-rec .rec-tag {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase;
+    background: var(--good-bg); color: var(--good); border-radius: 3px; padding: 0.08rem 0.35rem;
+    margin-right: 0.35rem;
+  }
+
+  /* ── not-doing ── */
+  .oos-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .oos {
+    display: grid; grid-template-columns: 200px 1fr; gap: 1rem;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.75rem 1rem; font-size: 0.81rem;
+  }
+  @media (max-width: 580px) { .oos { grid-template-columns: 1fr; gap: 0.25rem; } }
+  .oos-topic { font-weight: 600; color: var(--text); }
+  .oos-body { color: var(--text-2); line-height: 1.55; }
+
+  .footnote {
+    margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--text-3); line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="report-header">
+    <p class="report-eyebrow">Insights Forge · pilot round 2 · companion #3 (audit → pilot brief → this plan)</p>
+    <h1 class="report-title">Round 2 Change Plan — for team approval</h1>
+    <p class="report-meta">Every change below is specced against the repo as of commit <span style="font-family:var(--mono)">339a7f8</span> with exact file and line anchors. Verified by 27 independent repo-analysis passes.</p>
+    <div class="stat-strip">
+      <span class="stat-pill"><strong>15</strong> workstreams</span>
+      <span class="stat-pill"><strong>58</strong> agent + <strong>~35</strong> docs + <strong>~85</strong> capability & runtime changes</span>
+      <span class="stat-pill"><strong>~42</strong> files + 1 mechanical path rewrite</span>
+      <span class="stat-pill"><strong>2</strong> small stdlib tools — everything else markdown, HTML & config</span>
+      <span class="stat-pill hold"><strong>Nothing changed yet</strong> — awaiting approval</span>
+    </div>
+  </header>
+
+  <div class="intro">
+    This plan translates leadership's round-2 narrowing into repo changes: <strong>one use case</strong> (Customer Action Plan, 30/60/90), <strong>one default persona</strong> (Executive Sponsor, overridable), <strong>one artifact shape</strong> (one-pager + optional deck), a <strong>seed-prompt intake</strong> fed by the external HTML form, a <strong>harder consultative Q&amp;A loop</strong>, and a <strong>post-delivery replan path</strong>. It also fixes the root cause behind round 1's look-and-feel variance — skill triggering was 100% voluntary — which no amount of output templating would have solved. A sixth workstream brings the <strong>documentation into full alignment</strong> with the tool: 15 drift defects fixed, a plain-English pass for the newer-analyst audience, a rebuilt <code>index.html</code> walkthrough, and a standing rule that <strong>no workstream ships without its doc updates</strong>. The HTML form itself is out of scope (being built separately); this plan defines the <strong>seed contract</strong> the form targets.
+  </div>
+
+  <!-- ═══════════ ALIGNMENT ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">How this maps to leadership's asks</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Leadership ask (Jeremy's plan / debrief)</th><th>Where it lands</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>HTML input form up front (Angie-style)</td><td><span class="ws-ref">WS-1</span></td><td>Form built externally; this plan defines the seed contract it emits and how Phase 0 consumes it.</td></tr>
+          <tr><td>Analyst experience / customer maturity / account familiarity fields</td><td><span class="ws-ref">WS-1</span></td><td>New Q0 + extended Q3; each field has a named downstream consumer so none is dead weight.</td></tr>
+          <tr><td>Agent probes thin input ("3 words on session replay")</td><td><span class="ws-ref">WS-1</span></td><td>Thin-answer rule: concrete detection heuristic, one bounded probe, calibrated by account familiarity.</td></tr>
+          <tr><td>Quality gates before generating output</td><td><span class="ws-ref">WS-1</span></td><td>Existing MUST-HAVE scan stays; Phase 0 gate is formalized as a named <strong>Direction Check</strong> (Ben's round-1 ask).</td></tr>
+          <tr><td>Standardized look/feel of deliverables</td><td><span class="ws-ref">WS-2</span></td><td>The standard existed; triggering didn't. Registering skills with the harness is the fix — not more templates.</td></tr>
+          <tr><td>Gap → Solution → Sequenced action, 30/60/90</td><td><span class="ws-ref">WS-3</span></td><td>New feature, honestly scoped as such — the current plan has no time-phasing at all.</td></tr>
+          <tr><td>One persona output</td><td><span class="ws-ref">WS-3</span></td><td>Executive Sponsor as <em>default</em>, surfaced for confirmation — keeps the 8-archetype machinery, per Nate's pushback on "neutral."</td></tr>
+          <tr><td>Cut solutions outside DEM / stated scope</td><td><span class="ws-ref">WS-4</span></td><td>Containment by <em>consent</em>, not a hard whitelist — the Biz Events drift becomes an explicit ask; U-Haul-style adoption plays still pass with one recorded yes.</td></tr>
+          <tr><td>Analyst pushes adjustments after client meeting</td><td><span class="ws-ref">WS-5</span></td><td>Currently only works if the engagement was never archived. Reopen mode makes it a designed path.</td></tr>
+          <tr><td>Documentation aligns with the tool, in plain English, with a usable workflow walkthrough</td><td><span class="ws-ref">WS-6</span></td><td>15 drift defects found (2 direct contradictions); index.html confirmed over-engineered — and worse, a drift machine (all 8 embedded doc copies already stale). Rebuild specced.</td></tr>
+          <tr><td>Knowledge linking (second-brain / LLM-wiki) + graph of the knowledge base</td><td><span class="ws-ref">WS-7</span></td><td>The repo already started this unprompted — <code>[[brand-spec]]</code> links exist and long-term README is a de-facto index. Formalizing it also cuts session startup cost 63%. Round 2.5.</td></tr>
+          <tr><td>Near-real-time review of phased output across all local clients/engagements</td><td><span class="ws-ref">WS-8</span></td><td>Generalizes the hand-built U-Haul viewer into one manifest-driven tool + template. Directly supports gate reviews and the manager-review flow — recommended for round 2.</td></tr>
+          <tr><td>Future-proof models; optimize agents for the models they run on; manage context; run subagents more in parallel</td><td><span class="ws-ref">WS-9</span></td><td>All 7 subagents + the main agent pin stale models today. Per Nate's direction: <strong>generic tier aliases everywhere</strong> (sonnet/haiku) — zero pins, zero future bumps — plus a Model Matrix, read-only lens tools, session-hygiene / compaction-recovery rules, and a <strong>parallel dispatch rule</strong>: independent lens invocations go out in one message and run concurrently.</td></tr>
+          <tr><td>Incorporate the fable-mode execution discipline — always loaded, and expanded into the tool</td><td><span class="ws-ref">WS-10</span></td><td>Per Nate's direction: always loads at session start, and per his clarifying answers, extends into the consulting reasoning itself — a three-tier evidence taxonomy threaded from intake through hypotheses, ICE Confidence, signal linkages, and the roadmap; five of six lenses gain evidence-calibration edits. Internal only — no gate ceremony added.</td></tr>
+          <tr><td>A slash command to initialize the agent and jump in at different points</td><td><span class="ws-ref">WS-11</span></td><td><code>/engage</code> — one registered front-door command: new engagement (with form seed), resume, reopen, jump to a phase, or regenerate a deliverable. Jumping never bypasses gates. Also resolves the triple-defined interaction starter WS-6 flagged.</td></tr>
+          <tr><td>Summarize or export a full session</td><td><span class="ws-ref">WS-12</span></td><td>Both pieces per Nate's answer: <code>/wrap-up</code> writes distilled session notes into the engagement folder (and becomes Pause's missing context capture), and <code>tools/session-export.py</code> renders the verbatim transcript to markdown, defaulting to an untracked <code>exports/</code> dir.</td></tr>
+          <tr><td>Agent engages the analyst in Phases 1 &amp; 2 with questions that uncover better context or direction</td><td><span class="ws-ref">WS-13</span></td><td>Authored question points in the five Phase 1–2 skills, ask-with-draft delivery (never pause empty-handed), and a CONTINUING/BLOCKED status line on every batch. The U-Haul pilot is the evidence: Amy's four questions arrived via a gate workaround and forced a full hypotheses restructure that a mid-phase batch would have prevented.</td></tr>
+          <tr><td>Phased output lists the files to read after each phase; /wrap-up exports all the agent's reasoning</td><td><span class="ws-ref">WS-14</span></td><td>A "What to review" block ends every gate presentation (which finally <em>defines</em> the Phase 1 gate — closing the original audit's top structural finding), and /wrap-up gains a Reasoning trail section plus an auto-run of the verbatim transcript export.</td></tr>
+          <tr><td>One-pager and deck restructured on the StoryBrand framework</td><td><span class="ws-ref">WS-15</span></td><td>Problem → Guide → Plan → Stakes → Ask, customer as hero. Retro-fit against the real U-Haul one-pager: five of six beats already latent in the content; the missing one (Success) is exactly what WS-3's rollup outcome column supplies.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ TRACEABILITY ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Feedback traceability — every voice, mapped</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="section-sub">Every piece of round-1 feedback and every direction given since, traced to where the plan answers it. Status: <strong style="color:var(--good)">✔ addressed</strong> · <strong style="color:var(--warn)">◐ partial</strong> · <strong style="color:var(--text-3)">○ out of scope (org decision)</strong> · <strong style="color:var(--text-3)">◌ deferred</strong>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Who</th><th>Feedback</th><th>Where it lands</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="5"><strong>Ben</strong></td><td>Confirm the plan before creating assets that may need rework</td><td><span class="ws-ref">WS-1</span> Direction Check gate</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Output depth levels — stop when good enough</td><td>Gates + focus selection (D24) + council opt-out + <span class="ws-ref">WS-11/12</span> clean stop &amp; re-entry</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>"Would we sign off on this for any analyst"</td><td><span class="ws-ref">WS-1</span> intake + calibration · <span class="ws-ref">WS-2</span> enforcement · <span class="ws-ref">WS-10</span> evidence chain</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Combine Angie's simplicity with the agent's depth</td><td><span class="ws-ref">WS-1</span> seed contract — form in front, full machinery behind</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Run round 2 narrowly with the specialist team</td><td>Process decision — plan is staged for it (newer-analyst features prove out with the experienced cohort first)</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td rowspan="6"><strong>Julie</strong></td><td>Standardized, tiered input/output adjusted by analyst maturity</td><td><span class="ws-ref">WS-1</span> seed + Q0 experience/familiarity + customer maturity (MUST-HAVE)</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Leadership reviews outputs before customer-facing use</td><td><span class="ws-ref">WS-8</span> viewer + <span class="ws-ref">WS-12/14</span> notes &amp; reasoning give reviewers the material; the <em>formal</em> gate is pending D27</td><td><strong style="color:var(--warn)">◐</strong></td></tr>
+          <tr><td>"I want less, faster"</td><td><span class="ws-ref">WS-3</span> council slim · D24 focus · opt-out · <span class="ws-ref">WS-9</span> parallel dispatch + −63% session-init</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Licenses / deployment model</td><td>Org decision — plan doesn't block on it</td><td><strong style="color:var(--text-3)">○</strong></td></tr>
+          <tr><td>Data governance — what can go into AI tools</td><td>Respected, not decided: exports default local-untracked; docs say ask before sharing</td><td><strong style="color:var(--text-3)">○</strong></td></tr>
+          <tr><td>Salesforce / Slack AI integration</td><td>Out of scope — but the <span class="ws-ref">WS-1</span> seed contract is the integration surface a future feed targets</td><td><strong style="color:var(--text-3)">○</strong></td></tr>
+          <tr><td rowspan="7"><strong>Jeremy</strong></td><td>Agent probes thin input ("you only gave 3 words on session replay")</td><td><span class="ws-ref">WS-1</span> thin-answer rule + <span class="ws-ref">WS-13</span> mid-phase engagement</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>One use case: 30/60/90 Customer Action Plan</td><td><span class="ws-ref">WS-3</span> — honestly scoped as a new artifact structure, not a trim</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>One persona output (proposed: neutral)</td><td><span class="ws-ref">WS-3</span> Executive Sponsor <em>default</em> — Nate's amendment; the machinery stays, the pilot gets one persona</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Analyst experience / customer maturity / account familiarity fields + quality gates</td><td><span class="ws-ref">WS-1</span> Q0 + Q3-C + rubric rows; each field has a named downstream consumer</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Gap → Solution → Sequenced action standardized narrative</td><td><span class="ws-ref">WS-3</span> Sequenced roadmap + rollup; one-pager and deck read from it</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Cut solutions outside DEM / analyst can push post-client adjustments</td><td><span class="ws-ref">WS-4</span> consent gates (containment-by-consent, U-Haul-compatible) · <span class="ws-ref">WS-5</span> Reopen (was a real gap, not a checkbox)</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Standardized look/feel of deliverables</td><td><span class="ws-ref">WS-2</span> — the standard existed; deterministic triggering is the fix, plus <span class="ws-ref">WS-10</span>'s deck output inspection</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td rowspan="3"><strong>Mike Barnes</strong></td><td>Biz Events recommended outside stated scope</td><td><span class="ws-ref">WS-4</span> scope declaration + hypothesis check + ask-first step 2a + Optimist tagging</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Had to actively manage the session — stuck vs. working was illegible</td><td><span class="ws-ref">WS-13</span> CONTINUING/BLOCKED status lines + Questions-for-you block + <span class="ws-ref">WS-11</span> /engage</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>4–5 hours invested before direction was validated</td><td><span class="ws-ref">WS-1</span> Direction Check — direction confirmed before Phase 1 investment</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td rowspan="3"><strong>Angie</strong></td><td>Form-first intake outperformed for lower-context users</td><td><span class="ws-ref">WS-1</span> seed contract (form built externally by Nate; Phase 0 consumes it deterministically)</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Hard to understand why it paused or what it needed</td><td>Questions-for-you end-block rule + <span class="ws-ref">WS-13</span> status lines + <span class="ws-ref">WS-14</span> What-to-review at gates</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Deck output weaker than direct Claude use — "still needed cleanup"</td><td><span class="ws-ref">WS-2</span> skill enforcement + pptx permission gate + <span class="ws-ref">WS-10</span> output inspection + OUTPUT_DIR bug fix</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td rowspan="2"><strong>Paul</strong></td><td>Same structured information → output variance should decrease</td><td><span class="ws-ref">WS-1</span> seed + <span class="ws-ref">WS-2</span> deterministic triggering — the two variance sources, closed</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Is Nate's stronger output better info, tool familiarity, or both?</td><td>Q0 calibration makes both visible; the SOP/walkthrough docs (<span class="ws-ref">WS-6</span>) transfer the familiarity</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td><strong>Mike Chase</strong></td><td>New analysts may trust off-scope recommendations without account nuance</td><td><span class="ws-ref">WS-4</span> consent gates + <span class="ws-ref">WS-10</span> evidence tiers — off-scope and unevidenced claims are visibly labeled</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td rowspan="3"><strong>Wil</strong></td><td>Gen 2/Classic vs Gen 3 capability confusion</td><td>Playbook generation-tagging — deprioritized (his run was off-label); cheap to add with WS-7's playbook split</td><td><strong style="color:var(--text-3)">◌</strong></td></tr>
+          <tr><td>Output sometimes more detailed than needed</td><td>Focus selection (D24) + gate tiers + council opt-out</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td>Ingest web-app JSON/config files</td><td>Integration work — out of scope with Salesforce/Slack, same governance dependency</td><td><strong style="color:var(--text-3)">○</strong></td></tr>
+          <tr><td><strong>Adam</strong></td><td>"How does an analyst know to provide context that comes from experience?"</td><td><span class="ws-ref">WS-13</span> — the agent asks for it at the exact steps it matters, instead of hoping the analyst volunteers it; Q0 routes by familiarity</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+          <tr><td><strong>Nate</strong></td><td>All session directives: knowledge linking + graph · engagement viewer · model future-proofing + context + parallel subagents · always-on fable-mode + evidence chain · /engage · session summary/export · council opt-out · focus selection · mid-phase engagement · gate reading lists · reasoning export · StoryBrand deliverable narrative</td><td><span class="ws-ref">WS-7</span>–<span class="ws-ref">WS-15</span> + D1/D15/D18/D24 — each scoped with verified ground truth and honest rejections recorded</td><td><strong style="color:var(--good)">✔</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEQUENCING ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Implementation order</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="section-sub">Order matters twice over: three workstreams edit the same files (<code>context-framing</code>, <code>action-plan-builder</code>, <code>CLAUDE.md</code>), the skills-folder move rewrites every path, and index.html currently holds most content in <em>triplicate</em> — so the docs consolidation goes first (every later change then touches one copy, not three), content edits follow, and the move goes last with its path sweep covering everything. Each step ends by applying its doc-impact entries. Line anchors must be re-verified as edits land.</p>
+    <div class="seq">
+      <div class="seq-item">
+        <div class="seq-marker">1</div>
+        <div class="seq-body"><strong>Docs consolidation first</strong> — WS-6a/b: fix the 15 drift defects, rebuild <code>html/index.html</code> to the single-page spec (kills the triple-copy problem), apply the plain-English rewrites. Done first so WS-1–5's doc updates each land in exactly one place.</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">2</div>
+        <div class="seq-body"><strong>Phase 0 bundle</strong> — WS-1 in full, plus WS-4's Phase 0 parts (scope declaration) and WS-3's Q7 Executive Sponsor default. One coordinated editing pass over <code>context-framing/SKILL.md</code> + CLAUDE.md — <em>including WS-9b's Session hygiene section, WS-10's session-init entry + method file, WS-13's mid-phase engagement paragraph, and WS-14's "What to review" gate rule, so CLAUDE.md is edited once and the discipline is live for all subsequent implementation work</em>. Then its doc-impact entries (getting-started, workflow, skills, lenses, memory, README).</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">3</div>
+        <div class="seq-body"><strong>Phase 1–2 bundle</strong> — WS-3 roadmap restructure + WS-4 scope checks + WS-5's binding-exclusions hooks, <em>plus six riders: WS-9b's paths-not-paste council dispatch (merged into WS-3's step-6 rewrite), WS-10's pptx-builder output-inspection step, the WS-10 expansion's evidence chain (frameworks.md tiers + hypothesis Evidence field + ICE anchor bands + signal-map citations + action-plan inheritance), WS-13's five question-point steps, WS-14's Phase 1 gate definition (the new ice-scoring final step), and WS-15's StoryBrand restructure of exec-onepager + pptx-builder (supersedes the older section-4 swap in this same pass) — same files, same pass</em>. One pass over <code>action-plan-builder</code>, <code>hypothesis-generation</code>, <code>signal-mapping</code>, <code>ice-scoring</code>, <code>exec-onepager</code>, <code>pptx-builder</code>, <code>optimist-lens</code>, <code>frameworks.md</code>. Then its doc-impact entries (workflow, lenses, skills, memory, deliverables, customizing, README).</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">4</div>
+        <div class="seq-body"><strong>Reopen mode</strong> — WS-5's <code>investigation-reset</code> third mode, decisions-log vocabulary, template README, CLAUDE.md line-74 contradiction fix — <em>plus WS-12's investigation-reset edits (Pause Step 0 runs wrap-up; Archive offers it) and WS-14's wrap-up amendments (Reasoning trail section + the auto-run of the --full export), same files, same pass. The session-export tool + <code>exports/</code> gitignore entry land here too (no dependencies)</em>. Then its doc-impact entries (getting-started, memory, workflow, skills, README).</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">5</div>
+        <div class="seq-body"><strong>Engagement viewer</strong> — WS-8's <code>tools/engagement-viewer.py</code> + <code>html/engagement-viewer.html</code>. Sequenced after step 3 so WS-3's final artifact filenames go straight into the viewer's phase-grouping map without a churn commit. Touches zero agent behavior, so it can also run in parallel with steps 3–4 if capacity allows.</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">6</div>
+        <div class="seq-body"><strong>Skills registration + runtime bundle last</strong> — WS-2's <code>git mv skills/ → .claude/skills/</code>, the guarded path rewrite (~130 references, 36 files — docs included in the same sweep), and the <code>settings.json</code> edit. Riders that land with it: <em>WS-9b's skill-Inputs harmonization (edited in the relocated files, once), WS-9a's model-alias flip (settings.json + all 7 agent frontmatters → generic <code>sonnet</code>/<code>haiku</code>), the WS-10 expansion's five lens calibration edits (same agent files as the frontmatter pass, after WS-3's lens body edits so the three never interleave), and WS-11's <code>/engage</code> + WS-12's <code>/wrap-up</code> commands (both depend on registration; /engage also on WS-5's Reopen)</em>. WS-10's method file is already live from step 2 — it's created directly at <code>.claude/skills/</code>, the move's destination, so the sweep doesn't touch it. One-time comparison after the alias flip: re-run the council lenses + one MECE pass against the archived U-Haul artifacts and eyeball against the originals — the same procedure is the on-demand spot-check whenever a future tier release lands. Then the full smoke run: fresh session → <code>/engage</code> → seed prompt → Direction Check → Phase 1.</div>
+      </div>
+      <div class="seq-item">
+        <div class="seq-marker">7</div>
+        <div class="seq-body"><strong>Round 2.5: knowledge linking</strong> — WS-7 lands only after everything above: it edits the same CLAUDE.md session-init lines as WS-1/WS-2, every skill's Inputs section (which WS-2 just moved), and docs/memory.md (which WS-6 just rewrote). Running it concurrently guarantees collisions across ~12 files; its spec is already written against post-round-2 paths.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WS-1 ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">The five workstreams</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-1 · fixes intake variance + thin inputs + buried questions</div>
+          <div class="ws-title">Phase 0 intake — seed prompt, calibration fields, thin-answer challenge, Direction Check</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The form (external) emits a fenced <code>insights-forge-seed</code> block; Phase 0 parses it, treats each populated field as answered, and interviews <strong>only on gaps and thin answers</strong>. The existing skip-if-answered rule (line 45) already supports this — the change is a defined contract plus explicit parse rules. Critically, the seed <strong>feeds</strong> the machinery, never bypasses it: the C.S.I.R. completeness gate, archetype resolution, and MUST-HAVE scan all still run.</p>
+        <p><strong>The seed contract the form should target</strong> (SKILL.md becomes the source of truth; unknown keys are surfaced, never silently dropped):</p>
+        <div class="contract"><pre>```insights-forge-seed
+<span class="k">seed-version:</span> 1
+<span class="k">customer:</span> &lt;name — what they sell, approx size&gt;
+<span class="k">vertical:</span> &lt;vertical label&gt;
+<span class="k">csir-context:</span> &lt;relationship history, mood, analyst role&gt;
+<span class="k">csir-specific:</span> &lt;known facts, pain points, constraints, contract phase&gt;
+<span class="k">csir-intent:</span> &lt;analyst goal + customer's expected outcome&gt;
+<span class="k">csir-response-format:</span> &lt;deliverable format + primary audience&gt;
+<span class="k">tenant-type:</span> &lt;SaaS | Managed&gt;
+<span class="k">active-capabilities:</span> &lt;comma-separated labels from the Q5 checklist&gt;
+<span class="k">rum-status:</span> &lt;enabled/not on target app; session replay on/off&gt;
+<span class="k">stakeholder:</span> &lt;name, role, top-of-mind KPIs&gt;
+<span class="k">technical-team-priorities:</span> &lt;day-to-day pain points&gt;
+<span class="k">engagement-trigger:</span> &lt;QBR | renewal | expansion | touchpoint | other&gt;
+<span class="k">customer-maturity:</span> &lt;early adoption | early value | established&gt;
+<span class="k">analyst-experience:</span> &lt;New | Intermediate | Expert&gt;
+<span class="k">account-familiarity:</span> &lt;High | Moderate | Low&gt;
+```</pre></div>
+        <ul class="ws-calls">
+          <li><strong>Q0 — analyst calibration</strong> (experience + account familiarity, asked as a pair, defaults Intermediate/Moderate if unanswered). Experience sets output depth in every artifact; familiarity sets challenge intensity. SHOULD-HAVE with self-defaults so they never block the gate.</li>
+          <li><strong>Customer maturity</strong> lands inside Q3-Context (it's customer-side context, not a tenth question) and becomes <strong>MUST-HAVE</strong> — it's the anchor field for the narrowed use case and paces the 30/60/90 buckets.</li>
+          <li><strong>Thin-answer rule</strong>: a MUST-HAVE narrative answer under ~10 words, or naming a topic with zero specifics, triggers exactly <em>one</em> targeted probe that quotes the analyst's words back ("You gave me three words on session replay — which application, and what has the team done with the replays so far?"). Low familiarity → don't interrogate; route the gap to the customer via <code>client-question-bank.md</code>. Still-thin answers pass but are <em>named as thin</em> at the gate.</li>
+          <li><strong>Question visibility</strong>: one CLAUDE.md operating principle — every question to the analyst appears in a single <strong>"Questions for you"</strong> block at the END of the response, every phase, every gate. One rule in the always-loaded file beats duplicating it across ten skills.</li>
+          <li><strong>Direction Check gate</strong>: formalizes what Step 11 already does — scope summary + 3–5 orientation hypotheses (already produced in Step 6) + explicit approve/redirect/iterate ask, now as a <em>named</em> gate recorded as <code>Phase 0 Direction Check</code> in the decisions log. Zero new steps; Ben's "confirm the plan before creating assets" lands here.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/context-framing/SKILL.md</code> (9 edits) · <code>CLAUDE.md</code> (2) · <code>memory/clients/_template/engagements/decisions-log.md</code> · <code>memory/long-term/client-question-bank.md</code></div>
+      </div>
+    </div>
+
+    <!-- WS-2 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-2 · fixes the look/feel variance root cause</div>
+          <div class="ws-title">Deterministic skill triggering — register the skills with the harness</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decision D5–D6</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Round 1's "users didn't trigger the skills" was a design gap, not user error: skill invocation rested on a CLAUDE.md sentence asking the agent to voluntarily read a markdown file, and <code>settings.json</code> pre-allow-listed the pptx generator so decks rendered with zero friction. Three-layer fix:</p>
+        <ul class="ws-calls">
+          <li><strong>Move <code>skills/</code> → <code>.claude/skills/</code></strong>. All 13 SKILL.md files verified drop-in compatible (name + description frontmatter, kebab-case, under limits). Registration makes every skill's description visible to the model on every turn and each skill invocable as a slash command — a deterministic trigger instead of a convention. Symlinks were considered and rejected (undocumented discovery behavior, fragile on Windows).</li>
+          <li><strong>Deliverable routing rule in CLAUDE.md</strong>: any deliverable request — including mid-session "make me a one-pager" — MUST route through the phase table; missing prior-phase artifacts → refuse, name what's missing, offer to run the phases in order.</li>
+          <li><strong>Delete the pptx pre-allow from settings.json</strong>: every deck render now hits a human permission prompt — a free, harness-enforced gate at the exact moment of deliverable production. (Honest assessment: hooks <em>cannot</em> verify "the skill was read this session" — an optional block-and-instruct hook is specced for the team to accept or reject, but the permission prompt is the reliable gate.)</li>
+        </ul>
+        <p>Cost: a mechanical path rewrite — ~130 <code>skills/</code> references across 36 files, one guarded sed pass with a grep verification (the three <code>/mnt/skills/</code> references in pptx-builder must be preserved).</p>
+        <div class="callout"><strong>Round-2 comms note:</strong> deleting the pptx allow-list means analysts see a permission prompt on every deck render. That's the intended gate — say so in the walkthrough, or it will read as a regression.</div>
+        <div class="callout good"><strong>Found along the way:</strong> <code>tools/pptx-generator.py</code> defaults its output dir to <code>memory/project-space/</code>, which no longer exists under the folder-as-state memory model — decks silently land outside the engagement folder. Small separate fix, worth doing the same day.</div>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/*</code> → <code>.claude/skills/*</code> (13 folders) · <code>.claude/settings.json</code> · <code>CLAUDE.md</code> · ~36 files path rewrite</div>
+      </div>
+    </div>
+
+    <!-- WS-3 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-3 · the narrowed use case's artifact shape</div>
+          <div class="ws-title">Customer Action Plan — Gap → Solution → Sequenced 30/60/90 + Executive Sponsor default</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decision D1</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Honest framing: the current plan has <strong>no time-phasing at all</strong> — this is a new artifact structure, not a trim. The design keeps all the hypothesis-driven machinery (the tool's analytical value) and restructures the <em>recommended-actions</em> section into a <strong>Sequenced roadmap</strong> — replacing it rather than bolting on a sixth section, so there's one canonical action ordering.</p>
+        <ul class="ws-calls">
+          <li><strong>Gap list with citations</strong>: every gap gets an ID (G-1, G-2…) sourced from a signals-map instrumentation gap, a hypothesis, or an environment.md absence. "A gap with no citation is a sales pitch, not a finding" enters the pitfalls list.</li>
+          <li><strong>30/60/90 buckets with a rule of thumb</strong>: 30-day = existing data/config the delivery team controls; 60 = client engineering sprint time; 90 = new capability or further approval. Slip conditions stated on the bucket ("60-day, or 90 if change control applies") — no best-case-as-bucket. A one-line "Beyond 90" parking note, not roadmap rows.</li>
+          <li><strong>30/60/90 rollup</strong> with client-visible outcomes per bucket — generalizes the U-Haul "Day-30 target state" block leadership liked. The one-pager and deck read their sequence narrative from this rollup.</li>
+          <li><strong>One-pager section 4</strong> becomes "Sequenced plan (30/60/90)": three compact rows read from the rollup. <em>Superseded by WS-15's StoryBrand arc</em> — the rollup-reads-three-rows behavior survives as WS-15's Plan beat; what dies is the swap-one-section framing and the single "risks and decision asks" closer.</li>
+          <li><strong>Executive Sponsor default</strong> lands at the single point the archetype is populated (Q7): recorded as <code>Executive Sponsor (default — unconfirmed)</code>, surfaced for confirmation at the Direction Check, overridable with any archetype or named overlay. Zero downstream edits — exec-onepager already reads whatever Phase 0 recorded.</li>
+          <li><strong>Deck</strong>: one table-row edit (the 3-column actions slide becomes 30/60/90 columns); everything else flows through from the one-pager automatically.</li>
+          <li><strong>Council slimming (recommendation — needs ratification, D1)</strong>: default the Phase 2 panel to <em>one blind round</em> of all four lenses + agent reconciliation with the existing tie-breaks, escalating to the full ≥3-round council on unresolved material tension or an analyst high-stakes flag. Rationale: in the U-Haul reference, 3 of 4 recorded tensions were visible in round-1 positions and resolved by the agent's ruling — the extra rounds mostly re-derive codified tie-breaks at ~3× the cost. The "Tensions resolved" output leadership sees survives unchanged.</li>
+          <li><strong>Plan focus selection at the Phase 1→2 gate (proposed — D24)</strong>: after ICE ranks the hypotheses, the gate approval gains one question — <em>"which hypotheses/opportunities should the plan address? Default: confirmed + top-ICE; name a subset to focus."</em> The plan builds only from the focused set; everything else is <strong>parked, never deleted</strong> (<code>Status: deferred — analyst focus</code>, a one-line Parked list in the plan, optional mention on the one-pager). Guardrails: focus runs after ICE, never before (choosing before scoring is choosing blind); the Skeptic's council brief includes the parked list so it can flag a parked hypothesis that better explains the problem; and focus ≠ scope — WS-4's capability consent still applies inside the focused set. Completes the three-lever scoping model: Direction Check bounds the problem, scope declaration bounds the capabilities, focus bounds which validated findings the plan acts on. Side benefit: a focused set shrinks the draft plan, making the council round cheaper and sharper. Codifies the pattern the U-Haul engagement already used successfully (the plan served Amy's four questions, not all 15 hypotheses).</li>
+          <li><strong>Escalation is ask-first — the analyst holds the exit (decided — Nate)</strong>: after Round 1 + reconciliation, the agent presents the panel summary, its ruling on each tension, and anything the tie-breaks couldn't resolve — then asks: <em>accept and proceed</em> / <em>escalate just the unresolved tension</em> (targeted re-examination) / <em>run the full cross-examination council</em>. The checkpoint sits after reconciliation, not after raw lens output, because escalation can't be judged until the tie-breaks have done their work. Declining never buries a tension: an unresolved item accepted by the analyst moves into decision-asks (or Tensions-resolved, marked <em>analyst accepted without escalation</em>) so the audit trail and leadership still see it. This resolves WS-3's open question on escalation ownership: the agent proposes, the analyst disposes — and if the team rejects D1's slimming, the same post-Round-1 checkpoint lets the analyst collapse rounds 2–3 on the spot.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/action-plan-builder/SKILL.md</code> (5 edits) · <code>skills/exec-onepager/SKILL.md</code> (3) · <code>skills/context-framing/SKILL.md</code> (Q7) · <code>skills/pptx-builder/SKILL.md</code> · <code>docs/lenses.md</code> · <code>docs/deliverables.md</code></div>
+      </div>
+    </div>
+
+    <!-- WS-4 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-4 · fixes the Business Events drift</div>
+          <div class="ws-title">Scope containment — consent gate, not a DEM whitelist</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The drift wasn't a bug — <code>action-plan-builder</code> step 2a explicitly sanctions converting missing capabilities into adoption work items, and the Optimist lens hunts for them. A hard "DEM only" rule would have blocked the U-Haul engagement's legitimate adoption recommendations. The design is <strong>containment by consent</strong>: the agent may always <em>surface</em> an out-of-scope opportunity; nothing <em>enters an artifact</em> premised on one without a recorded analyst yes.</p>
+        <ul class="ws-calls">
+          <li><strong>Engagement scope declaration</strong> written at Phase 0 Step 7: in-scope = the Q5 checked capabilities (analyst can narrow or deliberately add expansion targets); out-of-scope = everything else; plus an append-only <strong>Approved additions</strong> list. One confirmation question, gated output.</li>
+          <li><strong>Hypothesis scope check</strong> (new step, before the Consultative lens): any hypothesis premised on an out-of-scope capability triggers one batched ask — "H4 relies on Business Events, outside your stated scope — include as exploratory, or drop?" Include → status marked <code>exploratory (out-of-scope, analyst-approved)</code> + capability appended to Approved additions. Drop → recorded in the decisions log.</li>
+          <li><strong>Step 2a split</strong>: in-scope-but-unconfigured keeps today's convert-to-instrumentation behavior; out-of-scope requires the ask first — add as tagged scope expansion / keep as flagged dependency / drop.</li>
+          <li><strong>Optimist lens</strong> keeps hunting upside but self-tags net-new adoption with <code>[OUT-OF-SCOPE — needs analyst approval]</code>; reconciliation collects tagged items into a "Scope expansion candidates" list the analyst rules on — never merged silently.</li>
+          <li><strong>Fail-safe direction</strong>: one yes persists for the whole engagement (asks don't repeat); a lost approval fails toward re-asking, never toward silent inclusion.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/context-framing/SKILL.md</code> (4 edits) · <code>skills/hypothesis-generation/SKILL.md</code> (4) · <code>skills/action-plan-builder/SKILL.md</code> (5) · <code>.claude/agents/optimist-lens.md</code> (2)</div>
+      </div>
+    </div>
+
+    <!-- WS-5 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-5 · "customer doesn't want X, replan"</div>
+          <div class="ws-title">Post-delivery loop — Reopen mode + binding client exclusions</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Today this loop only works if the analyst never archived the engagement — resume scans only <code>active|paused</code>, so delivered (<code>complete</code>) work is unreachable, and CLAUDE.md line 74 tells users to do something the resume procedure can't. The fix makes the loop a designed path:</p>
+        <ul class="ws-calls">
+          <li><strong>Reopen — a third mode</strong> in <code>investigation-reset</code>, invoked explicitly by engagement name (complete engagements stay out of the resume scan by design). Procedure: confirm target → capture feedback → flip <code>state: active</code>, roll <code>phase:</code> back (typically 2) → log → re-read context and plan before revising.</li>
+          <li><strong>Client feedback / exclusions</strong> — a new append-only section in current-context.md: one bullet per item, <code>REJECTED:</code> or <code>REQUESTED:</code>, with reason and date. <code>hypothesis-generation</code> and <code>action-plan-builder</code> treat it as binding: no rejected item resurrects without an explicit override; every requested item is addressed or explicitly deferred.</li>
+          <li><strong>"Client redirect"</strong> — a new decisions-log entry type (gate: <code>Post-delivery</code>), rationale required, so client feedback becomes an auditable gate event instead of being unrecordable.</li>
+          <li><strong>CLAUDE.md line 74 fixed</strong> to route complete engagements to Reopen and paused ones to resume — removing the internal contradiction.</li>
+          <li>Client rejection is explicitly mapped onto action-plan-builder's existing "new evidence" revision trigger — no new replan machinery needed.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/investigation-reset/SKILL.md</code> (5 edits) · <code>memory/clients/_template/engagements/decisions-log.md</code> · <code>…/README.md</code> · <code>CLAUDE.md</code> (2) · <code>skills/context-framing/SKILL.md</code> · <code>skills/action-plan-builder/SKILL.md</code> · <code>skills/hypothesis-generation/SKILL.md</code></div>
+      </div>
+    </div>
+
+    <!-- WS-6 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-6 · docs must describe the tool that exists</div>
+          <div class="ws-title">Documentation alignment — drift fixes, plain English, and the index.html rebuild</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M–L</span><span class="chip decide">Team decisions D9–D11</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Three audits ran: docs-vs-tool alignment, plain-English readability against a "new analyst who has never used Claude Code" reader, and a full read of all 3,089 lines of <code>html/index.html</code>. Four parts:</p>
+        <ul class="ws-calls">
+          <li><strong>(a) Fix 15 drift defects.</strong> Two direct contradictions a new analyst will hit: <code>docs/skills.md</code> expands C.S.I.R. as "Context, <em>Stakeholders</em>, Intent, <em>Result</em>" (wrong — it's Specific Information / Response Format), and <code>docs/deliverables.md</code> describes a one-pager structure that isn't the skill's five sections. Plus: <code>customizing.md</code> section 6 describes a CLAUDE.md that doesn't exist; three different allowlist-approval policies across two docs and the skill; the interaction starter is triple-defined with docs inverting who says it; Phase 3 HTML output landing at repo root is documented nowhere (which is why <code>insights-forge-leadership-brief.html</code> sits there unexplained); README's layout tree omits six real directories; ROADMAP predates round 2 entirely.</li>
+          <li><strong>(b) Rebuild <code>html/index.html</code></strong> — your over-engineering read is confirmed and understated. ~60% of the file is duplicated content or presentation machinery: all 8 embedded doc copies have <em>already drifted</em> from the real docs (52–93 diff lines each — the page's Doc Browser actively shows outdated behavior), plus a from-scratch physics engine for the Architecture Graph that fails every question a new analyst asks it: no "you are here," randomized layout defeats reading the sequence, and <em>gates aren't in the graph at all</em>. The tell: it needs five blocks of prose explaining how to read itself. Meanwhile the page already contains the right "graphify" element — the static <strong>Phase Flow strip</strong> — buried as one of 17 sub-pages. The rebuild: one scrollable page (~600 lines, −80%), phase strip promoted and extended to show gates explicitly (Phase 0 → <em>Direction Check</em> → … → Deliver → <em>Reopen</em>), per-phase cards answering exactly three questions — <em>what the agent produces, what it asks you, what you do at the gate</em> — a gate cheat-sheet, condensed getting-started, and links to <code>docs/</code> as the single source of truth. Deleted: Doc Browser (~760 lines), force graph (~210), Default Files viewer (~570, its ~60 good "field guide" annotations move into docs/memory.md), Source Files viewer (~110, whose 24 hardcoded paths would all break at WS-2 anyway), the page router, and the CDN dependency.</li>
+          <li><strong>(c) Plain-English pass.</strong> Docs are good for experts, fail the round-2 audience early: the README's first sentence opens with "agentic workspace" and four stacked abstractions. 15 worst-offender passages get specced rewrites (preserving accuracy — explained, not dumbed down), plus five global rules: define core terms once (glossary), replace dev jargon with the plain action ("these run automatically"), define consulting terms at first use, keep spec-precision sentences in skill files not docs, and name the actor (the agent does X, you approve Y). Three small new pages for the newer-analyst audience: a one-page <strong>glossary</strong>, <strong>"your first session, annotated,"</strong> and a <strong>troubleshooting page</strong>.</li>
+          <li><strong>(d) The standing rule.</strong> A per-workstream <strong>doc-impact map</strong> (produced by the audit, embedded in this plan) lists exactly which docs each of WS-1–5 must update — e.g., WS-3's council slimming is stated in at least 7 places in index.html alone today. Rule going forward: <em>a workstream isn't done until its doc-impact entries are applied</em>.</li>
+        </ul>
+        <div class="callout good"><strong>Found along the way (skill-side, folds into WS-1/WS-5):</strong> <code>investigation-reset</code>'s frontmatter still says "clears the session pointer" — the pointer architecture was removed in commit <span style="font-family:var(--mono)">f02361c</span>; and <code>external-research</code> line 88 says the freshness checker dispatches unconditionally while <code>context-framing</code> makes it conditional — the two skills disagree.</div>
+        <div class="ws-files"><span class="lbl">Files</span><code>html/index.html</code> (rebuild) · all 9 <code>docs/*.md</code> · <code>README.md</code> · <code>ROADMAP.md</code> · 3 new docs pages · <code>insights-forge-leadership-brief.html</code> (relocate to <code>html/</code> or untrack, per the main-branch hygiene rule)</div>
+      </div>
+    </div>
+
+    <!-- WS-7 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-7 · round 2.5 · second-brain / LLM-wiki knowledge base</div>
+          <div class="ws-title">Knowledge linking — [[wiki-links]], hub pages, and a generated graph</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decisions D12–D13</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The scoping pass found the repo has already started this without a convention: <code>[[brand-spec]]</code> wiki-links exist in the brand reference files, and <code>memory/long-term/README.md</code> is already a de-facto map-of-content. What's missing is the formalization — and the payoff is bigger than navigation: session-init currently reads <strong>696 lines (~15K tokens) of knowledge files in full at every session start</strong>, when Phase 1 needs only the 1–3 playbooks matched to its hypotheses and Phase 3 needs exactly one stakeholder profile.</p>
+        <ul class="ws-calls">
+          <li><strong>The convention</strong>: <code>[[slug]]</code> (+ optional <code>[[slug#section]]</code>), resolved by unique basename under <code>memory/long-term/</code>. Client folders resolve own-folder-first, then long-term, <strong>never another client</strong> — the isolation rule is preserved in the resolution rule itself. No hand-maintained backlink sections (they're grep-derivable, and written backlinks are exactly the drift failure WS-6 just purged). Link edits ride the existing long-term write-approval gate unchanged.</li>
+          <li><strong>Hub-and-topic split, only where it pays</strong>: <code>dynatrace-playbooks.md</code> (319 lines, 8 identically-structured playbooks) and <code>stakeholder-profiles.md</code> (205 lines, 8 archetypes) become ~40-line hubs with topic pages under <code>playbooks/</code> and <code>profiles/</code>. <code>domain-knowledge.md</code> and <code>frameworks.md</code> stay whole — splitting them adds file overhead for no meaningful saving. <strong>Session-init drops ~63% (~15K → ~5.5K tokens)</strong>, with one new CLAUDE.md rule: "traverse a link only when the current task needs that page — never preload."</li>
+          <li><strong>The graph — generated or nothing</strong>: <code>tools/memory-graph.py</code> (~70 lines, stdlib) is primarily a <em>link checker</em> (fails on broken links and duplicate slugs, warns on orphans); the graph is its byproduct — a Mermaid diagram written into <code>docs/memory-graph.md</code>, which GitHub renders natively with zero viewer code. Plus the zero-code option, documented: point Obsidian or VS Code's Foam extension at <code>memory/</code> and the same <code>[[links]]</code> give a free interactive graph. A custom interactive graph was considered and rejected — it's the same drift machine WS-6 is deleting.</li>
+          <li><strong><code>past-investigations.md</code> — delete, don't link</strong>: verified dead <em>by design</em> (deprecated tombstone, zero read paths). Giving it a read path would resurrect the cross-client-pollution architecture the repo deliberately killed. The honest answer to "give it a read path" is <code>git rm</code>.</li>
+          <li><strong>One silent-failure guard</strong>: the doc-freshness-checker's read list must be updated in the same change as the playbook split, or citation checking silently stops covering the moved pages.</li>
+        </ul>
+        <div class="callout"><strong>Why round 2.5:</strong> WS-7 edits the same CLAUDE.md session-init lines as WS-1/WS-2, every skill's Inputs section (WS-2 moves those files), and docs/memory.md (WS-6 rewrites it). Concurrent execution guarantees collisions across ~12 files. It loses nothing by waiting — the convention is additive.</div>
+        <div class="ws-files"><span class="lbl">Files</span><code>memory/long-term/README.md</code> (→ MOC) · 16 new topic pages · 2 hubs · <code>CLAUDE.md</code> session-init · 9 skill/agent Inputs sections · <code>tools/memory-graph.py</code> (new) · <code>docs/memory-graph.md</code> (generated) · <code>docs/memory.md</code> · 2 tombstone deletions</div>
+      </div>
+    </div>
+
+    <!-- WS-8 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-8 · round 2 · generalizes the hand-built U-Haul viewer</div>
+          <div class="ws-title">Engagement viewer — near-real-time gate review across all local clients</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decision D14</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The U-Haul <code>index.html</code> proved the UI: phase-grouped sidebar, in-place rendering of markdown/HTML/JSON, header pills from engagement state. What doesn't generalize is how it's built — 14 hand-wired sidebar entries, hand-typed stats, a personal SharePoint embed for the deck, and <code>../../../../../</code> asset paths. The generalization keeps the proven parts verbatim and replaces every hand-wired piece with data derived from the filesystem:</p>
+        <ul class="ws-calls">
+          <li><strong><code>tools/engagement-viewer.py</code></strong> (~120 lines, stdlib only, following the <code>pptx-generator.py</code> pattern): serves the repo root on localhost with exactly one dynamic route — <code>GET /manifest.json</code> walks <code>memory/clients/*/engagements/*</code> <em>fresh on every request</em>, parsing each engagement's front-matter (client, state, phase, last-touched) and file list. One command: <code>python3 tools/engagement-viewer.py</code>.</li>
+          <li><strong><code>html/engagement-viewer.html</code></strong> — one tracked template (distinct from WS-6's docs walkthrough): ports the U-Haul page's markdown renderer, JSON highlighter, and layout CSS verbatim; adds a client → engagement picker; groups files by phase via a single <code>PHASE_GROUPS</code> map keyed to the artifact naming conventions, with unmatched files in an always-visible "Other" bucket — nothing is ever hidden.</li>
+          <li><strong>"Near real time" done honestly</strong>: at a gate review the need is "the file the agent just wrote is visible when I look." A browser refresh against a per-request scan delivers exactly that with zero machinery — no stale manifest to forget to regenerate (the footgun that would fire mid-gate), no watcher process, no websockets. The upgrade path (a 5-line poll that badges changed files) is named, built only if refresh fatigue is real.</li>
+          <li><strong>Deck preview</strong>: <code>.pptx</code> becomes a download link (opens in PowerPoint locally) and the <code>deck-spec-*.json</code> renders in the existing JSON view. Your own page is the evidence for this call — its <code>slides-data.js</code> is an abandoned in-browser slide-renderer attempt; a browser PPTX renderer is a project, not a feature.</li>
+          <li><strong>Isolation stance, stated explicitly</strong>: the viewer is <em>analyst-side</em> tooling — the context-isolation rule binds the agent, and you legitimately own all your local client folders. Two guardrails ride the docs: localhost-only binding (never <code>0.0.0.0</code> — that would expose client data on the LAN), and viewer output is never pasted back into an agent session, where it would become a cross-client channel. Absent client folders and empty states render gracefully — each analyst has only their own clients on disk.</li>
+          <li><strong>The existing U-Haul page stays as-is</strong> — it's untracked client data; superseded for future engagements at your discretion.</li>
+        </ul>
+        <div class="callout good"><strong>Why round 2, not 2.5:</strong> this is the tool the gate reviews and the manager-review flow actually run through — it aids the pilot itself, touches zero agent behavior, and its only coupling to other workstreams is one line in the phase-grouping map after WS-3 settles artifact filenames.</div>
+        <div class="ws-files"><span class="lbl">Files</span><code>tools/engagement-viewer.py</code> (new) · <code>html/engagement-viewer.html</code> (new) · <code>docs/getting-started.md</code> ("Reviewing at gates" section) · <code>tools/README.md</code> (stale "Nothing yet" — also gains the missing pptx-generator entry)</div>
+      </div>
+    </div>
+
+    <!-- WS-9 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-9 · round 2 · runtime optimization</div>
+          <div class="ws-title">Model strategy, subagent hygiene, and context management</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: S + M</span><span class="chip decide">Team decisions D15–D17</span></div>
+      </div>
+      <div class="ws-body">
+        <p><strong>9a — Models and subagents (effort S).</strong> Verified: the main agent pins <code>claude-sonnet-4-6</code> (one generation stale), all six lenses pin the same, and the freshness checker carries the worst rot form in the repo — a dated snapshot ID. All seven subagents run with "All tools" access none of them needs. Per Nate's direction, the strategy is <strong>generic tier aliases everywhere — zero pins, zero future version bumps</strong>:</p>
+        <ul class="ws-calls">
+          <li><strong>Main agent: alias <code>sonnet</code></strong> in settings.json (decided — Nate). The version-rot problem is eliminated permanently: the repo can never again be a generation behind. The accepted trade-off is stated plainly in the risk register — a tier release can shift behavior without an announcement, possibly mid-round — with the mitigation being the thing this system is built on anyway: every artifact passes a human gate, and the archived U-Haul artifacts serve as an on-demand comparison baseline if outputs ever feel different after a release. Fable/opus-class remains a documented escalation option in the matrix, not a default — the workflow's quality lever is the gates + lens council + always-on discipline (WS-10), not raw model ceiling.</li>
+          <li><strong>Six lenses: alias <code>sonnet</code>; freshness checker: alias <code>haiku</code></strong>. Down-tiering any lens to haiku was rejected — ICE was the closest call, and it fails invisibly: a perfectly formatted, poorly calibrated table sails through the gate. WS-3's single blind round makes each lens invocation <em>more</em> load-bearing, strengthening the sonnet floor.</li>
+          <li><strong>Read-only tools on all six lenses</strong> (<code>Read, Grep, Glob</code>); freshness checker gets exactly <code>Read, Write, WebFetch</code>. Verified against all seven prompts — no lens writes, shells, or fetches. One prompt fix: the freshness checker's "add it here" editor note becomes "check ONLY these three files" so a haiku-class model can't misread it as license to scan.</li>
+          <li><strong>Model Matrix in <code>docs/customizing.md</code></strong> — the single source of truth (not CLAUDE.md, which WS-7 is shrinking; not settings.json, which can't hold comments). README and ROADMAP stop naming model IDs and point at the matrix. With zero pins, the matrix needs no review trigger at all — it documents which tier each role uses and why, plus the optional post-release spot-check procedure.</li>
+        </ul>
+        <p><strong>9b — Context management (effort M).</strong> Measured: session-init costs ~15K tokens (WS-7 cuts to ~5.5K), phase skills accumulate ~26K by end of Phase 3, 11 skills duplicate an 8-line engagement-path preamble (~10KB), 9 skills instruct re-reads of files the session already holds, and the council pastes 10–15KB into the main transcript per lens per round. And nothing anywhere says what to do after mid-engagement compaction.</p>
+        <ul class="ws-calls">
+          <li><strong>Session hygiene section in CLAUDE.md</strong> (~25 lines, the only text guaranteed present after compaction): fresh-session <em>recommendation</em> at the Phase 1→2 and 2→3 gates; post-compaction recovery (verify any surviving ENGAGEMENT_PATH against the folder's front-matter, then re-read only current-context, decisions-log, the in-progress artifact, and the current phase's skill); and the session-held re-read rule, stated once.</li>
+          <li><strong>Harmonization</strong>: skills mark session-init files "(session-held)" instead of "read"; the 11-way preamble collapses to 2 lines (~9KB off skill text). Lands in the relocated files with WS-2 so the edits happen once.</li>
+          <li><strong>Paths, not paste</strong>: the council writes the draft plan to the engagement folder <em>before</em> convening and hands each lens file paths — main-loop dispatch cost drops from ~10–15KB×4 to under 1KB×4, with the reading cost moving to the subagents' own contexts where it belongs. The consultative lens gets the named reader's profile excerpt instead of reading all 16KB of profiles for one reader.</li>
+          <li><strong>Rejected on the record</strong> (so they don't return as scope creep): per-phase token budgets, auto-summarizing engagement artifacts (corrupts the source of truth recovery depends on), PreCompact snapshot hooks (the folder front-matter already <em>is</em> the snapshot), and mandatory per-phase restarts.</li>
+        </ul>
+        <p><strong>9c — Parallel subagent dispatch (effort S).</strong> A full inventory found nine dispatch points; only two are sequential <em>by accident</em> — the Phase 2 council (parallel in intent, but the one-message mechanism is never stated, so four one-at-a-time dispatches technically comply and quadruple council wall-clock) and multi-lens gate requests (the U-Haul pilot ran Skeptic + Optimist + Consultative simultaneously, but only because you explicitly asked — nothing mandates it). The adversarial safety pass returned a stronger result than "safe": <strong>parallel dispatch is the mechanically correct implementation of the blind round</strong> — concurrent subagents run in isolated contexts that structurally <em>cannot</em> contain a sibling's output, whereas sequential dispatch puts lens #1's return in the transcript before lens #2's prompt is composed. Reconciliation was verified order-independent (tie-breaks key on named lens pairs, never arrival order).</p>
+        <ul class="ws-calls">
+          <li><strong>One always-loaded rule in CLAUDE.md</strong>: when multiple lens invocations are mandated or requested and none depends on another's output, dispatch them all in a single message; sequential is reserved for true dependencies. Explicit single-message wording lands at the two high-traffic sites (council step 6 via WS-3's rewrite; the gates section's iterate-through-a-lens bullet).</li>
+          <li><strong>Four guardrails, verified necessary</strong>: the draft plan is fully written <em>before</em> the convening message; parallelism is within-round only (the escalation round needs Round-1 positions — sequential by dependency); the rule explicitly exempts Phase 1's MECE → Consultative → ICE chain and the Phase 2 MECE → draft → council → ICE spine, which are order-dependent <em>by design</em> (the one outright-unsafe reading of "more parallel"); and blind-round prompts name the exact files to read — because with WS-9a's Glob access, "blind" is prose-only unless round outputs stay out of the paths blind lenses are pointed at.</li>
+          <li><strong>Preconditions already in the plan</strong>: WS-9a's read-only lens tools make wide dispatch safe (no write collisions possible — verified: no lens prompt writes anything; all outputs are in-reply); WS-9b's paths-not-paste makes it cheap (N lenses cost N path strings, not N pasted payloads). Cost is identical to sequential in tokens — the win is pure wall-clock (~4× lens latency collapses to ~1×).</li>
+          <li><strong>Coordination catch for WS-3</strong>: the one-blind-round design contradicts "≥3 rounds" text in <em>five</em> files (the skill, docs/lenses.md, and each of the four council lens files' round paragraph, which primes every lens to expect later rounds). All five must be edited in the same change, or the agent will follow the stricter surviving text and run three rounds anyway. Added to WS-3's edit list.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>.claude/settings.json</code> · all 7 <code>.claude/agents/*.md</code> frontmatter · <code>CLAUDE.md</code> (Session hygiene + parallel dispatch rule + gates bullet) · ~11 skill Inputs sections · <code>action-plan-builder</code> step 6 · <code>docs/lenses.md</code> · <code>docs/customizing.md</code> (Model Matrix) · <code>README.md</code> · <code>ROADMAP.md</code></div>
+      </div>
+    </div>
+
+    <!-- WS-10 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-10 · round 2 · execution discipline · always loaded per Nate's direction</div>
+          <div class="ws-title">Fable-mode adoption — the full method loads at every session start</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: S</span><span class="chip decide">Team decision D18 (placement)</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The five-gate discipline was mapped against what the repo already enforces, then — per Nate's direction — designed to <strong>always load</strong> rather than wait for invocation. The fit argument is strong: the consultative agent's core loop <em>is</em> the method. "Evidence before reasoning" is the no-invented-metrics rule; "verify at the layer of the claim" is what gate artifacts exist for; "report calibrated" is the leadership one-pager discipline. Always-on also closes the round-1 failure mode completely — no invocation decision means no missed invocation.</p>
+        <ul class="ws-calls">
+          <li><strong>Load mechanism: session initialization</strong>. The adapted method file joins the session-init read list in CLAUDE.md — the same mechanism that loads the knowledge files, and the most reliably-followed instruction in the repo. CLAUDE.md itself carries one standing principle ("the methodical-execution checks apply to all work; <em>gate</em> means human approval only, <em>checks</em> means this internal discipline") plus the init entry — the four rules previously specced for CLAUDE.md are <strong>absorbed into the method file</strong> so there is exactly one source and no drift surface. The file also joins the post-compaction re-read list in WS-9b's Session hygiene section (~2.5K tokens — cheap to restore, and discipline is exactly what a compacted session needs back first).</li>
+          <li><strong>Trimmed for the always-on budget</strong> (~70–80 lines, ~2.5–3K tokens): the five checks with deference clauses ("for engagement phase work, the phase skill's exit criteria ARE the scope check; the lens council IS the adversarial check" — always-on must not mean double machinery), the smells list kept whole (the cheapest self-diagnostic in the file), three standing habits (reversibility-sort feeding WS-4's consent gate, script-after-3-repetitions, preserve-by-default), and the trivial-work exemption — forcing five checks onto a two-minute edit is its own failure mode. Stages renamed <strong>gates → checks</strong>; "Gate 4 passed" must never read as a phase approval the analyst didn't give.</li>
+          <li><strong>Token accounting, honestly</strong>: +~2.5–3K per session, against WS-7's ~9.5K session-init cut — net ~6.5K lighter than today with the discipline always on. The file still lives at <code>.claude/skills/methodical-execution/SKILL.md</code> so "fable mode" also works as a spoken re-anchor mid-session at zero extra cost.</li>
+          <li><strong>One root-cause fix that discipline alone can't deliver</strong>: pptx-builder currently verifies renderer availability but <em>never inspects its own output</em> (verified by grep — the pilot's "it ran" deck failure lives exactly there). It gains an output-inspection step: render or unzip the generated deck, verify slide count, lockup variant, footer, heading case, no placeholder text — report done only after, citing what was checked. The check lands where the failure happens; the always-loaded verification check now reinforces it on every other Bash-generated artifact too.</li>
+        </ul>
+        <p style="margin-top:1rem;"><strong>Expansion — the discipline extends into the consulting reasoning itself</strong> (per Nate's clarifying answers: internal-only visibility, full reach, execution + reasoning depth). The organizing idea is <strong>one evidence chain, not five rules</strong>: intake answer (thin-marked per WS-1) → hypothesis Evidence line → ICE Confidence band → signal-map linkage citation → roadmap gap citation → one-pager claim — the same <code>tier: source</code> format at every link, and each downstream artifact inherits, never invents, its tier.</p>
+        <ul class="ws-calls">
+          <li><strong>Three evidence tiers, defined once in frameworks.md</strong>: <code>measured</code> (named client telemetry in a named file), <code>client-reported</code> (a stakeholder said it — who and when), <code>domain-assumed</code> (vertical pattern, no client-specific evidence). A fourth "externally-cited" tier was rejected — Dynatrace docs prove how a feature behaves, never that something is true of <em>this client</em>, so external citations qualify mechanisms but can never raise a tier. <strong>Omission defaults down</strong>: a claim with no citable source is domain-assumed — forgetting the field can only lower a score, never inflate it.</li>
+          <li><strong>ICE Confidence anchors to the tier — and the decisive finding is that the rubric already meant this</strong>: the existing bands (1–3 "hunch, no telemetry" / 4–6 "indirect signals" / 7–10 "direct signals from this system") map one-to-one onto the tiers. The change names it and makes it citable: domain-assumed anchors 1–3, client-reported 4–6, measured 7–10; scoring outside the band requires a note naming the additional evidence, and the ICE lens flags out-of-band scores without one. Hard caps were rejected (they flatten legitimate convergent evidence and incentivize tier laundering); pure guidance was rejected (drifts back to vibes). Tier bands bind Phase 1 only — Phase 2 Confidence measures execution likelihood — but the tier travels: an action inherits the weakest evidence it depends on.</li>
+          <li><strong>Structural hooks where real failure modes live</strong>: hypotheses get a fifth required field (Evidence, with a pre-handoff completeness check); signal-mapping's "fabricating quantitative linkages" pitfall becomes a rule — <em>a number with no tier citation does not enter the map</em>; action-plan rows inherit their parent's tier and WS-3's G-id citations adopt the same format. Rejected as ceremony: a MECE hook (structure has no evidence dimension), a second exec-onepager check (plan-fidelity already forbids divergence), and any linter script.</li>
+          <li><strong>Five of six lenses gain calibration edits; MECE is honestly exempt</strong>: Skeptic tags each risk <code>cited | inferred</code> and inherits an adapted plan-smells list (an empty Tensions-resolved section is a smell; an action without exit criteria is "should work" in plan form; every-hypothesis-tagged-measured is tier inflation); the ICE lens gains the tier-consistency flags; Optimist types the evidence behind each opportunity; Customer states whether customer-impact claims are measured, reported, or assumed; Consultative — the one lens that rewrites wording — gains the anti-laundering rule: <em>never polish a client-reported claim into prose that reads as measured fact</em>. All keyed off content already in the artifacts, so WS-9b's paths-not-paste payload economy holds.</li>
+          <li><strong>Analyst-facing docs</strong>: a ~30-line plain-English "How the agent keeps itself honest" section in getting-started — the five checks in one sentence each, how to read evidence tags ("a low Confidence isn't pessimism — it tells you exactly which conversation or measurement would raise it"), and "fable mode" as the spoken re-anchor. Per the internal-only decision, nothing is added to gate presentation format.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>CLAUDE.md</code> · <code>.claude/skills/methodical-execution/SKILL.md</code> (new) · <code>skills/pptx-builder</code> · <code>memory/long-term/frameworks.md</code> (Evidence tiers, ~15 lines) · <code>skills/hypothesis-generation</code> · <code>skills/ice-scoring</code> · <code>skills/signal-mapping</code> · <code>skills/action-plan-builder</code> · 5 lens files (MECE exempt, recorded) · <code>docs/lenses.md</code> · <code>docs/getting-started.md</code></div>
+      </div>
+    </div>
+
+    <!-- WS-11 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-11 · round 2 · the front door</div>
+          <div class="ws-title"><code>/engage</code> — one command to start, resume, reopen, or jump in</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: S</span><span class="chip decide">Team decision D19</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Round 1's usability complaints — "hard to understand why it paused or what it needed" (Angie), sessions needing active management (Mike Barnes) — share a root: there is no discoverable entry point. The opener is currently triple-defined across CLAUDE.md, context-framing, and the docs (a WS-6 drift finding), and an analyst who wants to do anything other than start fresh has to know the memory model. Once WS-2 registers skills as slash commands, the fix is one front-door command:</p>
+        <ul class="ws-calls">
+          <li><strong>What <code>/engage</code> does</strong>: ① confirms session initialization ran (runs it if not); ② scans engagement state — active and paused via the existing resume scan, complete engagements listed for Reopen; ③ presents the menu: <em>New engagement</em> (paste the intake form's seed prompt, or just describe the problem) · <em>Resume</em> [list with client · slug · phase · last-touched] · <em>Reopen after client feedback</em> (WS-5) · <em>Jump to a phase</em> · <em>Regenerate a deliverable</em>; ④ routes to the right skill and holds ENGAGEMENT_PATH.</li>
+          <li><strong>Jumping in never bypasses gates.</strong> "Jump to Phase 3" validates that the prior phases' approved artifacts exist in the engagement folder (per WS-2's deliverable routing rule) and lands the analyst at the correct next gate — it reads the folder's <code>phase:</code> front-matter and offers what's actually next, refusing with a named reason when prerequisites are missing. This makes the routing rule analyst-friendly instead of just a refusal.</li>
+          <li><strong>Fixes the triple-defined opener as a side effect</strong>: CLAUDE.md's interaction starter becomes "open with <code>/engage</code>, or describe the problem" — one canonical entry, closing the WS-6 drift finding at its source.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>.claude/skills/engage/SKILL.md</code> (new) · <code>CLAUDE.md</code> (interaction starter + on-demand table row) · <code>docs/getting-started.md</code> ("start here") · WS-6's rebuilt walkthrough mentions it · depends on WS-2 (registration) + WS-5 (Reopen)</div>
+      </div>
+    </div>
+
+    <!-- WS-12 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-12 · round 2 · session summary + verbatim export</div>
+          <div class="ws-title"><code>/wrap-up</code> session notes + the transcript exporter</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decisions D22–D23</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Both pieces, per Nate's answer — one distilled, one verbatim, with a clean boundary between them. The scoping also surfaced a design win: <strong>Pause currently captures nothing</strong> — a resumed engagement gets only the gate ledger, which structurally cannot hold mid-phase working state ("we were halfway through re-scoring H3 after the Skeptic pass"). Session notes are exactly that missing capture, so Pause gains a Step 0 that runs wrap-up by default.</p>
+        <ul class="ws-calls">
+          <li><strong><code>/wrap-up</code></strong> (registered skill): writes <code>session-notes-YYYY-MM-DD.md</code> into the engagement folder from working context — Scope, Gate decisions this session (pointer bullets to decisions-log rows, never restating rationale), Artifacts created/modified, Open items / next steps (the resume hook), Client feedback. Offered in one line when the user signals a work block is ending — never forced, per the internal-only ceremony decision. The boundary is stated verbatim in the skill: <em>decisions-log is the append-only ledger; notes point at it and carry what it can't hold. No conversation replay — that's the exporter's job.</em> Archive only <em>offers</em> wrap-up (it already ends with the lessons-learned retrospective; a second mandatory summary is ceremony). Notes render in the WS-8 viewer under the Log bucket.</li>
+          <li><strong><code>tools/session-export.py</code></strong> (~150 lines, stdlib, following the pptx-generator pattern): renders a session's JSONL transcript to markdown — user/assistant text verbatim, tool activity collapsed to one-liners, <code>--full</code> for tool payloads and thinking, <code>--list</code> to pick among sessions (they're opaque UUIDs otherwise). Grounded in the actual schema on this machine (17 sessions inspected; the schema drifts across Claude Code versions, so the exporter whitelists user/assistant lines and silently skips everything else — including subagent sidechains and system-injected meta lines).</li>
+          <li><strong>Default output location, argued</strong>: an untracked <code>exports/</code> dir under the repo root (added to .gitignore). Auto-writing into a client folder was rejected — "latest session" can be a different client than the analyst assumes, and a transcript may contain content that doesn't belong in the engagement record. The analyst consciously <em>moves</em> an export into an engagement folder when it belongs there — at which point the WS-8 viewer renders it for free.</li>
+          <li><strong>Privacy stance</strong>: an export is the complete verbatim record of everything the session saw. The context-isolation rule extends to exports, and where they may be stored or shared beyond the local machine is the org data-governance question that's still unresolved — the tool defaults to local-untracked and deliberately takes no position; the docs say to ask before sharing.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>.claude/skills/wrap-up/SKILL.md</code> (new) · <code>tools/session-export.py</code> (new) · <code>skills/investigation-reset</code> (Pause Step 0 + Archive offer) · <code>.gitignore</code> (<code>exports/</code>) · <code>tools/README.md</code> · <code>docs/getting-started.md</code> ("Ending a session") · template README · <code>CLAUDE.md</code> on-demand row · one PHASE_GROUPS row handed to WS-8</div>
+      </div>
+    </div>
+
+    <!-- WS-13 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-13 · round 2 · Nate's directive · the consultative loop extends past Phase 0</div>
+          <div class="ws-title">Mid-phase analyst engagement — authored questions in Phases 1 &amp; 2</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: S</span><span class="chip decide">Team decision D25</span></div>
+      </div>
+      <div class="ws-body">
+        <p>Verified: the five Phase 1–2 skills never ask the analyst anything mid-phase — every artifact drafts purely from memory files, so account knowledge the intake didn't capture never enters. The pilot proved the cost: <strong>Amy's four business questions arrived via a gate workaround</strong> (three lenses invoked simultaneously) and forced a full hypotheses restructure that a two-question mid-phase batch would have prevented. The design principle: a mid-phase question is justified only when the answer <em>upgrades an evidence tier</em> or <em>steers structure before it hardens</em> — and every question names the artifact field its answer feeds.</p>
+        <ul class="ws-calls">
+          <li><strong>Ask-with-draft, never pause empty-handed</strong>: the agent drafts on its best assumption, presents the draft, and appends one "Questions for you" batch (max 3) ending with an explicit <strong>CONTINUING</strong> (proceeding on stated defaults) or <strong>BLOCKED</strong> (and why) status line. Visible progress accompanies every ask — the direct answer to both round-1 complaints (Barnes' stall ambiguity, Angie's buried questions). One batch per deliverable boundary, hard-capped.</li>
+          <li><strong>The five question points</strong>: MECE — known suspects ("recent deploys, migrations, campaigns? → becomes a branch") + axis sanity ("does user-journey decomposition match how the client's teams divide this?"); hypothesis-generation — <em>the evidence-chain hook</em>: "already investigated / currently suspects / ruled out — who told you, when?" → re-tags rows client-reported with the cite, or closes ruled-out rows before they're ever scored; signal-mapping — "does the client actually track a KPI for this step — name and owner?" + "has anyone measured this linkage?"; ICE — <em>no gut-check question, explicitly rejected</em> (vibes would overwrite the evidence chain) — only band-deviation surfacing when a named signal would change rank order; action-plan-builder — client-side owners, change-control cadence (feeds the 30/60/90 slip conditions), budget/initiative attachment — asked <em>before</em> drafting so the council critiques a plan already grounded in them.</li>
+          <li><strong>The guardrails, distilled from the adversarial pass</strong>: "I don't know" is first-class — the agent proceeds on the stated default, tags fields domain-assumed (WS-10's default-down), and files the question in an engagement-local <strong>"Open questions for the client"</strong> list phrased client-facing; Q0 routing — Low-familiarity analysts get structural questions only, account-historical ones route straight to take-to-customer (a forced guess is domain-assumed wearing a client-reported costume); <strong>tier-honest</strong> — relaying the client's stated position with a name is client-reported, an analyst hunch stays domain-assumed, nothing analyst-said is ever measured, no fourth tier; the <strong>non-gate litmus</strong> — if an answer would warrant a decisions-log row (scope, ranking, branch inclusion), it's a gate question and never gets asked mid-phase, and a volunteered scope change escalates as a logged Redirect, never absorbed; <strong>recall, not fieldwork</strong> — questions ask only what the analyst already knows, answerable without opening Dynatrace (data pulls become investigation-action rows); <strong>council-safe</strong> — no questions between Round-1 dispatch and reconciliation except the escalation checkpoint.</li>
+          <li><strong>Answers persist beyond the transcript</strong>: every answer is written into its consuming artifact field with its tier tag at capture time; cross-artifact answers additionally land in current-context.md so they survive compaction and feed later phases.</li>
+        </ul>
+        <div class="ws-files"><span class="lbl">Files</span><code>CLAUDE.md</code> (one paragraph under gates) · <code>skills/mece-decomposition</code> (step 2a) · <code>skills/hypothesis-generation</code> (step 4a) · <code>skills/signal-mapping</code> (step 3 ask) · <code>skills/ice-scoring</code> (band-deviation note) · <code>skills/action-plan-builder</code> (step 2b) · template convention</div>
+      </div>
+    </div>
+
+    <!-- WS-14 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-14 · round 2 · Nate's directive · rides WS-1, WS-3, WS-12</div>
+          <div class="ws-title">Gate reading lists + full reasoning export</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: S</span><span class="chip decide">Team decision D26</span></div>
+      </div>
+      <div class="ws-body">
+        <p><strong>Part A — "What to review" at every gate.</strong> One cross-cutting CLAUDE.md rule: every gate presentation ends with the files created or modified this phase, ordered by reading priority, each with a one-line why-read that names <em>what to check</em>, not just what to open ("issue-tree.md — the six places the problem could live; check branch 4 reflects what you know about the deploy history"); decisions-log.md is always last ("the decisions you've made so far"), with a soft pointer to the WS-8 viewer. Fixed gate order everywhere: phase summary → content → <strong>What to review</strong> → gate ask → <strong>Questions for you</strong> (reading informs the answers; the questions are the last thing the analyst sees). The scoping verified something bigger along the way: <strong>Phase 1 has no gate presentation at all</strong> — ice-scoring ends at "update the table," and hypothesis-generation points at a "Phase 1 gate" no skill defines. WS-14 defines it: a new ice-scoring final step with a one-paragraph summary (top ICE hypotheses + the instrumentation gaps that matter), the review list, and the gate ask including focus selection — which also gives the CLAUDE.md gate obligations (decisions-log row, phase bump) their missing Phase 1 anchor. This closes the original audit's #1 structural finding. One latent contradiction found and flagged, not fixed: hypothesis-generation's "after the issue tree has been approved" presumes a mid-phase approval that never happens — kept single-gate, team to confirm.</p>
+        <p><strong>Part B — /wrap-up exports all the agent's reasoning</strong>, designed around one honest technical fact: the agent cannot re-read its own thinking blocks in-session, so "all the reasoning" takes two layers. <strong>Layer 1</strong>: session-notes gain a <em>Reasoning trail</em> — per major move this session (axis choice, hypothesis-set shape, scoring calls, tension rulings, plan structure), four lines each: Decided / Why / Considered-and-rejected / Evidence tier. A reconstruction from working memory — complete on the whys, silent on the wording. <strong>Layer 2</strong>: wrap-up's final step auto-runs <code>tools/session-export.py --full</code>, preserving the verbatim record including thinking blocks in <code>exports/</code> — never the engagement folder, so client folders stay shareable without shipping raw reasoning. The Bash permission prompt is the consent moment (one keystroke); a deny is first-class — recorded as "export declined" in the trail header, never retried. The trail cites the export filename, binding the two layers together.</p>
+        <div class="ws-files"><span class="lbl">Files</span><code>CLAUDE.md</code> (What-to-review rule) · <code>skills/ice-scoring</code> (new final step — the Phase 1 gate, at last) · <code>skills/action-plan-builder</code> + <code>skills/exec-onepager</code> (gate-block anchors) · <code>.claude/skills/wrap-up/SKILL.md</code> (Reasoning trail + export step, amends WS-12) · <code>docs/workflow.md</code> per-gate wording</div>
+      </div>
+    </div>
+
+    <!-- WS-15 -->
+    <div class="ws">
+      <div class="ws-head">
+        <div>
+          <div class="ws-id">WS-15 · round 2 · Nate's directive · the client-facing narrative</div>
+          <div class="ws-title">StoryBrand restructure — one-pager and deck as the customer's story</div>
+        </div>
+        <div class="chips"><span class="chip effort">Effort: M</span><span class="chip decide">Team decisions D28–D29</span></div>
+      </div>
+      <div class="ws-body">
+        <p>The one-pager becomes the SB7 arc — the customer (hero) has a Problem → meets a Guide (Insights + Dynatrace) → who gives them a Plan → with clear Stakes → and one Decision to make. The <strong>retro-fit test against the real U-Haul one-pager is the evidence</strong>: five of six beats are already latent in its content (the Guide beat fits best of all — the findings' teal/blue/magenta color semantics already encode evidence tiers), and the one missing beat, <strong>Success, is a genuine gap</strong> — the transformation exists only as verb clauses buried in action rows, and one of them ("Converts Dynatrace from a reporting tool to an operational platform") has the platform as subject, which is exactly what the hero rule rewrites ("Amy's team stops filing analytics requests and starts receiving automatic alerts"). Bonus: the Executive Sponsor archetype's own question list maps one-to-one onto the beats — including "what happens if we do nothing for 30 days?", which the current structure only answers by accident.</p>
+        <ul class="ws-calls">
+          <li><strong>Five printed sections, seven beats</strong> — the beats are an <em>authoring skeleton, not printed labels</em> (a heading reading "The Guide" is marketing jargon to exactly the reader Mike Chase worried about): The situation (Character + Problem, internal-problem sentence only if sourced — never composed) → What we found (Guide: one empathy lead + 3–5 tier-tagged findings; <em>the tiers are the authority mechanism</em>) → The plan (exactly the three rollup rows, tradeoffs inline) → What's at stake (Failure + Success <em>compressed into one day-90 contrast block</em> — separate sections invite padded doom; the contrast form forces both sides to the same horizon) → The decision (direct + transitional CTA). Word arithmetic verified: 485–630 vs. the U-Haul artifact's ~650 — the one-page constraint holds.</li>
+          <li><strong>The hero rule, made mechanical</strong>: the client is the grammatical subject of Problem and Success sentences; the platform may be subject only in Guide and Plan. It's fidelity-gate check 6, not a taste note — plus the new "Guide-as-hero" pitfall: a one-pager where the platform stars in every sentence is a product pitch wearing a consulting deliverable's clothes.</li>
+          <li><strong>Evidence-honest stakes</strong>: a Failure statement must be a measured trajectory, a client-reported concern (named stakeholder), or an explicitly-labeled industry pattern — never an invented prediction. Success statements are reads of the rollup's outcome column, already tiered at Phase 2. On the deck, the success side renders <em>royal blue, not teal</em> — teal means confirmed, and coloring planned outcomes in the confirmed color would be tier-laundering by palette.</li>
+          <li><strong>The fidelity gate grows to six checks</strong> (Plan↔rollup order · Success↔outcome column · Failure↔named risks/trajectories with tiers intact · CTA↔decision asks, no invented micro-asks · findings keep tiers, open reads open · hero rule + business-impact opening), because Phase 3 runs no lens — the gate is the only backstop for the new authored prose, and every new sentence must be a restatement of pre-approved content.</li>
+          <li><strong>Deck arc re-sequenced, machinery untouched</strong>: 8 slides (title → situation → findings → the WS-3 30/60/90 three-column slide, repositioned → the new stakes-contrast slide → pure-ask decision slide → appendix → closing); brand rules, generator, layout bindings, fonts all unchanged.</li>
+          <li><strong>What this deliberately does not touch</strong>: action-plan.md stays Gap→Solution→30/60/90 — the fidelity gate needs a stable analytical source of truth, and narrativizing it would mean checking a story against a story. One analysis artifact, one narrative artifact, one gate between them. Personas re-tone but never reorder the arc (practitioners get a one-clause empathy lead and SLI-framed stakes; reordering would fork the gate and the deck table).</li>
+        </ul>
+        <div class="callout"><strong>One deliberate deviation from the book (D29):</strong> Miller's canonical order puts the call-to-action before failure/success; this spec puts Stakes at section 4 and the Decision last, preserving the repo's existing "end with the specific decision being requested" rule — the last thing the exec reads is the approval, not the doom. Standard SB7 collateral variant, but since "StoryBrand framework" was the directive, the variance is flagged for sign-off.</div>
+        <div class="ws-files"><span class="lbl">Files</span><code>skills/exec-onepager/SKILL.md</code> (structure + hero rule + stakes rules + 6-check gate + 3 pitfalls) · <code>skills/pptx-builder/SKILL.md</code> (deck arc + teal pitfall) · <code>docs/deliverables.md</code> · <code>consultative-lens</code> (one anti-laundering example, rides WS-10) · supersession recorded against WS-3's section-4 swap</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DECISIONS ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Decisions needed at review</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="section-sub">Everything else in this plan is implementable as specced. Twenty-nine decisions total — two already made by Nate (D15 aliases-everywhere, D18 always-on discipline), twenty-seven for the team, each with a recommendation.</p>
+    <div class="decision-list">
+      <div class="decision">
+        <div class="decision-q">Slim the Phase 2 council to one blind round + reconciliation, with an escalation valve to the full ≥3-round council?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes</span>The tie-breaks are already codified in the skill; the U-Haul evidence shows the extra rounds mostly re-derived them. "Tensions resolved" — the part leadership reviews — survives unchanged, at roughly a third of the cost. Escalation stays available for genuinely contentious plans — and per Nate's follow-up, it is <strong>ask-first</strong>: after Round 1 + reconciliation the analyst chooses accept / targeted escalation / full council, with declined tensions recorded in decision-asks rather than dropped. Either way the analyst can always exit after Round 1.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Customer maturity as a hard MUST-HAVE — or allow an "unknown — confirm with customer" escape value?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: add the escape</span>A low-familiarity analyst genuinely may not know the adoption stage; a hard block on an enum field with no escape stalls Phase 0. "Unknown" routes the question to the client via the question bank and is named as thin at the Direction Check.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Who owns the seed contract?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: SKILL.md is source of truth</span>The form conforms to the contract, not vice versa. Practical today since the same person owns both; the <code>seed-version</code> key plus unknown-key surfacing make drift visible either way. Agree the change process before a second form author exists.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Can the seed prompt pre-set the reader archetype, overriding the Executive Sponsor default?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes, later</span>The Q7 wording already supports it ("if neither the seed nor the consultant names a reader…"). Keep it out of seed v1 to hold round-2 output constant; add the optional key in v2 once the default's behavior is observed.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Register all 13 skills, or only the round-2 narrowed set?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: all 13</span>One migration instead of two; 10 of 13 already carry a no-engagement guard step (spot-check the other three). The walkthrough teaches the four core ones; the rest being invocable is harmless. Total context cost of registered descriptions: ~3.5&nbsp;KB.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Adopt the optional PreToolUse hook on the pptx generator, or rely on the permission prompt alone?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: prompt only, first</span>Deleting the allow-list already puts a human gate at deck render. Add the block-and-instruct hook only if round 2 still shows off-path decks — hooks can't verify skill reads, so the added value is a deterministic reminder, not enforcement.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">When a Q5 capability answer is uncertain ("not sure if they have Business Analytics") — in-scope-unverified or out-of-scope?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: out-of-scope</span>Fails toward asking, never toward silent inclusion — consistent with the whole WS-4 design. The thin-answer probe will usually resolve the uncertainty at intake anyway.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Reopen allowed back to Phase 1, or restricted to Phase 2 for round 2?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: typically 2, allow 1 with confirm</span>Most client pushback is plan-level. Rolling to Phase 1 (diagnosis invalidated) stays possible behind an explicit confirmation, so the rare case isn't blocked but the common path stays simple.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Approve the index.html rebuild — delete the Doc Browser, Default Files viewer, Source Files viewer, and force-directed graph in favor of the single-page walkthrough?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes</span>The cut sections are duplicates (already stale) or machinery that fails the new-analyst test; the good content — phase strip, gate callout, overview cards, memory diagram — all survives. If the team wants a topology picture later, a static flowchart does it in ~30 lines with no physics engine.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Add the three new analyst-facing docs (glossary, annotated first session, troubleshooting)?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes, with WS-1</span>They directly serve the round-2 goal of onboarding newer analysts, and the annotated-first-session page doubles as the written form of the walkthrough Nate would otherwise deliver live to each new cohort.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Trim workflow.md / memory.md / lenses.md from full restatements of CLAUDE.md and the skills to summarize-and-link?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes, where drift occurred</span>Every contradiction found sits exactly where content is duplicated. Full restructure isn't needed — trim the passages that restate skill procedure verbatim (they're also the plain-English worst offenders) and keep each doc's unique explanatory value.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">WS-7 split scope: playbooks + profiles in one pass, or playbooks only first?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: both</span>Both files have perfectly regular structure, so extraction is mechanical, and doing them together means one CLAUDE.md session-init edit instead of two. Playbooks alone is the fallback if the team wants a smaller first bite (~6K of the ~9.5K token saving).</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Delete the past-investigations.md and client-environments/ tombstones — and should that ride WS-6's docs commit instead of waiting for WS-7?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: delete, with WS-6</span>Both are verified dead by design with zero read paths, and WS-6 already touches the docs/memory.md paragraph that documents them. Linking them back in (the original "second brain" instinct) would resurrect the cross-client-pollution design the repo deliberately killed.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Build the engagement viewer (WS-8) inside round 2, or defer to 2.5?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: round 2</span>It's the tool gate reviews and the manager-review flow actually run through, it aids the pilot demo, and it touches zero agent behavior. Sequence it after WS-3 settles the Phase 2/3 artifact filenames so the phase-grouping map is written once.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Models: pins or aliases? (Decided — Nate: generic sonnet/haiku aliases everywhere, main agent included, so versions never need bumping.)</div>
+        <div class="decision-rec"><span class="rec-tag">Decided: aliases everywhere</span>Zero pins, zero future maintenance. The accepted trade-off — a tier release can shift behavior unannounced, possibly mid-round — is mitigated by the human gates plus the on-demand spot-check (re-run the council against archived U-Haul artifacts whenever outputs feel different after a release). The Model Matrix documents tiers and the spot-check procedure; no review trigger needed.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Restrict the six lens subagents to read-only tools (Read, Grep, Glob)?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes</span>Verified safe against all seven prompts — no lens writes, shells, or fetches. Tighter tools are both a safety boundary and a focus improvement, and any future lens that genuinely needs another tool declares it explicitly in frontmatter instead of inheriting everything silently.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Fresh session at the Phase 1→2 and 2→3 gates: recommendation or hard rule?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: recommendation</span>The engagement folder makes restarts safe, so the guidance captures the value; a hard rule adds a resume-scan pick step to every phase transition for marginal gain. Revisit if compaction-related quality drops show up in round 2.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Fable-mode always loads (decided — Nate). Remaining call: placement — a session-init file, or embedded directly in CLAUDE.md?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: session-init file</span>Same always-on guarantee either way, but the standalone file keeps CLAUDE.md lean (WS-7's direction), stays independently maintainable, and doubles as a spoken re-anchor ("fable mode") mid-session. Embedding in CLAUDE.md is the fallback if the team wants zero reliance on the init read — at the cost of a ~3K-token permanent CLAUDE.md and a mixed-purpose file. Adaptation itself is unchanged: gates→checks rename, deference clauses, pptx-builder root-cause fix.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Name for the entry command: /engage, /start, or /forge?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: /engage</span>Distinctive (no collision risk with generic verbs other tooling might claim), on-brand for a consulting workflow, and reads correctly for every branch of the menu — you engage a new client, re-engage a paused one, and re-engage after client feedback. The command's behavior is identical under any name.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Evidence tiers bind Phase 1 Confidence only — Phase 2's execution-likelihood Confidence stays un-banded, with actions inheriting the weakest parent tier. Confirm the boundary?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: confirm as specced</span>Phase 2 Confidence measures "will this get executed" (coordination, capacity, risk), which isn't an evidence-of-truth claim — banding it would force telemetry semantics onto a different question. The tier still travels: a plan may never claim measured impact for an action whose parent hypothesis is domain-assumed.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">When a hypothesis's Status moves to confirmed, may the agent auto-upgrade its Evidence line to measured?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes, with named telemetry only</span>The upgrade requires citing the specific validation signal — a stakeholder saying "yes, we confirmed it" stays client-reported. Human-only upgrades were considered but add a manual step to the exact moment the evidence is freshest and most checkable.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Pause runs /wrap-up by default (declinable); Archive only offers it. Confirm the asymmetry?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: confirm as specced</span>Pause captures nothing today — the resuming session gets only the gate ledger, so notes are the missing resume hook and should be the default. Archive already ends with the lessons-learned retrospective; forcing a second summary there is ceremony.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Should the exporter's --full mode include thinking blocks, or only tool payloads?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: include both</span>--full's purpose is the complete record — it either is or it isn't. The default mode already excludes thinking and tool payloads, which is the everyday-safe path; if the org's data-governance stance lands restrictive, splitting out a --thinking flag is a 5-line change.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Adopt plan focus selection at the Phase 1→2 gate — the analyst names which hypotheses/opportunities the plan addresses, with the rest parked?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes</span>Plan size is driven by how many hypotheses feed Phase 2 (U-Haul carried 15), and today the only control is knowing to phrase a Redirect. An explicit ask with a sensible default (confirmed + top-ICE) delivers Julie's "less, faster" and Wil's "more detailed than needed" fixes structurally. Parked items keep a status and stay visible to the Skeptic, so focusing can never silently bury the real root cause.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Where do "I don't know" mid-phase questions go — an engagement-local "Open questions for the client" list, or written into the long-term client-question-bank?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: engagement-local</span>Literal bank writes would put client-specific content in the shared root library — violating both the context-isolation rule and the approval-gated long-term write rule. The engagement list borrows the bank's client-facing phrasing craft; genuinely client-agnostic phrasings can still graduate to the bank later, with approval.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Should /wrap-up auto-run the --full transcript export, or offer it default-yes?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: auto-run</span>Nate's directive is "export all the reasoning," and a default-yes offer adds a second consent question for consent the Bash permission prompt already collects — the analyst's keystroke on that prompt is the consent moment, and a deny is first-class (recorded, never retried). Governance note stands: exports stay local-untracked until the org's data stance lands.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Add the formal manager-review checkpoint before Phase 3 when output is customer-facing — the one Julie ask the plan supports but doesn't yet enforce?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes, as a WS-3 rider</span>Small: after the Phase 2 gate, if Phase 0's Response Format flags customer-facing output, the agent produces a one-paragraph review brief (what was produced, what to flag, what's unverified — the evidence tiers and Reasoning trail feed it) and prompts for manager sign-off before invoking Phase 3. The WS-8 viewer is the reviewing surface. Without this, Julie's review requirement stays ad hoc.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Adopt the StoryBrand restructure of the one-pager and deck (WS-15)?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: yes</span>The retro-fit against the real U-Haul one-pager shows the beats are latent in content that already works — the restructure adds signal (the missing Success beat, the collected stakes) rather than ceremony, and the Executive Sponsor archetype's own question list maps one-to-one onto the arc. Guardrails travel with it: hero rule as a gate check, evidence-honest stakes, no printed StoryBrand jargon.</div>
+      </div>
+      <div class="decision">
+        <div class="decision-q">Confirm the beat-order variance: Stakes at section 4, the Decision last — deviating from Miller's canonical CTA-before-failure order?</div>
+        <div class="decision-rec"><span class="rec-tag">Recommend: confirm</span>It preserves the repo's existing "end with the specific decision being requested" rule, so the exec's last impression is the approval, not the doom. A standard SB7 collateral variant — flagged only because "StoryBrand framework" was the directive and this is a variance from the book.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ NOT DOING ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Deliberately not in this plan</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="oos-list">
+      <div class="oos">
+        <div class="oos-topic">HTML intake form build</div>
+        <div class="oos-body">Being built separately with Claude Design and added to the project manually. This plan's contribution is the seed contract (WS-1) the form targets, so the two halves meet cleanly.</div>
+      </div>
+      <div class="oos">
+        <div class="oos-topic">Cutting multi-vertical support</div>
+        <div class="oos-body">Recommend rejecting this cut: vertical is a MUST-HAVE Phase 0 input that drives KPI selection and orientation hypotheses. The consistency goal is met by standardizing the plan <em>shape</em> (WS-3), with vertical kept as context — Nate's position, now verified against the repo.</div>
+      </div>
+      <div class="oos">
+        <div class="oos-topic">Persona-tailored output variations</div>
+        <div class="oos-body">Round 2 runs one default (Executive Sponsor). The archetype machinery is untouched, so round 3 can re-enable variation with zero rework.</div>
+      </div>
+      <div class="oos">
+        <div class="oos-topic">Gen 2 / Gen 3 capability tagging</div>
+        <div class="oos-body">Deprioritized: the confusion Wil hit came from an off-label use of the tool. Worth cheap tagging in the playbooks eventually, since the confusion can surface in legitimate use cases — but not round-2 blocking.</div>
+      </div>
+      <div class="oos">
+        <div class="oos-topic">DST involvement, licensing, data governance, Salesforce/Slack integration</div>
+        <div class="oos-body">Organizational decisions, unchanged from the pilot brief. Nothing in this plan blocks on them.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ RISKS ═══════════ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Risks worth naming at review</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Risk</th><th>Mitigation in the plan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Seed contract drift</strong> — form and SKILL.md diverge silently since the form lives outside the repo.</td><td><code>seed-version</code> key + unknown keys surfaced in the intake summary; contract ownership decision (D3).</td></tr>
+          <tr><td><strong>Bucket optimism</strong> — 30/60/90 rows presented as best-case when client change control is unconfirmed.</td><td>Mandatory inline slip conditions on buckets; "free-form timeframes" and "gaps without citations" added to pitfalls.</td></tr>
+          <tr><td><strong>Exclusions enforced by instruction, not mechanism</strong> — a long revision session could still resurrect a rejected item.</td><td>Binding language in both consuming skills + append-only format; accepted as a known limit of a prompt-level system.</td></tr>
+          <tr><td><strong>Path rewrite errors</strong> — 130 references, and 3 <code>/mnt/skills/</code> refs that must NOT be rewritten.</td><td>Guarded sed with placeholder protection + a grep verification step where the only surviving matches must be <code>.claude/skills/</code> and <code>/mnt/skills/</code>.</td></tr>
+          <tr><td><strong>Phase rollback is new territory</strong> — skills assume phase only advances; a reopened engagement's old Phase 3 log rows could short-circuit a second archive.</td><td>Archive step re-confirms closure after reopen; flagged for explicit testing in the round-2 smoke run.</td></tr>
+          <tr><td><strong>Line anchors shift</strong> — five workstreams touch overlapping files; specs cite lines as of commit <span style="font-family:var(--mono)">339a7f8</span>.</td><td>Bundled implementation order (one pass per file) + anchor re-verification at edit time.</td></tr>
+          <tr><td><strong>Docs re-drift after the fix</strong> — round 1 proved documentation and tool diverge silently; index.html's embedded copies drifted within weeks.</td><td>Structural, not procedural: kill the triple-copy problem (WS-6b), trim restatements to summarize-and-link (D11), and the standing rule that a workstream isn't done until its doc-impact entries land.</td></tr>
+          <tr><td><strong>Link over-traversal re-inflates context</strong> — an eager agent following every [[link]] could load more than the old monoliths.</td><td>Explicit CLAUDE.md rule ("traverse only when the current task needs that page; never preload") — behavioral, not mechanical, so watch the first post-WS-7 engagements for it.</td></tr>
+          <tr><td><strong>Viewer serves client data over HTTP</strong> — a dev-grade server with every local client folder in reach.</td><td>Localhost-only binding (documented; never 0.0.0.0), and the stated rule that viewer output never gets pasted back into an agent session.</td></tr>
+          <tr><td><strong>Alias-tracked models shift behavior on a release day</strong> — main agent and lenses alike, possibly mid-engagement, with no announcement.</td><td>Accepted deliberately (Nate's call, for zero-maintenance): tight output contracts + the human gate bound the impact, and the archived-U-Haul comparison is the on-demand spot-check whenever outputs feel different after a tier release. The alternative is pins that rot — the repo was already a generation behind.</td></tr>
+          <tr><td><strong>Always-on session budget</strong> — WS-9b's Session hygiene (~25 lines) plus WS-10's always-loaded method (~2.5–3K tokens) add to every session, the direction WS-7 pushes against.</td><td>Budgeted and net-positive: WS-7's ~9.5K session-init cut pays for both roughly three times over. The method file is hard-trimmed to ~70–80 lines with deference clauses so always-on never means double machinery. WS-6/WS-7 owners sign off on final wording.</td></tr>
+          <tr><td><strong>Tier laundering</strong> — under gate pressure, a client-reported claim gets tagged measured to unlock a higher Confidence score.</td><td>Structural counters: a measured tag must name a file/signal, the ICE lens flags pointer-less measured tags, and the Skeptic's smells list includes tier inflation. A plausible fake pointer survives until a human checks it — named as the residual risk.</td></tr>
+          <tr><td><strong>Transcript schema drift</strong> — the exporter reads an undocumented JSONL format that demonstrably changes across Claude Code versions.</td><td>Whitelist design: only user/assistant lines render, everything else skips silently, and a --selftest catches gross breakage. A quiet content-block format change would degrade output — accepted for a read-only convenience tool.</td></tr>
+          <tr><td><strong>"More parallel" over-applied</strong> — a future editor reads the dispatch rule as license to parallelize Phase 1's lens chain or fire the escalation round alongside the blind round, both of which are order-dependent by design.</td><td>The rule's own text scopes it to within-round, dependency-free invocations and names the exempt chains explicitly; the Phase 1 exemption is recorded in the plan as a decided convention, not an omission.</td></tr>
+          <tr><td><strong>Mid-phase questions re-create the pilot's stall problem</strong> — more pauses in a workflow whose round-1 complaint was illegible pauses.</td><td>Ask-with-draft (a draft always accompanies the batch), one batch per deliverable with a 3-question cap, skip conditions checked against the engagement files first, and the mandatory CONTINUING/BLOCKED status line — an unanswered batch produces the same artifact as answering "don't know" to everything.</td></tr>
+          <tr><td><strong>Analyst answers inflate evidence tiers</strong> — a hunch relayed confidently becomes "client-reported" and moves Confidence bands.</td><td>Attribution requirement: client-position-with-a-name = client-reported; analyst judgment or unattributed = domain-assumed; never measured, never an independent ICE signal. The who/when cite makes provenance auditable at the gate.</td></tr>
+          <tr><td><strong>Phase 3 authors more net-new prose with no lens review</strong> — the empathy lead, internal-problem sentence, and failure narrative are new composition, and subtle guide-as-hero tone can pass a subject-based gate check.</td><td>Sourcing constraints make every new sentence a restatement of pre-approved content (gate checks 2/3/6); the internal-problem sentence is client-reported-or-omitted, never composed; the on-demand Customer/Consultative lenses remain available at the Phase 3 gate. Residual risk named, not hidden.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footnote">
+    Prepared for the Insights Forge round-2 planning review · July 8, 2026. No repository changes have been made — this document is the plan awaiting approval. Full per-change specs (verbatim proposed text, exact line anchors, per-workstream open questions), the complete 15-item docs drift register, the per-workstream doc-impact map, the 15 plain-English rewrites, the index.html section-by-section rebuild spec, the per-agent model/tools audit, the measured context-cost breakdown, the fable-mode coverage map, and all design rationales (alternatives considered and rejected) are preserved in the working session and can be exported as an implementation checklist on approval. Companion documents: system audit · pilot feedback brief.
+  </footer>
+
+</div>
+
+</body>
+</html>
