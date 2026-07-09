@@ -74,7 +74,11 @@ In the Claude Code chat, start with:
 
 > *"Describe the problem you're trying to solve."*
 
-…or just describe the problem and client directly. The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
+…or just describe the problem and client directly.
+
+> **Faster path — the Seed Prompt Generator.** If you already know the customer, open the browser intake form ([`html/Insights Forge (Seed Prompt Generator).html`](<../html/Insights Forge (Seed Prompt Generator).html>)), fill it out, and paste the generated seed prompt as your opening message. Phase 0 then starts with the context already loaded instead of extracting it question-by-question. Full walkthrough in [seed-prompt-generator.md](seed-prompt-generator.md).
+
+The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
 - Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
 - Establishes the active engagement — the one this session creates at Phase 0, or one you resume (the agent scans engagement folders' status front-matter to offer resumable ones)
 - Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)

@@ -27,12 +27,14 @@ Use this skill when:
 Then read these files:
 
 - `<ENGAGEMENT_PATH>/issue-tree.md` — for the approved branches.
-- `<ENGAGEMENT_PATH>/current-context.md` — for scope and stakeholders.
+- `<ENGAGEMENT_PATH>/current-context.md` — for scope, stakeholders, and the **Out-of-scope exclusions**.
 - `memory/long-term/domain-knowledge.md` — for the standard signal patterns, tech/UX/business linkages, and the "Authoritative external references" allowlist that seeds the "expected signals" field.
 - `memory/long-term/dynatrace-playbooks.md` — for client-agnostic investigation patterns. Match each hypothesis to a playbook (latency, error spike, RUM regression, log investigation, SLO burn, deploy correlation, third-party dependency, Davis problem). The playbook's investigation sequence seeds the **validation approach** field; its "confirmed" / "ruled out" criteria seed the **exit criteria**.
 - `memory/long-term/frameworks.md` — for the issue-tree-to-hypothesis mapping guidance and the exit criteria standard.
 
 When a hypothesis depends on the specific behavior of a Dynatrace feature (e.g., RUM session capture rules, OneAgent vs OpenTelemetry attribute differences, Davis problem grouping) and local memory is silent or unclear, consult `skills/external-research/SKILL.md` before fixing the hypothesis text. Cite the source URL and retrieval date in the "expected signals" or "validation approach" field for that row.
+
+**Out-of-scope exclusions are binding.** Do not generate a hypothesis that depends on, requires, or would encourage adopting an out-of-scope capability or topic — even if it is active in the tenant. If a branch's most natural hypothesis is out of scope, record the exclusion on that branch instead of proposing the hypothesis. (Enforces the CLAUDE.md out-of-scope rule for Phase 1.)
 
 ## Steps
 

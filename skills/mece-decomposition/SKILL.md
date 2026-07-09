@@ -26,11 +26,13 @@ Use this skill when:
 
 Then read these files:
 
-- `<ENGAGEMENT_PATH>/current-context.md` — for the reframed problem and scope.
+- `<ENGAGEMENT_PATH>/current-context.md` — for the reframed problem and scope, **including the Out-of-scope exclusions**.
 - `memory/long-term/frameworks.md` — for MECE definitions and pitfalls.
 - `memory/long-term/domain-knowledge.md` — for the common signal patterns and tech/UX/business linkages.
 
 If any of these inputs is missing or stale, raise that with the user before drafting.
+
+**Out-of-scope exclusions bound the tree.** A branch or sub-cause that could only be pursued through an out-of-scope capability or topic does not belong in the tree — and its absence is **not** a MECE completeness gap. Collective exhaustiveness is bounded by the engagement's scope. (Enforces the CLAUDE.md out-of-scope rule for Phase 1.)
 
 If a Dynatrace concept needed to shape a branch (e.g., Smartscape grouping, Management Zone scoping, Davis problem boundaries) is not adequately defined in local memory, consult `skills/external-research/SKILL.md` before drafting. The allowlist is `docs.dynatrace.com` and `community.dynatrace.com`. Cite the source URL and retrieval date in the branch's "what we'd see if this is the cause" line when the branch leans on an externally sourced concept.
 

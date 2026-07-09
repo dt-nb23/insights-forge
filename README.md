@@ -52,6 +52,8 @@ The `skills/` files are **not** slash commands. The main agent reads them as ref
 
    > *"Describe the problem you're trying to solve."*
 
+   Or pre-fill the context first: open the [Seed Prompt Generator](html/Insights%20Forge%20%28Seed%20Prompt%20Generator%29.html) in a browser, fill it out, and paste the generated seed prompt as your opening message. See [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md).
+
 ## Cost management
 
 Claude Code automatically caches the system prompt — which includes `CLAUDE.md` and tool definitions — so you don't pay full re-ingestion cost on every conversational turn within a session. The four session-start file reads (`domain-knowledge.md`, `dynatrace-playbooks.md`, `frameworks.md`, `stakeholder-profiles.md`) enter conversation context and stay cached within that session; starting a new session re-reads them cold.
@@ -69,6 +71,7 @@ The detailed reference lives in [`/docs/`](docs/). Start with [docs/README.md](d
 | If you want to… | Read |
 |---|---|
 | Set up the workspace and run your first investigation | [docs/getting-started.md](docs/getting-started.md) |
+| Pre-fill Phase 0 with the browser intake form | [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md) |
 | Understand the four phases in depth | [docs/workflow.md](docs/workflow.md) |
 | Learn the six critique lenses | [docs/lenses.md](docs/lenses.md) |
 | See the procedural skills index | [docs/skills.md](docs/skills.md) |
@@ -107,6 +110,7 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │       ├── _template/            # Copy this to create a new client workspace
 │       └── <client-name>/        # README, environment.md, contract.md, stakeholder-overlays.md,
 │                                 #   engagements/<YYYY-MM-DD-slug>/  (all phase files live here)
+├── html/                         # Seed Prompt Generator (browser intake form) + screenshots
 ├── docs/                         # Human-readable documentation
 └── tools/                        # pptx-generator.py and future integrations
 ```

@@ -27,7 +27,7 @@ Then read these files:
 
 - `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed, open, and validating hypotheses with ICE scores.
 - `<ENGAGEMENT_PATH>/signals-map.md` — for the business KPIs that anchor recommended actions.
-- `<ENGAGEMENT_PATH>/current-context.md` — for stakeholders, owners, and decision deadlines.
+- `<ENGAGEMENT_PATH>/current-context.md` — for stakeholders, owners, decision deadlines, and the **Out-of-scope exclusions**.
 - `memory/long-term/dynatrace-playbooks.md` — the playbook matched to each hypothesis at Phase 1 supplies the investigation sequence. The numbered steps in that playbook become the candidate investigation-action rows; the "confirmed" / "ruled out" sections become the exit criteria.
 - `memory/long-term/frameworks.md` — for the exit-criteria standard.
 - `memory/long-term/stakeholder-profiles.md` — for the leaders whose decisions will be asked.
@@ -40,6 +40,8 @@ Then read these files:
 The Phase 2 plan is built by a **deliberating panel of perspectives**, in a deliberate order: MECE lays out the opportunity space, the plan is drafted against it **and against the client's real instrumentation**, four perspectives critique it over **at least three rounds** (independent positions → cross-examination → convergence), the agent reconciles, and ICE re-ranks once the critique is in. Run the steps in order — the sequence is the point.
 
 1. **Break down the opportunity space — MECE lens.** Before drafting, lay out the full set of opportunities and levers the plan could pull, then invoke the **MECE lens** (`.claude/agents/mece-lens.md`) on that breakdown. Its job here is the same as in Phase 1, applied to the opportunity set instead of an issue tree: confirm the set is **collectively exhaustive** (no viable opportunity missed) and **mutually exclusive** (no two overlap). Apply its fixes. A rough first-cut priority is fine at this point — ICE does the rigorous ranking in step 7. This breakdown is the candidate pool the recommended actions are drawn from.
+
+   **Out-of-scope exclusions bound the opportunity set.** Keep out any opportunity, lever, recommended action, or decision ask that depends on, requires, or would encourage adopting an out-of-scope capability or topic — even one that is active in the tenant. Exclude such items from the candidate pool up front; do not rank them and then drop them, and do not let a lens reintroduce them. An out-of-scope opportunity being absent is **not** a completeness gap. If an exclusion removes an otherwise strong lever, name that trade-off at the gate. (Enforces the CLAUDE.md out-of-scope rule for Phase 2.)
 2. **Define investigation actions for every open and validating hypothesis.** Each investigation action specifies:
    - What the team will look at (telemetry, dashboard, analysis).
    - The data source(s) — RUM, APM, business events, third-party.

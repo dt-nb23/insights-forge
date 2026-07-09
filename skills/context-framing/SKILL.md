@@ -12,6 +12,7 @@ description: Phase 0 procedure for framing a Dynatrace customer engagement befor
 Use this skill when:
 
 - A new engagement begins: a consultant describes a customer, a Dynatrace environment, an upcoming meeting, or a value-surfacing goal.
+- The consultant's opening message is a **seed-prompt intake brief** from the Seed Prompt Generator (it opens with `# Insights Forge intake brief` and a `> **For the agent — read first.**` preamble). Treat it as pre-filled intake, not a finished framing — see **Seed-prompt intake** below.
 - The user has redirected scope after a Phase 0 gate and the framing needs to be reset.
 - The existing `current-context.md` is stale and the user has asked to reframe.
 
@@ -40,9 +41,49 @@ If the consultant has not yet described the engagement, open with:
 
 Do not ask multiple questions at once. Let each answer drive the next question.
 
+## Seed-prompt intake
+
+Sometimes the consultant's opening message is not a freeform description but a **seed-prompt intake brief** produced by the Seed Prompt Generator (see `docs/seed-prompt-generator.md`). It opens with `# Insights Forge intake brief` and a `> **For the agent — read first.**` preamble, and it pre-fills most of the nine clarifying questions in one pass.
+
+**A seed-prompt brief front-loads context; it does not replace the conversation.** Absorb it, then still question before you summarize — never jump from a pasted brief straight to the framing summary and the gate.
+
+When the opening message is a seed-prompt brief:
+
+1. **Read the whole brief, including its preamble.** The preamble restates rules you already hold: active capabilities are the boundary of surfaceable insight; **out-of-scope items are a hard exclusion**; anything marked `not provided` is a genuine gap, not a value to invent.
+2. **Map its sections onto the question model** and treat every populated value as a **provisional** answer — captured, but not yet confirmed with the consultant:
+
+   | Brief section | Populates |
+   |---|---|
+   | Requested outputs + Analyst calibration | Response format (Q3-R); analyst / account / customer-maturity calibration |
+   | Customer (name, what they do, vertical, size, tenant, region) | Q1, Q2, Q4, plus customer size (ACV band) and region(s) |
+   | Engagement framing (C.S.I.R.) | Q3 — Context, Specific, Intent, Response format |
+   | Active capabilities | Q5 |
+   | Out of scope / do not suggest | Out-of-scope exclusions (hard boundary — carried into every later phase) |
+   | Focus applications | Q6 — RUM / Session Replay status per app |
+   | Stakeholders | Q7 — archetype match + named-leader overlay trigger |
+   | Technical team priorities | Q8 |
+   | Trigger(s) | Q9 |
+
+3. **Still run 1–3 rounds of clarifying questions, one topic at a time, before writing `current-context.md`:**
+   - **First, close every MUST-HAVE gap** — any rubric MUST-HAVE the brief left `not provided`, filled with a placeholder, or answered thinly. Ask the corresponding question from the list below.
+   - **Then sharpen the provisional answers** — confirm and deepen Intent, confirm the active-capability boundary, and probe what each named stakeholder actually cares about. A filled-in form field is a starting point, not a probed answer: treat a one-line brief value as a prompt for a real follow-up, not a closed question.
+   - Apply the normal rules: one question at a time, adaptive order, and **skip anything the brief already answers well** (a strong brief value counts as "already answered"). Stop when every MUST-HAVE holds a confirmed, non-placeholder value and you have enough substance to frame confidently.
+4. **Capture the fields the brief carries that the live question set does not ask for** — customer size (ACV band), region(s), out-of-scope exclusions, and the customer's-Dynatrace-maturity calibration — into `current-context.md` (see Output). **Record the out-of-scope exclusions explicitly and carry them forward**: later phases must never surface a hypothesis, opportunity, or action that depends on a capability or topic the consultant ruled out, even if it is active. See **Out-of-scope exclusions** below.
+5. **Then continue with Steps 3–11 unchanged** — folder creation, past-engagement check, reframe, orientation hypotheses, scope, write, verify, and the gate. The stakeholder-overlay and environment-intake follow-on triggers (Q7, Q5) apply exactly as in a live intake. The Phase 0 gate still requires explicit approval.
+
+## Out-of-scope exclusions
+
+Whether they arrive in a seed-prompt brief or the consultant states them live, **out-of-scope items are a hard exclusion for the entire engagement** — a boundary, not a preference. An item is out of scope for reasons the agent does not get to override: compliance (e.g., no Session Replay under GDPR), contractual limits, prior commitments, or an explicit customer "do not suggest."
+
+The rule the whole workspace holds to:
+
+> **Never surface a hypothesis, opportunity, recommendation, signal, or action that depends on, requires, or would encourage adopting an out-of-scope capability or topic — even if that capability is active in the tenant.** Out-of-scope overrides "active capability": active defines what *could* be surfaced; out-of-scope subtracts from it.
+
+Record the exclusions in `current-context.md` under **Out-of-scope exclusions** (see Output), verbatim enough that a later phase can check against them. If closing a MUST-HAVE gap or the consulting objective would require an out-of-scope capability, say so plainly at the gate rather than quietly routing around it — the exclusion may force a re-anchor of the insight narrative, and that is the consultant's call to make.
+
 ## Clarifying questions
 
-Ask **one question at a time**, in adaptive order — if the consultant's opening description already answers a question, skip it and move to the next unknown. Stop asking when every **MUST-HAVE** field in the Exit-criteria rubric below is populated with a non-placeholder value.
+Ask **one question at a time**, in adaptive order — if the consultant's opening description already answers a question, skip it and move to the next unknown. Stop asking when every **MUST-HAVE** field in the Exit-criteria rubric below is populated with a non-placeholder value. If a seed-prompt brief supplied the answers (see **Seed-prompt intake** above), the same skip rule applies to well-filled fields — but still run the gap-closing and sharpening rounds described there before you summarize.
 
 The nine questions, in default order:
 
@@ -196,7 +237,7 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 ## Steps
 
 1. **Conditionally dispatch the doc-freshness-checker sub-agent in background.** Before opening the conversation, read `memory/long-term/freshness-report.md` and check the "Last refresh" run date. If the last check was fewer than 7 days ago AND the report shows zero Drifted or Unreachable entries → skip the dispatch and plan to note at the gate: "Doc citations verified [N days ago] — current." Only dispatch the sub-agent if the last check was 7 or more days ago, OR the report shows any open Drifted or Unreachable entries. When dispatching, call the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. The sub-agent refreshes Dynatrace doc citation status while the consultant answers Q1–Q9; its wall-clock work is hidden inside the user-input phase. It writes to `memory/long-term/freshness-report.md` only — it never edits long-term memory. Then **open the conversation** with the prompt above if the consultant has not described the engagement yet.
-2. **Ask clarifying questions** one at a time in adaptive order, skipping any already answered.
+2. **Ask clarifying questions** one at a time in adaptive order, skipping any already answered. If the opening message was a seed-prompt brief, first absorb it per **Seed-prompt intake** — then question the gaps and sharpen the provisional answers before summarizing.
 3. **Create the engagement folder (new engagements only — skip if reframing an existing one).**
 
    Once Q1 has been answered and the client name is known:
@@ -245,10 +286,12 @@ Below the front-matter, the body sections:
 | Section | Contents |
 |---|---|
 | Engagement Framing (C.S.I.R.) | **C** — Customer name/label, business description, consultant role; **S** — Known constraints, environment facts, contract phase, prior outcomes; **I** — Consultant's goal and customer's expected outcome; **R** — Deliverable format, primary audience, tone/length constraints |
-| Customer | Name / label, industry, size |
+| Customer | Name / label, industry, size (ACV band if provided), region(s) |
 | Vertical | Named vertical |
 | Tenant type | SaaS or Managed |
 | Active capabilities | Checked list from Q5 |
+| Out-of-scope exclusions | Capabilities or topics the consultant ruled out (e.g., Session Replay under GDPR) — a hard boundary honored in every later phase; from the seed-prompt brief or stated live. Omit the row only if there are none. |
+| Analyst calibration | Consultant experience, account familiarity, and customer's Dynatrace maturity (1–5) if provided — tunes depth and tone |
 | RUM status | Enabled / not enabled on the app in question; session replay on/off |
 | Consulting objective | The reframed engagement goal |
 | Leadership priorities | Named KPIs and strategic priorities |

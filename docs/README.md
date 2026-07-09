@@ -11,6 +11,7 @@ Read these in order. About 20 minutes total.
 1. **[getting-started.md](getting-started.md)** — set up the workspace, populate stakeholders, run your first investigation end-to-end.
 2. **[workflow.md](workflow.md)** — the four-phase loop in depth. What happens in each phase, what the gate looks like, where artifacts land.
 3. **[lenses.md](lenses.md)** — the six critique sub-agents and when each one earns its keep.
+4. **[seed-prompt-generator.md](seed-prompt-generator.md)** — the browser intake form that assembles a ready-to-paste Phase 0 seed prompt. The fast on-ramp to a new engagement.
 
 ## If you're customizing or extending
 
