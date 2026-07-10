@@ -437,7 +437,7 @@
       <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; color:var(--text,#ebecff); letter-spacing:-.01em;">Start the engagement with the context already loaded.</h2>
       <p style="margin:0 0 18px; font-size:14.5px; color:var(--text-sub,#b1b2d2); line-height:1.55;">Phase 0 normally starts cold — the agent pulls the customer's story out of you one question at a time. This form flips that around: fill in what you know before the session, and it assembles a structured Phase 0 intake brief you paste into Claude Code to open the engagement already framed.</p>
       <ul style="margin:0 0 26px; padding:0 0 0 20px; font-size:13.5px; color:var(--text-sub,#b1b2d2); line-height:1.7;">
-        <li>10 short sections — Must-haves unlock Copy/Download; everything else sharpens the result.</li>
+        <li>9 short sections — Required fields unlock Copy/Download; everything else sharpens the result.</li>
         <li>Nothing here replaces Phase 0 — the agent still asks 1–3 rounds of clarifying questions and waits for your approval.</li>
         <li>Blank fields become “not provided” — a real gap the agent probes, never an invented answer.</li>
       </ul>
@@ -485,30 +485,32 @@
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px; flex-shrink:0;">1</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Outputs &amp; trigger</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What you're producing and what prompted it. The customer action plan is always produced; pick the presentation formats to build on top of it.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Engagement trigger <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">what prompted this — select any that apply</span></label>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <sc-for list="{{ triggers }}" as="o" hint-placeholder-count="6">
-            <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Requested outputs <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Which presentation formats to build on top of the always-produced action plan.</p>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:2px; padding:12px 14px; border:1px solid var(--success,#6fc3ba); border-radius:10px; background:var(--field,#1b1b30);">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:var(--success,#6fc3ba); color:var(--on-primary,#1f2037); font-weight:700; font-size:12px;">✓</span>
+          <div><strong style="font-size:13.5px; color:var(--text,#ebecff);">Customer action plan</strong> <span style="font-size:12px; color:var(--success,#6fc3ba);">· baseline, always produced</span><div style="font-size:12px; color:var(--text-sub,#b1b2d2); margin-top:2px;">The phased plan the customer acts on — generated every time.</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:10px;">
+          <sc-for list="{{ outputs }}" as="u" hint-placeholder-count="3">
+            <label onclick="{{ u.onClick }}" style="{{ u.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">
+              <div style="display:flex; align-items:center; gap:9px;">
+                <span style="{{ u.boxStyle }}"><sc-if value="{{ u.selected }}" hint-placeholder-val="{{ false }}"><span style="width:10px; height:10px; border-radius:3px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+                <strong style="font-size:13.5px; font-weight:600; color:var(--text,#ebecff);">{{ u.label }}</strong>
+              </div>
+              <small style="display:block; margin-top:6px; margin-left:27px; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.4;">{{ u.desc }}</small>
+            </label>
           </sc-for>
         </div>
         <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border,#3b3b52);">
-          <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Requested outputs <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
-          <div style="display:flex; align-items:center; gap:10px; margin-top:12px; padding:12px 14px; border:1px solid var(--success,#6fc3ba); border-radius:10px; background:var(--field,#1b1b30);">
-            <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:var(--success,#6fc3ba); color:var(--on-primary,#1f2037); font-weight:700; font-size:12px;">✓</span>
-            <div><strong style="font-size:13.5px; color:var(--text,#ebecff);">Customer action plan</strong> <span style="font-size:12px; color:var(--success,#6fc3ba);">· baseline, always produced</span><div style="font-size:12px; color:var(--text-sub,#b1b2d2); margin-top:2px;">The phased plan the customer acts on — generated every time.</div></div>
-          </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:10px;">
-            <sc-for list="{{ outputs }}" as="u" hint-placeholder-count="3">
-              <label onclick="{{ u.onClick }}" style="{{ u.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">
-                <div style="display:flex; align-items:center; gap:9px;">
-                  <span style="{{ u.boxStyle }}"><sc-if value="{{ u.selected }}" hint-placeholder-val="{{ false }}"><span style="width:10px; height:10px; border-radius:3px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
-                  <strong style="font-size:13.5px; font-weight:600; color:var(--text,#ebecff);">{{ u.label }}</strong>
-                </div>
-                <small style="display:block; margin-top:6px; margin-left:27px; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.4;">{{ u.desc }}</small>
-              </label>
+          <label style="display:flex; align-items:center; gap:8px; margin:0 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Engagement trigger <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Optional</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+          <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">What prompted this engagement — shapes urgency and tone.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ triggers }}" as="o" hint-placeholder-count="6">
+              <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
             </sc-for>
           </div>
         </div>
@@ -521,17 +523,19 @@
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">2</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Analyst context</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Rate 1–5</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Calibrates the plan's depth and tone. Optional — but once you rate one, rate all three (that's what unlocks copy/download).</p>
-        <label style="display:block; margin:16px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Your role</label>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who's running this and how well you know the account — calibrates the plan's depth and tone.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Your role <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Your seat in the account — calibrates how the plan is framed and who owns follow-through.</p>
         <select data-fid="role" value="{{ answers.role }}" onchange="{{ onInput }}" style="width:100%; max-width:300px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-          <option value="">— select —</option><option>CSM</option><option>SE</option><option>Consultant</option><option>Insights Analytics Consultant</option><option>Other</option>
+          <option>Insights Analytics Consultant</option><option>CSM</option><option>SE</option><option>Consultant</option><option>Other</option>
         </select>
         <div style="margin-top:6px;">
           <sc-for list="{{ scales }}" as="sc" hint-placeholder-count="3">
             <div style="margin-top:14px;">
-              <label style="display:block; margin-bottom:7px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">{{ sc.label }}</label>
+              <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">{{ sc.label }} <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Optional</span></label>
+              <p style="margin:2px 0 7px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">{{ sc.why }}</p>
               <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
                 <span style="font-size:11px; color:var(--text-faint,#8a8bad); width:64px; text-align:right;">{{ sc.lo }}</span>
                 <div style="display:flex; gap:6px;">
@@ -547,22 +551,25 @@
       </section>
       </sc-if>
 
-      <!-- SECTION 3 — Customer context -->
+      <!-- SECTION 3 — Customer basics -->
       <sc-if value="{{ showSec2 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 3 — Customer context" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <section data-screen-label="Section 3 — Customer basics" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">3</span>
-          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Customer context</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Customer basics</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who the customer is and where the relationship stands. The basics plus the relationship history frame everything downstream.</p>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who the customer is — grounds every recommendation in their business and market.</p>
         <div style="margin-top:14px;">
-          <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer name <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer name <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+          <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Who this engagement is for.</p>
           <input type="text" data-fid="customerName" value="{{ answers.customerName }}" oninput="{{ onInput }}" placeholder="e.g. Northwind Retail" style="width:100%; max-width:420px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
         </div>
-        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does the customer's business do? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does the customer's business do? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">One line on their business — grounds every recommendation.</p>
         <input type="text" data-fid="customerDesc" value="{{ answers.customerDesc }}" oninput="{{ onInput }}" placeholder="One line — e.g. mid-size online retailer selling home goods" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Vertical <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Vertical <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Industry — shapes benchmarks, compliance, and relevant use cases.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <sc-for list="{{ verticals }}" as="o" hint-placeholder-count="9">
             <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
@@ -573,13 +580,15 @@
         </sc-if>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:start;">
           <div>
-            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer size (ACV) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Nice</span></label>
+            <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer size (ACV) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Optional</span></label>
+            <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Commercial tier — sets plan ambition and pace.</p>
             <select data-fid="size" value="{{ answers.size }}" onchange="{{ onInput }}" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
               <option value="">— select —</option><option>Acceleration (&lt; $250K ACV)</option><option>Mid-Enterprise ($250K–$1M ACV)</option><option>Large Enterprise (&gt; $1M ACV)</option>
             </select>
           </div>
           <div>
-            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Tenant type <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
+            <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Tenant type <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span></label>
+            <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">SaaS or Managed — affects what's available and how you reference it.</p>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <sc-for list="{{ tenantOptions }}" as="o" hint-placeholder-count="2">
                 <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
@@ -588,7 +597,8 @@
           </div>
         </div>
         <div style="margin-top:16px;">
-          <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer region(s) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply — local laws (e.g. GDPR) may shape what the plan can suggest</span></label>
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer region(s) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+          <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Where they operate — local laws (e.g. GDPR) may constrain the plan.</p>
           <div style="border:1px solid var(--border,#3b3b52); border-radius:10px; padding:12px 14px; background:var(--field,#1b1b30); display:flex; gap:8px; flex-wrap:wrap;">
             <sc-for list="{{ regionOptions }}" as="r" hint-placeholder-count="4">
               <label onclick="{{ r.onClick }}" style="{{ r.rowStyle }}" style-hover="border-color:var(--border-hover,#4d4e66);">
@@ -597,19 +607,6 @@
               </label>
             </sc-for>
           </div>
-        </div>
-        <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--border,#3b3b52);">
-          <label style="display:flex; align-items:center; gap:8px; margin:0 0 6px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Relationship &amp; context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
-          <textarea data-fid="context" value="{{ free.context.value }}" oninput="{{ onInput }}" placeholder="Relationship history, mood, recent milestones…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
-          <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.context.guiding }}</p>
-          <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
-            <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
-            <sc-for list="{{ free.context.chips }}" as="c" hint-placeholder-count="4">
-              <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
-            </sc-for>
-          </div>
-          <button onclick="{{ free.context.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.context.toggleLabel }}</button>
-          <sc-if value="{{ free.context.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.context.tip }}</div></sc-if>
         </div>
       </section>
       </sc-if>
@@ -620,7 +617,7 @@
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">4</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Stakeholders &amp; audience</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who consumes or influences the deliverable, and how technical each one is. Each stakeholder carries their own communication level (Executive / Technical / Mixed) so the plan can speak to the whole room — this replaces a single form-level audience.</p>
         <div style="margin-top:10px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">Check Salesforce for the account team and named contacts — a real, named stakeholder sharpens the output far more than a role-only fallback.</div>
@@ -632,21 +629,25 @@
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
               <div>
-                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Name &amp; title <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
+                <label style="display:flex; align-items:center; gap:6px; margin-bottom:2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Name &amp; title <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span></label>
+                <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">Who'll read or influence this — a real name sharpens the output.</p>
                 <input type="text" value="{{ sk.name }}" oninput="{{ sk.onName }}" placeholder="e.g. Sarah Chen, VP Engineering" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
               </div>
               <div>
-                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Role archetype <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+                <label style="display:flex; align-items:center; gap:6px; margin-bottom:2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Role archetype <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+                <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">Their function — Phase 3 maps deliverables to it.</p>
                 <select value="{{ sk.archetype }}" onchange="{{ sk.onArch }}" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
                   <option>Stakeholder — role to be confirmed</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>unsure</option>
                 </select>
               </div>
             </div>
-            <label style="display:flex; align-items:center; gap:6px; margin:12px 0 6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Communication level <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">how technical this person's read should be</span></label>
+            <label style="display:flex; align-items:center; gap:6px; margin:12px 0 2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Communication level <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span></label>
+            <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">How technical this person's read should be.</p>
             <select value="{{ sk.level }}" onchange="{{ sk.onLevel }}" style="width:100%; max-width:260px; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
               <option>Executive</option><option>Technical</option><option>Mixed</option>
             </select>
-            <label style="display:flex; align-items:center; gap:6px; margin:12px 0 6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does this stakeholder care about? <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
+            <label style="display:flex; align-items:center; gap:6px; margin:12px 0 2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does this stakeholder care about? <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span></label>
+            <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">The KPIs or outcomes they judge success by.</p>
             <textarea value="{{ sk.cares }}" oninput="{{ sk.onCares }}" placeholder="KPIs, outcomes or priorities this person judges success by…" style="width:100%; min-height:52px; resize:vertical; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
             <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:8px;">
               <sc-for list="{{ sk.caresChips }}" as="c" hint-placeholder-count="6"><button onclick="{{ c.onClick }}" style="border:1px solid var(--border,#3b3b52); background:var(--card,#212135); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:5px 11px; font-size:12px; cursor:pointer; white-space:nowrap;" style-hover="border-color:var(--primary-border,#adb0ff); color:var(--text,#ebecff);">{{ c.label }}</button></sc-for>
@@ -657,22 +658,60 @@
       </section>
       </sc-if>
 
-      <!-- SECTION 5 — Goals & success criteria -->
+      <!-- SECTION 5 — Pain & constraints -->
       <sc-if value="{{ showSec4 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 5 — Goals & success criteria" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <section data-screen-label="Section 5 — Pain & constraints" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">5</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Pain &amp; constraints</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Where the relationship stands and what hurts day-to-day — the situation the plan has to work within. Chips toggle: click to insert, click again to remove.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Relationship &amp; context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Where the relationship stands — history, mood, recent milestones.</p>
+        <textarea data-fid="context" value="{{ free.context.value }}" oninput="{{ onInput }}" placeholder="Relationship history, mood, recent milestones…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.context.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.context.chips }}" as="c" hint-placeholder-count="4">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.context.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.context.toggleLabel }}</button>
+        <sc-if value="{{ free.context.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.context.tip }}</div></sc-if>
+        <label style="display:flex; align-items:center; gap:8px; margin:20px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Pain &amp; constraints <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">The team's day-to-day pain and anything limiting the plan.</p>
+        <textarea data-fid="painConstraints" value="{{ free.painConstraints.value }}" oninput="{{ onInput }}" placeholder="Alert noise, slow root cause, toil, on-call load — plus commitments, prior outcomes, and limits…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.painConstraints.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.painConstraints.chips }}" as="c" hint-placeholder-count="8">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.painConstraints.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.painConstraints.toggleLabel }}</button>
+        <sc-if value="{{ free.painConstraints.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.painConstraints.tip }}</div></sc-if>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 6 — Goals & success criteria -->
+      <sc-if value="{{ showSec5 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 6 — Goals & success criteria" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">6</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Goals &amp; success criteria</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What Dynatrace wants from this engagement and what the customer would call success — the load-bearing core the objective can't be written without.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">What Dynatrace wants from this engagement.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <sc-for list="{{ intents }}" as="o" hint-placeholder-count="7">
             <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
           </sc-for>
         </div>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 6px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">What the customer would call success — the observable "after".</p>
         <textarea data-fid="intentSuccess" value="{{ free.intentSuccess.value }}" oninput="{{ onInput }}" placeholder="What the customer would say changed if this works…" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.intentSuccess.guiding }}</p>
         <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
@@ -686,35 +725,13 @@
       </section>
       </sc-if>
 
-      <!-- SECTION 6 — Pain & constraints -->
-      <sc-if value="{{ showSec5 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 6 — Pain & constraints" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
-        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">6</span>
-          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Pain &amp; constraints</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
-        </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> The team's day-to-day pain and anything that limits the plan — commitments, prior QBR outcomes, regulatory or contract limits. This is the boundary of what the plan can use.</p>
-        <textarea data-fid="painConstraints" value="{{ free.painConstraints.value }}" oninput="{{ onInput }}" placeholder="Alert noise, slow root cause, toil, on-call load — plus commitments, prior outcomes, and limits…" style="width:100%; min-height:74px; margin-top:12px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
-        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.painConstraints.guiding }}</p>
-        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
-          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
-          <sc-for list="{{ free.painConstraints.chips }}" as="c" hint-placeholder-count="8">
-            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
-          </sc-for>
-        </div>
-        <button onclick="{{ free.painConstraints.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.painConstraints.toggleLabel }}</button>
-        <sc-if value="{{ free.painConstraints.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.painConstraints.tip }}</div></sc-if>
-      </section>
-      </sc-if>
-
       <!-- SECTION 7 — Active capabilities -->
       <sc-if value="{{ showSec6 }}" hint-placeholder-val="{{ true }}">
       <section data-screen-label="Section 7 — Active capabilities" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">7</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Active Dynatrace capabilities</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> The boundary of what insights can surface. For RUM, Session Replay and Dashboards, pick the generation. Davis AI is always on.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:14px; margin-top:16px;">
@@ -755,7 +772,7 @@
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">8</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Out of scope</h2>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> A hard boundary, not a preference — the agent will not suggest these even if the capability is active. Use for compliance constraints (e.g. GDPR limits on Session Replay) or anything the customer has explicitly ruled out.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:14px; margin-top:16px;">
@@ -846,7 +863,7 @@
           <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
           <span style="{{ statusStyle }}">{{ statusLabel }}</span>
         </div>
-        <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Must-have</span> is filled.</p>
+        <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Required field</span> is filled.</p>
 
         <sc-if value="{{ hasMissing }}" hint-placeholder-val="{{ false }}">
           <div style="margin-bottom:12px; background:var(--field,#1b1b30); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:10px 12px;">
@@ -925,8 +942,8 @@ class Component extends DCLogic {
     };
     this.VERTICALS = ['Retail / E-commerce','Financial Services (FSI)','Healthcare / Life Sciences','Manufacturing','Telco / Media','Public Sector','Technology / SaaS','Logistics / Supply Chain','Other'];
     this.INTENTS = ['prove value','secure renewal','justify expansion','prepare QBR narrative','improve digital experience','diagnose a problem','other'];
-    this.TRIGGERS = ['QBR','renewal','expansion','scheduled touchpoint','incident follow-up','other'];
-    this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer context','Stakeholders & audience','Goals & success','Pain & constraints','Active capabilities','Out of scope','Focus applications'];
+    this.TRIGGERS = ['QBR','renewal','expansion','Client Conversation','incident follow-up','other'];
+    this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer basics','Stakeholders & audience','Pain & constraints','Goals & success','Active capabilities','Out of scope','Focus applications'];
     this.REVIEW = 9;
     this.state = {
       theme: props.theme === 'light' ? 'light' : 'dark',
@@ -939,7 +956,7 @@ class Component extends DCLogic {
         outputs: [],
         analystExp: 0, accountFam: 0, domainFluency: 0,
         customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
-        context:'', role:'', intents:[], intentSuccess:'',
+        context:'', role:'Insights Analytics Consultant', intents:[], intentSuccess:'',
         painConstraints:'',
         caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
         apps:[ {name:'', rum:'', sr:''} ],
@@ -1019,11 +1036,11 @@ class Component extends DCLogic {
     const stkOk = a.stakeholders.some(s => F(s.archetype));
     const grp = {
       0: { fields: [F(a.outputs), F(a.triggers)], req: [F(a.outputs)] },
-      1: { fields: [!!anyScale, F(a.role)], req: anyScale ? [!!allScale] : [] },
-      2: { fields: [F(a.customerName), vertOk, F(a.customerDesc), F(a.size), F(a.regions), F(a.context)], req: [F(a.customerName), vertOk, F(a.customerDesc), F(a.context)] },
+      1: { fields: [F(a.role), !!anyScale], req: anyScale ? [F(a.role), !!allScale] : [F(a.role)] },
+      2: { fields: [F(a.customerName), vertOk, F(a.customerDesc), F(a.size), F(a.regions)], req: [F(a.customerName), vertOk, F(a.customerDesc)] },
       3: { fields: [a.stakeholders.some(s => F(s.name) || s.archetype || F(s.cares))], req: [stkOk] },
-      4: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), F(a.intentSuccess)] },
-      5: { fields: [F(a.painConstraints)], req: [F(a.painConstraints)] },
+      4: { fields: [F(a.context), F(a.painConstraints)], req: [F(a.context), F(a.painConstraints)] },
+      5: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), F(a.intentSuccess)] },
       6: { fields: [nonDavis], req: [nonDavis] },
       7: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
       8: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] }
@@ -1041,10 +1058,10 @@ class Component extends DCLogic {
     if (!a.customerName.trim()) m.push('Customer name');
     if (!a.customerDesc.trim()) m.push('What the customer does');
     if (!a.verticals.length || (a.verticals.indexOf('Other') >= 0 && !a.verticalOther.trim())) m.push('Vertical');
-    if (!a.context.trim()) m.push('Customer context (relationship & history)');
+    if (!a.context.trim()) m.push('Relationship & context');
+    if (!a.painConstraints.trim()) m.push('Pain & constraints');
     if (!a.intents.length) m.push('Intent — pick at least one goal');
     if (!a.intentSuccess.trim()) m.push('What success looks like');
-    if (!a.painConstraints.trim()) m.push('Pain & constraints');
     const nonDavis = a.caps.filter(c => c !== 'davis');
     if (!(nonDavis.length || a.capsUnsure)) m.push('At least one capability beyond Davis, or “unsure”');
     if (this.s6Req() && !a.apps.some(ap => ap.name.trim() && ap.rum && ap.sr)) m.push('At least one focus app with RUM status (digital-experience intent)');
@@ -1077,13 +1094,13 @@ class Component extends DCLogic {
       + '\n> **For the agent — read first.** This is a seeded Phase 0 engagement intake, captured with Insights Forge and aligned to skills/context-framing/SKILL.md. The **baseline deliverable is always a customer action plan**; "Requested outputs" below are the presentation formats to produce on top of it.\n'
       + '>\n'
       + '> **How the inputs are categorized:**\n'
-      + '> - **Must-have context** — Requested outputs, Customer (name / what-they-do / vertical), Customer context (relationship), Goals + success criteria, Pain & constraints, Active capabilities, and at least one Stakeholder (role archetype required; a named person strongly preferred). Framing is not complete without these.\n'
-      + '> - **Should-have context** — Analyst calibration (1–5) + role, Tenant, Customer region(s), per-stakeholder communication level & priorities, and Trigger. These sharpen tone, depth and KPI selection.\n'
+      + '> - **Required context** — Requested outputs, Customer (name / what-they-do / vertical), Relationship & context, Pain & constraints, Goals + success criteria, Active capabilities, and at least one Stakeholder (role archetype required; a named person strongly preferred). Framing is not complete without these.\n'
+      + '> - **Recommended context** — Analyst calibration (1–5) + role, Tenant, Customer region(s), per-stakeholder communication level & priorities, and Trigger. These sharpen tone, depth and KPI selection.\n'
       + '> - **Active capabilities are the boundary** of what insight you can surface — do not propose value that depends on a capability not listed. Davis AI is always on.\n'
       + '> - **Out of scope is a hard exclusion** — do not suggest or reference anything the customer has flagged as out of scope, even if the underlying capability is active.\n'
       + '> - Any value shown as "not provided" is a genuine gap.\n'
       + '>\n'
-      + '> **Before you build the plan:** ask the consultant **1–3 rounds of clarifying questions**, one topic at a time, until you have enough substantial context to move forward confidently. Start with any Must-have marked "not provided", then tighten Intent, capability scope, and what each stakeholder cares about. Do not advance past the Phase 0 gate until the consultant approves your framing.\n'
+      + '> **Before you build the plan:** ask the consultant **1–3 rounds of clarifying questions**, one topic at a time, until you have enough substantial context to move forward confidently. Start with any Required item marked "not provided", then tighten Intent, capability scope, and what each stakeholder cares about. Do not advance past the Phase 0 gate until the consultant approves your framing.\n'
       + '\n## Requested outputs & trigger\n'
       + '- Baseline (always): Customer action plan\n'
       + '- Additional formats: ' + outputs + '\n'
@@ -1202,9 +1219,9 @@ class Component extends DCLogic {
       outputs: this.OUTPUTS.map(u => { const sel = a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, selected:sel, onClick:()=>this.toggleArr('outputs', u.value), style:this.card(sel), boxStyle:this.box(sel) }; }),
 
       scales: [
-        { label:'Your experience with Dynatrace consulting', lo:'New', hi:'Expert', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('analystExp', n), style:this.scaleBtn(a.analystExp===n) })) },
-        { label:'Account familiarity', lo:'First touch', hi:'Deep history', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('accountFam', n), style:this.scaleBtn(a.accountFam===n) })) },
-        { label:'Customer’s Dynatrace Maturity', lo:'Low', hi:'High', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('domainFluency', n), style:this.scaleBtn(a.domainFluency===n) })) }
+        { label:'Your experience with Dynatrace consulting', why:'Your depth here — tunes how much the plan explains vs. assumes.', lo:'New', hi:'Expert', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('analystExp', n), style:this.scaleBtn(a.analystExp===n) })) },
+        { label:'Account familiarity', why:'How well you know this account — sets how much discovery to prompt.', lo:'First touch', hi:'Deep history', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('accountFam', n), style:this.scaleBtn(a.accountFam===n) })) },
+        { label:'Customer’s Dynatrace Maturity', why:'How advanced they are on Dynatrace — sets the ambition ceiling.', lo:'Low', hi:'High', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('domainFluency', n), style:this.scaleBtn(a.domainFluency===n) })) }
       ],
 
       answers: a,
@@ -1236,7 +1253,7 @@ class Component extends DCLogic {
         onRemove:()=>this.removeApp(i), showRemove: a.apps.length > 1
       })),
       onAddApp: () => this.addApp(),
-      s6TagLabel: s6required ? 'Must-have' : 'Should-have',
+      s6TagLabel: s6required ? 'Required' : 'Recommended',
       s6TagStyle: s6required ? 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);' : 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);',
       s6Why: s6required ? 'Your Intent includes “improve digital experience”, so RUM status decides whether the user-experience story is available — required here. Add every app in scope.' : 'Optional now — becomes required if Intent includes “improve digital experience”. Add every app in scope; each can have its own RUM and Session Replay status.',
 
