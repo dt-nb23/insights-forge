@@ -437,7 +437,7 @@
       <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; color:var(--text,#ebecff); letter-spacing:-.01em;">Start the engagement with the context already loaded.</h2>
       <p style="margin:0 0 18px; font-size:14.5px; color:var(--text-sub,#b1b2d2); line-height:1.55;">Phase 0 normally starts cold — the agent pulls the customer's story out of you one question at a time. This form flips that around: fill in what you know before the session, and it assembles a structured Phase 0 intake brief you paste into Claude Code to open the engagement already framed.</p>
       <ul style="margin:0 0 26px; padding:0 0 0 20px; font-size:13.5px; color:var(--text-sub,#b1b2d2); line-height:1.7;">
-        <li>9 short sections — Required fields unlock Copy/Download; everything else sharpens the result.</li>
+        <li>10 short sections — Required fields unlock Copy/Download; everything else sharpens the result.</li>
         <li>Nothing here replaces Phase 0 — the agent still asks 1–3 rounds of clarifying questions and waits for your approval.</li>
         <li>Blank fields become “not provided” — a real gap the agent probes, never an invented answer.</li>
       </ul>
@@ -658,15 +658,15 @@
       </section>
       </sc-if>
 
-      <!-- SECTION 5 — Pain & constraints -->
+      <!-- SECTION 5 — Relationship Context -->
       <sc-if value="{{ showSec4 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 5 — Pain & constraints" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <section data-screen-label="Section 5 — Relationship Context" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">5</span>
-          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Pain &amp; constraints</h2>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Relationship Context</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Where the relationship stands and what hurts day-to-day — the situation the plan has to work within. Chips toggle: click to insert, click again to remove.</p>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Where the relationship stands going into this engagement — shapes the tone of everything that follows. Chips toggle: click to insert, click again to remove.</p>
         <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Relationship &amp; context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Where the relationship stands — history, mood, recent milestones.</p>
         <textarea data-fid="context" value="{{ free.context.value }}" oninput="{{ onInput }}" placeholder="Relationship history, mood, recent milestones…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
@@ -679,7 +679,19 @@
         </div>
         <button onclick="{{ free.context.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.context.toggleLabel }}</button>
         <sc-if value="{{ free.context.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.context.tip }}</div></sc-if>
-        <label style="display:flex; align-items:center; gap:8px; margin:20px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Pain &amp; constraints <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 6 — Customer Pain Points -->
+      <sc-if value="{{ showSec5 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 6 — Customer Pain Points" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">6</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Customer Pain Points</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What hurts day-to-day, and what limits the plan — the boundary of what you can realistically propose. Chips toggle: click to insert, click again to remove.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Pain &amp; constraints <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">The team's day-to-day pain and anything limiting the plan.</p>
         <textarea data-fid="painConstraints" value="{{ free.painConstraints.value }}" oninput="{{ onInput }}" placeholder="Alert noise, slow root cause, toil, on-call load — plus commitments, prior outcomes, and limits…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.painConstraints.guiding }}</p>
@@ -694,11 +706,11 @@
       </section>
       </sc-if>
 
-      <!-- SECTION 6 — Goals & success criteria -->
-      <sc-if value="{{ showSec5 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 6 — Goals & success criteria" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <!-- SECTION 7 — Goals & success criteria -->
+      <sc-if value="{{ showSec6 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 7 — Goals & success criteria" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">6</span>
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">7</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Goals &amp; success criteria</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
@@ -726,10 +738,10 @@
       </sc-if>
 
       <!-- SECTION 7 — Active capabilities -->
-      <sc-if value="{{ showSec6 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 7 — Active capabilities" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <sc-if value="{{ showSec7 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 8 — Active capabilities" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">7</span>
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">8</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Active Dynatrace capabilities</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
@@ -767,10 +779,10 @@
       </sc-if>
 
       <!-- SECTION 8 — Out of scope -->
-      <sc-if value="{{ showSec7 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 8 — Out of scope" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <sc-if value="{{ showSec8 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 9 — Out of scope" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">8</span>
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">9</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Out of scope</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span>
         </div>
@@ -805,10 +817,10 @@
       </sc-if>
 
       <!-- SECTION 9 — Focus applications -->
-      <sc-if value="{{ showSec8 }}" hint-placeholder-val="{{ true }}">
-      <section data-screen-label="Section 9 — Focus applications" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+      <sc-if value="{{ showSec9 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 10 — Focus applications" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">9</span>
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">10</span>
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Focus applications &amp; RUM</h2>
           <span style="{{ s6TagStyle }}">{{ s6TagLabel }}</span>
         </div>
@@ -943,8 +955,8 @@ class Component extends DCLogic {
     this.VERTICALS = ['Retail / E-commerce','Financial Services (FSI)','Healthcare / Life Sciences','Manufacturing','Telco / Media','Public Sector','Technology / SaaS','Logistics / Supply Chain','Other'];
     this.INTENTS = ['prove value','secure renewal','justify expansion','prepare QBR narrative','improve digital experience','diagnose a problem','other'];
     this.TRIGGERS = ['QBR','renewal','expansion','Client Conversation','incident follow-up','other'];
-    this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer basics','Stakeholders & audience','Pain & constraints','Goals & success','Active capabilities','Out of scope','Focus applications'];
-    this.REVIEW = 9;
+    this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer basics','Stakeholders & audience','Relationship Context','Customer Pain Points','Goals & success','Active capabilities','Out of scope','Focus applications'];
+    this.REVIEW = 10;
     this.state = {
       theme: props.theme === 'light' ? 'light' : 'dark',
       showIntro: true,
@@ -1039,11 +1051,12 @@ class Component extends DCLogic {
       1: { fields: [F(a.role), !!anyScale], req: anyScale ? [F(a.role), !!allScale] : [F(a.role)] },
       2: { fields: [F(a.customerName), vertOk, F(a.customerDesc), F(a.size), F(a.regions)], req: [F(a.customerName), vertOk, F(a.customerDesc)] },
       3: { fields: [a.stakeholders.some(s => F(s.name) || s.archetype || F(s.cares))], req: [stkOk] },
-      4: { fields: [F(a.context), F(a.painConstraints)], req: [F(a.context), F(a.painConstraints)] },
-      5: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), F(a.intentSuccess)] },
-      6: { fields: [nonDavis], req: [nonDavis] },
-      7: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
-      8: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] }
+      4: { fields: [F(a.context)], req: [F(a.context)] },
+      5: { fields: [F(a.painConstraints)], req: [F(a.painConstraints)] },
+      6: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), F(a.intentSuccess)] },
+      7: { fields: [nonDavis], req: [nonDavis] },
+      8: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
+      9: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] }
     };
     return grp[i] || { fields: [], req: [] };
   }
@@ -1180,7 +1193,7 @@ class Component extends DCLogic {
     const navItems = this.STEP_TITLES.map((t, i) => { const on = step === i; return { num: String(i + 1), title: t, onClick: () => this.goStep(i), style: navBase + (on ? navActive : ''), numStyle: numBase + (on ? numOn : numOff), dotStyle: dotFor(this.dotState(i)) }; });
     navItems.push({ num: '\u2713', title: 'Review & generate', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : 'required') });
 
-    const show = {}; for (let i = 0; i < 9; i++) show['showSec' + i] = step === i;
+    const show = {}; for (let i = 0; i < 10; i++) show['showSec' + i] = step === i;
 
     return Object.assign({
       rootRef: this.rootRef,
@@ -1206,7 +1219,7 @@ class Component extends DCLogic {
 
       navItems,
       stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review & generate',
-      progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 9') : 'Complete',
+      progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 10') : 'Complete',
       progressPct: Math.round((Math.min(step, this.REVIEW) / this.REVIEW) * 100),
       onPrev: () => this.goStep(step - 1),
       onNext: () => this.goStep(step + 1),
