@@ -404,6 +404,7 @@
   ::-webkit-scrollbar-thumb { background:var(--border,#3b3b52); border-radius:8px; }
   @keyframes ifFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
   @keyframes drawerPop { from { opacity:0; transform:scale(.5); } to { opacity:1; transform:none; } }
+  @keyframes drawerClose { from { opacity:1; transform:none; } to { opacity:0; transform:scale(.5); } }
 </style>
 </helmet>
 <div ref="{{ rootRef }}" style="min-height:100vh; background:var(--bg,#19192c); color:var(--text,#ebecff); font-family:'DynatraceFlow','Roboto',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.45;">
@@ -476,7 +477,7 @@
     </nav>
 
     <!-- FORM COLUMN -->
-    <div style="min-width:0; min-height:620px; display:flex; flex-direction:column;">
+    <div style="min-width:0; min-height:517px; display:flex; flex-direction:column;">
 
       <!-- SECTION 1 — Outputs & trigger -->
       <sc-if value="{{ showSec0 }}" hint-placeholder-val="{{ true }}">
@@ -488,17 +489,14 @@
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What you're producing and what prompted it. The customer action plan is always produced; pick the presentation formats to build on top of it.</p>
         <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Requested outputs <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
-        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Which presentation formats to build on top of the always-produced action plan.</p>
-        <div style="display:flex; align-items:center; gap:10px; margin-top:2px; padding:12px 14px; border:1px solid var(--success,#6fc3ba); border-radius:10px; background:var(--field,#1b1b30);">
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:var(--success,#6fc3ba); color:var(--on-primary,#1f2037); font-weight:700; font-size:12px;">✓</span>
-          <div><strong style="font-size:13.5px; color:var(--text,#ebecff);">Customer action plan</strong> <span style="font-size:12px; color:var(--success,#6fc3ba);">· baseline, always produced</span><div style="font-size:12px; color:var(--text-sub,#b1b2d2); margin-top:2px;">The phased plan the customer acts on — generated every time.</div></div>
-        </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:10px;">
-          <sc-for list="{{ outputs }}" as="u" hint-placeholder-count="3">
+        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">The customer action plan is always produced; add any presentation formats to build on top of it.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
+          <sc-for list="{{ outputs }}" as="u" hint-placeholder-count="4">
             <label onclick="{{ u.onClick }}" style="{{ u.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">
-              <div style="display:flex; align-items:center; gap:9px;">
+              <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
                 <span style="{{ u.boxStyle }}"><sc-if value="{{ u.selected }}" hint-placeholder-val="{{ false }}"><span style="width:10px; height:10px; border-radius:3px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
                 <strong style="font-size:13.5px; font-weight:600; color:var(--text,#ebecff);">{{ u.label }}</strong>
+                <sc-if value="{{ u.always }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--success,#6fc3ba); border:1px solid var(--success,#6fc3ba); border-radius:100px; padding:1px 7px;">Always on</span></sc-if>
               </div>
               <small style="display:block; margin-top:6px; margin-left:27px; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.4;">{{ u.desc }}</small>
             </label>
@@ -879,7 +877,7 @@
       <div style="position:relative; min-height:34px; display:flow-root;">
         <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="position:absolute; top:-18px; left:-14px; z-index:3; width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--primary,#1966FF); color:var(--on-primary,#ffffff); border:none; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.45);" style-hover="background:var(--primary-hover,#4f86ff);">{{ previewChevronIcon }}</button>
         <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ true }}">
-        <div style="margin-top:0; min-height:600px; transform-origin:top left; animation:drawerPop .3s cubic-bezier(.2,.8,.3,1) both; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column;">
+        <div style="margin-top:0; min-height:517px; max-height:517px; transform-origin:top left; animation:{{ drawerAnim }}; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
             <span style="{{ statusStyle }}">{{ statusLabel }}</span>
@@ -920,6 +918,7 @@ class Component extends DCLogic {
       light: { '--bg':'#f9f9fa','--card':'#ffffff','--card-2':'#f2f2f5','--field':'#ffffff','--border':'#dadbe4','--border-hover':'#c6c7d5','--text':'#2f2f4f','--text-sub':'#595a7d','--text-faint':'#6d6f8f','--primary':'#1966FF','--primary-hover':'#0f52e0','--on-primary':'#ffffff','--primary-border':'#1966FF','--primary-bg':'#e6edff','--success':'#2f6862','--warning':'#c62239','--critical':'#bb0731','--code-bg':'#eef0f5','--code-text':'#2f2f4f' }
     };
     this.OUTPUTS = [
+      { value:'Customer action plan', label:'Customer action plan', desc:'The phased plan the customer acts on — produced every time.', always:true },
       { value:'Executive one-pager', label:'Executive one-pager', desc:'A 2–3 minute leadership read with a 30/60/90 plan.' },
       { value:'PowerPoint deck', label:'PowerPoint deck', desc:'A slide deck built on the action plan.' },
       { value:'Execution guides', label:'Execution guides', desc:'Step-by-step guide per agreed action item — gathered with the customer later; needs client feedback.' }
@@ -967,11 +966,12 @@ class Component extends DCLogic {
       showIntro: true,
       step: 0,
       copied: false,
-      previewOpen: true,
+      previewOpen: false,
+      previewClosing: false,
       expanded: {},
       chipsActive: {},
       answers: {
-        outputs: [],
+        outputs: ['Customer action plan'],
         analystExp: 0, accountFam: 0, domainFluency: 0,
         customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
         context:'', role:'Insights Analytics Consultant', intents:[], intentsOther:'', intentSuccess:'',
@@ -1112,7 +1112,8 @@ class Component extends DCLogic {
     const apps = appLines.length ? appLines.join('\n') : 'not provided';
     const stkLines = a.stakeholders.filter(s => s.name.trim() || s.archetype || s.cares.trim()).map(s => '- ' + (s.name.trim() || '(unnamed)') + ' · ' + (s.archetype || 'archetype not provided') + ' · communication level: ' + (s.level || 'Mixed') + ' — cares about: ' + (s.cares.trim() || 'not provided'));
     const stks = stkLines.length ? stkLines.join('\n') : 'not provided';
-    const outputs = a.outputs.length ? a.outputs.join(', ') : 'none selected (action plan only)';
+    const addlOutputs = a.outputs.filter(o => o !== 'Customer action plan');
+    const outputs = addlOutputs.length ? addlOutputs.join(', ') : 'none — action plan only';
     return '# Insights Forge intake brief\n'
       + '\n> **For the agent — read first.** This is a seeded Phase 0 engagement intake, captured with Insights Forge and aligned to skills/context-framing/SKILL.md. The **baseline deliverable is always a customer action plan**; "Requested outputs" below are the presentation formats to produce on top of it.\n'
       + '>\n'
@@ -1179,7 +1180,9 @@ class Component extends DCLogic {
     const missingList = this.missing();
     const canExport = missingList.length === 0;
     const s6required = this.s6Req();
-    const doneSections = this.STEP_TITLES.reduce((n, _t, i) => n + (this.dotState(i) === 'done' ? 1 : 0), 0);
+    const anyScaleV = a.analystExp || a.accountFam || a.domainFluency;
+    const totalRequired = 11 + (anyScaleV ? 1 : 0) + (a.intents.indexOf('other') >= 0 ? 1 : 0) + (s6required ? 1 : 0);
+    const filledRequired = Math.max(0, totalRequired - missingList.length);
 
     const freeVM = {};
     Object.keys(this.FREE).forEach(key => {
@@ -1215,10 +1218,15 @@ class Component extends DCLogic {
       showGuided: !st.showIntro,
       showPreviewAside: step !== this.REVIEW,
       previewOpen: st.previewOpen,
-      gridCols: step === this.REVIEW ? '206px minmax(0,1fr)' : (st.previewOpen ? '206px minmax(0,1fr) 360px' : '206px minmax(0,1fr) 40px'),
-      previewChevronIcon: dChev(!st.previewOpen),
-      previewToggleTitle: st.previewOpen ? 'Collapse preview' : 'Expand preview',
-      onTogglePreview: () => this.setState(s => ({ previewOpen: !s.previewOpen })),
+      gridCols: step === this.REVIEW ? '206px minmax(0,1fr)' : ((st.previewOpen && !st.previewClosing) ? '206px minmax(0,1fr) 360px' : '206px minmax(0,1fr) 40px'),
+      previewChevronIcon: dChev(!(st.previewOpen && !st.previewClosing)),
+      previewToggleTitle: (st.previewOpen && !st.previewClosing) ? 'Collapse preview' : 'Expand preview',
+      drawerAnim: st.previewClosing ? 'drawerClose .26s ease both' : 'drawerPop .3s cubic-bezier(.2,.8,.3,1) both',
+      onTogglePreview: () => {
+        const s = this.state;
+        if (s.previewOpen && !s.previewClosing) { this.setState({ previewClosing: true }); setTimeout(() => this.setState({ previewOpen: false, previewClosing: false }), 260); }
+        else if (!s.previewOpen) { this.setState({ previewOpen: true }); }
+      },
       onGetStarted: () => this.dismissIntro(),
       onToggleTheme: () => this.setTheme(theme === 'dark' ? 'light' : 'dark'),
       themeToggleTitle: theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
@@ -1239,8 +1247,8 @@ class Component extends DCLogic {
       navItems,
       stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review',
       progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 10') : 'Complete',
-      progressLabel: doneSections + '/' + this.STEP_TITLES.length + ' done',
-      progressPct: Math.round((doneSections / this.STEP_TITLES.length) * 100),
+      progressLabel: filledRequired + '/' + totalRequired + ' filled',
+      progressPct: Math.round((filledRequired / totalRequired) * 100),
       onPrev: () => this.goStep(step - 1),
       onNext: () => this.goStep(step + 1),
       showNext: step < this.REVIEW,
@@ -1250,7 +1258,7 @@ class Component extends DCLogic {
       showReviewPanel: step === this.REVIEW,
       reviewText: canExport ? 'All required fields are complete — copy or download your seed prompt below.' : (missingList.length + ' required field(s) still needed — jump to any section from the left rail to fill them in.'),
 
-      outputs: this.OUTPUTS.map(u => { const sel = a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, selected:sel, onClick:()=>this.toggleArr('outputs', u.value), style:this.card(sel), boxStyle:this.box(sel) }; }),
+      outputs: this.OUTPUTS.map(u => { const sel = u.always ? true : a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, always:!!u.always, selected:sel, onClick: u.always ? (()=>{}) : (()=>this.toggleArr('outputs', u.value)), style:this.card(sel) + (u.always ? ' cursor:default;' : ''), boxStyle:this.box(sel) }; }),
 
       scales: [
         { label:'Your experience with Dynatrace consulting', why:'Your depth here — tunes how much the plan explains vs. assumes.', lo:'New', hi:'Expert', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('analystExp', n), style:this.scaleBtn(a.analystExp===n) })) },
