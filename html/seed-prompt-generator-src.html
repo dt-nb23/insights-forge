@@ -795,13 +795,13 @@
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
               <div>
-                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Name &amp; title <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Name &amp; title <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
                 <input type="text" value="{{ sk.name }}" oninput="{{ sk.onName }}" placeholder="e.g. Sarah Chen, VP Engineering" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
               </div>
               <div>
                 <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Role archetype <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
                 <select value="{{ sk.archetype }}" onchange="{{ sk.onArch }}" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-                  <option value="">— select —</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>unsure</option>
+                  <option>Stakeholder — role to be confirmed</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>unsure</option>
                 </select>
               </div>
             </div>
@@ -982,7 +982,7 @@ class Component extends DCLogic {
         audience:[], timeWindow:'', tone:'',
         caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
         apps:[ {name:'', rum:'', sr:''} ],
-        stakeholders:[ {name:'', archetype:'', cares:''} ],
+        stakeholders:[ {name:'', archetype:'Stakeholder — role to be confirmed', cares:''} ],
         techPriorities:'',
         triggers:[]
       }
@@ -1040,7 +1040,7 @@ class Component extends DCLogic {
   addApp() { this.setState(s => ({ answers: Object.assign({}, s.answers, { apps: s.answers.apps.concat([{ name:'', rum:'', sr:'' }]) }) })); }
   removeApp(i) { this.setState(s => { const arr = s.answers.apps.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { apps: arr }) }; }); }
   setStk(i, key, val) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr[i] = Object.assign({}, arr[i], { [key]: val }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
-  addStk() { this.setState(s => ({ answers: Object.assign({}, s.answers, { stakeholders: s.answers.stakeholders.concat([{ name:'', archetype:'', cares:'' }]) }) })); }
+  addStk() { this.setState(s => ({ answers: Object.assign({}, s.answers, { stakeholders: s.answers.stakeholders.concat([{ name:'', archetype:'Stakeholder — role to be confirmed', cares:'' }]) }) })); }
   removeStk(i) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
   insertStkCares(i, text) { this.setState(s => { const arr = s.answers.stakeholders.slice(); const cur = (arr[i].cares || '').replace(/\s+$/, ''); arr[i] = Object.assign({}, arr[i], { cares: cur ? (cur + ' ' + text) : text }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
   goStep(n) { this.setState({ step: Math.max(0, Math.min(this.REVIEW, n)) }); }
@@ -1056,7 +1056,7 @@ class Component extends DCLogic {
     const allScale = a.analystExp && a.accountFam && a.domainFluency;
     const nonDavis = a.caps.filter(c => c !== 'davis').length > 0 || a.capsUnsure;
     const appOk = a.apps.some(ap => F(ap.name) && ap.rum && ap.sr);
-    const stkOk = a.stakeholders.some(s => F(s.name) && s.archetype);
+    const stkOk = a.stakeholders.some(s => F(s.archetype));
     const grp = {
       0: { fields: [F(a.outputs)], req: [F(a.outputs)] },
       1: { fields: [!!anyScale], req: anyScale ? [!!allScale] : [] },
@@ -1090,7 +1090,7 @@ class Component extends DCLogic {
     const nonDavis = a.caps.filter(c => c !== 'davis');
     if (!(nonDavis.length || a.capsUnsure)) m.push('At least one capability beyond Davis, or “unsure”');
     if (this.s6Req() && !a.apps.some(ap => ap.name.trim() && ap.rum && ap.sr)) m.push('At least one focus app with RUM status (digital-experience intent)');
-    if (!a.stakeholders.some(s => s.name.trim() && s.archetype)) m.push('At least one stakeholder — name & archetype');
+    if (!a.stakeholders.some(s => s.archetype && s.archetype.trim())) m.push('At least one stakeholder role archetype');
     return m;
   }
 
