@@ -467,7 +467,7 @@
     </nav>
 
     <!-- FORM COLUMN -->
-    <div style="min-width:0;">
+    <div style="min-width:0; min-height:620px; display:flex; flex-direction:column;">
 
       <div style="margin-bottom:18px;">
         <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px;">
@@ -864,6 +864,7 @@
       </section>
       </sc-if>
 
+      <div style="flex:1 1 auto; min-height:16px;"></div>
       <!-- Nav -->
       <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:4px;">
         <button onclick="{{ onPrev }}" style="{{ prevBtnStyle }}">← Back</button>
@@ -875,21 +876,25 @@
 
     <!-- PREVIEW COLUMN (collapsible drawer) -->
     <sc-if value="{{ showPreviewAside }}" hint-placeholder-val="{{ true }}">
-    <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start; min-width:0; overflow:hidden; display:flex; gap:0;">
-      <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="flex:0 0 26px; width:26px; align-self:stretch; min-height:140px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:10px 0 0 10px; color:var(--primary,#999bed); font-size:17px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--field,#1b1b30); border-color:var(--primary-border,#adb0ff);">{{ previewChevron }}</button>
-      <div style="flex:0 0 322px; width:322px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-left:none; border-radius:0 14px 14px 0; padding:18px 20px; display:flex; flex-direction:column;">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-          <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
-          <span style="{{ statusStyle }}">{{ statusLabel }}</span>
-        </div>
-        <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Required field</span> is filled.</p>
+    <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start; min-width:0; overflow:visible;">
+      <div style="position:relative; min-height:34px; display:flow-root;">
+        <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="position:absolute; top:-17px; left:-17px; z-index:3; width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--primary,#1966FF); color:var(--on-primary,#ffffff); border:none; cursor:pointer; box-shadow:0 2px 9px rgba(0,0,0,.4);" style-hover="background:var(--primary-hover,#4f86ff);">{{ previewChevronIcon }}</button>
+        <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:8px; min-height:600px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
+            <span style="{{ statusStyle }}">{{ statusLabel }}</span>
+          </div>
+          <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Required field</span> is filled.</p>
 
-        <textarea readonly="" value="{{ briefText }}" style="width:100%; flex:1; min-height:300px; background:var(--code-bg,#14142a); color:var(--code-text,#c6c8ea); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:12px; font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.55; resize:none; outline:none;"></textarea>
+          <textarea readonly="" value="{{ briefText }}" style="width:100%; flex:1; min-height:300px; background:var(--code-bg,#14142a); color:var(--code-text,#c6c8ea); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:12px; font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.55; resize:none; outline:none;"></textarea>
 
-        <div style="display:flex; gap:10px; margin-top:16px; flex-shrink:0;">
-          <button onclick="{{ onCopy }}" disabled="{{ exportDisabled }}" style="{{ copyBtnStyle }}">{{ copyLabel }}</button>
-          <button onclick="{{ onDownload }}" disabled="{{ exportDisabled }}" style="{{ downloadBtnStyle }}">Download .md</button>
+          <div style="display:flex; gap:10px; margin-top:16px; flex-shrink:0;">
+            <button onclick="{{ onCopy }}" disabled="{{ exportDisabled }}" style="{{ copyBtnStyle }}">{{ copyLabel }}</button>
+            <button onclick="{{ onDownload }}" disabled="{{ exportDisabled }}" style="{{ downloadBtnStyle }}">Download .md</button>
+          </div>
         </div>
+        </sc-if>
       </div>
     </aside>
     </sc-if>
@@ -1199,6 +1204,9 @@ class Component extends DCLogic {
     navItems.push({ num: '\u2713', title: 'Review', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : 'required') });
 
     const show = {}; for (let i = 0; i < 10; i++) show['showSec' + i] = step === i;
+    const dChev = (left) => React.createElement('svg', { width:15, height:15, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2.4, strokeLinecap:'round', strokeLinejoin:'round', style: left ? { transform:'scaleX(-1)' } : null },
+      React.createElement('polyline', { points:'6 5 13 12 6 19' }),
+      React.createElement('polyline', { points:'13 5 20 12 13 19' }));
 
     return Object.assign({
       rootRef: this.rootRef,
@@ -1206,8 +1214,9 @@ class Component extends DCLogic {
       showIntro: st.showIntro,
       showGuided: !st.showIntro,
       showPreviewAside: step !== this.REVIEW,
-      gridCols: step === this.REVIEW ? '206px minmax(0,1fr)' : (st.previewOpen ? '206px minmax(0,1fr) 348px' : '206px minmax(0,1fr) 26px'),
-      previewChevron: st.previewOpen ? '›' : '‹',
+      previewOpen: st.previewOpen,
+      gridCols: step === this.REVIEW ? '206px minmax(0,1fr)' : (st.previewOpen ? '206px minmax(0,1fr) 360px' : '206px minmax(0,1fr) 40px'),
+      previewChevronIcon: dChev(!st.previewOpen),
       previewToggleTitle: st.previewOpen ? 'Collapse preview' : 'Expand preview',
       onTogglePreview: () => this.setState(s => ({ previewOpen: !s.previewOpen })),
       onGetStarted: () => this.dismissIntro(),
