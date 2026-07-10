@@ -1053,6 +1053,7 @@ class Component extends DCLogic {
   missing() {
     const a = this.state.answers, m = [];
     if (!a.outputs.length) m.push('Requested output — pick at least one format');
+    if (!a.role || !a.role.trim()) m.push('Your role');
     const anyScale = a.analystExp || a.accountFam || a.domainFluency;
     if (anyScale && !(a.analystExp && a.accountFam && a.domainFluency)) m.push('Analyst context — rate all three (1–5) once you start');
     if (!a.customerName.trim()) m.push('Customer name');
