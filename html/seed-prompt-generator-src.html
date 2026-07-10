@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="8ad7526f-50c5-47f2-bd67-3343b70f0a2f"></script>
+<style>textarea[readonly]{-webkit-user-select:none !important;user-select:none !important;}</style><script>['copy','cut','contextmenu','selectstart'].forEach(function(t){document.addEventListener(t,function(e){var el=e.target;if(el&&el.closest&&el.closest('textarea[readonly]'))e.preventDefault();},true);});</script></head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("92f33aa6-6f4b-46ce-ada1-11798aab91a9") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("cc40c33c-1908-4cf7-b1e8-c5b3d33561ed") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("63f786c4-bd19-4f77-95f0-8c1f1bfd8338") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("ec0fedb4-40bf-47b1-93e3-1bb185f4d0e8") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* math */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e16f3de4-5c90-420f-93c0-0303b16beaf4") format('woff2');
+  unicode-range: U+0302-0303, U+0305, U+0307-0308, U+0310, U+0312, U+0315, U+031A, U+0326-0327, U+032C, U+032F-0330, U+0332-0333, U+0338, U+033A, U+0346, U+034D, U+0391-03A1, U+03A3-03A9, U+03B1-03C9, U+03D1, U+03D5-03D6, U+03F0-03F1, U+03F4-03F5, U+2016-2017, U+2034-2038, U+203C, U+2040, U+2043, U+2047, U+2050, U+2057, U+205F, U+2070-2071, U+2074-208E, U+2090-209C, U+20D0-20DC, U+20E1, U+20E5-20EF, U+2100-2112, U+2114-2115, U+2117-2121, U+2123-214F, U+2190, U+2192, U+2194-21AE, U+21B0-21E5, U+21F1-21F2, U+21F4-2211, U+2213-2214, U+2216-22FF, U+2308-230B, U+2310, U+2319, U+231C-2321, U+2336-237A, U+237C, U+2395, U+239B-23B7, U+23D0, U+23DC-23E1, U+2474-2475, U+25AF, U+25B3, U+25B7, U+25BD, U+25C1, U+25CA, U+25CC, U+25FB, U+266D-266F, U+27C0-27FF, U+2900-2AFF, U+2B0E-2B11, U+2B30-2B4C, U+2BFE, U+3030, U+FF5B, U+FF5D, U+1D400-1D7FF, U+1EE00-1EEFF;
+}
+/* symbols */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("2db02571-8eda-413e-9131-8a6611b96ec6") format('woff2');
+  unicode-range: U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F, U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299, U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF, U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB, U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB, U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD, U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336, U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2, U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3, U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442, U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3, U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA, U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE, U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA, U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD, U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA, U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847, U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1, U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F, U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9, U+1FAF0-1FAF8, U+1FB00-1FBFF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("6ac05c71-b630-44af-a462-912419a810a7") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e5fe12ee-515e-47fb-9296-b68c495fe366") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("0876ddf0-84fc-4905-83f0-80254d272eb5") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("92f33aa6-6f4b-46ce-ada1-11798aab91a9") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("cc40c33c-1908-4cf7-b1e8-c5b3d33561ed") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("63f786c4-bd19-4f77-95f0-8c1f1bfd8338") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("ec0fedb4-40bf-47b1-93e3-1bb185f4d0e8") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* math */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e16f3de4-5c90-420f-93c0-0303b16beaf4") format('woff2');
+  unicode-range: U+0302-0303, U+0305, U+0307-0308, U+0310, U+0312, U+0315, U+031A, U+0326-0327, U+032C, U+032F-0330, U+0332-0333, U+0338, U+033A, U+0346, U+034D, U+0391-03A1, U+03A3-03A9, U+03B1-03C9, U+03D1, U+03D5-03D6, U+03F0-03F1, U+03F4-03F5, U+2016-2017, U+2034-2038, U+203C, U+2040, U+2043, U+2047, U+2050, U+2057, U+205F, U+2070-2071, U+2074-208E, U+2090-209C, U+20D0-20DC, U+20E1, U+20E5-20EF, U+2100-2112, U+2114-2115, U+2117-2121, U+2123-214F, U+2190, U+2192, U+2194-21AE, U+21B0-21E5, U+21F1-21F2, U+21F4-2211, U+2213-2214, U+2216-22FF, U+2308-230B, U+2310, U+2319, U+231C-2321, U+2336-237A, U+237C, U+2395, U+239B-23B7, U+23D0, U+23DC-23E1, U+2474-2475, U+25AF, U+25B3, U+25B7, U+25BD, U+25C1, U+25CA, U+25CC, U+25FB, U+266D-266F, U+27C0-27FF, U+2900-2AFF, U+2B0E-2B11, U+2B30-2B4C, U+2BFE, U+3030, U+FF5B, U+FF5D, U+1D400-1D7FF, U+1EE00-1EEFF;
+}
+/* symbols */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("2db02571-8eda-413e-9131-8a6611b96ec6") format('woff2');
+  unicode-range: U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F, U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299, U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF, U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB, U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB, U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD, U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336, U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2, U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3, U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442, U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3, U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA, U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE, U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA, U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD, U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA, U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847, U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1, U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F, U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9, U+1FAF0-1FAF8, U+1FB00-1FBFF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("6ac05c71-b630-44af-a462-912419a810a7") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e5fe12ee-515e-47fb-9296-b68c495fe366") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("0876ddf0-84fc-4905-83f0-80254d272eb5") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("92f33aa6-6f4b-46ce-ada1-11798aab91a9") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("cc40c33c-1908-4cf7-b1e8-c5b3d33561ed") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("63f786c4-bd19-4f77-95f0-8c1f1bfd8338") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("ec0fedb4-40bf-47b1-93e3-1bb185f4d0e8") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* math */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e16f3de4-5c90-420f-93c0-0303b16beaf4") format('woff2');
+  unicode-range: U+0302-0303, U+0305, U+0307-0308, U+0310, U+0312, U+0315, U+031A, U+0326-0327, U+032C, U+032F-0330, U+0332-0333, U+0338, U+033A, U+0346, U+034D, U+0391-03A1, U+03A3-03A9, U+03B1-03C9, U+03D1, U+03D5-03D6, U+03F0-03F1, U+03F4-03F5, U+2016-2017, U+2034-2038, U+203C, U+2040, U+2043, U+2047, U+2050, U+2057, U+205F, U+2070-2071, U+2074-208E, U+2090-209C, U+20D0-20DC, U+20E1, U+20E5-20EF, U+2100-2112, U+2114-2115, U+2117-2121, U+2123-214F, U+2190, U+2192, U+2194-21AE, U+21B0-21E5, U+21F1-21F2, U+21F4-2211, U+2213-2214, U+2216-22FF, U+2308-230B, U+2310, U+2319, U+231C-2321, U+2336-237A, U+237C, U+2395, U+239B-23B7, U+23D0, U+23DC-23E1, U+2474-2475, U+25AF, U+25B3, U+25B7, U+25BD, U+25C1, U+25CA, U+25CC, U+25FB, U+266D-266F, U+27C0-27FF, U+2900-2AFF, U+2B0E-2B11, U+2B30-2B4C, U+2BFE, U+3030, U+FF5B, U+FF5D, U+1D400-1D7FF, U+1EE00-1EEFF;
+}
+/* symbols */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("2db02571-8eda-413e-9131-8a6611b96ec6") format('woff2');
+  unicode-range: U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F, U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299, U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF, U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB, U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB, U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD, U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336, U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2, U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3, U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442, U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3, U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA, U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE, U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA, U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD, U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA, U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847, U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1, U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F, U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9, U+1FAF0-1FAF8, U+1FB00-1FBFF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("6ac05c71-b630-44af-a462-912419a810a7") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("e5fe12ee-515e-47fb-9296-b68c495fe366") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("0876ddf0-84fc-4905-83f0-80254d272eb5") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("b07f80f4-07bb-4ca8-bff0-565a2936414b") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("4bbc09e9-4e64-4b86-9fed-38c83d8e337b") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9e6625ff-5cb3-4dad-83d9-2a54512472ed") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("cfef41ba-69eb-4134-8751-b597a98b9973") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("42745f4a-0863-4748-82a6-c1e816d9ca23") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("dbfd308c-03c5-40c3-8d4a-bf84d96719bc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("b07f80f4-07bb-4ca8-bff0-565a2936414b") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("4bbc09e9-4e64-4b86-9fed-38c83d8e337b") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9e6625ff-5cb3-4dad-83d9-2a54512472ed") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("cfef41ba-69eb-4134-8751-b597a98b9973") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("42745f4a-0863-4748-82a6-c1e816d9ca23") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("dbfd308c-03c5-40c3-8d4a-bf84d96719bc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+  @font-face { font-family:'DynatraceFlow'; src:url("cdcf0b71-9df5-4a0f-b6a5-0804f068f5a3") format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'DynatraceFlow'; src:url("c26e181e-fe05-49c1-8e9a-ee5981e26c08") format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:'DynatraceFlow'; src:url("62658443-3188-4159-94f4-d99b2efc9ab1") format('opentype'); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face { font-family:'DynatraceFlow'; src:url("5c2e8caa-a735-4bdc-bd9a-94e7bffa4538") format('opentype'); font-weight:700; font-style:normal; font-display:swap; }
+  html, body { margin:0; padding:0; }
+  * { box-sizing:border-box; }
+  ::placeholder { color:var(--text-faint,#8a8bad); opacity:1; }
+  a { color:var(--primary,#999bed); text-decoration:none; }
+  a:hover { color:var(--primary-hover,#b8bbff); }
+  textarea, input, select, button { font-family:inherit; }
+  select option { background:#212135; color:#ebecff; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb { background:var(--border,#3b3b52); border-radius:8px; }
+  @keyframes ifFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="min-height:100vh; background:var(--bg,#19192c); color:var(--text,#ebecff); font-family:'DynatraceFlow','Roboto',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.45;">
+
+  <sc-if value="{{ showGradient }}" hint-placeholder-val="{{ true }}">
+    <div style="height:5px; background:linear-gradient(90deg,#3BACF0 0%,#1966FF 40%,#5E28E5 72%,#C93FDB 100%);"></div>
+  </sc-if>
+
+  <!-- Header (Dynatrace wave hero) -->
+  <header style="position:relative; background:#05060f; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.08);">
+    <div style="position:absolute; inset:0; background:url(&quot;9a41ab38-a3ca-46d6-bde9-66edf0e817ab&quot;) center center / cover no-repeat;"></div>
+    <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(5,6,15,.62) 0%, rgba(5,6,15,.42) 42%, rgba(5,6,15,.15) 100%);"></div>
+    <div style="position:relative; max-width:1440px; margin:0 auto; padding:26px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+      <div style="display:flex; align-items:center; gap:16px; flex:1; min-width:0;">
+        <img src="6eb1c548-8b09-489d-9f0f-49e4d08f0efd" alt="Dynatrace Insights" style="height:32px; width:auto; display:block; flex-shrink:0; filter:drop-shadow(0 1px 3px rgba(0,0,0,.7));">
+        <div style="width:1px; height:34px; background:rgba(255,255,255,.2); flex-shrink:0;"></div>
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <h1 style="margin:0; font-size:20px; font-weight:600; letter-spacing:-.01em; color:#ffffff; text-shadow:0 1px 5px rgba(0,0,0,.55);">Insights Forge</h1>
+            <span style="font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.28); border-radius:100px; padding:2px 9px;">Internal</span>
+          </div>
+          <p style="margin:3px 0 0; font-size:13.5px; color:rgba(255,255,255,.82); max-width:660px; text-shadow:0 1px 4px rgba(0,0,0,.5);">Engagement intake &amp; seed-prompt generator. The agent always produces a customer <strong style="color:#ffffff; font-weight:600;">action plan</strong>; fill in what you know and it seeds a Phase&nbsp;0 framing you paste as your first message in Claude Code.</p>
+        </div>
+      </div>
+      <button onclick="{{ onToggleTheme }}" title="{{ themeToggleTitle }}" aria-label="{{ themeToggleTitle }}" style="display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); cursor:pointer; flex-shrink:0;" style-hover="background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.4);">{{ themeIcon }}</button>
+    </div>
+  </header>
+
+  <!-- Main layout (guided) -->
+  <div style="max-width:1440px; margin:14px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:206px minmax(0,1fr) 348px; gap:20px; align-items:start;">
+
+    <!-- NAV RAIL -->
+    <nav style="position:sticky; top:16px; align-self:start;">
+      <div style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:10px;">
+        <div style="font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint,#8a8bad); padding:4px 9px 8px;">Sections</div>
+        <div style="display:flex; flex-direction:column; gap:2px;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
+            <button onclick="{{ n.onClick }}" style="{{ n.style }}" style-hover="background:var(--field,#1b1b30);">
+              <span style="{{ n.numStyle }}">{{ n.num }}</span>
+              <span style="flex:1; text-align:left; line-height:1.25;">{{ n.title }}</span>
+              <span style="{{ n.dotStyle }}"></span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FORM COLUMN -->
+    <div style="min-width:0;">
+
+      <div style="margin-bottom:18px;">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px;">
+          <span style="font-size:15px; font-weight:700; color:var(--text,#ebecff);">{{ stepLabel }}</span>
+          <span style="font-size:12px; color:var(--text-faint,#8a8bad);">{{ progressText }}</span>
+        </div>
+        <div style="height:6px; border-radius:100px; background:var(--field,#1b1b30); border:1px solid var(--border,#3b3b52); overflow:hidden;">
+          <div style="height:100%; width:{{ progressPct }}%; background:linear-gradient(90deg,#3BACF0,#1966FF,#5E28E5,#C93FDB); transition:width .25s;"></div>
+        </div>
+      </div>
+
+      <!-- SECTION 1 — Requested outputs -->
+      <sc-if value="{{ showSec0 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 1 — Requested outputs" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px; flex-shrink:0;">1</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Requested outputs</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> This is the Response-Format decision. Choose the presentation format(s) you need on top of the action plan.</p>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:14px; padding:12px 14px; border:1px solid var(--success,#6fc3ba); border-radius:10px; background:var(--field,#1b1b30);">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:var(--success,#6fc3ba); color:var(--on-primary,#1f2037); font-weight:700; font-size:12px;">✓</span>
+          <div><strong style="font-size:13.5px; color:var(--text,#ebecff);">Customer action plan</strong> <span style="font-size:12px; color:var(--success,#6fc3ba);">· baseline, always produced</span><div style="font-size:12px; color:var(--text-sub,#b1b2d2); margin-top:2px;">The phased plan the customer acts on — generated every time.</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:10px;">
+          <sc-for list="{{ outputs }}" as="u" hint-placeholder-count="3">
+            <label onclick="{{ u.onClick }}" style="{{ u.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">
+              <div style="display:flex; align-items:center; gap:9px;">
+                <span style="{{ u.boxStyle }}"><sc-if value="{{ u.selected }}" hint-placeholder-val="{{ false }}"><span style="width:10px; height:10px; border-radius:3px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+                <strong style="font-size:13.5px; font-weight:600; color:var(--text,#ebecff);">{{ u.label }}</strong>
+              </div>
+              <small style="display:block; margin-top:6px; margin-left:27px; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.4;">{{ u.desc }}</small>
+            </label>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 2 — Analyst context -->
+      <sc-if value="{{ showSec1 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 2 — Analyst context" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">2</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Analyst context</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Rate 1–5</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Calibrates the plan's depth and tone. Optional — but once you rate one, rate all three (that's what unlocks copy/download).</p>
+        <div style="margin-top:6px;">
+          <sc-for list="{{ scales }}" as="sc" hint-placeholder-count="3">
+            <div style="margin-top:14px;">
+              <label style="display:block; margin-bottom:7px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">{{ sc.label }}</label>
+              <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+                <span style="font-size:11px; color:var(--text-faint,#8a8bad); width:64px; text-align:right;">{{ sc.lo }}</span>
+                <div style="display:flex; gap:6px;">
+                  <sc-for list="{{ sc.buttons }}" as="b" hint-placeholder-count="5">
+                    <button onclick="{{ b.onClick }}" style="{{ b.style }}">{{ b.n }}</button>
+                  </sc-for>
+                </div>
+                <span style="font-size:11px; color:var(--text-faint,#8a8bad);">{{ sc.hi }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 3 — Customer basics -->
+      <sc-if value="{{ showSec2 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 3 — Customer basics" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">3</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Customer basics</h2>
+        </div>
+        <div style="margin-top:14px;">
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer name <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+          <input type="text" data-fid="customerName" value="{{ answers.customerName }}" oninput="{{ onInput }}" placeholder="e.g. Northwind Retail" style="width:100%; max-width:420px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does the customer's business do? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <input type="text" data-fid="customerDesc" value="{{ answers.customerDesc }}" oninput="{{ onInput }}" placeholder="One line — e.g. mid-size online retailer selling home goods" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+        <label style="display:flex; align-items:center; gap:8px; margin:14px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Vertical <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <sc-for list="{{ verticals }}" as="o" hint-placeholder-count="9">
+            <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ showVerticalOther }}" hint-placeholder-val="{{ false }}">
+          <input type="text" data-fid="verticalOther" value="{{ answers.verticalOther }}" oninput="{{ onInput }}" placeholder="Name the vertical" style="width:100%; max-width:320px; margin-top:9px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+        </sc-if>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:start;">
+          <div>
+            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer size <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Nice</span></label>
+            <select data-fid="size" value="{{ answers.size }}" onchange="{{ onInput }}" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+              <option value="">— select —</option><option>Below $250k</option><option>Above $250K &amp; Below $1M</option><option>Above $1M</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Tenant type <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <sc-for list="{{ tenantOptions }}" as="o" hint-placeholder-count="2">
+                <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+              <div style="margin-top:16px;">
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer region(s) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply — local laws (e.g. GDPR) may shape what the plan can suggest</span></label>
+          <div style="border:1px solid var(--border,#3b3b52); border-radius:10px; padding:12px 14px; background:var(--field,#1b1b30); display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ regionOptions }}" as="r" hint-placeholder-count="4">
+              <label onclick="{{ r.onClick }}" style="{{ r.rowStyle }}" style-hover="border-color:var(--border-hover,#4d4e66);">
+                <span style="{{ r.boxStyle }}"><sc-if value="{{ r.selected }}" hint-placeholder-val="{{ false }}"><span style="width:9px; height:9px; border-radius:2px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+                <span>{{ r.label }}</span>
+              </label>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 4 — Engagement framing -->
+      <sc-if value="{{ showSec3 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 4 — Engagement framing" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">4</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Engagement framing · C.S.I.R.</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Context, Specific info and Intent are the load-bearing core — the consulting objective can't be written without them. Chips toggle: click to insert, click again to remove that exact sentence.</p>
+
+        <label style="display:flex; align-items:center; gap:8px; margin:18px 0 6px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <textarea data-fid="context" value="{{ free.context.value }}" oninput="{{ onInput }}" placeholder="Relationship history, mood, recent milestones…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.context.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.context.chips }}" as="c" hint-placeholder-count="4">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.context.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.context.toggleLabel }}</button>
+        <sc-if value="{{ free.context.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.context.tip }}</div></sc-if>
+
+        <label style="display:block; margin:18px 0 6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Your role</label>
+        <select data-fid="role" value="{{ answers.role }}" onchange="{{ onInput }}" style="width:100%; max-width:300px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+          <option value="">— select —</option><option>CSM</option><option>SE</option><option>Consultant</option><option>Insights Analytics Consultant</option><option>Other</option>
+        </select>
+
+        <label style="display:flex; align-items:center; gap:8px; margin:20px 0 6px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Specific information <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <textarea data-fid="specific" value="{{ free.specific.value }}" oninput="{{ onInput }}" placeholder="Known pain points, prior QBR outcomes, commitments, constraints…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.specific.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.specific.chips }}" as="c" hint-placeholder-count="4">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.specific.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.specific.toggleLabel }}</button>
+        <sc-if value="{{ free.specific.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.specific.tip }}</div></sc-if>
+
+        <label style="display:flex; align-items:center; gap:8px; margin:20px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <sc-for list="{{ intents }}" as="o" hint-placeholder-count="7">
+            <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 6px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+        <textarea data-fid="intentSuccess" value="{{ free.intentSuccess.value }}" oninput="{{ onInput }}" placeholder="What the customer would say changed if this works…" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.intentSuccess.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.intentSuccess.chips }}" as="c" hint-placeholder-count="4">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.intentSuccess.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.intentSuccess.toggleLabel }}</button>
+        <sc-if value="{{ free.intentSuccess.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.intentSuccess.tip }}</div></sc-if>
+
+        <div style="margin-top:22px; padding-top:18px; border-top:1px solid var(--border,#3b3b52);">
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Response format — audience <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ audienceOptions }}" as="o" hint-placeholder-count="3">
+              <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:start;">
+            <div>
+              <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Meeting / read-time window</label>
+              <select data-fid="timeWindow" value="{{ answers.timeWindow }}" onchange="{{ onInput }}" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+                <option value="">— select —</option><option>15 min</option><option>30 min</option><option>60 min</option><option>async document</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Tone or branding constraints</label>
+              <input type="text" data-fid="tone" value="{{ answers.tone }}" oninput="{{ onInput }}" placeholder="e.g. exec-brief, low jargon" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+            </div>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 5 — Active capabilities -->
+      <sc-if value="{{ showSec4 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 5 — Active capabilities" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">5</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Active Dynatrace capabilities</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> The boundary of what insights can surface. For RUM, Session Replay and Dashboards, pick the generation. Davis AI is always on.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:14px; margin-top:16px;">
+          <sc-for list="{{ capGroups }}" as="g" hint-placeholder-count="6">
+            <div style="border:1px solid var(--border,#3b3b52); border-radius:10px; padding:12px 14px; background:var(--field,#1b1b30);">
+              <h3 style="margin:0 0 8px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint,#8a8bad); font-weight:700;">{{ g.title }}</h3>
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                <div style="margin:4px 0;">
+                  <label onclick="{{ it.onClick }}" style="{{ it.rowStyle }}" style-hover="border-color:var(--border-hover,#4d4e66);">
+                    <span style="{{ it.boxStyle }}"><sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><span style="width:9px; height:9px; border-radius:2px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+                    <span style="flex:1;">{{ it.label }}</span>
+                    <sc-if value="{{ it.always }}" hint-placeholder-val="{{ false }}"><span style="font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--success,#6fc3ba); border:1px solid var(--success,#6fc3ba); border-radius:100px; padding:1px 7px;">Always on</span></sc-if>
+                  </label>
+                  <sc-if value="{{ it.showGen }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; gap:6px; margin:6px 0 2px 30px; flex-wrap:wrap;">
+                      <sc-for list="{{ it.genButtons }}" as="gb" hint-placeholder-count="3">
+                        <button onclick="{{ gb.onClick }}" style="{{ gb.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ gb.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border,#3b3b52);">
+          <label onclick="{{ capsUnsure.onClick }}" style="{{ capsUnsure.rowStyle }}">
+            <span style="{{ capsUnsure.boxStyle }}"><sc-if value="{{ capsUnsure.selected }}" hint-placeholder-val="{{ false }}"><span style="width:9px; height:9px; border-radius:2px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+            <em style="flex:1; font-style:italic; color:var(--text-sub,#b1b2d2);">Unsure — help me confirm capabilities during framing</em>
+          </label>
+        </div>
+      </section>
+      </sc-if>
+
+            <!-- SECTION 6 — Out of scope -->
+      <sc-if value="{{ showSec5 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 6 — Out of scope" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">6</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Out of scope</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> A hard boundary, not a preference — the agent will not suggest these even if the capability is active. Use for compliance constraints (e.g. GDPR limits on Session Replay) or anything the customer has explicitly ruled out.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:14px; margin-top:16px;">
+          <sc-for list="{{ outOfScopeGroups }}" as="g" hint-placeholder-count="3">
+            <div style="border:1px solid var(--border,#3b3b52); border-radius:10px; padding:12px 14px; background:var(--field,#1b1b30);">
+              <h3 style="margin:0 0 8px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint,#8a8bad); font-weight:700;">{{ g.title }}</h3>
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                <div style="margin:4px 0;">
+                  <label onclick="{{ it.onClick }}" style="{{ it.rowStyle }}" style-hover="border-color:var(--border-hover,#4d4e66);">
+                    <span style="{{ it.boxStyle }}"><sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><span style="width:9px; height:9px; border-radius:2px; background:var(--primary-border,#adb0ff); display:block;"></span></sc-if></span>
+                    <span style="flex:1;">{{ it.label }}</span>
+                  </label>
+                  <sc-if value="{{ it.showGen }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; gap:6px; margin:6px 0 2px 30px; flex-wrap:wrap;">
+                      <sc-for list="{{ it.genButtons }}" as="gb" hint-placeholder-count="3">
+                        <button onclick="{{ gb.onClick }}" style="{{ gb.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ gb.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border,#3b3b52);">
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Notes <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">why it’s out of scope — regulation, prior commitment, contract terms…</span></label>
+          <textarea data-fid="outOfScopeNotes" value="{{ answers.outOfScopeNotes }}" oninput="{{ onInput }}" placeholder="e.g. GDPR — no Session Replay in the EU tenant" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 7 — Focus applications -->
+      <sc-if value="{{ showSec6 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 7 — Focus applications" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">7</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Focus applications &amp; RUM</h2>
+          <span style="{{ s6TagStyle }}">{{ s6TagLabel }}</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> {{ s6Why }}</p>
+        <sc-for list="{{ apps }}" as="ap" hint-placeholder-count="1">
+          <div style="margin-top:14px; border:1px solid var(--border,#3b3b52); border-radius:10px; padding:14px; background:var(--field,#1b1b30);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <span style="font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text-faint,#8a8bad);">{{ ap.label }}</span>
+              <sc-if value="{{ ap.showRemove }}" hint-placeholder-val="{{ false }}"><button onclick="{{ ap.onRemove }}" style="background:none; border:none; color:var(--text-faint,#8a8bad); font-size:16px; cursor:pointer; line-height:1; padding:0 4px;" style-hover="color:var(--critical,#ff999c);">×</button></sc-if>
+            </div>
+            <input type="text" value="{{ ap.name }}" oninput="{{ ap.onName }}" placeholder="Application name — e.g. Checkout web app" style="width:100%; margin-top:8px; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px;">
+              <div>
+                <label style="display:block; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">RUM enabled?</label>
+                <div style="display:flex; gap:7px; flex-wrap:wrap;"><sc-for list="{{ ap.rumOptions }}" as="o" hint-placeholder-count="3"><button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button></sc-for></div>
+              </div>
+              <div>
+                <label style="display:block; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Session Replay active?</label>
+                <div style="display:flex; gap:7px; flex-wrap:wrap;"><sc-for list="{{ ap.srOptions }}" as="o" hint-placeholder-count="3"><button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button></sc-for></div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <button onclick="{{ onAddApp }}" style="margin-top:12px; background:transparent; border:1px dashed var(--border-hover,#4d4e66); color:var(--primary,#999bed); border-radius:8px; padding:9px 16px; font-size:13px; font-weight:500; cursor:pointer;" style-hover="border-color:var(--primary-border,#adb0ff);">+ Add application</button>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 8 — Stakeholders -->
+      <sc-if value="{{ showSec7 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 8 — Stakeholders" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">8</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Stakeholders</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Must-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Phase 3 reads stakeholder profiles against each archetype. Add everyone who'll consume or influence the deliverable.</p>
+        <sc-for list="{{ stakeholders }}" as="sk" hint-placeholder-count="1">
+          <div style="margin-top:14px; border:1px solid var(--border,#3b3b52); border-radius:10px; padding:14px; background:var(--field,#1b1b30);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <span style="font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text-faint,#8a8bad);">{{ sk.label }}</span>
+              <sc-if value="{{ sk.showRemove }}" hint-placeholder-val="{{ false }}"><button onclick="{{ sk.onRemove }}" style="background:none; border:none; color:var(--text-faint,#8a8bad); font-size:16px; cursor:pointer; line-height:1; padding:0 4px;" style-hover="color:var(--critical,#ff999c);">×</button></sc-if>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
+              <div>
+                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Name &amp; title <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+                <input type="text" value="{{ sk.name }}" oninput="{{ sk.onName }}" placeholder="e.g. Sarah Chen, VP Engineering" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+              </div>
+              <div>
+                <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Role archetype <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Must</span></label>
+                <select value="{{ sk.archetype }}" onchange="{{ sk.onArch }}" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+                  <option value="">— select —</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>unsure</option>
+                </select>
+              </div>
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; margin:12px 0 6px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">What does this stakeholder care about? <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should</span></label>
+            <textarea value="{{ sk.cares }}" oninput="{{ sk.onCares }}" placeholder="KPIs, outcomes or priorities this person judges success by…" style="width:100%; min-height:52px; resize:vertical; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+            <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:8px;">
+              <sc-for list="{{ sk.caresChips }}" as="c" hint-placeholder-count="6"><button onclick="{{ c.onClick }}" style="border:1px solid var(--border,#3b3b52); background:var(--card,#212135); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:5px 11px; font-size:12px; cursor:pointer; white-space:nowrap;" style-hover="border-color:var(--primary-border,#adb0ff); color:var(--text,#ebecff);">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <button onclick="{{ onAddStk }}" style="margin-top:12px; background:transparent; border:1px dashed var(--border-hover,#4d4e66); color:var(--primary,#999bed); border-radius:8px; padding:9px 16px; font-size:13px; font-weight:500; cursor:pointer;" style-hover="border-color:var(--primary-border,#adb0ff);">+ Add stakeholder</button>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 9 — Technical team priorities -->
+      <sc-if value="{{ showSec8 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 9 — Technical team priorities" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">9</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Technical team priorities</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> The technical team defines success differently from leadership — capturing both makes the deliverable speak to the whole room.</p>
+        <textarea data-fid="techPriorities" value="{{ free.techPriorities.value }}" oninput="{{ onInput }}" placeholder="Day-to-day pain points, frustrations, priorities…" style="width:100%; min-height:66px; margin-top:12px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.techPriorities.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.techPriorities.chips }}" as="c" hint-placeholder-count="5">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onclick="{{ free.techPriorities.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.techPriorities.toggleLabel }}</button>
+        <sc-if value="{{ free.techPriorities.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.techPriorities.tip }}</div></sc-if>
+      </section>
+      </sc-if>
+
+      <!-- SECTION 10 — Trigger -->
+      <sc-if value="{{ showSec9 }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Section 10 — Trigger" style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:13px;">10</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Engagement trigger</h2>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Should-have</span>
+        </div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What's driving this engagement — shapes urgency and tone. Select any that apply.</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+          <sc-for list="{{ triggers }}" as="o" hint-placeholder-count="6">
+            <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- Review panel -->
+      <sc-if value="{{ showReviewPanel }}" hint-placeholder-val="{{ false }}">
+      <section style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
+        <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:14px;">✓</span>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Review &amp; generate</h2>
+        </div>
+        <p style="margin:12px 0 0; font-size:13.5px; color:var(--text-sub,#b1b2d2); line-height:1.55;">{{ reviewText }}</p>
+      </section>
+      </sc-if>
+
+      <!-- Nav -->
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:4px;">
+        <button onclick="{{ onPrev }}" style="{{ prevBtnStyle }}">← Back</button>
+        <sc-if value="{{ showNext }}" hint-placeholder-val="{{ true }}">
+          <button onclick="{{ onNext }}" style="background:var(--primary,#999bed); color:var(--on-primary,#1f2037); border:none; border-radius:100px; padding:11px 22px; font-size:14px; font-weight:600; cursor:pointer;" style-hover="background:var(--primary-hover,#b8bbff);">{{ nextLabel }} →</button>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- PREVIEW COLUMN -->
+    <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start;">
+      <div style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:18px 20px; display:flex; flex-direction:column;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
+          <span style="{{ statusStyle }}">{{ statusLabel }}</span>
+        </div>
+        <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Must-have</span> is filled.</p>
+
+        <sc-if value="{{ hasMissing }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom:12px; background:var(--field,#1b1b30); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:10px 12px;">
+            <div style="font-size:11.5px; font-weight:600; color:var(--warning,#eea83f); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Still needed ({{ missingCount }})</div>
+            <sc-for list="{{ missingList }}" as="m" hint-placeholder-count="3">
+              <div style="font-size:12.5px; color:var(--text-sub,#b1b2d2); padding:2px 0;">· {{ m }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <textarea readonly="" value="{{ briefText }}" style="width:100%; flex:1; min-height:300px; background:var(--code-bg,#14142a); color:var(--code-text,#c6c8ea); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:12px; font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.55; resize:none; outline:none;"></textarea>
+
+        <div style="display:flex; gap:10px; margin-top:16px; flex-shrink:0;">
+          <button onclick="{{ onCopy }}" disabled="{{ exportDisabled }}" style="{{ copyBtnStyle }}">{{ copyLabel }}</button>
+          <button onclick="{{ onDownload }}" disabled="{{ exportDisabled }}" style="{{ downloadBtnStyle }}">Download .md</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer style="max-width:1440px; margin:0 auto; padding:16px 24px 40px; display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--text-faint,#8a8bad); border-top:1px solid var(--border,#3b3b52);">
+    <span>© 2026 Dynatrace, LLC.</span><span>·</span><span>Confidential</span><span>·</span><span>Insights Forge — internal intake tool</span>
+  </footer>
+
+  
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:940},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dark&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;tsType&quot;:&quot;'dark' | 'light'&quot;,&quot;section&quot;:&quot;Design&quot;},&quot;showGradient&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Design&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.rootRef = React.createRef();
+    this.THEMES = {
+      dark: { '--bg':'#19192c','--card':'#212135','--card-2':'#292a3e','--field':'#1b1b30','--border':'#3b3b52','--border-hover':'#4d4e66','--text':'#ebecff','--text-sub':'#b1b2d2','--text-faint':'#8a8bad','--primary':'#1966FF','--primary-hover':'#4f86ff','--on-primary':'#ffffff','--primary-border':'#6f9dff','--primary-bg':'#223056','--success':'#6fc3ba','--warning':'#eea83f','--critical':'#ff999c','--code-bg':'#14142a','--code-text':'#c6c8ea' },
+      light: { '--bg':'#f9f9fa','--card':'#ffffff','--card-2':'#f2f2f5','--field':'#ffffff','--border':'#dadbe4','--border-hover':'#c6c7d5','--text':'#2f2f4f','--text-sub':'#595a7d','--text-faint':'#6d6f8f','--primary':'#1966FF','--primary-hover':'#0f52e0','--on-primary':'#ffffff','--primary-border':'#1966FF','--primary-bg':'#e6edff','--success':'#2f6862','--warning':'#c62239','--critical':'#bb0731','--code-bg':'#eef0f5','--code-text':'#2f2f4f' }
+    };
+    this.OUTPUTS = [
+      { value:'Executive one-pager', label:'Executive one-pager', desc:'A 2–3 minute leadership read with a 30/60/90 plan.' },
+      { value:'PowerPoint deck', label:'PowerPoint deck', desc:'A slide deck built on the action plan.' },
+      { value:'Execution guides', label:'Execution guides', desc:'Step-by-step guide per agreed action item — gathered with the customer later; needs client feedback.' }
+    ];
+    this.CAP_GROUPS = [
+      { title:'Core observability', items:[ {id:'fullstack',label:'Full-Stack Monitoring (OneAgent)'},{id:'infra',label:'Infrastructure Monitoring only'},{id:'apm',label:'APM / Distributed Tracing'} ] },
+      { title:'User experience', items:[ {id:'rumweb',label:'Real User Monitoring — Web',gen:['Classic','Grail','Mixed']},{id:'rummobile',label:'Real User Monitoring — Mobile',gen:['Classic','Grail','Mixed']},{id:'sr',label:'Session Replay',gen:['Classic','Grail','Mixed']},{id:'synthetic',label:'Synthetic Monitoring'} ] },
+      { title:'Data & logs', items:[ {id:'logs',label:'Log Management (Grail)'},{id:'bizevents',label:'Business Analytics / Business Events'},{id:'metrics',label:'Metrics ingestion'} ] },
+      { title:'AI & automation', items:[ {id:'davis',label:'Davis AI (problem detection)',always:true},{id:'copilot',label:'Dynatrace Intelligence'},{id:'workflows',label:'Workflows / Automation'} ] },
+      { title:'Security', items:[ {id:'appsec',label:'Application Security'},{id:'cloudsec',label:'Cloud Security'} ] },
+      { title:'Platform', items:[ {id:'grail',label:'Grail (data lakehouse)'},{id:'srg',label:'Site Reliability Guardian'},{id:'dashboards',label:'Dashboards',gen:['Classic (Gen2)','Grail (Gen3)','Mixed']},{id:'notebooks',label:'Notebooks'} ] }
+    ];
+    this.CARES_CHIPS = ['Conversion & revenue','Reliability & uptime','MTTR & incident volume','Cost / cloud spend','Security & compliance','Customer experience (CSAT/NPS)'];
+    this.FREE = {
+      context: { guiding:'What\u2019s the relationship history — new logo, established, or at-risk? What\u2019s the mood heading in? Any recent milestone, incident, or exec change?', tip:'Aim for two sentences: what the relationship is, and what changed recently. Note who the champion is and how the last few interactions felt.', chips:[
+        {short:'Established, plateaued', text:'Established customer; renewal in [quarter]. Relationship is healthy but usage has plateaued.'},
+        {short:'At-risk after incident', text:'At-risk account after [incident]. Tone is cautious and trust needs rebuilding.'},
+        {short:'New logo, first QBR', text:'New logo, first QBR — sponsor is enthusiastic but the platform is still unproven internally.'},
+        {short:'Expansion underway', text:'Expansion conversation: a new team or BU is evaluating adoption.'}
+      ] },
+      specific: { guiding:'Known pain points? Prior QBR outcomes or commitments? Constraints — limited data access, regulated industry, contract phase?', tip:'List facts, not hopes — commitments made, gaps you already know about, and anything off-limits. This is the boundary of what the plan can use.', chips:[
+        {short:'Prior QBR commitment', text:'Prior QBR flagged [issue]; we committed to [action] by [date].'},
+        {short:'Regulated / limited data', text:'Regulated environment (PCI / HIPAA) limits access to [data].'},
+        {short:'Known pain point', text:'Known pain point: alert noise / slow root cause / cloud cost.'},
+        {short:'Renewal, budget scrutiny', text:'Renewal in [quarter]; budget scrutiny is high.'}
+      ] },
+      intentSuccess: { guiding:'What would the customer say changed if this works? What decision or outcome does it unlock for you?', tip:'Describe the observable \u201cafter\u201d. One concrete sentence beats a paragraph of goals — name a metric or a decision if you can.', chips:[
+        {short:'Renews with confidence', text:'Customer renews with confidence in the value they\u2019re getting.'},
+        {short:'Approves expansion', text:'Leadership approves expansion into [team / module / BU].'},
+        {short:'Cuts MTTR & noise', text:'The team cuts MTTR and alert noise measurably.'},
+        {short:'Agreed 30/60/90', text:'We land an agreed 30/60/90 roadmap.'}
+      ] },
+      techPriorities: { guiding:'What frustrates the technical team day-to-day — alert noise, tool sprawl, slow root cause, manual toil, on-call load?', tip:'Think on-call and daily workflow, not strategy. What makes them sigh on a Monday?', chips:[
+        {short:'Alert noise', text:'Alert noise / too many false positives'},
+        {short:'Slow root cause', text:'Slow root-cause analysis'},
+        {short:'Tool sprawl', text:'Tool sprawl & context switching'},
+        {short:'Manual toil', text:'Manual, repetitive toil'},
+        {short:'On-call load', text:'On-call burnout'}
+      ] }
+    };
+    this.VERTICALS = ['Retail / E-commerce','Financial Services (FSI)','Healthcare / Life Sciences','Manufacturing','Telco / Media','Public Sector','Technology / SaaS','Logistics / Supply Chain','Other'];
+    this.INTENTS = ['prove value','secure renewal','justify expansion','prepare QBR narrative','improve digital experience','diagnose a problem','other'];
+    this.TRIGGERS = ['QBR','renewal','expansion','scheduled touchpoint','incident follow-up','other'];
+    this.STEP_TITLES = ['Requested outputs','Analyst context','Customer basics','Engagement framing','Active capabilities','Out of scope','Focus applications','Stakeholders','Technical priorities','Trigger'];
+    this.REVIEW = 10;
+    this.state = {
+      theme: props.theme === 'light' ? 'light' : 'dark',
+      step: 0,
+      copied: false,
+      expanded: {},
+      chipsActive: {},
+      answers: {
+        outputs: [],
+        analystExp: 0, accountFam: 0, domainFluency: 0,
+        customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
+        context:'', role:'', specific:'', intents:[], intentSuccess:'',
+        audience:[], timeWindow:'', tone:'',
+        caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
+        apps:[ {name:'', rum:'', sr:''} ],
+        stakeholders:[ {name:'', archetype:'', cares:''} ],
+        techPriorities:'',
+        triggers:[]
+      }
+    };
+  }
+
+  componentDidMount() {
+    let stored = null;
+    try { stored = localStorage.getItem('if-theme'); } catch (e) {}
+    if (stored === 'dark' || stored === 'light') { this.setState({ theme: stored }, () => this.applyTheme()); }
+    else this.applyTheme();
+  }
+  applyTheme() {
+    const el = this.rootRef.current; if (!el) return;
+    const m = this.THEMES[this.state.theme] || this.THEMES.dark;
+    Object.keys(m).forEach(k => el.style.setProperty(k, m[k]));
+  }
+  setTheme(t) { this.setState({ theme: t }, () => { this.applyTheme(); try { localStorage.setItem('if-theme', t); } catch (e) {} }); }
+
+  setAns(id, v) { this.setState(s => ({ answers: Object.assign({}, s.answers, { [id]: v }) })); }
+  onInput = (e) => {
+    const id = e.target.getAttribute('data-fid'); if (!id) return;
+    const val = e.target.value;
+    this.setState(s => {
+      const out = { answers: Object.assign({}, s.answers, { [id]: val }) };
+      if (s.chipsActive[id]) { out.chipsActive = Object.assign({}, s.chipsActive, { [id]: s.chipsActive[id].filter(t => val.indexOf(t) >= 0) }); }
+      return out;
+    });
+  };
+  toggleArr(id, v) { this.setState(s => { const arr = (s.answers[id] || []).slice(); const i = arr.indexOf(v); if (i >= 0) arr.splice(i, 1); else arr.push(v); return { answers: Object.assign({}, s.answers, { [id]: arr }) }; }); }
+  setScale(id, n) { this.setState(s => ({ answers: Object.assign({}, s.answers, { [id]: s.answers[id] === n ? 0 : n }) })); }
+  toggleCap(id) { if (id === 'davis') return; this.toggleArr('caps', id); }
+  setGen(id, v) { this.setState(s => ({ answers: Object.assign({}, s.answers, { capGen: Object.assign({}, s.answers.capGen, { [id]: v }) }) })); }
+  setOosGen(id, v) { this.setState(s => ({ answers: Object.assign({}, s.answers, { outOfScopeGen: Object.assign({}, s.answers.outOfScopeGen, { [id]: v }) }) })); }
+  toggleUnsure() { this.setState(s => ({ answers: Object.assign({}, s.answers, { capsUnsure: !s.answers.capsUnsure }) })); }
+  toggleExpand(id) { this.setState(s => ({ expanded: Object.assign({}, s.expanded, { [id]: !s.expanded[id] }) })); }
+  toggleChip(field, text) {
+    this.setState(s => {
+      const active = (s.chipsActive[field] || []).slice();
+      const i = active.indexOf(text);
+      let val = s.answers[field] || '';
+      if (i >= 0) {
+        active.splice(i, 1);
+        const j = val.indexOf(text);
+        if (j >= 0) { val = (val.slice(0, j) + val.slice(j + text.length)).replace(/[ \t]{2,}/g, ' ').replace(/\s+([.,;])/g, '$1').replace(/^\s+|\s+$/g, ''); }
+      } else {
+        active.push(text);
+        const base = val.replace(/\s+$/, '');
+        val = base ? (base + ' ' + text) : text;
+      }
+      return { answers: Object.assign({}, s.answers, { [field]: val }), chipsActive: Object.assign({}, s.chipsActive, { [field]: active }) };
+    });
+  }
+  setApp(i, key, val) { this.setState(s => { const arr = s.answers.apps.slice(); arr[i] = Object.assign({}, arr[i], { [key]: val }); return { answers: Object.assign({}, s.answers, { apps: arr }) }; }); }
+  addApp() { this.setState(s => ({ answers: Object.assign({}, s.answers, { apps: s.answers.apps.concat([{ name:'', rum:'', sr:'' }]) }) })); }
+  removeApp(i) { this.setState(s => { const arr = s.answers.apps.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { apps: arr }) }; }); }
+  setStk(i, key, val) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr[i] = Object.assign({}, arr[i], { [key]: val }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
+  addStk() { this.setState(s => ({ answers: Object.assign({}, s.answers, { stakeholders: s.answers.stakeholders.concat([{ name:'', archetype:'', cares:'' }]) }) })); }
+  removeStk(i) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
+  insertStkCares(i, text) { this.setState(s => { const arr = s.answers.stakeholders.slice(); const cur = (arr[i].cares || '').replace(/\s+$/, ''); arr[i] = Object.assign({}, arr[i], { cares: cur ? (cur + ' ' + text) : text }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
+  goStep(n) { this.setState({ step: Math.max(0, Math.min(this.REVIEW, n)) }); }
+
+  s6Req() { return this.state.answers.intents.indexOf('improve digital experience') >= 0; }
+
+  _F(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && ('' + v).trim())); }
+  _secData(i) {
+    const a = this.state.answers, F = this._F;
+    const vertOk = a.verticals.length > 0 && (a.verticals.indexOf('Other') < 0 || F(a.verticalOther));
+    const anyScale = a.analystExp || a.accountFam || a.domainFluency;
+    const allScale = a.analystExp && a.accountFam && a.domainFluency;
+    const nonDavis = a.caps.filter(c => c !== 'davis').length > 0 || a.capsUnsure;
+    const appOk = a.apps.some(ap => F(ap.name) && ap.rum && ap.sr);
+    const stkOk = a.stakeholders.some(s => F(s.name) && s.archetype);
+    const grp = {
+      0: { fields: [F(a.outputs)], req: [F(a.outputs)] },
+      1: { fields: [!!anyScale], req: anyScale ? [!!allScale] : [] },
+      2: { fields: [F(a.customerName), vertOk, F(a.customerDesc), F(a.size), F(a.regions)], req: [F(a.customerName), vertOk, F(a.customerDesc)] },
+      3: { fields: [F(a.context), F(a.role), F(a.specific), F(a.intents), F(a.intentSuccess), F(a.audience), F(a.timeWindow), F(a.tone)], req: [F(a.context), F(a.specific), F(a.intents), F(a.intentSuccess), F(a.audience)] },
+      4: { fields: [nonDavis], req: [nonDavis] },
+      5: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
+      6: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] },
+      7: { fields: [a.stakeholders.some(s => F(s.name) || s.archetype || F(s.cares))], req: [stkOk] },
+      8: { fields: [F(a.techPriorities)], req: [] },
+      9: { fields: [F(a.triggers)], req: [] }
+    };
+    return grp[i] || { fields: [], req: [] };
+  }
+  secTouched(i) { return this._secData(i).fields.some(Boolean); }
+  dotState(i) { const d = this._secData(i); if (d.req.length) { if (d.req.every(Boolean)) return 'done'; return this.secTouched(i) ? 'partial' : 'empty'; } return this.secTouched(i) ? 'done' : 'empty'; }
+
+  missing() {
+    const a = this.state.answers, m = [];
+    if (!a.outputs.length) m.push('Requested output — pick at least one format');
+    const anyScale = a.analystExp || a.accountFam || a.domainFluency;
+    if (anyScale && !(a.analystExp && a.accountFam && a.domainFluency)) m.push('Analyst context — rate all three (1–5) once you start');
+    if (!a.customerName.trim()) m.push('Customer name');
+    if (!a.customerDesc.trim()) m.push('What the customer does');
+    if (!a.verticals.length || (a.verticals.indexOf('Other') >= 0 && !a.verticalOther.trim())) m.push('Vertical');
+    if (!a.context.trim()) m.push('Engagement context (C)');
+    if (!a.specific.trim()) m.push('Specific information (S)');
+    if (!a.intents.length) m.push('Intent — pick at least one goal');
+    if (!a.intentSuccess.trim()) m.push('What success looks like');
+    if (!a.audience.length) m.push('Audience (response format)');
+    const nonDavis = a.caps.filter(c => c !== 'davis');
+    if (!(nonDavis.length || a.capsUnsure)) m.push('At least one capability beyond Davis, or “unsure”');
+    if (this.s6Req() && !a.apps.some(ap => ap.name.trim() && ap.rum && ap.sr)) m.push('At least one focus app with RUM status (digital-experience intent)');
+    if (!a.stakeholders.some(s => s.name.trim() && s.archetype)) m.push('At least one stakeholder — name & archetype');
+    return m;
+  }
+
+  capLabelMap() { const map = {}; this.CAP_GROUPS.forEach(g => g.items.forEach(it => { map[it.id] = it; })); return map; }
+
+  buildBrief() {
+    const a = this.state.answers;
+    const today = new Date().toISOString().slice(0, 10);
+    const np = v => { if (Array.isArray(v)) return v.length ? v.join(', ') : 'not provided'; return (v && ('' + v).trim()) ? ('' + v) : 'not provided'; };
+    const sc = n => n ? (n + '/5') : 'not provided';
+    const verts = a.verticals.map(x => x === 'Other' ? (a.verticalOther.trim() || 'Other') : x);
+    const vert = verts.length ? verts.join(', ') : 'not provided';
+    const map = this.capLabelMap();
+    let capLines = a.caps.map(id => { const it = map[id]; if (!it) return ''; const gv = a.capGen[id]; return '- ' + it.label + ((it.gen && gv) ? (' — ' + gv) : '') + (id === 'davis' ? ' (always on)' : ''); }).filter(Boolean);
+    if (a.capsUnsure) capLines.push('- Capabilities unconfirmed — analyst requests help confirming during framing');
+    const caps = capLines.length ? capLines.join('\n') : 'not provided';
+    let oosLines = a.outOfScope.map(id => { const it = map[id]; if (!it) return ''; const gv = a.outOfScopeGen[id]; return '- ' + it.label + ((it.gen && gv) ? (' — ' + gv) : ''); }).filter(Boolean);
+    if (a.outOfScopeNotes.trim()) oosLines.push('- Notes: ' + a.outOfScopeNotes.trim());
+    const oos = oosLines.length ? oosLines.join('\n') : 'not provided';
+    const appLines = a.apps.filter(ap => ap.name.trim() || ap.rum || ap.sr).map(ap => '- ' + (ap.name.trim() || '(unnamed app)') + ' — RUM: ' + (ap.rum || 'not provided') + '; Session Replay: ' + (ap.sr || 'not provided'));
+    const apps = appLines.length ? appLines.join('\n') : 'not provided';
+    const stkLines = a.stakeholders.filter(s => s.name.trim() || s.archetype || s.cares.trim()).map(s => '- ' + (s.name.trim() || '(unnamed)') + ' · ' + (s.archetype || 'archetype not provided') + ' — cares about: ' + (s.cares.trim() || 'not provided'));
+    const stks = stkLines.length ? stkLines.join('\n') : 'not provided';
+    const outputs = a.outputs.length ? a.outputs.join(', ') : 'none selected (action plan only)';
+    return '# Insights Forge intake brief\n'
+      + '\n> **For the agent — read first.** This is a seeded Phase 0 engagement intake, captured with Insights Forge and aligned to skills/context-framing/SKILL.md. The **baseline deliverable is always a customer action plan**; "Requested outputs" below are the presentation formats to produce on top of it.\n'
+      + '>\n'
+      + '> **How the inputs are categorized:**\n'
+      + '> - **Must-have context** — Requested outputs, Customer (name / what-they-do / vertical), Engagement framing (Context, Specific info, Intent, Response format), Active capabilities, and at least one Stakeholder (name + archetype). Framing is not complete without these.\n'
+      + '> - **Should-have context** — Analyst calibration (1–5), Tenant, Customer region(s), per-stakeholder priorities, Technical team priorities, and Trigger. These sharpen tone, depth and KPI selection.\n'
+      + '> - **Active capabilities are the boundary** of what insight you can surface — do not propose value that depends on a capability not listed. Davis AI is always on.\n'
+      + '> - **Out of scope is a hard exclusion** — do not suggest or reference anything the customer has flagged as out of scope, even if the underlying capability is active.\n'
+      + '> - Any value shown as "not provided" is a genuine gap.\n'
+      + '>\n'
+      + '> **Before you build the plan:** ask the consultant **1–3 rounds of clarifying questions**, one topic at a time, until you have enough substantial context to move forward confidently. Start with any Must-have marked "not provided", then tighten Intent, capability scope, and what each stakeholder cares about. Do not advance past the Phase 0 gate until the consultant approves your framing.\n'
+      + '\n## Requested outputs\n'
+      + '- Baseline (always): Customer action plan\n'
+      + '- Additional formats: ' + outputs + '\n'
+      + '- Analyst calibration — experience: ' + sc(a.analystExp) + ', account familiarity: ' + sc(a.accountFam) + ', Dynatrace maturity: ' + sc(a.domainFluency) + '\n'
+      + '- Generated: ' + today + '\n'
+      + '\n## Customer\n'
+      + '- Name: ' + np(a.customerName) + '\n'
+      + '- What they do: ' + np(a.customerDesc) + '\n'
+      + '- Vertical(s): ' + vert + '\n'
+      + '- Customer size (ACV): ' + np(a.size) + '\n'
+      + '- Tenant type: ' + np(a.tenant) + '\n'
+      + '- Region(s): ' + np(a.regions) + '\n'
+      + '\n## Engagement framing (C.S.I.R.)\n'
+      + '### Context\n' + np(a.context) + '\n'
+      + 'Consultant role: ' + np(a.role) + '\n'
+      + '### Specific information\n' + np(a.specific) + '\n'
+      + '### Intent\n'
+      + 'Goals: ' + np(a.intents) + '\n'
+      + 'Success looks like: ' + np(a.intentSuccess) + '\n'
+      + '### Response format\n'
+      + 'Requested outputs: ' + outputs + '\n'
+      + 'Audience: ' + np(a.audience) + '\n'
+      + 'Time window: ' + np(a.timeWindow) + '\n'
+      + 'Tone / branding: ' + np(a.tone) + '\n'
+      + '\n## Active capabilities\n' + caps + '\n'
+      + '\n## Out of scope / do not suggest\n' + oos + '\n'
+      + '\n## Focus applications\n' + apps + '\n'
+      + '\n## Stakeholders\n' + stks + '\n'
+      + '\n## Technical team priorities\n' + np(a.techPriorities) + '\n'
+      + '\n## Trigger(s)\n' + np(a.triggers) + '\n';
+  }
+
+  doCopy() {
+    const t = this.buildBrief();
+    const done = () => { this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(done); } else { done(); }
+  }
+  doDownload() {
+    const t = this.buildBrief();
+    const nm = (this.state.answers.customerName || 'intake').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'intake';
+    const blob = new Blob([t], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = 'insights-forge-' + nm + '-' + new Date().toISOString().slice(0, 10) + '.md';
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  seg(sel) { return 'border:none; border-radius:100px; padding:5px 13px; font-size:12.5px; font-weight:500; cursor:pointer; background:transparent; color:var(--text-sub,#b1b2d2);' + (sel ? ' background:var(--primary,#999bed); color:var(--on-primary,#1f2037); font-weight:600;' : ''); }
+  segHeader(sel) { return 'border:none; border-radius:100px; padding:5px 13px; font-size:12.5px; font-weight:500; cursor:pointer; background:transparent; color:rgba(255,255,255,.72);' + (sel ? ' background:#1966FF; color:#ffffff; font-weight:600;' : ''); }
+  pill(sel) { return 'display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:7px 14px; font-size:13px; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
+  card(sel) { return 'display:block; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); border-radius:10px; padding:12px 14px; cursor:pointer; transition:border-color .15s, background .15s;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944);' : ''); }
+  box(sel) { return 'display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:5px; border:1px solid var(--border-hover,#4d4e66); flex-shrink:0; background:var(--card,#212135);' + (sel ? ' border-color:var(--primary-border,#adb0ff);' : ''); }
+  capRow(sel) { return 'display:flex; align-items:center; gap:10px; padding:7px 9px; border:1px solid transparent; border-radius:8px; cursor:pointer; font-size:13.5px; color:var(--text,#ebecff);' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944);' : ''); }
+  scaleBtn(sel) { return 'width:38px; height:34px; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:7px; font-size:13px; font-weight:600; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
+  chipStyle(active) { return 'border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:5px 11px; font-size:12px; cursor:pointer; white-space:nowrap;' + (active ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
+  miniSeg(sel) { return 'border:1px solid var(--border,#3b3b52); background:var(--card,#212135); color:var(--text-sub,#b1b2d2); border-radius:6px; padding:3px 10px; font-size:11.5px; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
+
+  renderVals() {
+    const st = this.state, a = st.answers, theme = st.theme, step = st.step;
+    const missingList = this.missing();
+    const canExport = missingList.length === 0;
+    const s6required = this.s6Req();
+
+    const freeVM = {};
+    Object.keys(this.FREE).forEach(key => {
+      const f = this.FREE[key];
+      freeVM[key] = {
+        value: a[key] || '',
+        guiding: f.guiding, tip: f.tip,
+        expanded: !!st.expanded[key],
+        toggleLabel: st.expanded[key] ? 'Hide tips' : 'Need ideas?',
+        onToggle: () => this.toggleExpand(key),
+        chips: f.chips.map(c => { const active = (st.chipsActive[key] || []).indexOf(c.text) >= 0; return { label: (active ? '\u2713 ' : '+ ') + c.short, onClick: () => this.toggleChip(key, c.text), style: this.chipStyle(active) }; })
+      };
+    });
+
+    const navBase = 'display:flex; align-items:center; gap:9px; width:100%; border:none; background:transparent; color:var(--text-sub,#b1b2d2); border-radius:9px; padding:8px 9px; font-size:12.5px; cursor:pointer; text-align:left;';
+    const navActive = ' background:var(--primary-bg,#292944); color:var(--text,#ebecff); font-weight:500;';
+    const numBase = 'display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; font-size:11px; font-weight:700; flex-shrink:0;';
+    const numOn = ' background:var(--primary,#999bed); color:var(--on-primary,#1f2037);';
+    const numOff = ' background:var(--field,#1b1b30); color:var(--text-faint,#8a8bad); border:1px solid var(--border,#3b3b52);';
+    const dotFor = (s) => 'width:8px; height:8px; border-radius:50%; flex-shrink:0; ' + (s === 'done' ? 'background:var(--success,#6fc3ba);' : (s === 'partial' ? 'background:var(--warning,#eea83f);' : 'border:1px solid var(--border-hover,#4d4e66);'));
+    const navItems = this.STEP_TITLES.map((t, i) => { const on = step === i; return { num: String(i + 1), title: t, onClick: () => this.goStep(i), style: navBase + (on ? navActive : ''), numStyle: numBase + (on ? numOn : numOff), dotStyle: dotFor(this.dotState(i)) }; });
+    navItems.push({ num: '\u2713', title: 'Review & generate', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : (missingList.length < 13 ? 'partial' : 'empty')) });
+
+    const show = {}; for (let i = 0; i < 10; i++) show['showSec' + i] = step === i;
+
+    return Object.assign({
+      rootRef: this.rootRef,
+      showGradient: this.props.showGradient !== false,
+      onToggleTheme: () => this.setTheme(theme === 'dark' ? 'light' : 'dark'),
+      themeToggleTitle: theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
+      themeIcon: theme === 'dark'
+        ? React.createElement('svg', { width:18, height:18, viewBox:'0 0 24 24', fill:'none', stroke:'#ffffff', strokeWidth:2, strokeLinecap:'round' },
+            React.createElement('circle', { cx:12, cy:12, r:4.2, fill:'#ffffff', stroke:'none' }),
+            React.createElement('line', { x1:12, y1:2, x2:12, y2:4.3 }),
+            React.createElement('line', { x1:12, y1:19.7, x2:12, y2:22 }),
+            React.createElement('line', { x1:2, y1:12, x2:4.3, y2:12 }),
+            React.createElement('line', { x1:19.7, y1:12, x2:22, y2:12 }),
+            React.createElement('line', { x1:4.6, y1:4.6, x2:6.2, y2:6.2 }),
+            React.createElement('line', { x1:17.8, y1:17.8, x2:19.4, y2:19.4 }),
+            React.createElement('line', { x1:4.6, y1:19.4, x2:6.2, y2:17.8 }),
+            React.createElement('line', { x1:17.8, y1:6.2, x2:19.4, y2:4.6 }))
+        : React.createElement('svg', { width:18, height:18, viewBox:'0 0 24 24', fill:'#ffffff' },
+            React.createElement('path', { d:'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z' })),
+
+      navItems,
+      stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review & generate',
+      progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 10') : 'Complete',
+      progressPct: Math.round((Math.min(step, this.REVIEW) / this.REVIEW) * 100),
+      onPrev: () => this.goStep(step - 1),
+      onNext: () => this.goStep(step + 1),
+      showNext: step < this.REVIEW,
+      nextLabel: step === (this.REVIEW - 1) ? 'Review' : 'Next',
+      prevBtnStyle: 'background:transparent; border:1px solid var(--border,#3b3b52); color:' + (step === 0 ? 'var(--text-faint,#8a8bad)' : 'var(--text,#ebecff)') + '; border-radius:100px; padding:10px 20px; font-size:14px; cursor:' + (step === 0 ? 'not-allowed' : 'pointer') + ';',
+
+      showReviewPanel: step === this.REVIEW,
+      reviewText: canExport ? 'All must-haves are complete. Use the brief panel to copy or download your seed prompt.' : (missingList.length + ' must-have field(s) still needed — jump to any section from the left rail to fill them in.'),
+
+      outputs: this.OUTPUTS.map(u => { const sel = a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, selected:sel, onClick:()=>this.toggleArr('outputs', u.value), style:this.card(sel), boxStyle:this.box(sel) }; }),
+
+      scales: [
+        { label:'Your experience with Dynatrace consulting', lo:'New', hi:'Expert', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('analystExp', n), style:this.scaleBtn(a.analystExp===n) })) },
+        { label:'Account familiarity', lo:'First touch', hi:'Deep history', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('accountFam', n), style:this.scaleBtn(a.accountFam===n) })) },
+        { label:'Customer’s Dynatrace Maturity', lo:'Low', hi:'High', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('domainFluency', n), style:this.scaleBtn(a.domainFluency===n) })) }
+      ],
+
+      answers: a,
+      showVerticalOther: a.verticals.indexOf('Other') >= 0,
+      verticals: this.VERTICALS.map(v => ({ label:v, onClick:()=>this.toggleArr('verticals', v), style:this.pill(a.verticals.indexOf(v) >= 0) })),
+      tenantOptions: ['SaaS','Managed'].map(v => ({ label:v, onClick:()=>this.setAns('tenant', v), style:this.pill(a.tenant===v) })),
+      regionOptions: ['NORAM','LATAM','EMEA','APAC'].map(v => { const sel = a.regions.indexOf(v) >= 0; return { label:v, selected:sel, onClick:()=>this.toggleArr('regions', v), rowStyle:this.capRow(sel), boxStyle:this.box(sel) }; }),
+
+      free: freeVM,
+      intents: this.INTENTS.map(v => ({ label:v, onClick:()=>this.toggleArr('intents', v), style:this.pill(a.intents.indexOf(v) >= 0) })),
+      audienceOptions: ['Executive','Technical','Mixed'].map(v => ({ label:v, onClick:()=>this.toggleArr('audience', v), style:this.pill(a.audience.indexOf(v) >= 0) })),
+      triggers: this.TRIGGERS.map(v => ({ label:v, onClick:()=>this.toggleArr('triggers', v), style:this.pill(a.triggers.indexOf(v) >= 0) })),
+
+      capGroups: this.CAP_GROUPS.map(g => ({ title:g.title, items: g.items.map(it => {
+        const sel = it.always ? true : a.caps.indexOf(it.id) >= 0;
+        const gv = a.capGen[it.id] || '';
+        return { label:it.label, always:!!it.always, selected:sel, onClick: it.always ? (()=>{}) : (()=>this.toggleCap(it.id)), rowStyle:this.capRow(sel) + (it.always ? ' cursor:default;' : ''), boxStyle:this.box(sel), showGen: sel && !!it.gen, genButtons: (it.gen || []).map(opt => ({ label:opt, onClick:()=>this.setGen(it.id, opt), style:this.miniSeg(gv===opt) })) };
+      }) })),
+      capsUnsure: { selected:a.capsUnsure, onClick:()=>this.toggleUnsure(), rowStyle:this.capRow(a.capsUnsure), boxStyle:this.box(a.capsUnsure) },
+      outOfScopeGroups: this.CAP_GROUPS.filter(g => ['User experience','Data & logs','AI & automation'].indexOf(g.title) >= 0).map(g => ({ title:g.title, items: g.items.filter(it => !it.always).map(it => {
+        const sel = a.outOfScope.indexOf(it.id) >= 0;
+        const gv = a.outOfScopeGen[it.id] || '';
+        return { label:it.label, selected:sel, onClick:()=>this.toggleArr('outOfScope', it.id), rowStyle:this.capRow(sel), boxStyle:this.box(sel), showGen: sel && !!it.gen, genButtons: (it.gen || []).map(opt => ({ label:opt, onClick:()=>this.setOosGen(it.id, opt), style:this.miniSeg(gv===opt) })) };
+      }) })),
+
+      apps: a.apps.map((ap, i) => ({
+        label: 'Application ' + (i + 1), name: ap.name, onName:(e)=>this.setApp(i, 'name', e.target.value),
+        rumOptions:['Yes','No','Unsure'].map(v => ({ label:v, onClick:()=>this.setApp(i, 'rum', v), style:this.pill(ap.rum===v) })),
+        srOptions:['Yes','No','Unsure'].map(v => ({ label:v, onClick:()=>this.setApp(i, 'sr', v), style:this.pill(ap.sr===v) })),
+        onRemove:()=>this.removeApp(i), showRemove: a.apps.length > 1
+      })),
+      onAddApp: () => this.addApp(),
+      s6TagLabel: s6required ? 'Must-have' : 'Should-have',
+      s6TagStyle: s6required ? 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);' : 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);',
+      s6Why: s6required ? 'Your Intent includes “improve digital experience”, so RUM status decides whether the user-experience story is available — required here. Add every app in scope.' : 'Optional now — becomes required if Intent includes “improve digital experience”. Add every app in scope; each can have its own RUM and Session Replay status.',
+
+      stakeholders: a.stakeholders.map((sk, i) => ({
+        label: 'Stakeholder ' + (i + 1), name: sk.name, onName:(e)=>this.setStk(i, 'name', e.target.value),
+        archetype: sk.archetype, onArch:(e)=>this.setStk(i, 'archetype', e.target.value),
+        cares: sk.cares, onCares:(e)=>this.setStk(i, 'cares', e.target.value),
+        caresChips: this.CARES_CHIPS.map(t => ({ label:'+ ' + t, onClick:()=>this.insertStkCares(i, t) })),
+        onRemove:()=>this.removeStk(i), showRemove: a.stakeholders.length > 1
+      })),
+      onAddStk: () => this.addStk(),
+
+      briefText: this.buildBrief(),
+      missingList, missingCount: missingList.length, hasMissing: missingList.length > 0,
+      exportDisabled: !canExport,
+      copyLabel: st.copied ? 'Copied ✓' : 'Copy to clipboard',
+      onCopy: () => this.doCopy(), onDownload: () => this.doDownload(),
+      copyBtnStyle: 'flex:1; border-radius:100px; padding:11px 14px; font-size:13.5px; font-weight:600; cursor:' + (canExport ? 'pointer' : 'not-allowed') + '; border:none; background:' + (canExport ? 'var(--primary,#999bed)' : 'var(--field,#1b1b30)') + '; color:' + (canExport ? 'var(--on-primary,#1f2037)' : 'var(--text-faint,#8a8bad)') + '; opacity:' + (canExport ? '1' : '.7') + ';',
+      downloadBtnStyle: 'flex:1; border-radius:100px; padding:11px 14px; font-size:13.5px; font-weight:500; cursor:' + (canExport ? 'pointer' : 'not-allowed') + '; background:transparent; border:1px solid ' + (canExport ? 'var(--border-hover,#4d4e66)' : 'var(--border,#3b3b52)') + '; color:' + (canExport ? 'var(--text,#ebecff)' : 'var(--text-faint,#8a8bad)') + ';',
+      statusLabel: canExport ? 'Ready' : (missingList.length + ' to go'),
+      statusStyle: 'font-size:11px; font-weight:600; padding:2px 9px; border-radius:100px; ' + (canExport ? 'background:var(--primary-bg,#292944); color:var(--success,#6fc3ba); border:1px solid var(--success,#6fc3ba);' : 'background:var(--field,#1b1b30); color:var(--warning,#eea83f); border:1px solid var(--border,#3b3b52);'),
+
+      onInput: this.onInput
+    }, show);
+  }
+}
+</script>
+
+
+</body></html>
