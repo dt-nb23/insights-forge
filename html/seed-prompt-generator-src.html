@@ -403,6 +403,7 @@
   ::-webkit-scrollbar { width:10px; height:10px; }
   ::-webkit-scrollbar-thumb { background:var(--border,#3b3b52); border-radius:8px; }
   @keyframes ifFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  @keyframes drawerPop { from { opacity:0; transform:scale(.5); } to { opacity:1; transform:none; } }
 </style>
 </helmet>
 <div ref="{{ rootRef }}" style="min-height:100vh; background:var(--bg,#19192c); color:var(--text,#ebecff); font-family:'DynatraceFlow','Roboto',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.45;">
@@ -448,36 +449,34 @@
 
   <sc-if value="{{ showGuided }}" hint-placeholder-val="{{ true }}">
   <!-- Main layout (guided) -->
-  <div style="max-width:1440px; margin:14px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:{{ gridCols }}; gap:20px; align-items:start; transition:grid-template-columns .28s ease;">
+  <div style="max-width:1440px; margin:28px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:{{ gridCols }}; gap:24px; align-items:start; transition:grid-template-columns .28s ease;">
 
     <!-- NAV RAIL -->
     <nav style="position:sticky; top:16px; align-self:start;">
-      <div style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:10px;">
-        <div style="font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint,#8a8bad); padding:4px 9px 8px;">Sections</div>
-        <div style="display:flex; flex-direction:column; gap:2px;">
-          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
-            <button onclick="{{ n.onClick }}" style="{{ n.style }}" style-hover="background:var(--field,#1b1b30);">
-              <span style="{{ n.numStyle }}">{{ n.num }}</span>
-              <span style="flex:1; text-align:left; line-height:1.25;">{{ n.title }}</span>
-              <span style="{{ n.dotStyle }}"></span>
-            </button>
-          </sc-for>
+      <div style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:12px 12px 14px;">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding:2px 7px 11px;">
+          <span style="font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint,#8a8bad);">Sections</span>
+          <span style="font-size:10.5px; font-weight:600; color:var(--text-faint,#8a8bad);">{{ progressLabel }}</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="width:5px; flex-shrink:0; border-radius:100px; background:var(--field,#1b1b30); overflow:hidden;">
+            <div style="width:100%; height:{{ progressPct }}%; background:linear-gradient(180deg,#3BACF0,#1966FF,#5E28E5,#C93FDB); border-radius:100px; transition:height .3s ease;"></div>
+          </div>
+          <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;">
+            <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
+              <button onclick="{{ n.onClick }}" style="{{ n.style }}" style-hover="background:var(--field,#1b1b30);">
+                <span style="{{ n.numStyle }}">{{ n.num }}</span>
+                <span style="flex:1; text-align:left; line-height:1.25;">{{ n.title }}</span>
+                <span style="{{ n.dotStyle }}"></span>
+              </button>
+            </sc-for>
+          </div>
         </div>
       </div>
     </nav>
 
     <!-- FORM COLUMN -->
     <div style="min-width:0; min-height:620px; display:flex; flex-direction:column;">
-
-      <div style="margin-bottom:18px;">
-        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px;">
-          <span style="font-size:15px; font-weight:700; color:var(--text,#ebecff);">{{ stepLabel }}</span>
-          <span style="font-size:12px; color:var(--text-faint,#8a8bad);">{{ progressText }}</span>
-        </div>
-        <div style="height:6px; border-radius:100px; background:var(--field,#1b1b30); border:1px solid var(--border,#3b3b52); overflow:hidden;">
-          <div style="height:100%; width:{{ progressPct }}%; background:linear-gradient(90deg,#3BACF0,#1966FF,#5E28E5,#C93FDB); transition:width .25s;"></div>
-        </div>
-      </div>
 
       <!-- SECTION 1 — Outputs & trigger -->
       <sc-if value="{{ showSec0 }}" hint-placeholder-val="{{ true }}">
@@ -878,9 +877,9 @@
     <sc-if value="{{ showPreviewAside }}" hint-placeholder-val="{{ true }}">
     <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start; min-width:0; overflow:visible;">
       <div style="position:relative; min-height:34px; display:flow-root;">
-        <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="position:absolute; top:-17px; left:-17px; z-index:3; width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--primary,#1966FF); color:var(--on-primary,#ffffff); border:none; cursor:pointer; box-shadow:0 2px 9px rgba(0,0,0,.4);" style-hover="background:var(--primary-hover,#4f86ff);">{{ previewChevronIcon }}</button>
+        <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="position:absolute; top:-18px; left:-14px; z-index:3; width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--primary,#1966FF); color:var(--on-primary,#ffffff); border:none; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.45);" style-hover="background:var(--primary-hover,#4f86ff);">{{ previewChevronIcon }}</button>
         <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ true }}">
-        <div style="margin-top:8px; min-height:600px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column;">
+        <div style="margin-top:0; min-height:600px; transform-origin:top left; animation:drawerPop .3s cubic-bezier(.2,.8,.3,1) both; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
             <span style="{{ statusStyle }}">{{ statusLabel }}</span>
@@ -1180,6 +1179,7 @@ class Component extends DCLogic {
     const missingList = this.missing();
     const canExport = missingList.length === 0;
     const s6required = this.s6Req();
+    const doneSections = this.STEP_TITLES.reduce((n, _t, i) => n + (this.dotState(i) === 'done' ? 1 : 0), 0);
 
     const freeVM = {};
     Object.keys(this.FREE).forEach(key => {
@@ -1239,7 +1239,8 @@ class Component extends DCLogic {
       navItems,
       stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review',
       progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 10') : 'Complete',
-      progressPct: Math.round((Math.min(step, this.REVIEW) / this.REVIEW) * 100),
+      progressLabel: doneSections + '/' + this.STEP_TITLES.length + ' done',
+      progressPct: Math.round((doneSections / this.STEP_TITLES.length) * 100),
       onPrev: () => this.goStep(step - 1),
       onNext: () => this.goStep(step + 1),
       showNext: step < this.REVIEW,
