@@ -448,7 +448,7 @@
 
   <sc-if value="{{ showGuided }}" hint-placeholder-val="{{ true }}">
   <!-- Main layout (guided) -->
-  <div style="max-width:1440px; margin:14px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:206px minmax(0,1fr) 348px; gap:20px; align-items:start;">
+  <div style="max-width:1440px; margin:14px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:{{ gridCols }}; gap:20px; align-items:start; transition:grid-template-columns .28s ease;">
 
     <!-- NAV RAIL -->
     <nav style="position:sticky; top:16px; align-self:start;">
@@ -667,8 +667,7 @@
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Where the relationship stands going into this engagement — shapes the tone of everything that follows. Chips toggle: click to insert, click again to remove.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Relationship &amp; context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
-        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Where the relationship stands — history, mood, recent milestones.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Relationship &amp; context <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <textarea data-fid="context" value="{{ free.context.value }}" oninput="{{ onInput }}" placeholder="Relationship history, mood, recent milestones…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.context.guiding }}</p>
         <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
@@ -691,8 +690,7 @@
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What hurts day-to-day, and what limits the plan — the boundary of what you can realistically propose. Chips toggle: click to insert, click again to remove.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Pain &amp; constraints <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
-        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">The team's day-to-day pain and anything limiting the plan.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Pain &amp; constraints <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <textarea data-fid="painConstraints" value="{{ free.painConstraints.value }}" oninput="{{ onInput }}" placeholder="Alert noise, slow root cause, toil, on-call load — plus commitments, prior outcomes, and limits…" style="width:100%; min-height:74px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.painConstraints.guiding }}</p>
         <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
@@ -715,15 +713,16 @@
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
         <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What Dynatrace wants from this engagement and what the customer would call success — the load-bearing core the objective can't be written without.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
-        <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">What Dynatrace wants from this engagement.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <sc-for list="{{ intents }}" as="o" hint-placeholder-count="7">
             <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
           </sc-for>
         </div>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
-        <p style="margin:2px 0 6px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">What the customer would call success — the observable "after".</p>
+        <sc-if value="{{ showIntentsOther }}" hint-placeholder-val="{{ false }}">
+          <input type="text" data-fid="intentsOther" value="{{ answers.intentsOther }}" oninput="{{ onInput }}" placeholder="Name the other goal" style="width:100%; max-width:360px; margin-top:9px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+        </sc-if>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <textarea data-fid="intentSuccess" value="{{ free.intentSuccess.value }}" oninput="{{ onInput }}" placeholder="What the customer would say changed if this works…" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.intentSuccess.guiding }}</p>
         <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
@@ -853,9 +852,15 @@
       <section style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:22px 24px; margin-bottom:16px; animation:ifFade .25s ease both;">
         <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
           <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:8px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); font-weight:700; font-size:14px;">✓</span>
-          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Review &amp; generate</h2>
+          <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Review</h2>
+          <span style="{{ statusStyle }}">{{ statusLabel }}</span>
         </div>
         <p style="margin:12px 0 0; font-size:13.5px; color:var(--text-sub,#b1b2d2); line-height:1.55;">{{ reviewText }}</p>
+        <textarea readonly="" value="{{ briefText }}" style="width:100%; height:calc(100vh - 430px); min-height:300px; margin-top:16px; background:var(--code-bg,#14142a); color:var(--code-text,#c6c8ea); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:12px; font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.55; resize:vertical; outline:none;"></textarea>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button onclick="{{ onCopy }}" disabled="{{ exportDisabled }}" style="{{ copyBtnStyle }}">{{ copyLabel }}</button>
+          <button onclick="{{ onDownload }}" disabled="{{ exportDisabled }}" style="{{ downloadBtnStyle }}">Download .md</button>
+        </div>
       </section>
       </sc-if>
 
@@ -868,23 +873,16 @@
       </div>
     </div>
 
-    <!-- PREVIEW COLUMN -->
-    <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start;">
-      <div style="background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:14px; padding:18px 20px; display:flex; flex-direction:column;">
+    <!-- PREVIEW COLUMN (collapsible drawer) -->
+    <sc-if value="{{ showPreviewAside }}" hint-placeholder-val="{{ true }}">
+    <aside data-screen-label="Live preview" style="position:sticky; top:16px; align-self:start; min-width:0; overflow:hidden; display:flex; gap:0;">
+      <button onclick="{{ onTogglePreview }}" title="{{ previewToggleTitle }}" style="flex:0 0 26px; width:26px; align-self:stretch; min-height:140px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-radius:10px 0 0 10px; color:var(--primary,#999bed); font-size:17px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--field,#1b1b30); border-color:var(--primary-border,#adb0ff);">{{ previewChevron }}</button>
+      <div style="flex:0 0 322px; width:322px; background:var(--card,#212135); border:1px solid var(--border,#3b3b52); border-left:none; border-radius:0 14px 14px 0; padding:18px 20px; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
           <h2 style="margin:0; font-size:15px; font-weight:700; color:var(--text,#ebecff);">Seed-prompt brief</h2>
           <span style="{{ statusStyle }}">{{ statusLabel }}</span>
         </div>
         <p style="margin:5px 0 12px; font-size:12px; color:var(--text-faint,#8a8bad);">Updates live. Copy / download unlock once every <span style="color:var(--primary-border,#adb0ff);">Required field</span> is filled.</p>
-
-        <sc-if value="{{ hasMissing }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-bottom:12px; background:var(--field,#1b1b30); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:10px 12px;">
-            <div style="font-size:11.5px; font-weight:600; color:var(--warning,#eea83f); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Still needed ({{ missingCount }})</div>
-            <sc-for list="{{ missingList }}" as="m" hint-placeholder-count="3">
-              <div style="font-size:12.5px; color:var(--text-sub,#b1b2d2); padding:2px 0;">· {{ m }}</div>
-            </sc-for>
-          </div>
-        </sc-if>
 
         <textarea readonly="" value="{{ briefText }}" style="width:100%; flex:1; min-height:300px; background:var(--code-bg,#14142a); color:var(--code-text,#c6c8ea); border:1px solid var(--border,#3b3b52); border-radius:8px; padding:12px; font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.55; resize:none; outline:none;"></textarea>
 
@@ -894,12 +892,15 @@
         </div>
       </div>
     </aside>
+    </sc-if>
 
   </div>
   </sc-if>
 
-  <footer style="max-width:1440px; margin:0 auto; padding:16px 24px 40px; display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--text-faint,#8a8bad); border-top:1px solid var(--border,#3b3b52);">
-    <span>© 2026 Dynatrace, LLC.</span><span>·</span><span>Confidential</span><span>·</span><span>Insights Forge — internal intake tool</span>
+  <footer style="position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--bg,#19192c); border-top:1px solid var(--border,#3b3b52);">
+    <div style="max-width:1440px; margin:0 auto; padding:11px 24px; display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--text-faint,#8a8bad);">
+      <span>© 2026 Dynatrace, LLC.</span><span>·</span><span>Confidential</span><span>·</span><span>Insights Forge — internal intake tool</span>
+    </div>
   </footer>
 
   
@@ -932,7 +933,7 @@ class Component extends DCLogic {
       context: { guiding:'What\u2019s the relationship history — new logo, established, or at-risk? What\u2019s the mood heading in? Any recent milestone, incident, or exec change?', tip:'Aim for two sentences: what the relationship is, and what changed recently. Note who the champion is and how the last few interactions felt.', chips:[
         {short:'Established, plateaued', text:'Established customer; renewal in [quarter]. Relationship is healthy but usage has plateaued.'},
         {short:'At-risk after incident', text:'At-risk account after [incident]. Tone is cautious and trust needs rebuilding.'},
-        {short:'New logo, first QBR', text:'New logo, first QBR — sponsor is enthusiastic but the platform is still unproven internally.'},
+        {short:'New logo, early days', text:'New logo, early days — sponsor is enthusiastic but the platform is still unproven internally.'},
         {short:'Expansion underway', text:'Expansion conversation: a new team or BU is evaluating adoption.'}
       ] },
       intentSuccess: { guiding:'What would the customer say changed if this works? What decision or outcome does it unlock for you?', tip:'Describe the observable \u201cafter\u201d. One concrete sentence beats a paragraph of goals — name a metric or a decision if you can.', chips:[
@@ -941,19 +942,19 @@ class Component extends DCLogic {
         {short:'Cuts MTTR & noise', text:'The team cuts MTTR and alert noise measurably.'},
         {short:'Agreed 30/60/90', text:'We land an agreed 30/60/90 roadmap.'}
       ] },
-      painConstraints: { guiding:'What’s the team’s day-to-day pain, and what constrains the plan? Alert noise, slow root cause, toil, on-call load — plus known commitments, prior QBR outcomes, or limits (regulated data, contract phase).', tip:'List facts, not hopes: the team’s daily friction and anything off-limits. This is the boundary of what the plan can use.', chips:[
+      painConstraints: { guiding:'What’s the team’s day-to-day pain, and what constrains the plan? Alert noise, slow root cause, toil, on-call load — plus known commitments, prior review outcomes, or limits (regulated data, contract phase).', tip:'List facts, not hopes: the team’s daily friction and anything off-limits. This is the boundary of what the plan can use.', chips:[
         {short:'Alert noise', text:'Alert noise / too many false positives'},
         {short:'Slow root cause', text:'Slow root-cause analysis'},
         {short:'Tool sprawl', text:'Tool sprawl & context switching'},
         {short:'Manual toil', text:'Manual, repetitive toil'},
         {short:'On-call load', text:'On-call burnout'},
-        {short:'Prior QBR commitment', text:'Prior QBR flagged [issue]; we committed to [action] by [date].'},
+        {short:'Prior commitment', text:'A prior review flagged [issue]; we committed to [action] by [date].'},
         {short:'Regulated / limited data', text:'Regulated environment (PCI / HIPAA) limits access to [data].'},
-        {short:'Renewal, budget scrutiny', text:'Renewal in [quarter]; budget scrutiny is high.'}
+        {short:'Budget scrutiny', text:'Budget scrutiny is high heading into [quarter].'}
       ] }
     };
     this.VERTICALS = ['Retail / E-commerce','Financial Services (FSI)','Healthcare / Life Sciences','Manufacturing','Telco / Media','Public Sector','Technology / SaaS','Logistics / Supply Chain','Other'];
-    this.INTENTS = ['prove value','secure renewal','justify expansion','prepare QBR narrative','improve digital experience','diagnose a problem','other'];
+    this.INTENTS = ['prove value','secure renewal','justify expansion','prepare exec narrative','improve digital experience','diagnose a problem','other'];
     this.TRIGGERS = ['QBR','New Customer','renewal','expansion','Client Conversation','incident follow-up','other'];
     this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer basics','Stakeholders & audience','Relationship Context','Customer Pain Points','Goals & success','Active capabilities','Out of scope','Focus applications'];
     this.REVIEW = 10;
@@ -962,13 +963,14 @@ class Component extends DCLogic {
       showIntro: true,
       step: 0,
       copied: false,
+      previewOpen: true,
       expanded: {},
       chipsActive: {},
       answers: {
         outputs: [],
         analystExp: 0, accountFam: 0, domainFluency: 0,
         customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
-        context:'', role:'Insights Analytics Consultant', intents:[], intentSuccess:'',
+        context:'', role:'Insights Analytics Consultant', intents:[], intentsOther:'', intentSuccess:'',
         painConstraints:'',
         caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
         apps:[ {name:'', rum:'', sr:''} ],
@@ -1046,6 +1048,7 @@ class Component extends DCLogic {
     const nonDavis = a.caps.filter(c => c !== 'davis').length > 0 || a.capsUnsure;
     const appOk = a.apps.some(ap => F(ap.name) && ap.rum && ap.sr);
     const stkOk = a.stakeholders.some(s => F(s.archetype));
+    const intentsOtherOk = a.intents.indexOf('other') < 0 || F(a.intentsOther);
     const grp = {
       0: { fields: [F(a.outputs), F(a.triggers)], req: [F(a.outputs)] },
       1: { fields: [F(a.role), !!anyScale], req: anyScale ? [F(a.role), !!allScale] : [F(a.role)] },
@@ -1053,7 +1056,7 @@ class Component extends DCLogic {
       3: { fields: [a.stakeholders.some(s => F(s.name) || s.archetype || F(s.cares))], req: [stkOk] },
       4: { fields: [F(a.context)], req: [F(a.context)] },
       5: { fields: [F(a.painConstraints)], req: [F(a.painConstraints)] },
-      6: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), F(a.intentSuccess)] },
+      6: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), intentsOtherOk, F(a.intentSuccess)] },
       7: { fields: [nonDavis], req: [nonDavis] },
       8: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
       9: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] }
@@ -1075,6 +1078,7 @@ class Component extends DCLogic {
     if (!a.context.trim()) m.push('Relationship & context');
     if (!a.painConstraints.trim()) m.push('Pain & constraints');
     if (!a.intents.length) m.push('Intent — pick at least one goal');
+    if (a.intents.indexOf('other') >= 0 && !a.intentsOther.trim()) m.push('Name the “other” goal');
     if (!a.intentSuccess.trim()) m.push('What success looks like');
     const nonDavis = a.caps.filter(c => c !== 'davis');
     if (!(nonDavis.length || a.capsUnsure)) m.push('At least one capability beyond Davis, or “unsure”');
@@ -1092,6 +1096,7 @@ class Component extends DCLogic {
     const sc = n => n ? (n + '/5') : 'not provided';
     const verts = a.verticals.map(x => x === 'Other' ? (a.verticalOther.trim() || 'Other') : x);
     const vert = verts.length ? verts.join(', ') : 'not provided';
+    const ints = a.intents.filter(x => x !== 'other' || a.intentsOther.trim()).map(x => x === 'other' ? a.intentsOther.trim() : x);
     const map = this.capLabelMap();
     let capLines = a.caps.map(id => { const it = map[id]; if (!it) return ''; const gv = a.capGen[id]; return '- ' + it.label + ((it.gen && gv) ? (' — ' + gv) : '') + (id === 'davis' ? ' (always on)' : ''); }).filter(Boolean);
     if (a.capsUnsure) capLines.push('- Capabilities unconfirmed — analyst requests help confirming during framing');
@@ -1131,7 +1136,7 @@ class Component extends DCLogic {
       + '- Relationship & context: ' + np(a.context) + '\n'
       + '\n## Stakeholders & audience\n' + stks + '\n'
       + '\n## Goals & success criteria\n'
-      + 'Goals: ' + np(a.intents) + '\n'
+      + 'Goals: ' + np(ints) + '\n'
       + 'Success looks like: ' + np(a.intentSuccess) + '\n'
       + '\n## Pain & constraints\n' + np(a.painConstraints) + '\n'
       + '\n## Active capabilities\n' + caps + '\n'
@@ -1191,7 +1196,7 @@ class Component extends DCLogic {
     const numOff = ' background:var(--field,#1b1b30); color:var(--text-faint,#8a8bad); border:1px solid var(--border,#3b3b52);';
     const dotFor = (s) => 'width:8px; height:8px; border-radius:50%; flex-shrink:0; ' + (s === 'done' ? 'background:var(--success,#6fc3ba);' : (s === 'required' ? 'background:var(--warning,#eea83f);' : 'border:1px solid var(--border-hover,#4d4e66);'));
     const navItems = this.STEP_TITLES.map((t, i) => { const on = step === i; return { num: String(i + 1), title: t, onClick: () => this.goStep(i), style: navBase + (on ? navActive : ''), numStyle: numBase + (on ? numOn : numOff), dotStyle: dotFor(this.dotState(i)) }; });
-    navItems.push({ num: '\u2713', title: 'Review & generate', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : 'required') });
+    navItems.push({ num: '\u2713', title: 'Review', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : 'required') });
 
     const show = {}; for (let i = 0; i < 10; i++) show['showSec' + i] = step === i;
 
@@ -1200,6 +1205,11 @@ class Component extends DCLogic {
       showGradient: this.props.showGradient !== false,
       showIntro: st.showIntro,
       showGuided: !st.showIntro,
+      showPreviewAside: step !== this.REVIEW,
+      gridCols: step === this.REVIEW ? '206px minmax(0,1fr)' : (st.previewOpen ? '206px minmax(0,1fr) 348px' : '206px minmax(0,1fr) 26px'),
+      previewChevron: st.previewOpen ? '›' : '‹',
+      previewToggleTitle: st.previewOpen ? 'Collapse preview' : 'Expand preview',
+      onTogglePreview: () => this.setState(s => ({ previewOpen: !s.previewOpen })),
       onGetStarted: () => this.dismissIntro(),
       onToggleTheme: () => this.setTheme(theme === 'dark' ? 'light' : 'dark'),
       themeToggleTitle: theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
@@ -1218,7 +1228,7 @@ class Component extends DCLogic {
             React.createElement('path', { d:'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z' })),
 
       navItems,
-      stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review & generate',
+      stepLabel: step < this.REVIEW ? this.STEP_TITLES[step] : 'Review',
       progressText: step < this.REVIEW ? ('Step ' + (step + 1) + ' of 10') : 'Complete',
       progressPct: Math.round((Math.min(step, this.REVIEW) / this.REVIEW) * 100),
       onPrev: () => this.goStep(step - 1),
@@ -1228,7 +1238,7 @@ class Component extends DCLogic {
       prevBtnStyle: 'background:transparent; border:1px solid var(--border,#3b3b52); color:' + (step === 0 ? 'var(--text-faint,#8a8bad)' : 'var(--text,#ebecff)') + '; border-radius:100px; padding:10px 20px; font-size:14px; cursor:' + (step === 0 ? 'not-allowed' : 'pointer') + ';',
 
       showReviewPanel: step === this.REVIEW,
-      reviewText: canExport ? 'All must-haves are complete. Use the brief panel to copy or download your seed prompt.' : (missingList.length + ' must-have field(s) still needed — jump to any section from the left rail to fill them in.'),
+      reviewText: canExport ? 'All required fields are complete — copy or download your seed prompt below.' : (missingList.length + ' required field(s) still needed — jump to any section from the left rail to fill them in.'),
 
       outputs: this.OUTPUTS.map(u => { const sel = a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, selected:sel, onClick:()=>this.toggleArr('outputs', u.value), style:this.card(sel), boxStyle:this.box(sel) }; }),
 
@@ -1246,6 +1256,7 @@ class Component extends DCLogic {
 
       free: freeVM,
       intents: this.INTENTS.map(v => ({ label:v, onClick:()=>this.toggleArr('intents', v), style:this.pill(a.intents.indexOf(v) >= 0) })),
+      showIntentsOther: a.intents.indexOf('other') >= 0,
       triggers: this.TRIGGERS.map(v => ({ label:v, onClick:()=>this.toggleArr('triggers', v), style:this.pill(a.triggers.indexOf(v) >= 0) })),
 
       capGroups: this.CAP_GROUPS.map(g => ({ title:g.title, items: g.items.map(it => {
@@ -1282,7 +1293,6 @@ class Component extends DCLogic {
       onAddStk: () => this.addStk(),
 
       briefText: this.buildBrief(),
-      missingList, missingCount: missingList.length, hasMissing: missingList.length > 0,
       exportDisabled: !canExport,
       copyLabel: st.copied ? 'Copied ✓' : 'Copy to clipboard',
       onCopy: () => this.doCopy(), onDownload: () => this.doDownload(),
