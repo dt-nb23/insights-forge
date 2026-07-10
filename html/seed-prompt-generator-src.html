@@ -558,9 +558,9 @@
         </sc-if>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:start;">
           <div>
-            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer size <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Nice</span></label>
+            <label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">Customer size (ACV) <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Nice</span></label>
             <select data-fid="size" value="{{ answers.size }}" onchange="{{ onInput }}" style="width:100%; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-              <option value="">— select —</option><option>Below $250k</option><option>Above $250K &amp; Below $1M</option><option>Above $1M</option>
+              <option value="">— select —</option><option>Acceleration (&lt; $250K ACV)</option><option>Mid-Enterprise ($250K–$1M ACV)</option><option>Large Enterprise (&gt; $1M ACV)</option>
             </select>
           </div>
           <div>
