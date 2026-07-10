@@ -1073,7 +1073,7 @@ class Component extends DCLogic {
     return grp[i] || { fields: [], req: [] };
   }
   secTouched(i) { return this._secData(i).fields.some(Boolean); }
-  dotState(i) { const d = this._secData(i); if (d.req.length) { if (d.req.every(Boolean)) return 'done'; return this.secTouched(i) ? 'partial' : 'empty'; } return this.secTouched(i) ? 'done' : 'empty'; }
+  dotState(i) { const d = this._secData(i); if (d.req.length) { return d.req.every(Boolean) ? 'done' : 'required'; } return this.secTouched(i) ? 'done' : 'neutral'; }
 
   missing() {
     const a = this.state.answers, m = [];
@@ -1209,9 +1209,9 @@ class Component extends DCLogic {
     const numBase = 'display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; font-size:11px; font-weight:700; flex-shrink:0;';
     const numOn = ' background:var(--primary,#999bed); color:var(--on-primary,#1f2037);';
     const numOff = ' background:var(--field,#1b1b30); color:var(--text-faint,#8a8bad); border:1px solid var(--border,#3b3b52);';
-    const dotFor = (s) => 'width:8px; height:8px; border-radius:50%; flex-shrink:0; ' + (s === 'done' ? 'background:var(--success,#6fc3ba);' : (s === 'partial' ? 'background:var(--warning,#eea83f);' : 'border:1px solid var(--border-hover,#4d4e66);'));
+    const dotFor = (s) => 'width:8px; height:8px; border-radius:50%; flex-shrink:0; ' + (s === 'done' ? 'background:var(--success,#6fc3ba);' : (s === 'required' ? 'background:var(--warning,#eea83f);' : 'border:1px solid var(--border-hover,#4d4e66);'));
     const navItems = this.STEP_TITLES.map((t, i) => { const on = step === i; return { num: String(i + 1), title: t, onClick: () => this.goStep(i), style: navBase + (on ? navActive : ''), numStyle: numBase + (on ? numOn : numOff), dotStyle: dotFor(this.dotState(i)) }; });
-    navItems.push({ num: '\u2713', title: 'Review & generate', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : (missingList.length < 13 ? 'partial' : 'empty')) });
+    navItems.push({ num: '\u2713', title: 'Review & generate', onClick: () => this.goStep(this.REVIEW), style: navBase + (step === this.REVIEW ? navActive : ''), numStyle: numBase + (step === this.REVIEW ? numOn : numOff), dotStyle: dotFor(canExport ? 'done' : 'required') });
 
     const show = {}; for (let i = 0; i < 10; i++) show['showSec' + i] = step === i;
 
