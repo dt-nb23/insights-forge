@@ -513,6 +513,9 @@
               <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
             </sc-for>
           </div>
+          <sc-if value="{{ showTriggersOther }}" hint-placeholder-val="{{ false }}">
+            <input type="text" data-fid="triggersOther" value="{{ answers.triggersOther }}" oninput="{{ onInput }}" placeholder="Name the other trigger" style="width:100%; max-width:360px; margin-top:9px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+          </sc-if>
         </div>
       </section>
       </sc-if>
@@ -531,6 +534,9 @@
         <select data-fid="role" value="{{ answers.role }}" onchange="{{ onInput }}" style="width:100%; max-width:300px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
           <option>Insights Analytics Consultant</option><option>CSM</option><option>SE</option><option>Consultant</option><option>Other</option>
         </select>
+        <sc-if value="{{ showRoleOther }}" hint-placeholder-val="{{ false }}">
+          <input type="text" data-fid="roleOther" value="{{ answers.roleOther }}" oninput="{{ onInput }}" placeholder="Name your role" style="width:100%; max-width:300px; margin-top:9px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+        </sc-if>
         <div style="margin-top:6px;">
           <sc-for list="{{ scales }}" as="sc" hint-placeholder-count="3">
             <div style="margin-top:14px;">
@@ -637,8 +643,11 @@
                 <label style="display:flex; align-items:center; gap:6px; margin-bottom:2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Role archetype <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
                 <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">Their function. Phase 3 maps deliverables to it.</p>
                 <select value="{{ sk.archetype }}" onchange="{{ sk.onArch }}" style="width:100%; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-                  <option>Stakeholder — role to be confirmed</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>unsure</option>
+                  <option>Stakeholder — role to be confirmed</option><option>Executive Sponsor</option><option>Product Owner</option><option>SRE / Reliability Engineer</option><option>IT Operations Manager</option><option>Application Developer</option><option>Platform / DevOps Engineer</option><option>Security / Compliance Officer</option><option>Data / Analytics Lead</option><option>Marketing / Business</option><option>Unsure</option><option>Other</option>
                 </select>
+                <sc-if value="{{ sk.showArchetypeOther }}" hint-placeholder-val="{{ false }}">
+                  <input type="text" value="{{ sk.archetypeOther }}" oninput="{{ sk.onArchOther }}" placeholder="Name the role archetype" style="width:100%; margin-top:8px; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
+                </sc-if>
               </div>
             </div>
             <label style="display:flex; align-items:center; gap:6px; margin:12px 0 2px; font-size:12.5px; font-weight:500; color:var(--text-sub,#b1b2d2);">Communication level <span style="font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 5px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);">Recommended</span></label>
@@ -650,7 +659,7 @@
             <p style="margin:2px 0 6px; font-size:11px; color:var(--text-faint,#8a8bad); line-height:1.4;">The KPIs or outcomes they judge success by.</p>
             <textarea value="{{ sk.cares }}" oninput="{{ sk.onCares }}" placeholder="KPIs, outcomes or priorities this person judges success by…" style="width:100%; min-height:52px; resize:vertical; background:var(--card,#212135); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
             <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:8px;">
-              <sc-for list="{{ sk.caresChips }}" as="c" hint-placeholder-count="6"><button onclick="{{ c.onClick }}" style="border:1px solid var(--border,#3b3b52); background:var(--card,#212135); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:5px 11px; font-size:12px; cursor:pointer; white-space:nowrap;" style-hover="border-color:var(--primary-border,#adb0ff); color:var(--text,#ebecff);">{{ c.label }}</button></sc-for>
+              <sc-for list="{{ sk.caresChips }}" as="c" hint-placeholder-count="6"><button onclick="{{ c.onClick }}" style="{{ c.style }}" style-hover="border-color:var(--primary-border,#adb0ff); color:var(--text,#ebecff);">{{ c.label }}</button></sc-for>
             </div>
           </div>
         </sc-for>
@@ -977,12 +986,12 @@ class Component extends DCLogic {
         outputs: ['Customer action plan'],
         analystExp: 0, accountFam: 0, domainFluency: 0,
         customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
-        context:'', role:'Insights Analytics Consultant', intents:[], intentsOther:'', intentSuccess:'',
+        context:'', role:'Insights Analytics Consultant', roleOther:'', intents:[], intentsOther:'', intentSuccess:'',
         painConstraints:'',
         caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
         apps:[ {name:'', rum:'', sr:''} ],
-        stakeholders:[ {name:'', archetype:'Stakeholder — role to be confirmed', level:'Mixed', cares:''} ],
-        triggers:[]
+        stakeholders:[ {name:'', archetype:'IT Operations Manager', archetypeOther:'', level:'Mixed', cares:''} ],
+        triggers:[], triggersOther:''
       }
     };
   }
@@ -1038,9 +1047,9 @@ class Component extends DCLogic {
   addApp() { this.setState(s => ({ answers: Object.assign({}, s.answers, { apps: s.answers.apps.concat([{ name:'', rum:'', sr:'' }]) }) })); }
   removeApp(i) { this.setState(s => { const arr = s.answers.apps.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { apps: arr }) }; }); }
   setStk(i, key, val) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr[i] = Object.assign({}, arr[i], { [key]: val }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
-  addStk() { this.setState(s => ({ answers: Object.assign({}, s.answers, { stakeholders: s.answers.stakeholders.concat([{ name:'', archetype:'Stakeholder — role to be confirmed', level:'Mixed', cares:'' }]) }) })); }
+  addStk() { this.setState(s => ({ answers: Object.assign({}, s.answers, { stakeholders: s.answers.stakeholders.concat([{ name:'', archetype:'Stakeholder — role to be confirmed', archetypeOther:'', level:'Mixed', cares:'' }]) }) })); }
   removeStk(i) { this.setState(s => { const arr = s.answers.stakeholders.slice(); arr.splice(i, 1); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
-  insertStkCares(i, text) { this.setState(s => { const arr = s.answers.stakeholders.slice(); const cur = (arr[i].cares || '').replace(/\s+$/, ''); arr[i] = Object.assign({}, arr[i], { cares: cur ? (cur + ' ' + text) : text }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
+  toggleStkCares(i, text) { this.setState(s => { const arr = s.answers.stakeholders.slice(); let val = arr[i].cares || ''; const j = val.indexOf(text); if (j >= 0) { val = (val.slice(0, j) + val.slice(j + text.length)).replace(/\s{2,}/g, ' ').replace(/\s+([.,;])/g, '$1').replace(/^[\s,]+|[\s,]+$/g, ''); } else { const base = val.replace(/\s+$/, ''); val = base ? (base + ', ' + text) : text; } arr[i] = Object.assign({}, arr[i], { cares: val }); return { answers: Object.assign({}, s.answers, { stakeholders: arr }) }; }); }
   goStep(n) { this.setState({ step: Math.max(0, Math.min(this.REVIEW, n)) }); }
   dismissIntro() { this.setState({ showIntro: false }); }
 
@@ -1113,7 +1122,7 @@ class Component extends DCLogic {
     const oos = oosLines.length ? oosLines.join('\n') : 'not provided';
     const appLines = a.apps.filter(ap => ap.name.trim() || ap.rum || ap.sr).map(ap => '- ' + (ap.name.trim() || '(unnamed app)') + ' — RUM: ' + (ap.rum || 'not provided') + '; Session Replay: ' + (ap.sr || 'not provided'));
     const apps = appLines.length ? appLines.join('\n') : 'not provided';
-    const stkLines = a.stakeholders.filter(s => s.name.trim() || s.archetype || s.cares.trim()).map(s => '- ' + (s.name.trim() || '(unnamed)') + ' · ' + (s.archetype || 'archetype not provided') + ' · communication level: ' + (s.level || 'Mixed') + ' — cares about: ' + (s.cares.trim() || 'not provided'));
+    const stkLines = a.stakeholders.filter(s => s.name.trim() || s.archetype || s.cares.trim()).map(s => '- ' + (s.name.trim() || '(unnamed)') + ' · ' + ((s.archetype === 'Other' ? (s.archetypeOther || '').trim() || 'Other' : s.archetype) || 'archetype not provided') + ' · communication level: ' + (s.level || 'Mixed') + ' — cares about: ' + (s.cares.trim() || 'not provided'));
     const stks = stkLines.length ? stkLines.join('\n') : 'not provided';
     const addlOutputs = a.outputs.filter(o => o !== 'Customer action plan');
     const outputs = addlOutputs.length ? addlOutputs.join(', ') : 'none (action plan only)';
@@ -1131,8 +1140,8 @@ class Component extends DCLogic {
       + '\n## Requested outputs & trigger\n'
       + '- Baseline (always): Customer action plan\n'
       + '- Additional formats: ' + outputs + '\n'
-      + '- Trigger(s): ' + np(a.triggers) + '\n'
-      + '- Analyst: role ' + np(a.role) + '; experience ' + sc(a.analystExp) + ', account familiarity ' + sc(a.accountFam) + ', customer Dynatrace maturity ' + sc(a.domainFluency) + '\n'
+      + '- Trigger(s): ' + np(a.triggers.map(x => x === 'Other' ? (a.triggersOther.trim() || 'Other') : x)) + '\n'
+      + '- Analyst: role ' + np(a.role === 'Other' ? (a.roleOther.trim() || 'Other') : a.role) + '; experience ' + sc(a.analystExp) + ', account familiarity ' + sc(a.accountFam) + ', customer Dynatrace maturity ' + sc(a.domainFluency) + '\n'
       + '- Generated: ' + today + '\n'
       + '\n## Customer context\n'
       + '- Name: ' + np(a.customerName) + '\n'
@@ -1278,6 +1287,8 @@ class Component extends DCLogic {
       free: freeVM,
       intents: this.INTENTS.map(v => ({ label:v, onClick:()=>this.toggleArr('intents', v), style:this.pill(a.intents.indexOf(v) >= 0) })),
       showIntentsOther: a.intents.indexOf('Other') >= 0,
+      showRoleOther: a.role === 'Other',
+      showTriggersOther: a.triggers.indexOf('Other') >= 0,
       triggers: this.TRIGGERS.map(v => ({ label:v, onClick:()=>this.toggleArr('triggers', v), style:this.pill(a.triggers.indexOf(v) >= 0) })),
 
       capGroups: this.CAP_GROUPS.map(g => ({ title:g.title, items: g.items.map(it => {
@@ -1306,9 +1317,10 @@ class Component extends DCLogic {
       stakeholders: a.stakeholders.map((sk, i) => ({
         label: 'Stakeholder ' + (i + 1), name: sk.name, onName:(e)=>this.setStk(i, 'name', e.target.value),
         archetype: sk.archetype, onArch:(e)=>this.setStk(i, 'archetype', e.target.value),
+        archetypeOther: sk.archetypeOther || '', onArchOther:(e)=>this.setStk(i, 'archetypeOther', e.target.value), showArchetypeOther: sk.archetype === 'Other',
         level: sk.level, onLevel:(e)=>this.setStk(i, 'level', e.target.value),
         cares: sk.cares, onCares:(e)=>this.setStk(i, 'cares', e.target.value),
-        caresChips: this.CARES_CHIPS.map(t => ({ label:'+ ' + t, onClick:()=>this.insertStkCares(i, t) })),
+        caresChips: this.CARES_CHIPS.map(t => { const active = (sk.cares || '').indexOf(t) >= 0; return { label:(active ? '✓ ' : '+ ') + t, onClick:()=>this.toggleStkCares(i, t), style:this.chipStyle(active) }; }),
         onRemove:()=>this.removeStk(i), showRemove: a.stakeholders.length > 1
       })),
       onAddStk: () => this.addStk(),
