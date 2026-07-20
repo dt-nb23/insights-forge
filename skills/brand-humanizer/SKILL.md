@@ -44,9 +44,26 @@ every time.
 This skill handles the words, not the visuals. Color, layout, fonts, and logo
 placement belong to [exec-onepager](../exec-onepager/SKILL.md) and
 [pptx-builder](../pptx-builder/SKILL.md), which already consult brand-spec.md
-for that side. Run this skill as the copy pass, either on a fresh draft before
-either of those builds the deliverable, or as a final read-through on what
-they produce.
+for that side.
+
+**In the exec-onepager workflow, this skill runs as a mandatory pre-pass
+(step 3) on structured draft copy, before the HTML is built.** The
+exec-onepager skill invokes it explicitly; you do not need to invoke it
+separately. When invoked there, apply the full procedure below to all drafted
+copy blocks: TL;DR sentence, problem statement, guide narrative and
+capability descriptions, plan steps and concurrency notes, stakes framing,
+takeaway line, and decision asks.
+
+**In the pptx-builder workflow, this skill runs as a mandatory pre-pass
+(step 4a) on slide copy adapted from the one-pager,** before generating or
+specifying any slide content. Slide copy is shorter and more constrained than
+one-pager copy — apply the same rules but pay extra attention to title-case
+headings (a common regression when compressing sentences into slide titles)
+and em dashes (which appear frequently in compressed copy).
+
+Run this skill as a standalone pass when someone asks to "humanize this,"
+"brand-check this," or "make this sound like Dynatrace," or when a draft
+needs a final read-through outside the Phase 3 workflow.
 
 ## Before you start: load the brand spec
 
