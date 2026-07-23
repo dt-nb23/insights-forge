@@ -52,7 +52,7 @@ The `skills/` files are **not** slash commands. The main agent reads them as ref
 
    > *"Describe the problem you're trying to solve."*
 
-   Or pre-fill the context first: open the [Seed Prompt Generator](html/Insights%20Forge%20%28Seed%20Prompt%20Generator%29.html) in a browser, fill it out, and paste the generated seed prompt as your opening message. See [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md).
+   Or pre-fill the context first: open [`html/seed-prompt-generator-src.html`](html/seed-prompt-generator-src.html) in VS Code or Claude Code Desktop App, fill it out, and paste the generated seed prompt as your opening message. See [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md).
 
 ## Cost management
 
@@ -98,6 +98,7 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │   ├── signal-mapping/           # Phase 1
 │   ├── action-plan-builder/      # Phase 2
 │   ├── exec-onepager/            # Phase 3
+│   ├── brand-humanizer/          # Phase 3 (mandatory copy-editing pre-pass)
 │   ├── pptx-builder/             # Phase 3
 │   ├── external-research/        # All phases (web lookup)
 │   ├── investigation-reset/      # Archive / pause / resume an engagement
@@ -110,7 +111,7 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │       ├── _template/            # Copy this to create a new client workspace
 │       └── <client-name>/        # README, environment.md, contract.md, stakeholder-overlays.md,
 │                                 #   engagements/<YYYY-MM-DD-slug>/  (all phase files live here)
-├── html/                         # Seed Prompt Generator (browser intake form) + screenshots
+├── html/                         # Seed Prompt Generator (VS Code / Claude Code Desktop App tool) + screenshots
 ├── docs/                         # Human-readable documentation
 └── tools/                        # pptx-generator.py and future integrations
 ```

@@ -4,7 +4,7 @@ Phase 0 normally starts cold: you describe the customer, and the agent pulls the
 
 It doesn't replace Phase 0 or its gate. It front-loads the intake so the agent spends its first questions sharpening the framing instead of collecting basics from scratch.
 
-The tool lives at [`html/Insights Forge (Seed Prompt Generator).html`](<../html/Insights Forge (Seed Prompt Generator).html>). It's a single file — no install, no build, no network. Double-click it to open in any modern browser (React and its runtime are embedded in the file, so it works fully offline from `file://`).
+The tool lives at [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html). It's a single file — no install, no build, no network. Open it in VS Code or Claude Code Desktop App.
 
 ## When to use it
 
@@ -58,7 +58,7 @@ Because the brief is just a rich, structured problem description, no change to t
 
 | What you'll find | Where to look |
 |---|---|
-| The tool itself | [`html/Insights Forge (Seed Prompt Generator).html`](<../html/Insights Forge (Seed Prompt Generator).html>) |
+| The tool itself | [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html) |
 | Screenshots of each section | [`html/screenshots/`](../html/screenshots/) |
 | The Phase 0 procedure that consumes the brief | [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) |
 | The nine clarifying questions and the rubric | [getting-started.md](getting-started.md) · [workflow.md](workflow.md) |

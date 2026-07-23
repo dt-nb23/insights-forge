@@ -39,7 +39,10 @@ Output: the engagement's `action-plan.md`.
 ## Phase 3 — Producing exec-ready deliverables
 
 ### [`exec-onepager`](../skills/exec-onepager/SKILL.md)
-Produce a one-page written summary tailored to a *named* stakeholder. Reads the matching profile in [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) and applies brand directives from [`brand-spec.md`](../memory/long-term/brand/brand-spec.md). See [deliverables.md](deliverables.md) for the brand specifics.
+Produce a one-page written summary tailored to a *named* stakeholder. Runs in five steps: recipe selection from `layout-system.md`, content draft from the engagement files, brand-humanizer pre-pass (mandatory Step 3 — runs on all structured copy before any HTML is built), HTML build, and brand gate. Reads the matching profile in [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) and applies brand directives from [`brand-spec.md`](../memory/long-term/brand/brand-spec.md). See [deliverables.md](deliverables.md) for the brand specifics.
+
+### [`brand-humanizer`](../skills/brand-humanizer/SKILL.md)
+Polish Phase 3 copy so it passes two independent bars: it reads like a person wrote it (no em dashes, no hedging, no AI vocabulary, no rule-of-three lists) and it reads like Dynatrace wrote it (sentence case, active voice, correct product names and trademarks, American spelling, serial commas, no disallowed phrasings). In the exec-onepager workflow this runs as mandatory Step 3 on all structured draft copy before the HTML is built. In the pptx-builder workflow it runs as mandatory Step 4a on slide copy before any slides are generated. Can also be run standalone when someone asks to "humanize this," "brand-check this," or "make this sound like Dynatrace."
 
 ### [`pptx-builder`](../skills/pptx-builder/SKILL.md)
 Produce a PowerPoint deck. Adapter that delegates to the standard pptx skill when available and applies the brand spec on top. **Only produced after the one-pager is approved** — see [workflow.md](workflow.md) for the rationale.
@@ -85,6 +88,6 @@ The agent tells you which skill it's reading before it starts — so if you want
 
 | Where to find them | What's there |
 |---|---|
-| [`skills/`](../skills/) | Thirteen skill folders |
+| [`skills/`](../skills/) | Fourteen skill folders |
 | Each `SKILL.md` file | When-to-use, inputs, procedure, output location, common pitfalls |
 | [`memory/long-term/frameworks.md`](../memory/long-term/frameworks.md) | The shared procedural reference skills draw on (MECE, ICE definitions, exit-criteria patterns) |

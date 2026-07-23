@@ -36,6 +36,8 @@ Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md).
 
 Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks. The skill defines the exact section order and word-budget guidance — open the `SKILL.md` if you want to see the template.
 
+The exec-onepager skill runs in five steps: recipe selection, content draft, brand-humanizer pre-pass, HTML build, and brand gate. The brand-humanizer pre-pass (Step 3) runs on all drafted copy before any HTML is assembled, catching AI writing patterns and DT voice violations while the copy is still in plain text and easy to fix.
+
 ## What the deck looks like
 
 Produced by [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md), **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.

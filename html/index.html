@@ -275,6 +275,53 @@
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+
+  /* ── Architecture step-through ── */
+  .sf-phase-row { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 20px; gap: 0; }
+  .sf-phase, .sf-seed {
+    background: var(--card-bg); border: 1.5px solid var(--card-border);
+    border-radius: 10px; padding: 13px 18px; cursor: pointer;
+    transition: all .15s; text-align: center; min-width: 90px;
+  }
+  .sf-phase:hover, .sf-seed:hover { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.05); }
+  .sf-phase.sf-active { border-color: var(--teal); background: rgba(73,194,179,.08); }
+  .sf-seed.sf-active { border-color: #6fa8ff; background: rgba(25,102,255,.08); }
+  .sf-phase-num { font-size: 18px; font-weight: 700; color: rgba(255,255,255,.15); line-height: 1; }
+  .sf-phase-name { font-size: 11px; font-weight: 500; color: var(--gray-lt); margin-top: 4px; }
+  .sf-seed-label { font-size: 11px; font-weight: 500; color: var(--gray-lt); }
+  .sf-seed-sub { font-size: 10px; color: var(--gray); margin-top: 3px; }
+  .sf-conn { display: flex; flex-direction: column; align-items: center; padding: 0 8px; color: var(--gray); font-size: 12px; line-height: 1.2; }
+  .sf-conn-arrow { font-size: 14px; }
+  .sf-conn-label { font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: var(--gray); margin-top: 1px; }
+  .sf-lenses-band { margin-bottom: 20px; }
+  .sf-lenses-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .sf-lenses-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sf-lens { padding: 4px 10px; border-radius: 6px; font-size: 11px; border: 1px solid var(--card-border); color: var(--gray); background: rgba(255,255,255,.03); transition: all .15s; }
+  .sf-lens.sf-on { background: rgba(201,63,219,.15); border-color: rgba(201,63,219,.4); color: var(--magenta); }
+  .sf-lens.sf-dim { opacity: .2; }
+  .sf-detail { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; min-height: 80px; }
+  .sf-detail-row { display: flex; gap: 16px; align-items: flex-start; margin-top: 10px; }
+  .sf-detail-lbl { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: .07em; min-width: 110px; padding-top: 4px; flex-shrink: 0; }
+  .sf-mem-row { display: flex; align-items: stretch; flex-wrap: wrap; gap: 0; margin-top: 8px; }
+  .sf-mem { border: 1px solid; border-radius: 10px; padding: 14px 18px; flex: 1; min-width: 150px; }
+  .sf-mem-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .sf-mem-path { font-size: 10px; font-family: monospace; color: var(--gray); }
+  .sf-mem-rule { font-size: 11px; color: var(--gray); margin-top: 6px; line-height: 1.5; }
+  .sf-mem-arr { display: flex; align-items: center; padding: 0 10px; color: var(--gray); font-size: 16px; }
+
+  /* ── Seed prompt callout ── */
+  .seed-callout { border: 1px solid rgba(25,102,255,.35); background: rgba(25,102,255,.05); border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; display: flex; gap: 14px; align-items: flex-start; }
+  .seed-callout-icon { font-size: 20px; flex-shrink: 0; }
+  .seed-callout-tag { display: inline-block; margin-bottom: 6px; }
+
+  /* ── 5-step orchestrator ── */
+  .step-flow { display: flex; flex-direction: column; gap: 0; max-width: 620px; margin: 16px 0 24px; }
+  .step-row { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--card-border); }
+  .step-row:last-child { border-bottom: none; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--card-border); color: var(--gray-lt); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-num.step-mandatory { border-color: var(--magenta); color: var(--magenta); background: rgba(201,63,219,.08); }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--white); }
+  .step-desc { font-size: 12px; color: var(--gray-lt); margin-top: 3px; }
 </style>
 </head>
 <body>
@@ -291,9 +338,6 @@
     <div class="nav-section">Start here</div>
     <div class="nav-item active" data-page="overview">
       <div class="nav-dot" style="background:#49C2B3"></div> Overview
-    </div>
-    <div class="nav-item" data-page="init">
-      <div class="nav-dot" style="background:#6fa8ff"></div> Session Init
     </div>
 
     <div class="nav-section">Phases</div>
@@ -390,84 +434,6 @@
   </div>
 </section>
 
-<!-- ══════════════ SESSION INIT ══════════════ -->
-<section class="page" id="page-init">
-  <h1>Session Initialization</h1>
-  <p class="lead">Before Phase 0 begins, the agent loads four long-term memory files in order and holds them for the full session.</p>
-
-  <h2>Read order (hold entire session)</h2>
-  <ol class="steps" style="max-width:600px">
-    <li><div><code>memory/long-term/domain-knowledge.md</code><br><span style="font-size:12px;color:var(--gray)">Tech concepts, signal patterns, tech→UX→business mappings, Dynatrace-specific terminology</span></div></li>
-    <li><div><code>memory/long-term/dynatrace-playbooks.md</code><br><span style="font-size:12px;color:var(--gray)">8 named investigation workflows with step sequences, confirmed/ruled-out criteria, common dead-ends</span></div></li>
-    <li><div><code>memory/long-term/frameworks.md</code><br><span style="font-size:12px;color:var(--gray)">MECE definition, ICE formula, issue-tree → hypothesis rules, exit criteria rubric</span></div></li>
-    <li><div><code>memory/long-term/stakeholder-profiles.md</code><br><span style="font-size:12px;color:var(--gray)">8 role archetypes + named-leader overlays for Phase 3 framing</span></div></li>
-  </ol>
-
-  <h2>Then establish the active engagement</h2>
-  <div class="card" style="max-width:600px">
-    <p style="margin:0;font-size:13px;color:var(--gray-lt)">There is <strong style="color:var(--white)">no global pointer file</strong>. The session establishes its engagement folder one of two ways:</p>
-    <div style="display:flex;gap:24px;margin-top:14px">
-      <div style="flex:1">
-        <div class="tag tag-teal" style="margin-bottom:6px">New engagement</div>
-        <p style="font-size:12px;margin:0">Phase 0 (context-framing) creates a dated folder <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code> and the session holds that path.</p>
-      </div>
-      <div style="flex:1">
-        <div class="tag tag-gray" style="margin-bottom:6px">Resume</div>
-        <p style="font-size:12px;margin:0">Scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state: active</code> or <code>paused</code>; the user picks one to resume.</p>
-      </div>
-    </div>
-    <p style="margin:12px 0 0;font-size:12px;color:var(--gray-lt)">The client name is the segment between <code>memory/clients/</code> and <code>/engagements/</code>. All client-specific reads then come only from <code>memory/clients/&lt;client-name&gt;/</code>.</p>
-  </div>
-
-  <h2>Long-term memory contents</h2>
-  <div class="card-grid">
-    <div class="card card-sm">
-      <h3 style="color:var(--teal);font-size:13px">domain-knowledge.md</h3>
-      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
-        <li>Observability concepts: SLI, SLO, SLA, error budget, RUM, APM</li>
-        <li>Common signal patterns: latency, error spikes, saturation, cache collapse</li>
-        <li>Tech → UX → business mapping table (7 rows)</li>
-        <li>DT-specific: DPS, Grail, DQL, Smartscape, Davis AI, OneAgent</li>
-        <li>Citation freshness rules (&gt;7 days = stale)</li>
-      </ul>
-    </div>
-    <div class="card card-sm">
-      <h3 style="color:var(--teal);font-size:13px">dynatrace-playbooks.md</h3>
-      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
-        <li>Backend service latency</li>
-        <li>Service failure spike</li>
-        <li>Frontend / UX regression (RUM)</li>
-        <li>Log investigation (Grail)</li>
-        <li>SLO breach / error-budget burn</li>
-        <li>Deploy / release correlation</li>
-        <li>Third-party dependency</li>
-        <li>Reading a Davis problem</li>
-      </ul>
-    </div>
-    <div class="card card-sm">
-      <h3 style="color:var(--teal);font-size:13px">frameworks.md</h3>
-      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
-        <li>MECE: template Q-set for tree validation</li>
-        <li>ICE: Impact × Confidence / Effort (1–10 scale)</li>
-        <li>Issue tree → hypothesis: 2–4 testable claims per branch</li>
-        <li>Exit criteria: Confirmed / Ruled out / Inconclusive</li>
-      </ul>
-    </div>
-    <div class="card card-sm">
-      <h3 style="color:var(--teal);font-size:13px">stakeholder-profiles.md</h3>
-      <ul style="font-size:12px;color:var(--gray-lt);padding-left:16px;margin-top:6px">
-        <li>Executive Sponsor (CTO/VP Eng) — business impact, 1-page max</li>
-        <li>Product Owner — user journeys, feature velocity</li>
-        <li>SRE — SLO/error budget, blameless retro</li>
-        <li>IT Ops Manager — MTTR, alert noise</li>
-        <li>App Developer — root cause, traces</li>
-        <li>Platform / DevOps — deploy safety, coverage</li>
-        <li>Security / Compliance — audit trails, regulatory</li>
-        <li>Data / Analytics Lead — confidence intervals, KPIs</li>
-      </ul>
-    </div>
-  </div>
-</section>
 
 <!-- ══════════════ PHASE FLOW ══════════════ -->
 <section class="page" id="page-phases">
@@ -530,11 +496,37 @@
 
 <!-- ══════════════ PHASE 0 ══════════════ -->
 <section class="page" id="page-phase0">
-  <div class="tag tag-gray" style="margin-bottom:12px">Phase 0</div>
+  <!-- Session init preamble (folded from Session Init page) -->
+  <h2 style="margin-top:0;margin-bottom:8px">Before Phase 0 — session init</h2>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:14px">The agent loads four long-term memory files in order and holds them for the entire session. This happens before any questions are asked.</p>
+  <div class="card" style="max-width:640px;margin-bottom:10px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:12px;color:var(--gray-lt)">
+      <div><code>domain-knowledge.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">Signal patterns, tech→UX→business mappings, DT terminology</div></div>
+      <div><code>dynatrace-playbooks.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">8 investigation workflows with step sequences and exit criteria</div></div>
+      <div><code>frameworks.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">MECE, ICE formula, issue-tree → hypothesis rules</div></div>
+      <div><code>stakeholder-profiles.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">8 role archetypes + named-leader overlays for Phase 3</div></div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--card-border);font-size:12px;color:var(--gray-lt);display:flex;gap:20px">
+      <div style="flex:1"><span class="tag tag-teal" style="margin-bottom:6px;display:inline-block">New engagement</span><br>Phase 0 creates <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code> and holds that path.</div>
+      <div style="flex:1"><span class="tag tag-gray" style="margin-bottom:6px;display:inline-block">Resume</span><br>Scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state: active</code> or <code>paused</code>; pick one.</div>
+    </div>
+  </div>
+
+  <div class="tag tag-gray" style="margin-bottom:12px;margin-top:28px">Phase 0</div>
   <h1>Context framing</h1>
   <p class="lead">Frame the engagement before any diagnosis work. Produces a complete <code>current-context.md</code> with all MUST-HAVE fields populated.</p>
 
-  <h2>Inputs loaded</h2>
+  <!-- Seed prompt generator callout -->
+  <div class="seed-callout">
+    <div class="seed-callout-icon">🌱</div>
+    <div>
+      <span class="tag tag-blue seed-callout-tag">Optional · Recommended for new users</span>
+      <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px">Seed Prompt Generator</div>
+      <p style="font-size:12px;color:var(--gray-lt);margin:0">A standalone HTML tool that guides you through the Phase 0 inputs and generates a structured seed prompt to paste into Claude Code. Open <code>html/seed-prompt-generator-src.html</code> in VS Code or the Claude Code Desktop App before starting your session. If you already know your inputs well, you can describe the problem directly — the generator is a starting-point aid, not a requirement.</p>
+    </div>
+  </div>
+
+  <h2>Inputs loaded for Phase 0</h2>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
     <span class="tag tag-teal">stakeholder-profiles.md</span>
     <span class="tag tag-teal">domain-knowledge.md</span>
@@ -758,28 +750,46 @@
   <p class="lead">Two deliverables: a leadership-ready written brief (one-pager) and a PowerPoint deck. The deck is only generated after explicit one-pager approval.</p>
 
   <!-- 3a -->
-  <h2>3a — Exec one-pager</h2>
-  <div class="card-grid">
-    <div class="card card-sm">
-      <div class="tag tag-gray" style="margin-bottom:8px">Markdown mode</div>
-      <p style="font-size:12px;margin:0">Async review; feeds into pptx-builder as source document</p>
-      <div style="font-family:monospace;font-size:11px;color:var(--teal);margin-top:8px">one-pager-YYYY-MM-DD.md</div>
+  <h2>3a — Exec one-pager (5-step orchestrator)</h2>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:4px">The exec-onepager skill runs in five sequential steps. Each step reads a reference file immediately before executing — never pre-loaded. The brand-humanizer pre-pass in Step 3 is mandatory and runs before HTML is touched.</p>
+
+  <div class="step-flow">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Recipe selection</div>
+        <div class="step-desc">Reads <code>layout-system.md</code>. Answers three narrative questions (tension, reader need, strongest evidence) before selecting components from the catalog. Records recipe + a <em>Why:</em> rationale before proceeding.</div>
+      </div>
     </div>
-    <div class="card card-sm">
-      <div class="tag tag-teal" style="margin-bottom:8px">HTML mode</div>
-      <p style="font-size:12px;margin:0">Projected / leadership review; DT Flow fonts + Insights lockup + wave backgrounds</p>
-      <div style="font-family:monospace;font-size:11px;color:var(--teal);margin-top:8px">&lt;deliverable-name&gt;.html</div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Content draft</div>
+        <div class="step-desc">Reads <code>steps/1-content-assembly.md</code>. Produces structured labeled text for every component — no HTML yet. Plan-fidelity rules apply: no re-ranking, no new findings, no upgrading open hypotheses to confirmed.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num step-mandatory">3</div>
+      <div>
+        <div class="step-title">Brand-humanizer pre-pass <span class="tag tag-magenta" style="margin-left:6px;font-size:10px">Mandatory</span></div>
+        <div class="step-desc">Reads <code>skills/brand-humanizer/SKILL.md</code>. Runs the full brand-humanizer on every piece of drafted copy before HTML is built. Fixes AI writing patterns (em dashes, rule-of-three, hedging) and DT voice violations (wrong product names, missing trademark symbols, passive voice). Fixing copy in structured text costs far less than fixing it in finished HTML.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">HTML build</div>
+        <div class="step-desc">Reads <code>steps/2-html-renderer.md</code>. Builds the HTML using humanized copy and the selected recipe. Follows component patterns from <code>layout-system.md</code> exactly — no improvised CSS or invented color values. Writes <code>&lt;deliverable-name&gt;.html</code> and companion <code>one-pager-YYYY-MM-DD.md</code>.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title">Brand gate</div>
+        <div class="step-desc">Reads <code>steps/3-brand-gate.md</code>. Runs the full checklist: one-page constraint · plan fidelity · brand text rules · accessibility · sources block · handoff readiness. Not marked done until every item passes.</div>
+      </div>
     </div>
   </div>
-
-  <h2>One-pager content structure</h2>
-  <ol class="steps" style="max-width:560px">
-    <li>Problem summary — 2–3 sentences, lead with business impact</li>
-    <li>Business impact — quantified with confidence notes if possible</li>
-    <li>Top findings — 3–5 bullets, each with evidence cited</li>
-    <li>Recommended actions — owner + timeframe + cost/risk paired inline</li>
-    <li>Risks &amp; decision asks — short para or 3 bullets; ends with specific ask</li>
-  </ol>
 
   <h2>HTML visual rules</h2>
   <div class="card card-sm" style="max-width:560px;font-size:12px;color:var(--gray-lt)">
@@ -787,9 +797,7 @@
       <div><strong style="color:var(--white)">Header</strong><br>Insights-Lockup-Horizontal-RGB_REV.svg (24–26px height)</div>
       <div><strong style="color:var(--white)">Fonts</strong><br>DT Flow Medium (headings), DT Flow Light (body), Arial fallback</div>
       <div><strong style="color:var(--white)">Wave backgrounds</strong><br>datalargebeam or datatrail — never particle series behind text &lt;13px</div>
-      <div><strong style="color:var(--white)">Overlay</strong><br>Dark left-to-right gradient (7,16,30 navy)</div>
       <div><strong style="color:var(--white)">Layout</strong><br>Two-column; balance left/right heights</div>
-      <div><strong style="color:var(--white)">Footer</strong><br>© 2026 Dynatrace, LLC. Confidential (#6F747F)</div>
     </div>
     <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--card-border)">
       <strong style="color:var(--white)">Color semantics:</strong>
@@ -797,13 +805,6 @@
       <span style="color:#C93FDB">magenta = gaps/risks</span> ·
       <span style="color:#6fa8ff">blue = open/CTA</span>
     </div>
-  </div>
-
-  <h2>Quality gates before finalizing</h2>
-  <div class="card-grid">
-    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Consultative lens</div><p style="font-size:12px;margin:0">Voice matches stakeholder profile + brand conformance</p></div>
-    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Customer lens</div><p style="font-size:12px;margin:0">Does the work match actual user experience?</p></div>
-    <div class="card card-sm"><div class="tag tag-magenta" style="margin-bottom:6px">Skeptic lens</div><p style="font-size:12px;margin:0">Surfaces the questions the leader will ask</p></div>
   </div>
 
   <!-- 3b -->
@@ -832,7 +833,7 @@
 <!-- ══════════════ SKILLS ══════════════ -->
 <section class="page" id="page-skills">
   <h1>Skills</h1>
-  <p class="lead">13 procedural skill files, each read immediately before its artifact is produced. Click any skill to see its procedure.</p>
+  <p class="lead">14 procedural skill files, each read immediately before its artifact is produced. Click any skill to see its procedure.</p>
 
   <h2>Phase-bound skills</h2>
 
@@ -925,7 +926,20 @@
       <div class="chevron" id="chev-sk-op">▾</div>
     </div>
     <div class="skill-body" id="body-sk-op">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Produces markdown or HTML one-pager. Invokes Consultative, Customer, and Skeptic lenses before finalizing. Style rules: sentence case, active voice, no acronyms without definition, tradeoffs inline.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px"><strong style="color:var(--white)">5-step orchestrator.</strong> (1) Recipe selection from <code>layout-system.md</code> — answers 3 narrative questions before choosing components. (2) Content draft in structured text — plan-fidelity rules apply. (3) <strong style="color:var(--magenta)">Brand-humanizer pre-pass (mandatory)</strong> — AI writing patterns and DT voice violations fixed before HTML is built. (4) HTML build from humanized copy. (5) Brand gate checklist. Writes <code>one-pager-YYYY-MM-DD.md</code> and <code>&lt;deliverable-name&gt;.html</code>.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-bh')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(201,63,219,.12)">✍️</div>
+        <div><div style="font-size:13px;font-weight:500">brand-humanizer</div><div style="font-size:11px;color:var(--gray)">Phase 3 · mandatory pre-pass · skills/brand-humanizer/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-bh">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-bh">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Clears two independent bars before any copy ships: (1) reads like a person wrote it — no em dashes, no "stands as a testament," no hedging, no rule-of-three, no chatbot filler; (2) reads like Dynatrace wrote it — sentence case, active voice, correct product terminology, trademark symbols, American spelling, serial commas, no disallowed phrasings. Always cross-checks against <code>brand-spec.md</code> Sections 6–7. Runs as the mandatory Step 3 in exec-onepager and as the equivalent pre-pass in pptx-builder.</p>
     </div>
   </div>
 
@@ -1081,49 +1095,76 @@
 
 <!-- ══════════════ ARCHITECTURE MAP ══════════════ -->
 <section class="page" id="page-arch-map">
-  <h1>Architecture graph</h1>
-  <p class="lead">The agent and everything it touches, as a live topology. Drag any node to rearrange it; hover one to trace its connections.</p>
+  <h1>Architecture — step-through</h1>
+  <p class="lead">Click any phase to see which skills run, which lenses are dispatched, and what artifacts it produces.</p>
 
-  <div style="margin:22px 0 8px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:11px;color:var(--gray)">
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#cfd4dc;display:inline-block"></span>You</span>
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:50%;background:#49C2B3;display:inline-block"></span>Agent</span>
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#6fa8ff;display:inline-block"></span>Phase</span>
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#C93FDB;display:inline-block"></span>Lens</span>
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#E6A23C;display:inline-block"></span>Memory</span>
-    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:transparent;border:1.5px dashed #8a93a6;display:inline-block"></span>Background</span>
-    <button id="ag-reset" style="margin-left:auto;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--gray);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit">↻ Reshuffle</button>
-  </div>
-
-  <div style="background:rgba(7,16,30,0.45);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden">
-    <svg id="arch-graph" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;touch-action:none;font-family:'DTFlow',Arial,sans-serif">
-      <defs>
-        <marker id="ag-arrow-flow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6fa8ff"/></marker>
-        <marker id="ag-arrow-disp" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#C93FDB"/></marker>
-      </defs>
-      <g id="ag-edges"></g>
-      <g id="ag-nodes"></g>
-    </svg>
-  </div>
-
-  <h2>How to read it</h2>
-  <div class="card-grid">
-    <div class="card card-sm">
-      <div class="tag tag-teal" style="margin-bottom:8px">The nodes</div>
-      <p style="font-size:13px;margin:0"><strong style="color:#49C2B3">The agent</strong> is the hub — it reads memory, runs the phases, and dispatches the lenses. <strong style="color:#cfd4dc">You</strong> bring the problem and approve every gate. <strong style="color:#6fa8ff">Phases</strong> run in sequence, <strong style="color:#C93FDB">lenses</strong> are critique sub-agents, and <strong style="color:#E6A23C">memory</strong> is two isolated tiers — the root library and per-client workspaces (the live engagement folder lives inside the active client's workspace).</p>
+  <!-- Phase flow -->
+  <div class="sf-phase-row">
+    <div class="sf-seed" data-sf="seed" onclick="sfSelect(this,'seed')">
+      <div class="sf-seed-label">Seed Prompt</div>
+      <div class="sf-seed-sub">Optional entry point</div>
     </div>
-    <div class="card card-sm">
-      <div class="tag tag-magenta" style="margin-bottom:8px">The links</div>
-      <p style="font-size:13px;margin:0"><strong style="color:#cfd4dc">You ↔ Agent</strong> is your direction and gate approvals. <strong style="color:#6fa8ff">Phase → phase</strong> is the run order. <strong style="color:#C93FDB">Phase → lens</strong> shows which phase dispatches which critique. <strong style="color:#E6A23C">Agent ↔ memory</strong> is reads and writes.</p>
+    <div class="sf-conn"><span class="sf-conn-arrow">→</span><span class="sf-conn-label">opt</span></div>
+    <div class="sf-phase" data-sf="p0" onclick="sfSelect(this,'p0')">
+      <div class="sf-phase-num">0</div>
+      <div class="sf-phase-name">Context</div>
     </div>
-    <div class="card card-sm">
-      <div class="tag tag-blue" style="margin-bottom:8px">Where the lenses run</div>
-      <p style="font-size:13px;margin:0"><strong style="color:var(--white)">Diagnose</strong> dispatches MECE, ICE, and Consultative (framing). <strong style="color:var(--white)">Plan</strong> runs MECE, then the persona council (Skeptic, Optimist, Customer, Consultative) over ≥3 rounds, then ICE re-ranks. <strong style="color:var(--white)">Deliver</strong> dispatches none — it just packages the approved plan.</p>
+    <div class="sf-conn"><span class="sf-conn-arrow">→</span><span class="sf-conn-label">gate</span></div>
+    <div class="sf-phase" data-sf="p1" onclick="sfSelect(this,'p1')">
+      <div class="sf-phase-num">1</div>
+      <div class="sf-phase-name">Diagnose</div>
+    </div>
+    <div class="sf-conn"><span class="sf-conn-arrow">→</span><span class="sf-conn-label">gate</span></div>
+    <div class="sf-phase" data-sf="p2" onclick="sfSelect(this,'p2')">
+      <div class="sf-phase-num">2</div>
+      <div class="sf-phase-name">Plan</div>
+    </div>
+    <div class="sf-conn"><span class="sf-conn-arrow">→</span><span class="sf-conn-label">gate</span></div>
+    <div class="sf-phase" data-sf="p3" onclick="sfSelect(this,'p3')">
+      <div class="sf-phase-num">3</div>
+      <div class="sf-phase-name">Deliver</div>
     </div>
   </div>
 
-  <div style="max-width:660px;margin-top:18px;padding:14px 18px;border:1px solid rgba(201,63,219,0.22);border-radius:10px;background:rgba(201,63,219,0.04)">
-    <p style="font-size:12.5px;color:var(--gray);margin:0 0 8px"><strong style="color:var(--white)">Reading the clusters.</strong> The lenses pull toward the phases that use them, so MECE, ICE, and Consultative sit between Diagnose and Plan (both dispatch them), while Skeptic, Optimist, and Customer cluster on Plan alone. The background <em>doc-freshness</em> check hangs off Phase 0 only.</p>
-    <p style="font-size:12.5px;color:var(--gray);margin:0">Deliver has no lens links by design — it inherits the council-reviewed plan and packages it. The two memory tiers stay clustered on the agent; the Client Workspace is isolated per client and never crosses to another, and the live engagement folder lives inside it.</p>
+  <!-- Lenses band -->
+  <div class="sf-lenses-band">
+    <div class="sf-lenses-label">Sub-agents / Lenses</div>
+    <div class="sf-lenses-row">
+      <span class="sf-lens" id="sfl-freshness">doc-freshness</span>
+      <span class="sf-lens" id="sfl-mece">MECE</span>
+      <span class="sf-lens" id="sfl-ice">ICE</span>
+      <span class="sf-lens" id="sfl-consultative">Consultative</span>
+      <span class="sf-lens" id="sfl-skeptic">Skeptic</span>
+      <span class="sf-lens" id="sfl-optimist">Optimist</span>
+      <span class="sf-lens" id="sfl-customer">Customer</span>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="sf-detail" id="sf-detail">
+    <p style="color:var(--gray);font-size:13px;text-align:center;margin:0;padding:8px 0">Click a phase above to see what runs inside it.</p>
+  </div>
+
+  <!-- Memory tiers -->
+  <h2>Memory tiers</h2>
+  <div class="sf-mem-row">
+    <div class="sf-mem" style="border-color:rgba(73,194,179,.3);background:rgba(73,194,179,.04)">
+      <div class="sf-mem-name" style="color:var(--teal)">Root Library</div>
+      <div class="sf-mem-path">memory/long-term/</div>
+      <div class="sf-mem-rule">Read every session · Never contains client data · Writes require user approval</div>
+    </div>
+    <div class="sf-mem-arr">↔</div>
+    <div class="sf-mem" style="border-color:rgba(201,63,219,.3);background:rgba(201,63,219,.04)">
+      <div class="sf-mem-name" style="color:var(--magenta)">Client Workspace</div>
+      <div class="sf-mem-path">memory/clients/&lt;client&gt;/</div>
+      <div class="sf-mem-rule">Isolated per client · Never read outside active session · Template at clients/_template/</div>
+    </div>
+    <div class="sf-mem-arr">⊃</div>
+    <div class="sf-mem" style="border-color:rgba(25,102,255,.3);background:rgba(25,102,255,.04)">
+      <div class="sf-mem-name" style="color:#6fa8ff">Engagement Folder</div>
+      <div class="sf-mem-path">…/engagements/YYYY-MM-DD-slug/</div>
+      <div class="sf-mem-rule">Self-describing via <code>state:</code> in current-context.md · No global pointer file</div>
+    </div>
   </div>
 </section>
 
@@ -1306,26 +1347,33 @@
     <div class="qs-row">
       <div class="qs-num">1</div>
       <div>
-        <strong style="font-size:13px">Open with the problem</strong>
-        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Start with: <em>"Describe the problem you're trying to solve."</em> — or just describe the problem directly. The agent reads context-framing/SKILL.md and begins Phase 0.</p>
+        <strong style="font-size:13px">Optional: use the Seed Prompt Generator</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Open <code>html/seed-prompt-generator-src.html</code> in VS Code or Claude Code Desktop App. It guides you through the Phase 0 inputs and builds a structured seed prompt to paste in. Recommended for new users — skip it if you know your inputs well.</p>
       </div>
     </div>
     <div class="qs-row">
       <div class="qs-num">2</div>
       <div>
-        <strong style="font-size:13px">Answer 9 clarifying questions</strong>
-        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">One at a time, in adaptive order. If your opening paragraph covers Q1 and Q2, the agent skips them. See the table below.</p>
+        <strong style="font-size:13px">Open with the problem</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Start with: <em>"Describe the problem you're trying to solve."</em> — or paste your seed prompt directly. The agent reads context-framing/SKILL.md and begins Phase 0.</p>
       </div>
     </div>
     <div class="qs-row">
       <div class="qs-num">3</div>
+      <div>
+        <strong style="font-size:13px">Answer up to 9 clarifying questions</strong>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">One at a time, in adaptive order. If your opening paragraph covers Q1 and Q2, the agent skips them. See the table below.</p>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-num">4</div>
       <div>
         <strong style="font-size:13px">Approve Phase 0</strong>
         <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Agent presents reframed engagement and writes <code>current-context.md</code>. Approve to proceed, redirect to adjust scope, or iterate through a lens.</p>
       </div>
     </div>
     <div class="qs-row">
-      <div class="qs-num">4</div>
+      <div class="qs-num">5</div>
       <div>
         <strong style="font-size:13px">Continue through Phases 1, 2, 3</strong>
         <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Each phase has its own gate and its own artifacts. Don't skip gates — they catch bad assumptions before downstream work bakes them in.</p>
@@ -1759,7 +1807,11 @@ Output: `action-plan.md`.
 
 ### exec-onepager
 
-Produce a one-page written summary tailored to a *named* stakeholder. Reads the matching profile in `stakeholder-profiles.md` and applies brand directives from `brand-spec.md`.
+Produce a one-page written summary tailored to a *named* stakeholder. Runs as a **5-step orchestrator**: (1) recipe selection from `layout-system.md`, (2) content draft in structured text, (3) brand-humanizer pre-pass (mandatory), (4) HTML build, (5) brand gate checklist. Reads the matching profile in `stakeholder-profiles.md` and brand directives from `brand-spec.md`.
+
+### brand-humanizer
+
+Mandatory Phase 3 pre-pass for all copy before HTML is built. Clears two independent bars: reads like a person wrote it (no em dashes, hedging, or AI filler) and reads like Dynatrace wrote it (correct product names, trademark symbols, sentence case, serial commas). Cross-checks against `brand-spec.md` Sections 6–7.
 
 ### pptx-builder
 
@@ -2098,12 +2150,18 @@ When the official PowerPoint template and the brand PDF disagree, the **PowerPoi
 
 ## What the one-pager looks like
 
-Produced by `skills/exec-onepager/SKILL.md`. One page, written for a *named* stakeholder. The voice and emphasis genuinely change between stakeholders — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product:
+Produced by `skills/exec-onepager/SKILL.md` via a **5-step orchestrator**. One page, written for a *named* stakeholder. The voice and emphasis genuinely change between stakeholders — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product:
 
 - **VP of Reliability** — error-budget framing, SLO impact, on-call burden, post-incident learnings.
 - **VP of Product** — feature impact, customer-experience surface, release velocity, competitive considerations.
 
-Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks.
+### The five steps
+
+1. **Recipe selection** — reads `layout-system.md`, answers three narrative questions (tension, reader need, strongest evidence) before picking components from the catalog.
+2. **Content draft** — structured labeled text for every component; plan-fidelity rules apply (no re-ranking, no new findings).
+3. **Brand-humanizer pre-pass** (mandatory) — runs `skills/brand-humanizer/SKILL.md` on every piece of copy *before* HTML is built. Clears two bars: reads like a person, reads like Dynatrace.
+4. **HTML build** — assembles the page from humanized copy and selected recipe; no improvised CSS.
+5. **Brand gate** — full checklist (one-page constraint, plan fidelity, brand text, accessibility, handoff readiness).
 
 ## What the deck looks like
 
@@ -2119,7 +2177,7 @@ Practical implications you'll see in the output:
 
 ## Voice and tone
 
-Voice comes from `styleguide.dynatrace.com` and from the matching stakeholder profile. The three Phase 3 lenses do most of the enforcement:
+Voice comes from `styleguide.dynatrace.com` and the matching stakeholder profile. The **brand-humanizer** (mandatory Step 3 in exec-onepager) handles most of the enforcement before HTML is built. The three Phase 3 lenses add a final check:
 
 - The **Consultative lens** makes sure the deliverable reads as the firm's voice for a technical-leadership audience.
 - The **Customer lens** checks that the deliverable matches what users actually experience.
@@ -2611,175 +2669,93 @@ function navTo(page) {
   if (page === 'docs') initDocs();
   if (page === 'files') initFiles();
   if (page === 'source-files') initSourceFiles();
-  if (page === 'arch-map') ensureArchGraph(); else pauseArchGraph();
 }
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => navTo(item.dataset.page));
 });
 
-// ── Architecture force-directed graph (self-contained, no deps) ──
-let archGraph = null;
-function ensureArchGraph(){ if(!archGraph) archGraph = buildArchGraph(); if(archGraph) archGraph.start(); }
-function pauseArchGraph(){ if(archGraph) archGraph.stop(); }
-
-function buildArchGraph(){
-  const svg = document.getElementById('arch-graph');
-  if(!svg) return null;
-  const NS = 'http://www.w3.org/2000/svg';
-  const W = 900, H = 620, CX = W/2, CY = H/2;
-  const COL  = {human:'#cfd4dc', agent:'#49C2B3', phase:'#6fa8ff', lens:'#C93FDB', mem:'#E6A23C', bg:'#8a93a6'};
-  const ECOL = {gate:'#cfd4dc', flow:'#6fa8ff', disp:'#C93FDB', mem:'#E6A23C'};
-
-  const NODES = [
-    {id:'you',          label:'You',                  type:'human', r:20},
-    {id:'agent',        label:'Insights Forge agent', type:'agent', r:30},
-    {id:'p0',           label:'Phase 0 · Context',    type:'phase', r:21},
-    {id:'p1',           label:'Phase 1 · Diagnose',   type:'phase', r:21},
-    {id:'p2',           label:'Phase 2 · Plan',       type:'phase', r:21},
-    {id:'p3',           label:'Phase 3 · Deliver',    type:'phase', r:21},
-    {id:'mece',         label:'MECE',                 type:'lens',  r:14},
-    {id:'ice',          label:'ICE',                  type:'lens',  r:14},
-    {id:'skeptic',      label:'Skeptic',              type:'lens',  r:14},
-    {id:'optimist',     label:'Optimist',             type:'lens',  r:14},
-    {id:'customer',     label:'Customer',             type:'lens',  r:14},
-    {id:'consultative', label:'Consultative',         type:'lens',  r:14},
-    {id:'fresh',        label:'doc-freshness',        type:'bg',    r:13},
-    {id:'root',         label:'Root Library',         type:'mem',   r:18},
-    {id:'proj',         label:'Engagement folder',    type:'mem',   r:18},
-    {id:'client',       label:'Client Workspace',     type:'mem',   r:18},
-  ];
-  const EDGES = [
-    {s:'you',t:'agent',type:'gate'},
-    {s:'agent',t:'p0',type:'flow'},{s:'p0',t:'p1',type:'flow'},{s:'p1',t:'p2',type:'flow'},{s:'p2',t:'p3',type:'flow'},
-    {s:'agent',t:'root',type:'mem'},{s:'agent',t:'proj',type:'mem'},{s:'agent',t:'client',type:'mem'},
-    {s:'p0',t:'fresh',type:'disp'},
-    {s:'p1',t:'mece',type:'disp'},{s:'p1',t:'ice',type:'disp'},{s:'p1',t:'consultative',type:'disp'},
-    {s:'p2',t:'mece',type:'disp'},{s:'p2',t:'skeptic',type:'disp'},{s:'p2',t:'optimist',type:'disp'},
-    {s:'p2',t:'customer',type:'disp'},{s:'p2',t:'consultative',type:'disp'},{s:'p2',t:'ice',type:'disp'},
-  ];
-  const REST = {gate:120, flow:115, disp:88, mem:96};
-
-  const byId = {}; NODES.forEach(n => byId[n.id] = n);
-  const adj  = {}; NODES.forEach(n => adj[n.id] = new Set());
-  EDGES.forEach(e => { adj[e.s].add(e.t); adj[e.t].add(e.s); });
-
-  function seed(){
-    NODES.forEach((n,i) => {
-      const a = i / NODES.length * Math.PI * 2;
-      n.x = CX + Math.cos(a)*200 + (Math.random()-0.5)*50;
-      n.y = CY + Math.sin(a)*165 + (Math.random()-0.5)*50;
-      n.vx = 0; n.vy = 0; n.fixed = false;
-    });
-    byId.agent.x = CX; byId.agent.y = CY;
+// ── Architecture step-through ──
+const SF_DATA = {
+  seed: {
+    title: 'Seed Prompt Generator',
+    tag: 'Pre-Phase 0 · Optional',
+    desc: 'A standalone HTML tool that guides you through the Phase 0 inputs and generates a structured seed prompt. Open <code>html/seed-prompt-generator-src.html</code> in VS Code or the Claude Code Desktop App before starting a session. If you already know your inputs, describe the problem directly.',
+    skills: [],
+    lenses: [],
+    artifacts: ['Seed prompt (copy → paste into Claude Code to begin Phase 0)']
+  },
+  p0: {
+    title: 'Phase 0 — Context',
+    tag: 'context-framing skill',
+    desc: 'Before questions begin, the agent loads 4 long-term memory files and establishes the active engagement folder. Up to 9 clarifying questions produce <code>current-context.md</code>. A doc-freshness check runs in the background while questions are being answered.',
+    skills: ['context-framing'],
+    lenses: ['doc-freshness (background — P0 only)'],
+    artifacts: ['current-context.md']
+  },
+  p1: {
+    title: 'Phase 1 — Diagnose',
+    tag: 'mece-decomposition → hypothesis-generation → signal-mapping → ice-scoring',
+    desc: 'Decomposes the framed problem into a MECE issue tree, generates 2–4 ranked hypotheses per branch, maps technical signals → UX outcomes → business KPIs. Three mandatory lenses run in sequence before the gate.',
+    skills: ['mece-decomposition', 'hypothesis-generation', 'signal-mapping', 'ice-scoring'],
+    lenses: ['MECE (issue tree critique)', 'Consultative (framing pass)', 'ICE (after signals map)'],
+    artifacts: ['issue-tree.md', 'hypotheses.md', 'signals-map.md']
+  },
+  p2: {
+    title: 'Phase 2 — Plan',
+    tag: 'action-plan-builder + full persona council',
+    desc: 'Translates ranked hypotheses into an action plan with owners, exit criteria, and timeframes. A deliberating persona council runs ≥3 rounds, each panelist blind to others in Round 1. Agent reconciles every material disagreement into "Tensions resolved." ICE re-ranks before the gate.',
+    skills: ['action-plan-builder'],
+    lenses: ['MECE (opportunity set)', 'Skeptic', 'Optimist', 'Customer', 'Consultative', 'ICE (re-rank)'],
+    artifacts: ['action-plan.md']
+  },
+  p3: {
+    title: 'Phase 3 — Deliver',
+    tag: 'exec-onepager (5-step) → brand-humanizer → pptx-builder',
+    desc: 'Produces exec-ready deliverables via a 5-step orchestrator: (1) recipe selection, (2) content draft, (3) brand-humanizer pre-pass (mandatory — fixes AI writing + DT voice before HTML is touched), (4) HTML build, (5) brand gate. Deck is generated only after one-pager approval.',
+    skills: ['exec-onepager (5-step)', 'brand-humanizer', 'pptx-builder'],
+    lenses: ['Consultative', 'Customer', 'Skeptic'],
+    artifacts: ['one-pager-YYYY-MM-DD.md', '&lt;deliverable&gt;.html', 'deck-YYYY-MM-DD.pptx']
   }
-  seed();
+};
 
-  const gE = document.getElementById('ag-edges'), gN = document.getElementById('ag-nodes');
-  gE.innerHTML = ''; gN.innerHTML = '';
+const SF_LENS_MAP = {
+  freshness:    ['p0'],
+  mece:         ['p1', 'p2'],
+  ice:          ['p1', 'p2'],
+  consultative: ['p1', 'p2', 'p3'],
+  skeptic:      ['p2', 'p3'],
+  optimist:     ['p2'],
+  customer:     ['p2', 'p3']
+};
 
-  EDGES.forEach(e => {
-    const l = document.createElementNS(NS,'line');
-    l.setAttribute('stroke', ECOL[e.type]);
-    l.setAttribute('stroke-width', (e.type==='gate'||e.type==='flow') ? 2 : 1.3);
-    l.setAttribute('stroke-opacity','0.4');
-    l.setAttribute('stroke-linecap','round');
-    if(e.type==='mem') l.setAttribute('stroke-dasharray','4,4');
-    if(e.type==='disp'){ l.setAttribute('stroke-dasharray','1,4'); l.setAttribute('marker-end','url(#ag-arrow-disp)'); }
-    if(e.type==='flow') l.setAttribute('marker-end','url(#ag-arrow-flow)');
-    e.el = l; gE.appendChild(l);
+function sfSelect(el, key) {
+  document.querySelectorAll('[data-sf]').forEach(n => n.classList.remove('sf-active'));
+  el.classList.add('sf-active');
+
+  document.querySelectorAll('.sf-lens').forEach(l => {
+    const lk = l.id.replace('sfl-', '');
+    const phases = SF_LENS_MAP[lk] || [];
+    const on = phases.includes(key);
+    l.classList.toggle('sf-on', on);
+    l.classList.toggle('sf-dim', key !== 'seed' && !on);
+    if (key === 'seed') { l.classList.remove('sf-on'); l.classList.remove('sf-dim'); }
   });
 
-  NODES.forEach(n => {
-    const g = document.createElementNS(NS,'g'); g.style.cursor = 'grab';
-    const c = document.createElementNS(NS,'circle');
-    c.setAttribute('r', n.r);
-    c.setAttribute('fill', COL[n.type]);
-    c.setAttribute('fill-opacity', n.type==='bg' ? '0.16' : '0.24');
-    c.setAttribute('stroke', COL[n.type]);
-    c.setAttribute('stroke-width', n.type==='agent' ? 2.5 : 1.6);
-    if(n.type==='bg') c.setAttribute('stroke-dasharray','4,3');
-    const t = document.createElementNS(NS,'text');
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('fill', n.type==='agent' ? '#eafffb' : '#cdd2da');
-    t.setAttribute('font-size', n.type==='agent' ? 12 : (n.type==='phase' ? 11 : 10));
-    t.setAttribute('font-weight', (n.type==='agent'||n.type==='phase') ? '500' : '400');
-    t.setAttribute('dy', n.r + 14);
-    t.textContent = n.label;
-    g.appendChild(c); g.appendChild(t);
-    n.gEl = g;
-    g.addEventListener('mouseenter', () => highlight(n.id));
-    g.addEventListener('mouseleave', () => highlight(null));
-    g.addEventListener('pointerdown', ev => startDrag(ev, n));
-    gN.appendChild(g);
-  });
-
-  function highlight(id){
-    NODES.forEach(n => { n.gEl.style.opacity = (id===null || n.id===id || adj[id].has(n.id)) ? 1 : 0.12; });
-    EDGES.forEach(e => {
-      const on = id!==null && (e.s===id || e.t===id);
-      e.el.setAttribute('stroke-opacity', id===null ? 0.4 : (on ? 0.95 : 0.05));
-    });
-  }
-
-  let drag = null;
-  function toSvg(ev){
-    const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
-    const m = svg.getScreenCTM(); if(!m) return {x:CX,y:CY};
-    const r = pt.matrixTransform(m.inverse()); return {x:r.x, y:r.y};
-  }
-  function startDrag(ev, n){ drag = n; n.fixed = true; n.gEl.style.cursor='grabbing'; reheat(); ev.preventDefault(); }
-  window.addEventListener('pointermove', ev => { if(!drag) return; const p = toSvg(ev); drag.x = p.x; drag.y = p.y; drag.vx = 0; drag.vy = 0; });
-  window.addEventListener('pointerup', () => { if(drag){ drag.fixed = false; drag.gEl.style.cursor='grab'; drag = null; } });
-
-  let alpha = 1, running = false, raf = null;
-  function reheat(){ alpha = Math.max(alpha, 0.5); start(); }
-  function start(){ if(running) return; running = true; raf = requestAnimationFrame(tick); }
-  function stop(){ running = false; if(raf) cancelAnimationFrame(raf); raf = null; }
-
-  function tick(){
-    if(!running) return;
-    alpha += (0 - alpha) * 0.012;
-    const A = alpha;
-    for(let i=0;i<NODES.length;i++){
-      const a = NODES[i];
-      for(let j=i+1;j<NODES.length;j++){
-        const b = NODES[j];
-        let dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy; if(d2<1) d2=1;
-        const d = Math.sqrt(d2), f = 3600/d2 * A, ux = dx/d, uy = dy/d;
-        a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
-      }
-    }
-    EDGES.forEach(e => {
-      const a = byId[e.s], b = byId[e.t];
-      let dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy)||1;
-      const f = (d - (REST[e.type]||100)) * 0.03 * A, ux = dx/d, uy = dy/d;
-      a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
-    });
-    NODES.forEach(n => {
-      const cf = (n.id==='agent' ? 0.03 : 0.006) * A;
-      n.vx += (CX - n.x)*cf; n.vy += (CY - n.y)*cf;
-      n.vx *= 0.85; n.vy *= 0.85;
-      if(!n.fixed){ n.x += n.vx; n.y += n.vy; }
-      n.x = Math.max(n.r+8, Math.min(W-n.r-8, n.x));
-      n.y = Math.max(n.r+8, Math.min(H-n.r-24, n.y));
-    });
-    EDGES.forEach(e => {
-      const a = byId[e.s], b = byId[e.t];
-      let dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy)||1, ux = dx/d, uy = dy/d;
-      const pad = (e.type==='flow'||e.type==='disp') ? 6 : 0;
-      e.el.setAttribute('x1', (a.x + ux*a.r).toFixed(1)); e.el.setAttribute('y1', (a.y + uy*a.r).toFixed(1));
-      e.el.setAttribute('x2', (b.x - ux*(b.r+pad)).toFixed(1)); e.el.setAttribute('y2', (b.y - uy*(b.r+pad)).toFixed(1));
-    });
-    NODES.forEach(n => n.gEl.setAttribute('transform','translate('+n.x.toFixed(1)+','+n.y.toFixed(1)+')'));
-    if(alpha < 0.004 && !drag){ running = false; raf = null; return; }
-    raf = requestAnimationFrame(tick);
-  }
-
-  function reshuffle(){ seed(); alpha = 1; start(); }
-  const resetBtn = document.getElementById('ag-reset');
-  if(resetBtn) resetBtn.addEventListener('click', reshuffle);
-
-  return { start, stop, reheat, reshuffle };
+  const d = SF_DATA[key];
+  if (!d) return;
+  const skillsHtml = d.skills.length
+    ? '<div class="sf-detail-row"><div class="sf-detail-lbl">Skills</div><div>' + d.skills.map(s => `<span class="tag tag-teal" style="margin:0 4px 4px 0">${s}</span>`).join('') + '</div></div>'
+    : '';
+  const lensHtml = d.lenses.length
+    ? '<div class="sf-detail-row"><div class="sf-detail-lbl">Lenses</div><div>' + d.lenses.map(l => `<span class="tag tag-magenta" style="margin:0 4px 4px 0">${l}</span>`).join('') + '</div></div>'
+    : '';
+  const artHtml = d.artifacts.length
+    ? '<div class="sf-detail-row"><div class="sf-detail-lbl">Artifacts</div><div style="font-size:13px;color:var(--gray-lt)">' + d.artifacts.map(a => `<code class="ic">${a}</code>`).join('<span style="margin:0 6px;color:var(--gray)">·</span>') + '</div></div>'
+    : '';
+  document.getElementById('sf-detail').innerHTML =
+    `<div class="sf-detail-header"><strong style="color:var(--white);font-size:14px">${d.title}</strong> <span class="tag tag-gray" style="margin-left:8px;font-size:10px">${d.tag}</span></div>` +
+    `<p style="font-size:13px;color:var(--gray-lt);margin:8px 0 10px;max-width:660px">${d.desc}</p>` +
+    skillsHtml + lensHtml + artHtml;
 }
 
 function toggleSkill(id) {

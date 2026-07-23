@@ -78,15 +78,15 @@ The order matters here: **one-pager first, deck second**. The one-pager forces t
 
 **Skills the agent reads, in this order.**
 
-- [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md) — one-page written summary.
-- [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md) — PowerPoint deck.
+- [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md) — five-step orchestrator: recipe selection, content draft, brand-humanizer pre-pass (mandatory Step 3, runs before HTML is built), HTML build, and brand gate.
+- [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md) — PowerPoint deck (only after the one-pager is approved).
 
 **Files the agent reads before producing anything.**
 
 - [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) — colors, typography, layouts, voice, terminology, footer conventions. The brand spec is authoritative; the agent never improvises off-spec. See [deliverables.md](deliverables.md) for what this means in practice.
 - The matching profile in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md). Voice and emphasis come from here — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product.
 
-**Lenses the phase runs.** None. Phase 3 is **pure packaging** of a plan the persona panel already reviewed and you already approved at the Phase 2 gate. No critique lens runs here — the substance, framing, priorities, and risks were settled in Phase 2, and re-opening them in Phase 3 is a signal to reopen Phase 2, not to patch the one-pager. What remains in Phase 3 is mechanical: the one-page constraint, brand conformance (sentence-case headings, product-name trademarks, footer, palette), and — for the HTML one-pager — a legibility screenshot pass. Those are formatting gates, not critique. You can still invoke any of the six lenses on demand at the gate if you want a second look, but none runs automatically.
+**Lenses the phase runs.** None. Phase 3 is **pure packaging** of a plan the persona panel already reviewed and you already approved at the Phase 2 gate. No critique lens runs here — the substance, framing, priorities, and risks were settled in Phase 2, and re-opening them in Phase 3 is a signal to reopen Phase 2, not to patch the one-pager. What remains in Phase 3 is mechanical: the brand-humanizer pre-pass (Step 3 — fixes AI writing patterns and DT voice violations on structured copy before the HTML is built), the one-page constraint, brand conformance (sentence-case headings, product-name trademarks, footer, palette), and the brand gate checklist. Those are formatting gates, not critique. You can still invoke any of the six lenses on demand at the gate if you want a second look, but none runs automatically.
 
 **The gate question.** *"Is this ready to send to the named stakeholder?"* — asked separately for the one-pager and the deck.
 
