@@ -59,14 +59,14 @@ The Phase 2 plan is built by a **deliberating panel of perspectives**, in a deli
 5. **Document risks and tradeoffs.** Every recommendation has a cost. Pair each high-impact recommendation with its risk and a mitigation in the same line. The Consultative lens (step 6) and the Phase 3 one-pager both depend on this — surface it now rather than leaving it to be invented downstream.
 6. **Convene the deliberating panel — Skeptic, Optimist, Customer, Consultative — over at least three rounds.** This is an AI council, not a relay. Hand every panelist the draft plan **and** the client's `environment.md` (or the environment facts) so critiques are grounded in what this client can actually observe, not generic product capability.
 
-   - **Round 1 — Independent positions (parallel, blind).** Dispatch all four lenses at once, each critiquing the draft *only* from its own vantage, none seeing the others' output. Collect four independent position statements.
+   - **Round 1 — Independent positions (parallel, blind).** Dispatch all four lenses at once **in a single message** so they run concurrently. Include in every lens's dispatch prompt: (a) the draft plan, (b) the client's `environment.md` facts, and (c) the out-of-scope exclusions copied verbatim from `current-context.md`. Each lens critiques the draft *only* from its own vantage, none seeing the others' output. Collect four independent position statements. **Round 2 and Round 3 are likewise single messages** — each round goes out all at once, not one lens at a time.
      - **Skeptic** (`.claude/agents/skeptic-lens.md`) — fragile assumptions, weak evidence, instrumentation the plan needs but the client lacks, the questions a leader will ask.
      - **Optimist** (`.claude/agents/optimist-lens.md`) — unclaimed upside, higher ambition, capabilities the client already owns but underuses, actions that could run in parallel.
      - **Customer** (`.claude/agents/customer-lens.md`) — whether the plan targets what users actually experience, given the client's real RUM / Session Replay footprint.
      - **Consultative** (`.claude/agents/consultative-lens.md`) — whether it reads as decisions for the named senior leader, with each tradeoff surfaced honestly.
    - **Round 2 — Cross-examination (parallel).** Give each panelist the other three Round-1 positions. Each responds: where it agrees, where it contradicts another lens and why, what it concedes, what it holds firm on.
-   - **Round 3 — Convergence (parallel).** Give each panelist the Round-2 reactions. Each states its **final position** — the strongest version of its view after the debate — and flags explicitly any tension it cannot concede.
-   - **Continue if needed.** Three rounds is the floor. If panelists are still moving positions or a material tension is unresolved, run another round; stop when positions stabilize.
+   - **Round 3 — Convergence (conditional, parallel).** After reading all Round-2 positions: if every material tension has been conceded or resolved (i.e., no lens still contradicts another on a recommendation, evidence claim, or risk severity), **skip Round 3** and proceed directly to Reconciliation — the panel has converged. If any material tension remains unresolved after Round 2, dispatch Round 3 as a single message: give each panelist the Round-2 reactions; each states its **final position** and explicitly flags any tension it cannot concede. The escape hatch: if the agent has read both sides and the residual disagreement is a matter of degree rather than a binary (e.g., "high risk" vs "medium risk"), rule on it in Reconciliation without a third round.
+   - **Continue beyond Round 3 if needed.** Three rounds is the floor. If panelists are still moving positions on a binary claim after Round 3, run one more round; stop when positions stabilize or the agent rules in Reconciliation.
 
    **Reconciliation — the agent decides (after the rounds).** Read every panelist's final position. For **each material disagreement** — not only the two recurring pairs below — record in a **"Tensions resolved"** subsection of `action-plan.md`: (a) the claim in dispute, (b) each side's logic, and (c) the agent's ruling and why. Resolve each explicitly in the revised plan rather than splitting the difference or averaging it away. **Default tie-break** when no specific rule applies: weight the evidence, and escalate any unresolved high-severity Skeptic risk into the decision-asks section so leadership rules on it. Two conflicts recur and have set tie-breaks:
    - **Optimist vs Skeptic** — ambition against caution. Decide how much upside the plan claims given the evidence, and say which way you ruled.
@@ -76,6 +76,16 @@ The Phase 2 plan is built by a **deliberating panel of perspectives**, in a deli
 7. **Re-rank the opportunities — ICE lens.** After the panel, invoke the **ICE lens** (`.claude/agents/ice-lens.md`) to re-score and re-rank the opportunities in light of what the critique surfaced — Impact, Confidence, and Effort all move once the perspectives have weighed in. Scores must be **recalibrated to Phase 2 action-execution semantics** (per ice-scoring's recalibration note: Confidence = likelihood the action executes given coordination/risk; Impact = magnitude if the mitigation is executed, with a partial fix scoring below its target problem) — not carried over from Phase 1 unchanged. The ranking that lands in the plan is this post-panel ranking, not the first-cut order from step 1.
 8. **Revise** based on the panel and the re-ranking.
 9. **Write to `<ENGAGEMENT_PATH>/action-plan.md`.** All five sections — investigation actions, recommended actions, decision asks, risks and tradeoffs, and **"Tensions resolved"** (the panel conflicts and their resolutions from step 6) — must be populated. No placeholders in the live file.
+
+## Phase 2 gate
+
+After writing `action-plan.md`, present the **Phase 2 gate summary block** (per CLAUDE.md "Gate summary block"):
+
+1. **Conclusion** — the single highest-priority action or decision the plan surfaces, in one sentence.
+2. **What changed** — what the panel revised versus the draft: tensions resolved, ICE rank shifts, instrumentation gaps surfaced.
+3. **Assumptions and confidence gaps** — list any action where the agent assumed instrumentation the client may not have (per Step 2a), or where Confidence was recalibrated downward for execution risk.
+4. **Out-of-scope cost** — any lever removed from the opportunity set because it required an excluded capability. If none, write "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — "**Approve** to proceed to Phase 3 (one-pager), **Redirect** [scope or priority change], or **Iterate** [lens to re-run on the plan]."
 
 ## Output
 

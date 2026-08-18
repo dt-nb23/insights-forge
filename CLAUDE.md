@@ -40,6 +40,7 @@ On-demand skills (read only when the task is active):
 
 | Task | Skill |
 |---|---|
+| Chat-native intake without a seed-prompt brief | `skills/drill/SKILL.md` |
 | External research / web citation lookup | `skills/external-research/SKILL.md` |
 | Pause, archive, or resume an engagement | `skills/investigation-reset/SKILL.md` |
 | Add a named client leader | `skills/stakeholder-overlay/SKILL.md` |
@@ -56,11 +57,25 @@ Between each phase the agent **presents its output and pauses**. The user has th
 
 Each phase runs a specific set of critique lenses as a mandatory step, separate from the on-demand option above. `docs/lenses.md` is the authority for WHICH lenses are mandatory in each phase and WHEN each runs.
 
+### Gate summary block
+
+At every phase gate the agent presents output using this **five-part block**, in order:
+
+1. **Conclusion** — the single most important finding or decision from this phase, in one sentence.
+2. **What changed** — what the agent produced, revised, or resolved in this phase compared to the prior gate.
+3. **Assumptions and confidence gaps** — places where the agent made an assumption the user should know about, or where thin evidence limits confidence. List as brief bullets; write "None" if none.
+4. **Out-of-scope cost** — any lever or opportunity excluded because it touched an out-of-scope capability. If nothing was excluded, write "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — close with: "**Approve** to proceed to Phase N, **Redirect** [scope or framing change to make], or **Iterate** [lens to run on the output]."
+
+The gate summary block is not a recap of prose already visible in the artifact — it is the decision frame that lets the user act without re-reading everything.
+
 The agent records every gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (where ENGAGEMENT_PATH is the engagement folder this session is working in). At each gate approval, the agent also bumps `phase:` and `last-touched:` in that engagement's `current-context.md` status front-matter so the folder stays self-describing. The decisions-log.md format follows the template in the client engagement template (`memory/clients/_template/engagements/`).
 
 ## Sub-agent lenses
 
 Six critique lenses live in `.claude/agents/`. Each has a narrow job and a defined output format. Specific lenses are mandatory in each phase — the agent runs them as a required step, not at its discretion — and any of the six may additionally be invoked on-demand at a gate. `docs/lenses.md` is the authority for WHEN each lens runs (which are mandatory per phase, in what order); each agent file is authoritative for that lens's procedure and output format.
+
+**Dispatch rule — one message per round.** All four Round-1 lenses go out in a **single message** so they run concurrently, not in sequence. Each subsequent round (cross-examination, convergence) is likewise a single message. Never relay one lens's output to the next as a chain — every lens in a round receives the same inputs at the same moment, and the agent reads all responses before composing the next round's message. When dispatching, include the engagement's out-of-scope exclusions (copied verbatim from `current-context.md`) in every lens's prompt so sub-agents cannot reintroduce excluded capabilities.
 
 ## Memory model
 

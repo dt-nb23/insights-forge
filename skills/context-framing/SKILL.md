@@ -83,9 +83,15 @@ Record the exclusions in `current-context.md` under **Out-of-scope exclusions** 
 
 ## Clarifying questions
 
-Ask **one question at a time**, in adaptive order — if the consultant's opening description already answers a question, skip it and move to the next unknown. Stop asking when every **MUST-HAVE** field in the Exit-criteria rubric below is populated with a non-placeholder value. If a seed-prompt brief supplied the answers (see **Seed-prompt intake** above), the same skip rule applies to well-filled fields — but still run the gap-closing and sharpening rounds described there before you summarize.
+**Two-phase questioning structure:**
 
-The nine questions, in default order:
+**Phase A — Narrative funnel (Q1–Q3, C.S.I.R.):** Work through Q1 (customer), Q2 (vertical), and Q3 (C.S.I.R. sub-sequence) as a flowing conversation, not a form. Each answer should naturally surface the next question — if the consultant's opening message answers Q1 and Q2, jump straight into C.S.I.R. context questions without re-asking. Allow 1–3 exchanges per dimension; a confident consultant's crisp answer wraps a dimension in one turn. Skip any dimension the opening message already covered with a real value.
+
+**Phase B — Closed drill block (Q4–Q9):** Once all four C.S.I.R. dimensions are locked, present Q4 through Q9 in **one message**, labeled "To anchor the plan, here are the factual questions I need:". Use the checklist format for Q5 (capabilities). This single message collapses 6 potential turns into one round-trip. Skip any question the opening description or brief has already answered with a real value.
+
+Stop asking when every **MUST-HAVE** field in the Exit-criteria rubric below is populated with a non-placeholder value. If a seed-prompt brief supplied the answers (see **Seed-prompt intake** above), the same skip rule applies to well-filled fields.
+
+The nine questions — use the two-phase structure above, not serial one-at-a-time delivery:
 
 ### Q1 — Customer and what they do
 > "Who is the customer, and what does their business do?"
@@ -206,6 +212,34 @@ The technical team and leadership often have different definitions of success. C
 
 The trigger shapes urgency, tone, and what a "good outcome" looks like for the consultant.
 
+## Calibration dial routing
+
+The "Analyst calibration" row in `current-context.md` carries three 1–5 scores (consultant experience, account familiarity, customer DT maturity). Read these values and route the engagement accordingly. If no scores were provided, default to 3 on all three.
+
+| Score axis | 1–2 (low) | 3 (mid) | 4–5 (high) |
+|---|---|---|---|
+| **Consultant experience** | Deeper drill in Phase A (more CSIR follow-up turns); explain signal → business linkages explicitly in orientation hypotheses | Default depth | Terse orientation hypotheses; assume the consultant follows signal logic without elaboration |
+| **Account familiarity** | Ask more S (Specific Information) follow-up questions; probe for unknown constraints | Default | Skip basic S clarifications the consultant has likely already covered |
+| **Customer DT maturity** | Use simpler Dynatrace terminology in hypotheses and signals map; avoid jargon-dense phrasing | Default | Assume Dynatrace fluency; use precise DT product and capability names without definition |
+| **Council size (Phase 2)** | Low experience + low maturity → reduce panel to 3 lenses (drop Consultative for internal framing) | Default 4 lenses | High experience + high maturity → 4 lenses standard; consider adding a second Skeptic pass |
+| **Gate verbosity (Phase gates)** | Low familiarity → longer gate narrative, more context for each decision | Default | High familiarity + high experience → terse gate block; lead with the decision ask, not the summary |
+| **Ambition ceiling (Phase 2)** | Low maturity → cap at "confirm and fix" scope; do not propose transformation-level actions | Default | High maturity → full ambition ceiling; propose strategic capability builds if evidence supports |
+
+Record the routing decision in `current-context.md` under "Calibration routing" (one sentence per axis that deviates from the default), so later skills can inherit it without re-computing.
+
+**Note on form calibration (F5):** the seed-prompt form currently collects the three 1–5 scores but does not display behavioral anchors for each level. When next updating the seed-prompt form, add a tooltip or label per scale showing what 1 and 5 mean. Until then, the routing above is the canonical definition; the form scores are the input, and this table is the mapping.
+
+## Brief-complete fast path (E2)
+
+When the opening message is a seed-prompt brief and **every MUST-HAVE field is already populated** with a real non-placeholder value, collapse Phase A and Phase B questioning into a **single sharpening message** instead of multiple turns. The sharpening message:
+
+1. Acknowledges the brief ("Brief received — all required fields are populated.")
+2. Calls out any SHOULD-HAVE field left blank and asks all of them in one batch (or notes them if the marginal-value stopping rule applies).
+3. Names the one element with the most analytical uncertainty — the field or claim that, if wrong, would most change the consulting objective — and asks the consultant to confirm or sharpen it.
+4. Moves directly to creating the engagement folder and writing `current-context.md` after the consultant's one-turn reply.
+
+The fast path is triggered when: opening message has the `# Insights Forge intake brief` header AND every row of the MUST-HAVE column in the rubric below maps to a filled value in the brief. If any MUST-HAVE is missing, fall back to the standard two-phase flow.
+
 ## Exit criteria (Phase 0 gate rubric)
 
 Phase 0 is done when every **MUST-HAVE** field below is populated in `current-context.md` with a real value — not a placeholder, not "TBD", not a guess. SHOULD-HAVE fields are not required to proceed but **help refine the framing**; if any are missing, the agent explicitly *confirms with the consultant* whether they have that context before closing the gate, phrased as helpful rather than blocking (e.g., *"Not required to proceed, but do you happen to know X? It would sharpen the framing."*). NICE-TO-HAVE fields are recorded if known but never block the gate and need not be confirmed.
@@ -249,14 +283,19 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
    e. Check whether `memory/clients/<client-short-name>/` exists. If not, create it by copying the template: `memory/clients/_template/README.md`, `memory/clients/_template/environment.md`, `memory/clients/_template/contract.md`, `memory/clients/_template/stakeholder-overlays.md`, and `memory/clients/_template/engagements/README.md`.
    f. Create the engagement folder.
    g. Set ENGAGEMENT_PATH and CLIENT_NAME in working context and **hold them for the rest of this session** — every later skill uses this held value, not a shared file. There is no global pointer to write; the engagement folder is the state, and its `current-context.md` status front-matter (written in Step 8) records that it is active.
-   h. Confirm briefly: "Engagement folder created at `<path>`."
+   h. **Write `.claude/active-client`** with the client short-name (one line, no trailing newline). This file is read by the client-isolation hook (`tools/client-isolation-hook.sh`) to mechanically block accidental reads from other clients' workspaces. Overwrite silently — it is a session marker, not an artifact.
+   i. Confirm briefly: "Engagement folder created at `<path>`."
 
-4. **Check past engagements for this client.** Read `memory/clients/<CLIENT_NAME>/README.md` for prior engagement history. Surface the key lesson from the most recent engagement if found. Do not read other clients' folders — context isolation is strict.
+4. **Check past engagements — current client and cross-client lessons.**
+   - **Current client:** Read `memory/clients/<CLIENT_NAME>/README.md` for prior engagement history. Surface the key lesson from the most recent engagement if found.
+   - **Cross-client lessons readback:** Glob `memory/clients/*/engagements/*/lessons-learned.md` for all completed engagements across all clients. For each file whose `vertical` or `problem-shape` front-matter tag matches the current engagement's vertical or problem-shape (from Q2/Q3), read its "Cross-engagement hook" line and surface it as a brief "Prior lesson" note — e.g., *"A similar retail RUM-adoption engagement found that Davis AI grouping drift was the root cause; worth checking here."* Do not read the full file; read only the `---` front-matter block and the "Cross-engagement hook" line to keep context lean. Do not read the rest of a matched file unless the user explicitly asks to. This readback is informational — not a constraint on the current engagement — and is listed as a brief addendum before proceeding, not embedded in the framing itself.
 5. **Reframe the engagement** as a clear consulting objective: what insight will be surfaced, for whom, and to what end. Write this under "Consulting objective" in `current-context.md`. Example: *"Surface underutilized RUM and Davis AI insights for [Customer]'s Executive Sponsor ahead of their Q3 renewal, demonstrating measurable value from their Full-Stack and RUM investment."*
 6. **Surface 3–5 orientation hypotheses** about where value is likely hiding in the environment, given the active capabilities and vertical. Label them clearly as pre-scoring candidates — not findings. Pull from the tech → UX → business linkages in `domain-knowledge.md` and the vertical context. Example: *"Davis AI may be grouping related problems in ways the team hasn't reviewed, understating incident volume and MTTR improvement."*
 7. **Confirm scope** — what this engagement will cover and what it will not. Name any capability gaps (e.g., RUM not enabled) that limit the insight surface.
 8. **Write `<ENGAGEMENT_PATH>/current-context.md`** fully populated, **beginning with the status front-matter block** described under Output (set `state: active`, `phase: 0`, and today's date for both `opened` and `last-touched`). This front-matter is what `investigation-reset` and any resuming session read to find this engagement and track its lifecycle — it is required, not optional. **Pre-write MUST-HAVE scan (run before writing anything):** walk every MUST-HAVE row and scan its value for `[TBD]`, `"TBD"`, any bracketed placeholder, an empty value, or `"not provided"`. If any MUST-HAVE row trips the scan, do **not** write the file — loop back to the corresponding clarifying question, capture a real value, then re-run the scan. Write only after the scan finds zero MUST-HAVE placeholders. Every MUST-HAVE row carries a real value. SHOULD-HAVE rows carry either the consultant's answer or the literal string `"not provided (declined at gate)"` if they skipped the confirmation in Step 9 — the scan does not block on SHOULD-HAVE or NICE-TO-HAVE rows. NICE-TO-HAVE rows are written when known and omitted otherwise. No `"TBD"`, no bracketed placeholders.
-9. **Verify the exit-criteria rubric.** Walk the rubric table top-to-bottom. Every MUST-HAVE must be populated with a real value before proceeding. For each unfilled SHOULD-HAVE, ask the consultant a short confirming question framed as helpful-not-blocking — e.g., *"Not required to proceed, but do you happen to know [field]? It would help sharpen the framing."* Record their answer (including "don't know" or "skip") and move on. Do not loop on a SHOULD-HAVE the consultant has declined.
+9. **Verify the exit-criteria rubric and close SHOULD-HAVE gaps in one batch.** Walk the rubric table top-to-bottom. Every MUST-HAVE must be populated with a real value before proceeding. For unfilled SHOULD-HAVEs, **collect all open ones and ask them in a single batch message** — e.g., *"Not required to proceed, but these details would sharpen the framing: [field 1]? / [field 2]? / [field 3]?"* Record every answer (including "don't know" or "skip") and move on. Do not loop on a SHOULD-HAVE the consultant has declined.
+
+   **Marginal-value stopping rule:** if the consultant has skipped or answered "don't know" to two consecutive SHOULD-HAVE gaps, stop asking the remaining SHOULD-HAVE fields for this session — additional asks have diminishing returns. Record the remaining fields as `"not provided (declined at gate)"`. MUST-HAVE gaps still require an answer regardless of this rule.
 10. **Check freshness results (if dispatch occurred in Step 1).** If the sub-agent was dispatched, read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation — e.g., *"The freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note results will be surfaced at the next phase gate. If the dispatch was **skipped** (last check < 7 days, no Drifted/Unreachable), state at the gate: "Doc citations last verified [date from report] — current, no refresh needed."
 11. **Present and pause at the gate.** State clearly:
 

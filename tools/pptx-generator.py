@@ -12,8 +12,7 @@ so the output renders correctly in PowerPoint without any manual setup.
 
 Usage:
     python3 tools/pptx-generator.py <spec.json> [output.pptx]
-        Generate a deck. Output defaults to
-        memory/project-space/deck-YYYY-MM-DD.pptx
+        Generate a deck. Output defaults to <spec-dir>/deck-YYYY-MM-DD.pptx
 
     python3 tools/pptx-generator.py --list-layouts
         Print all 64 named layouts in the template.
@@ -37,7 +36,6 @@ from pptx import Presentation
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE     = PROJECT_ROOT / "Dynatrace_Brand_Insights-Forge.pptx"
 FONTS_DIR    = PROJECT_ROOT / "DTFlow"
-OUTPUT_DIR   = PROJECT_ROOT / "memory" / "project-space"
 
 
 # ── Font installation ──────────────────────────────────────────────────────
@@ -251,6 +249,8 @@ def handle_title_content(prs, spec):
 def handle_icon_cards(prs, spec):
     cards = spec.get("cards", [])
     count = 4 if len(cards) >= 4 else 3
+    if len(cards) < 3:
+        print(f"  ⚠ handle_icon_cards: {len(cards)} card(s) provided; minimum layout is 3 cards. Padding empty.", file=sys.stderr)
     layout = spec.get("layout", f"{count} icon cards+title")
     slide, n = add_slide(prs, layout)
     fill_first(slide, ["title"], spec.get("title", ""), n)
@@ -265,6 +265,7 @@ def handle_text_columns(prs, spec):
     cols = spec.get("columns", [])
     count = max(2, min(len(cols), 6))
     if count not in (2, 3, 4, 6):
+        print(f"  ⚠ handle_text_columns: {len(cols)}-column layout not supported (valid: 2, 3, 4, 6). Falling back to 3; column(s) {count+1}+ discarded.", file=sys.stderr)
         count = 3
     layout = spec.get("layout", f"{count} text columns")
     slide, n = add_slide(prs, layout)
@@ -362,7 +363,6 @@ def dispatch(prs, spec: dict):
 # ── Generator ──────────────────────────────────────────────────────────────
 
 def generate(spec_data: dict, output_path: Path) -> None:
-    ensure_dtflow_fonts()
     prs = load_template()
     clear_sample_slides(prs)
 
@@ -370,6 +370,7 @@ def generate(spec_data: dict, output_path: Path) -> None:
     if not slides_spec:
         print("Warning: spec contains no slides.", file=sys.stderr)
 
+    failures = 0
     for i, slide_spec in enumerate(slides_spec):
         # Skip comment-only entries
         if set(slide_spec.keys()) <= {"_comment"}:
@@ -380,10 +381,15 @@ def generate(spec_data: dict, output_path: Path) -> None:
             print(f"  ✓  [{i+1:2d}] {layout}")
         except Exception as e:
             print(f"  ✗  [{i+1:2d}] {layout} — {e}", file=sys.stderr)
+            failures += 1
 
+    if failures:
+        print(f"\n⚠ {failures} slide(s) failed. Saving partial output.", file=sys.stderr)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(output_path))
     print(f"\nSaved → {output_path}")
+    if failures:
+        sys.exit(1)
 
 
 # ── CLI ────────────────────────────────────────────────────────────────────
@@ -413,11 +419,12 @@ def main():
         sys.exit(1)
 
     output_path = Path(sys.argv[2]) if len(sys.argv) >= 3 \
-        else OUTPUT_DIR / f"deck-{date.today():%Y-%m-%d}.pptx"
+        else spec_path.parent / f"deck-{date.today():%Y-%m-%d}.pptx"
 
     with open(spec_path, encoding="utf-8") as f:
         spec_data = json.load(f)
 
+    ensure_dtflow_fonts()
     print(f"Template : {TEMPLATE.name}")
     print(f"Spec     : {spec_path}")
     print(f"Output   : {output_path}")

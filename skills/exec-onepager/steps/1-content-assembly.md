@@ -38,7 +38,7 @@ Work through the recipe components in order. For each, write out the copy in str
 
 Draft two things:
 
-**Summary sentence** — one sentence that answers: what already exists, what the plan does with it, and when results arrive. The key date or outcome goes in bold. Example: "uhaul.com already captures every user interaction in Dynatrace®. This plan refines that data into answers the team reaches on its own: **first results in 30 days, the full picture in 90.**"
+**Summary sentence** — one sentence that answers: what already exists, what the plan does with it, and when results arrive. The key date or outcome goes in bold. Example: "[client] already captures every user interaction in Dynatrace®. This plan refines that data into answers the team reaches on its own: **first results in 30 days, the full picture in 90.**"
 
 **4 stats** — pull from `signals-map.md`. Each stat needs a number and a label (≤ 6 words). The four stats should together answer: scope, timeline, confidence, and the ask. Use the section accent token for the color (match the stat to the section it relates to).
 
@@ -72,7 +72,7 @@ State the recommended actions with owners and timeframes. Write one of:
 - **For 03A/03B:** Phase names, day ranges, and descriptions. 03B adds: owner, gate, output per phase.
 - **For 03D:** Numbered steps with names, day ranges, and one-line descriptions.
 
-Always include the 30/60/90 framing from `memory/long-term/phased-plan-timeline-framing.md` (if loaded). Always include a concurrency or sequencing note.
+Always include the 30/60/90 framing from `memory/long-term/phased-plan-timeline-framing.md`. Always include a concurrency or sequencing note.
 
 Every action from `action-plan.md` must appear here with its paired tradeoff (plan-fidelity rule). If the tradeoff text is too long for the phase card, state it in the concurrency note or in the section's beat-line.
 

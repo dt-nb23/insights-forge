@@ -4,8 +4,8 @@ description: |
   Design system catalog for Insights Forge HTML one-pagers. Defines the
   design tokens, component catalog (headers, beats, footer), recipe selection
   guide, and HTML/CSS conventions. Read this before selecting a recipe or
-  writing any HTML. The canonical implementation is
-  memory/clients/u-haul/engagements/2026-06-29-digital-experience-parity/uhaul-digital-experience-intelligence-v3.html.
+  writing any HTML. The canonical implementation lives in the client engagement
+  folder of the most recent completed engagement as <deliverable>.html.
 ---
 
 # Insights Forge one-pager layout system
@@ -596,7 +596,7 @@ The recipe is a storytelling decision, not a template. Start from the plan and t
 
 ### Reference implementation
 
-The canonical approved one-pager is `memory/clients/u-haul/engagements/2026-06-29-digital-experience-parity/uhaul-digital-experience-intelligence-v3.html`. Its recipe (`HdrB · TL;DR · 01B · 02A · 03A · 04A · 05A`) is a reference, not a default — it was right for that engagement's story. A different engagement needs a different recipe.
+The canonical approved one-pager lives in the most recent completed engagement folder. Its recipe is a reference, not a default — it was right for that engagement's story. A different engagement needs a different recipe. Check `memory/clients/*/engagements/*/` for the latest completed HTML deliverable.
 
 ### Semantic color assignments (do not reassign)
 

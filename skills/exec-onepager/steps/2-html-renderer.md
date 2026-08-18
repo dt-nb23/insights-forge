@@ -14,7 +14,7 @@ Read this file at step 4 of the exec-onepager skill. The humanized copy is ready
 
 ## File setup
 
-**Output path:** Write the HTML to `<deliverable-name>.html` in the project root (e.g., `uhaul-dxi-exec-brief.html`). Use a kebab-case name that reflects the client and engagement.
+**Output path:** Write the HTML to `<deliverable-name>.html` in the project root (e.g., `acme-api-latency-exec-brief.html`). Use a kebab-case name that reflects the client and engagement.
 
 **Companion markdown:** Also write `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — a plain-text version of the content for the pptx-builder. The markdown companion carries only content (sections, bullets, numbers) — not CSS or HTML structure.
 

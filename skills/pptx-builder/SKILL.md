@@ -34,11 +34,9 @@ Then read these files:
 - `DT Insights Lockup RGB/` — local SVG lockup files for all Insights variants (horizontal and vertical, in Black, Gray, REV, and White). Use these before checking Brandfolder — they are the same source files. See lockup selection rules below.
 - `assets/` — pre-rendered wave PNGs already used in the HTML one-pager. Reuse them in the deck for visual consistency rather than re-rendering from scratch.
 
-## Important: this skill does not replace the standard pptx skill
+## Renderer priority
 
-If the runtime environment provides a standard pptx skill at `/mnt/skills/public/pptx/SKILL.md`, this skill's job is to **adapt the one-pager into a deck structure and then invoke that skill** to render the actual `.pptx` file. This skill is an **adapter**, not a renderer.
-
-If the standard pptx skill is not available in the current environment, this skill falls back to writing a structured slide-by-slide markdown outline that the team can paste into their preferred deck tool. Always verify availability before assuming the renderer exists.
+The **in-repo generator is the primary renderer.** Use `tools/pptx-generator.py` unless it is not runnable (python-pptx not installed, no Python). The external skill at `/mnt/skills/public/pptx/SKILL.md` is a secondary option — check for it only if the generator is unavailable. If neither is usable, fall back to a structured slide-by-slide markdown outline at `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`.
 
 ## Deck structure
 
@@ -98,8 +96,7 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 
 ## Steps
 
-1. **Check for the standard pptx skill** at `/mnt/skills/public/pptx/SKILL.md`. If it exists, plan to invoke it; if not, plan a structured markdown outline.
-2. **Read `memory/long-term/brand/brand-spec.md`.** Carry the exact HEX values, font names (DT Flow Medium / DT Flow Light, Arial fallback), and footer text into whatever you produce next — outline notes for the human renderer, or parameters to the standard pptx skill.
+1. **Read `memory/long-term/brand/brand-spec.md`.** Carry the exact HEX values, font names (DT Flow Medium / DT Flow Light, Arial fallback), and footer text into whatever you produce next. Also check whether `python3 -c "import pptx"` succeeds to confirm the generator is runnable; if not, note the fallback plan now (external skill check or markdown outline).
 3. **Map the one-pager content into the six-section structure** above. Each section becomes one or more slides per the stakeholder profile and adopts the brand pattern keyed in the table.
 4. **Adapt language for slide format — then run the brand-humanizer pre-pass.**
    - Condense one-pager prose into slide-appropriate fragments: sentences become bullets, definitions move to footnotes, long caveats become a single qualifier or move to appendix. Headings remain sentence case (brand-spec §3 and §6); product names follow §7.
@@ -107,7 +104,13 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 5. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the engagement folder, flag it and ask the user. Chart series colors follow brand-spec §5 — never use red or green.
 6. **Preserve the quality-gate outputs.** The Consultative-lens rewrites, the Customer-lens framings, and the Skeptic-lens "questions a leader will ask" are all baked into the one-pager already — do not undo them when adapting to slide format.
 7. **Carry citations into a "Sources" slide or footer.** Any externally sourced fact in the one-pager (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date. Put them on a final "Sources" slide for VP audiences who skim, or in a small footer on each slide where the fact appears for Director audiences who scrutinize. Do not drop citations during the adaptation.
-8. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md` for the team to render manually. When the team renders manually, instruct them to start from the official Dynatrace `.potx` (the file the brand PDF documents) rather than a blank deck — the theme colors and theme fonts are programmed into it.
+8. **Generate the deck.** Write the JSON spec to `<ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json` (see `tools/pptx-spec-example.json` for the format). Then run:
+
+   ```bash
+   python3 tools/pptx-generator.py <ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json
+   ```
+
+   The output `.pptx` saves to `<ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx`. If the generator is unavailable, check for the external skill at `/mnt/skills/public/pptx/SKILL.md` and invoke it; if that is also absent, write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`. When the team renders manually, instruct them to start from the official Dynatrace `.potx` — the theme colors and fonts are embedded in it.
 
 ## Output
 

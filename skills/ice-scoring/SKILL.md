@@ -55,6 +55,16 @@ Then read these files:
 
 Updates `<ENGAGEMENT_PATH>/hypotheses.md` with Impact, Confidence, Effort, and ICE columns populated for every row.
 
+## Phase 1 gate
+
+After updating `hypotheses.md`, present the **Phase 1 gate summary block** (per CLAUDE.md "Gate summary block"):
+
+1. **Conclusion** — the highest-ICE hypothesis and what it implies for the investigation.
+2. **What changed** — what scoring or ranking changed from the pre-ICE draft; which hypotheses rose or fell and why.
+3. **Assumptions and confidence gaps** — any hypothesis whose score was adjusted for an instrumentation gap (raised Effort, lowered Confidence, lowered Impact); list each adjustment.
+4. **Out-of-scope cost** — any hypothesis excluded from scoring because confirming it would require an out-of-scope capability.
+5. **Approve / Redirect / Iterate** — "**Approve** to proceed to Phase 2 (action planning), **Redirect** [scope or framing change], or **Iterate** [lens to re-run on the scored hypotheses]."
+
 ## Calibration reminders
 
 - **Impact** is anchored to business KPI magnitude, not to engineering interest.

@@ -7,7 +7,23 @@
       "Read(.claude/**)",
       "Write(memory/long-term/freshness-report.md)",
       "Write(memory/clients/**)",
-      "Bash(python3 tools/pptx-generator.py*)"
+      "Write(.claude/active-client)",
+      "Bash(python3 tools/pptx-generator.py*)",
+      "WebFetch(https://docs.dynatrace.com/*)",
+      "WebFetch(https://community.dynatrace.com/*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/client-isolation-hook.sh"
+          }
+        ]
+      }
     ]
   }
 }
