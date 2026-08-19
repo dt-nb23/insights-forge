@@ -15,7 +15,7 @@ Read this file at step 2 of the exec-onepager skill. The recipe has already been
 1. `<ENGAGEMENT_PATH>/action-plan.md` — recommendations, rank order, owners, timeframes, tradeoffs
 2. `<ENGAGEMENT_PATH>/signals-map.md` — business impact numbers, SLI/SLO grounding
 3. `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed/open/ruled-out status per hypothesis
-4. `memory/long-term/stakeholder-profiles.md` — depth and tone calibration for the named reader
+4. `memory/long-term/stakeholder-profiles.md` (hub) + the specific profile file for the named reader — depth and tone calibration
 5. `memory/long-term/terminology.md` — first-use definitions for any acronym
 
 ## Plan-fidelity rules (enforce throughout)

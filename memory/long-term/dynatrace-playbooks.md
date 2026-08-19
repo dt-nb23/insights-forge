@@ -12,18 +12,30 @@ Playbook content was originally sourced from `docs.dynatrace.com` on 2026-05-12;
 
 ## Playbook index
 
-| Problem shape | Playbook |
-|---|---|
-| Latency degradation on a backend service | [Latency on a backend service](#latency-on-a-backend-service) |
-| Error rate / failure spike on a service | [Service failure spike](#service-failure-spike) |
-| User-visible slowness or errors in the browser/app | [Frontend / UX regression in RUM](#frontend--ux-regression-in-rum) |
-| Anomalous behavior in logs (volume, errors, content) | [Log investigation in Grail](#log-investigation-in-grail) |
-| SLO at risk or breached | [SLO breach / error-budget burn](#slo-breach--error-budget-burn) |
-| Regression correlated with a deploy | [Deploy / release correlation](#deploy--release-correlation) |
-| Third-party dependency suspected | [Third-party dependency investigation](#third-party-dependency-investigation) |
-| Triage starting from an open Davis problem | [Reading a Davis problem](#reading-a-davis-problem) |
+Individual playbooks live in `memory/long-term/playbooks/`. Read the matching file only when a hypothesis names its problem shape — do not load all playbooks at session start.
 
----
+| Problem shape | File |
+|---|---|
+| Latency degradation on a backend service | `memory/long-term/playbooks/latency-backend.md` |
+| Error rate / failure spike on a service | `memory/long-term/playbooks/service-failure.md` |
+| User-visible slowness or errors in the browser/app | `memory/long-term/playbooks/frontend-rum.md` |
+| Anomalous behavior in logs (volume, errors, content) | `memory/long-term/playbooks/log-grail.md` |
+| SLO at risk or breached | `memory/long-term/playbooks/slo-burn.md` |
+| Regression correlated with a deploy | `memory/long-term/playbooks/deploy-correlation.md` |
+| Third-party dependency suspected | `memory/long-term/playbooks/third-party.md` |
+| Triage starting from an open Davis problem | `memory/long-term/playbooks/davis-problem.md` |
+
+**Traverse-on-need rule:** When Phase 1 matches a hypothesis to a problem shape, read only the file(s) for that shape. The investigation sequence, exit criteria, and source citations live in the individual file. The doc-freshness checker reads all files in `memory/long-term/playbooks/` to validate citations.
+
+## What this file deliberately does NOT contain
+
+- **Executable DQL.** The agent describes the pipeline shape (`fetch → filter → summarize`) in plain English. The team writes and runs the query.
+- **Specific Management Zone names, service names, or environment IDs.** Those are client/team-specific and live in `domain-knowledge.md` brackets.
+- **UI click paths past one level of detail.** Dynatrace UI evolves faster than the conceptual workflow. The playbooks name the *artifact* (Services app, Failure Analysis, Users & Sessions) and let the team click into it.
+- **Recommendations on whether to use Classic vs new Apps.** Where both exist, the playbook names the concept and lets the team pick the surface their environment runs.
+- **Configuration guidance.** This file is for *how to investigate*, not *how to set up*. SLO configuration, failure-detection rules, and synthetic test creation are out of scope here.
+
+<!-- Individual playbook content follows below for reference; canonical source is the per-file content above. -->
 
 ## Latency on a backend service
 

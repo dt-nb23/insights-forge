@@ -31,6 +31,30 @@ python3 tools/pptx-generator.py --install-fonts
 
 Output defaults to `<spec-dir>/deck-YYYY-MM-DD.pptx` (alongside the spec file, inside the engagement folder).
 
+### Wave background spec fields
+
+Any slide can carry a dark-themed wave background. Add these fields to the slide's spec object:
+
+| Field | Required | Values / notes |
+|---|---|---|
+| `wave_background` | Yes | `"wave-bg"` (cover/closing slides), `"wave-ask"` (decision-required slides), or a repo-relative path string |
+| `wave_overlay_opacity` | No | `0.0`–`1.0`; default `0.80`. Use `0.65`–`0.70` for title-only slides, `0.80`–`0.85` for body-text slides |
+
+The wave PNG is inserted at the bottom of the z-stack; the dark overlay sits above it; existing slide content (placeholders, text) renders on top of the overlay.
+
+### Chart spec fields
+
+Use `"layout": "Chart"` to generate a branded chart slide. The `chart` object contains:
+
+| Field | Required | Values / notes |
+|---|---|---|
+| `type` | No | `XL_CHART_TYPE` name: `BAR_CLUSTERED`, `COLUMN_CLUSTERED`, `LINE`, `PIE`, etc. Default `BAR_CLUSTERED` |
+| `categories` | Yes | List of category label strings |
+| `series` | Yes | List of `{"name": "...", "values": [...]}` objects |
+| `left`, `top`, `width`, `height` | No | Position/size in EMUs. Omit for full-slide default |
+
+Brand series colors (Teal → Light blue → Royal blue → Purple → Violet → Magenta) are applied automatically, cycling if there are more than six series.
+
 ## Boundary that all tools must respect
 
 This agent does not run live queries or execute production changes. Any tool added to this folder must respect that boundary:

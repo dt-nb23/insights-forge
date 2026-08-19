@@ -32,10 +32,35 @@ import shutil
 from datetime import date
 from pathlib import Path
 from pptx import Presentation
+from pptx.chart.data import ChartData
+from pptx.dml.color import RGBColor
+from pptx.enum.chart import XL_CHART_TYPE
+from pptx.oxml.ns import qn
+from pptx.util import Emu, Inches, Pt
+from lxml import etree
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE     = PROJECT_ROOT / "Dynatrace_Brand_Insights-Forge.pptx"
 FONTS_DIR    = PROJECT_ROOT / "DTFlow"
+ASSETS_DIR   = PROJECT_ROOT / "assets"
+
+# Brand constants — brand-spec.md §2 (theme colors) and §5 (chart series)
+_OVERLAY_COLOR = RGBColor(0x1A, 0x24, 0x40)   # Deep navy #1A2440
+
+BRAND_CHART_COLORS = [
+    RGBColor(0x49, 0xC2, 0xB3),  # Teal      — Accent 1
+    RGBColor(0x3B, 0xAC, 0xF0),  # Light blue — Accent 2
+    RGBColor(0x19, 0x66, 0xFF),  # Royal blue — Accent 3
+    RGBColor(0x5E, 0x28, 0xE5),  # Purple    — Accent 4
+    RGBColor(0x8D, 0x1C, 0xDC),  # Violet    — Accent 5
+    RGBColor(0xC9, 0x3F, 0xDB),  # Magenta   — Accent 6
+]
+
+# Named wave asset shortcuts (files live in assets/)
+WAVE_ASSETS = {
+    "wave-bg":  ASSETS_DIR / "wave-bg.png",   # cover / closing
+    "wave-ask": ASSETS_DIR / "wave-ask.png",  # decision-required accent slides
+}
 
 
 # ── Font installation ──────────────────────────────────────────────────────
@@ -94,6 +119,114 @@ def ensure_dtflow_fonts(verbose: bool = True) -> int:
         print(f"  ✓ DT Flow fonts already installed ({len(otf_files)} fonts in {font_dir})")
 
     return len(installed)
+
+
+# ── Visual helpers — wave backgrounds, overlays, chart colors ─────────────
+
+def _slide_dimensions(slide):
+    """Return (width, height) in EMUs from the presentation."""
+    prs = slide.part.package.presentation
+    return prs.slide_width, prs.slide_height
+
+
+def _move_shape_in_spTree(slide, shape, position: int) -> None:
+    """Reposition a shape element in the slide's spTree to control z-order.
+
+    position=2 is just after the bg/bgRef elements (bottom of the stack).
+    """
+    spTree = slide.shapes._spTree
+    spTree.remove(shape._element)
+    spTree.insert(position, shape._element)
+
+
+def _set_fill_alpha(shape, opacity: float) -> None:
+    """Set opacity on a shape whose fill is already set to solid().
+
+    opacity: 0.0 (transparent) → 1.0 (fully opaque).
+    OOXML alpha is expressed in thousandths-of-a-percent: 100% = 100000.
+    """
+    alpha_val = str(int(opacity * 100000))
+    spPr = shape._element.spPr
+    solidFill = spPr.find(".//" + qn("a:solidFill"))
+    if solidFill is None:
+        return
+    # Try srgbClr first, then sysClr / schemeClr
+    for tag in (qn("a:srgbClr"), qn("a:sysClr"), qn("a:schemeClr")):
+        clr = solidFill.find(tag)
+        if clr is not None:
+            # Remove any existing alpha child, then add a fresh one
+            for existing in clr.findall(qn("a:alpha")):
+                clr.remove(existing)
+            alpha_elem = etree.SubElement(clr, qn("a:alpha"))
+            alpha_elem.set("val", alpha_val)
+            return
+
+
+def add_wave_background(slide, wave: str, overlay_opacity: float = 0.80) -> None:
+    """Insert a wave PNG as a full-slide background with a dark overlay.
+
+    wave: a key from WAVE_ASSETS ("wave-bg", "wave-ask") or a path string.
+    overlay_opacity: 0.0–1.0. Default 0.80 (body-text dark slides).
+                     Use 0.65–0.70 for title-only dark slides (cover, closing).
+                     Use 0.80–0.85 for dark slides with body text.
+
+    Z-order after this call (bottom → top):
+        [0] spTree background elements (<p:bg>, <p:bgRef>)
+        [1] wave PNG picture
+        [2] dark overlay rectangle
+        [3+] all existing slide content shapes (placeholders etc.)
+    """
+    slide_w, slide_h = _slide_dimensions(slide)
+
+    # Resolve the wave asset path
+    if wave in WAVE_ASSETS:
+        wave_path = WAVE_ASSETS[wave]
+    else:
+        wave_path = Path(wave)
+        if not wave_path.is_absolute():
+            wave_path = PROJECT_ROOT / wave_path
+
+    if not wave_path.exists():
+        print(f"  ⚠ wave asset not found: {wave_path} — skipping wave background",
+              file=sys.stderr)
+        return
+
+    # 1. Wave PNG — inserted last so we can move it immediately
+    pic = slide.shapes.add_picture(str(wave_path), 0, 0, slide_w, slide_h)
+    _move_shape_in_spTree(slide, pic, 2)  # just above bg/bgRef
+
+    # 2. Dark overlay — full-slide rectangle with semi-transparency
+    # Use a textbox as the rectangle primitive (cleanest in python-pptx)
+    from pptx.util import Emu
+    overlay = slide.shapes.add_textbox(Emu(0), Emu(0), slide_w, slide_h)
+    overlay.fill.solid()
+    overlay.fill.fore_color.rgb = _OVERLAY_COLOR
+    overlay.line.fill.background()  # no border
+    _set_fill_alpha(overlay, overlay_opacity)
+    _move_shape_in_spTree(slide, overlay, 3)  # just above the wave image
+
+
+def apply_brand_chart_colors(chart) -> None:
+    """Apply Dynatrace brand series colors (Accent 1–6) to every series.
+
+    Removes the Office theme color reference so the explicit RGB wins
+    regardless of what theme is embedded in the template.
+    """
+    for i, series in enumerate(chart.series):
+        color = BRAND_CHART_COLORS[i % len(BRAND_CHART_COLORS)]
+        try:
+            series.format.fill.solid()
+            series.format.fill.fore_color.rgb = color
+
+            # Clear the theme color reference (<c:spPr><a:solidFill><a:schemeClr>)
+            # so the explicit srgbClr we just wrote is not overridden by the theme.
+            spPr = series._element.find(qn("c:spPr"))
+            if spPr is not None:
+                for sf in spPr.findall(".//" + qn("a:solidFill")):
+                    for sc in sf.findall(qn("a:schemeClr")):
+                        sf.remove(sc)
+        except Exception as e:
+            print(f"  ⚠ apply_brand_chart_colors series {i}: {e}", file=sys.stderr)
 
 
 # ── Template helpers ───────────────────────────────────────────────────────
@@ -295,6 +428,62 @@ def handle_customer_story(prs, spec):
     return slide
 
 
+def handle_chart(prs, spec):
+    """Add a slide with a branded chart built from spec data.
+
+    Spec keys:
+        layout        — slide layout name (default "Blank_graphic")
+        title         — optional slide title (filled into the title placeholder)
+        chart         — dict with:
+            type          — XL_CHART_TYPE name string (default "BAR_CLUSTERED")
+            categories    — list of category labels
+            series        — list of {name, values} dicts
+            left, top     — position in EMUs (default: left-aligned with some margin)
+            width, height — size in EMUs (default: most of the slide)
+    """
+    layout = spec.get("layout", "Blank_graphic")
+    slide, n = add_slide(prs, layout)
+
+    if spec.get("title"):
+        fill_first(slide, ["title", "Title 1", "Title 3"], spec["title"], n)
+
+    chart_spec = spec.get("chart")
+    if not chart_spec:
+        print("  ⚠ handle_chart: no 'chart' key in spec — slide added but empty", file=sys.stderr)
+        return slide
+
+    # Resolve chart type — fall back to BAR_CLUSTERED on unknown strings
+    type_name = chart_spec.get("type", "BAR_CLUSTERED").upper()
+    chart_type = getattr(XL_CHART_TYPE, type_name, None)
+    if chart_type is None:
+        print(f"  ⚠ Unknown chart type '{type_name}' — falling back to BAR_CLUSTERED",
+              file=sys.stderr)
+        chart_type = XL_CHART_TYPE.BAR_CLUSTERED
+
+    # Build ChartData
+    chart_data = ChartData()
+    categories = chart_spec.get("categories", [])
+    chart_data.categories = categories
+    for s in chart_spec.get("series", []):
+        chart_data.add_series(s.get("name", ""), s.get("values", []))
+
+    # Default position/size: small insets on all four sides (inches → EMUs)
+    slide_w, slide_h = _slide_dimensions(slide)
+    default_left   = Inches(0.5)
+    default_top    = Inches(1.5)
+    default_width  = slide_w - Inches(1.0)
+    default_height = slide_h - Inches(2.0)
+
+    x  = Emu(chart_spec["left"])   if "left"   in chart_spec else default_left
+    y  = Emu(chart_spec["top"])    if "top"    in chart_spec else default_top
+    cx = Emu(chart_spec["width"])  if "width"  in chart_spec else default_width
+    cy = Emu(chart_spec["height"]) if "height" in chart_spec else default_height
+
+    graphic_frame = slide.shapes.add_chart(chart_type, x, y, cx, cy, chart_data)
+    apply_brand_chart_colors(graphic_frame.chart)
+    return slide
+
+
 def handle_blank(prs, spec):
     layout = spec.get("layout", "Blank_graphic")
     slide, _ = add_slide(prs, layout)
@@ -344,6 +533,7 @@ HANDLERS = {
     "Customer story_quote": handle_customer_story,
     "Blank_graphic":        handle_blank,
     "Blank_black":          handle_blank,
+    "Chart":                handle_chart,
     "Thank you slide":      handle_thank_you,
 }
 
@@ -352,12 +542,23 @@ def dispatch(prs, spec: dict):
     layout = spec.get("layout", "")
     handler = HANDLERS.get(layout)
     if handler:
-        return handler(prs, spec)
-    for key, fn in HANDLERS.items():
-        if layout.startswith(key):
-            return fn(prs, spec)
-    print(f"  ⚠ No handler for '{layout}' — using generic fallback", file=sys.stderr)
-    return handle_generic(prs, spec)
+        slide = handler(prs, spec)
+    else:
+        for key, fn in HANDLERS.items():
+            if layout.startswith(key):
+                slide = fn(prs, spec)
+                break
+        else:
+            print(f"  ⚠ No handler for '{layout}' — using generic fallback", file=sys.stderr)
+            slide = handle_generic(prs, spec)
+
+    # Apply wave background after the slide's content is placed
+    if slide is not None and spec.get("wave_background"):
+        wave = spec["wave_background"]
+        opacity = float(spec.get("wave_overlay_opacity", 0.80))
+        add_wave_background(slide, wave, opacity)
+
+    return slide
 
 
 # ── Generator ──────────────────────────────────────────────────────────────

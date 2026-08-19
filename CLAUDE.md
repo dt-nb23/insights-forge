@@ -14,9 +14,13 @@
 At session start — before Phase 0 begins — read the following files in this order and hold them in working context for the entire session. Do not re-read them at each phase boundary unless the user explicitly approves an update to one of them during this session; in that case, re-read only the updated file.
 
 1. `memory/long-term/domain-knowledge.md`
-2. `memory/long-term/dynatrace-playbooks.md`
+2. `memory/long-term/dynatrace-playbooks.md` — **hub only** (index table + How-to-use section). Individual playbooks live in `memory/long-term/playbooks/`. Do **not** load individual playbook files at session start.
 3. `memory/long-term/frameworks.md`
-4. `memory/long-term/stakeholder-profiles.md`
+4. `memory/long-term/stakeholder-profiles.md` — **hub only** (profile index table + overlay index). Individual profiles live in `memory/long-term/profiles/`. Do **not** load individual profile files at session start.
+
+**Traverse-on-need rule.** After session init, read individual files only when they are needed:
+- **Playbooks** — when Phase 1 (`skills/hypothesis-generation/SKILL.md`) matches a hypothesis to a problem shape, read the specific file named in the playbook index (e.g., `memory/long-term/playbooks/latency-backend.md`). Read only the matched playbook(s); do not load all eight.
+- **Profiles** — when Phase 3 (`skills/exec-onepager/SKILL.md`, `skills/pptx-builder/SKILL.md`) needs to calibrate for a named stakeholder, read the specific profile file named in the profile index. Read only the matched profile.
 
 Then establish the **active engagement for this session**. There is no global pointer file; the dated engagement folder under the client *is* the session's state, and you hold its path (`ENGAGEMENT_PATH`) in working context for the whole session.
 

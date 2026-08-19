@@ -26,7 +26,7 @@ Use this skill when:
 Then read these files:
 
 - `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If an HTML one-pager also exists in the project root, read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
-- `memory/long-term/stakeholder-profiles.md` — the profile of the intended reader, to inform pacing, depth, and visual emphasis.
+- `memory/long-term/stakeholder-profiles.md` — hub index (loaded at session init). Read the specific profile file for the intended reader (e.g., `memory/long-term/profiles/executive-sponsor.md`) to calibrate pacing, depth, and visual emphasis.
 - `<ENGAGEMENT_PATH>/signals-map.md` and `<ENGAGEMENT_PATH>/action-plan.md` — for any supporting numbers, charts, or appendix material the one-pager pointed to.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand spec. Governs cover-slide aesthetic, section-divider pattern, content-card / chart / table layouts, footer text, chart series colors, and product-name capitalization.
 - `memory/long-term/brand/reference/source-pdf-notes.md` — page-by-page index of the source brand PDF, useful when picking a layout pattern.

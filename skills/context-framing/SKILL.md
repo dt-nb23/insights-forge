@@ -27,7 +27,7 @@ Use this skill when:
 
 Then read these files:
 
-- `memory/long-term/stakeholder-profiles.md` — to recognize named stakeholder types and calibrate what "exec-ready" means for this engagement.
+- `memory/long-term/stakeholder-profiles.md` — hub index (already loaded at session init). When a stakeholder is named, read the specific profile file (e.g., `memory/long-term/profiles/executive-sponsor.md`) to calibrate "exec-ready" depth and tone.
 - `memory/long-term/domain-knowledge.md` — for the tech → UX → business linkage table; helps identify which insights are likely surfaceable given the active capabilities.
 - `memory/long-term/terminology.md` — to use consistent terminology when restating the engagement context.
 - `memory/long-term/client-question-bank.md` — client-facing phrasings of the 9 clarifying questions below, grouped by rubric classification (MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE). When the consultant indicates this discovery is being done **live with the customer** (rather than the agent gathering context from the consultant), draw question phrasings from this bank instead of the consultant-facing prompts below. Otherwise, treat it as a reference the consultant can take into their own discovery calls.

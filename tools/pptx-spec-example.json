@@ -120,6 +120,30 @@
     },
 
     {
+      "_comment": "Optional: wave background on a dark accent slide. wave_background names a key in WAVE_ASSETS ('wave-bg' for cover/closing, 'wave-ask' for decision-required). wave_overlay_opacity controls the dark overlay (0.0–1.0; default 0.80). Applies AFTER slide content is placed, so placeholders render on top of the wave.",
+      "layout": "Title+content+eyebrow_left",
+      "eyebrow": "Decision required",
+      "title": "Approve a 60-day pilot",
+      "content": ["Go-ahead needed by end of Q3 to start the pilot cohort"],
+      "wave_background": "wave-ask",
+      "wave_overlay_opacity": 0.78
+    },
+
+    {
+      "_comment": "Chart slide. The 'Chart' layout key routes to handle_chart(), which uses python-pptx ChartData. chart.type must be a valid XL_CHART_TYPE name (BAR_CLUSTERED, COLUMN_CLUSTERED, LINE, PIE, etc.). chart.left/top/width/height are in EMUs; omit them to use the full-slide default. Brand series colors (Teal → Magenta) are applied automatically.",
+      "layout": "Chart",
+      "title": "Error Rate by Service — 30-day trend",
+      "chart": {
+        "type": "COLUMN_CLUSTERED",
+        "categories": ["Week 1", "Week 2", "Week 3", "Week 4"],
+        "series": [
+          {"name": "Checkout API", "values": [2.1, 1.8, 2.4, 1.2]},
+          {"name": "Search API",   "values": [0.9, 1.1, 0.8, 0.7]}
+        ]
+      }
+    },
+
+    {
       "_comment": "Closing slide — always the last slide.",
       "layout": "Thank you slide"
     }
