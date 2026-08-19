@@ -10,7 +10,7 @@ The canonical phase rules live in [`CLAUDE.md`](../CLAUDE.md). This page expands
 
 **What it's for.** Take a vague problem statement and reframe it into a scoped, stakeholder-aware engagement. This is where you turn *"latency is bad on checkout"* into *"P95 checkout latency is up 40% week-over-week for the EU region; the VP of Reliability needs an answer before next Thursday's QBR."*
 
-**The skill the agent reads.** [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) — open it if you want to see every step the agent runs through, including the nine clarifying questions and the C.S.I.R. sub-sequence for Q3.
+**The skill the agent reads.** [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) — open it if you want to see every step the agent runs through, including the nine clarifying questions and the C.S.I.R. sub-sequence for Q3. Four behaviors worth knowing: questioning is **two-phase** (Q1–Q3 as a conversation, Q4–Q9 as one batched message); a pasted **seed-prompt intake brief** is absorbed as provisional answers and only the gaps get asked — collapsing to a single sharpening message when the brief arrives complete; the three **analyst calibration scores** route drill depth, council size, gate verbosity, and the plan's ambition ceiling; and Phase 0 writes the `.claude/active-client` marker that arms the client-isolation hook.
 
 **Files the agent reads before asking you anything.**
 
@@ -33,7 +33,7 @@ The phase runs in a fixed order, and the order resolves a real dependency — IC
 1. **Issue tree** ([`mece-decomposition`](../skills/mece-decomposition/SKILL.md)) — a structured decomposition of where the problem could be coming from, where every branch is mutually exclusive and the union is collectively exhaustive. The [MECE lens](../.claude/agents/mece-lens.md) critiques the tree here.
 2. **Hypotheses** ([`hypothesis-generation`](../skills/hypothesis-generation/SKILL.md)) — each branch gets 2–4 testable statements with stated exit criteria. Any hypothesis that depends on telemetry the team doesn't have is marked, on its own row, with Status **"blocked: instrumentation"** — the gap is recorded *in* `hypotheses.md`, not yet in the signals map. The [Consultative lens](../.claude/agents/consultative-lens.md) then runs a **framing pass** on the issue-tree and hypotheses *wording* — confirming branches and claims read as business outcomes and decisions — before hand-off. It corrects wording only; it does not touch structure or scores. Hand-off goes to signal-mapping, **not** to ICE.
 3. **Signals map** ([`signal-mapping`](../skills/signal-mapping/SKILL.md)) — connects each hypothesis to the SLI/SLO, RUM event, or APM trace that would validate it. This step also **scans `hypotheses.md` for the "blocked: instrumentation" rows and consolidates them** into the signals-map "Instrumentation gaps" section. Hand-off goes to ICE.
-4. **ICE scoring** ([`ice-scoring`](../skills/ice-scoring/SKILL.md)) — now that the signals map exists, Impact can be anchored to a business KPI. Before scoring, ICE consumes the instrumentation gaps: if a hypothesis can't be validated until a gap is closed, Effort rises (the instrumentation work is now in scope), Confidence drops (it can't be confirmed yet), and Impact drops if the KPI link can't be quantified. The [ICE lens](../.claude/agents/ice-lens.md) sanity-checks the scoring, and the full ranked table is what goes to the gate.
+4. **ICE scoring** ([`ice-scoring`](../skills/ice-scoring/SKILL.md)) — now that the signals map exists, Impact can be anchored to a business KPI. Before scoring, ICE consumes the instrumentation gaps: if a hypothesis can't be validated until a gap is closed, Effort rises (the instrumentation work is now in scope), Confidence drops (it can't be confirmed yet), and Impact drops if the KPI link can't be quantified. The [ICE lens](../.claude/agents/ice-lens.md) sanity-checks the scoring, and ice-scoring itself then presents the Phase 1 gate — the five-part gate summary block with the ranked table.
 
 In Phase 1, ICE Confidence means *the likelihood the hypothesis is validated by telemetry* and Impact means *the magnitude if it is confirmed*. (Phase 2 re-scores both against execution — see below.)
 
@@ -92,7 +92,7 @@ The order matters here: **one-pager first, deck second**. The one-pager forces t
 
 ## What every gate looks like, in practice
 
-At each gate the agent **stops and presents**. You always have three responses available:
+At each gate the agent **stops and presents** using the five-part gate summary block defined in `CLAUDE.md`: **1 Conclusion** (the single most important finding, one sentence), **2 What changed** since the prior gate, **3 Assumptions and confidence gaps**, **4 Out-of-scope cost** (anything excluded because it touched an out-of-scope capability), and **5 the ask**. At each approval the agent also bumps `phase:` and `last-touched:` in the engagement's `current-context.md`. You always have three responses available:
 
 | Response | What it does |
 |---|---|

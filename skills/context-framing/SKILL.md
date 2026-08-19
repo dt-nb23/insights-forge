@@ -39,7 +39,7 @@ If the consultant has not yet described the engagement, open with:
 
 > "Tell me about the customer and what you're trying to accomplish with them."
 
-Do not ask multiple questions at once. Let each answer drive the next question.
+Question flow follows the two-phase structure defined under **Clarifying questions** below: Phase A (Q1–Q3) runs as a conversation where each answer drives the next question; Phase B (Q4–Q9) is one batched drill message.
 
 ## Seed-prompt intake
 
@@ -54,20 +54,19 @@ When the opening message is a seed-prompt brief:
 
    | Brief section | Populates |
    |---|---|
-   | Requested outputs + Analyst calibration | Response format (Q3-R); analyst / account / customer-maturity calibration |
-   | Customer (name, what they do, vertical, size, tenant, region) | Q1, Q2, Q4, plus customer size (ACV band) and region(s) |
-   | Engagement framing (C.S.I.R.) | Q3 — Context, Specific, Intent, Response format |
+   | Requested outputs & trigger | Response format (Q3-R), trigger(s) (Q9), and the analyst's role plus the three 1–5 calibration scores (experience / account familiarity / customer Dynatrace maturity) |
+   | Customer context | Q1, Q2, Q4, plus customer size (ACV band), region(s), and the "Relationship & context" line (Q3-Context) |
+   | Stakeholders & audience | Q7 — archetype match + named-leader overlay trigger, with per-stakeholder communication level and priorities |
+   | Goals & success criteria | Q3-Intent — the Dynatrace intent and what the customer would call success |
+   | Pain & constraints | Q3-Specific and Q8 (technical-team priorities) — a single free-text field covering both |
    | Active capabilities | Q5 |
    | Out of scope / do not suggest | Out-of-scope exclusions (hard boundary — carried into every later phase) |
    | Focus applications | Q6 — RUM / Session Replay status per app |
-   | Stakeholders | Q7 — archetype match + named-leader overlay trigger |
-   | Technical team priorities | Q8 |
-   | Trigger(s) | Q9 |
 
 3. **Still run 1–3 rounds of clarifying questions, one topic at a time, before writing `current-context.md`:**
    - **First, close every MUST-HAVE gap** — any rubric MUST-HAVE the brief left `not provided`, filled with a placeholder, or answered thinly. Ask the corresponding question from the list below.
    - **Then sharpen the provisional answers** — confirm and deepen Intent, confirm the active-capability boundary, and probe what each named stakeholder actually cares about. A filled-in form field is a starting point, not a probed answer: treat a one-line brief value as a prompt for a real follow-up, not a closed question.
-   - Apply the normal rules: one question at a time, adaptive order, and **skip anything the brief already answers well** (a strong brief value counts as "already answered"). Stop when every MUST-HAVE holds a confirmed, non-placeholder value and you have enough substance to frame confidently.
+   - Apply the normal rules: the two-phase structure (conversational for Phase A gaps, one batched message for Phase B gaps), and **skip anything the brief already answers well** (a strong brief value counts as "already answered"). Stop when every MUST-HAVE holds a confirmed, non-placeholder value and you have enough substance to frame confidently.
 4. **Capture the fields the brief carries that the live question set does not ask for** — customer size (ACV band), region(s), out-of-scope exclusions, and the customer's-Dynatrace-maturity calibration — into `current-context.md` (see Output). **Record the out-of-scope exclusions explicitly and carry them forward**: later phases must never surface a hypothesis, opportunity, or action that depends on a capability or topic the consultant ruled out, even if it is active. See **Out-of-scope exclusions** below.
 5. **Then continue with Steps 3–11 unchanged** — folder creation, past-engagement check, reframe, orientation hypotheses, scope, write, verify, and the gate. The stakeholder-overlay and environment-intake follow-on triggers (Q7, Q5) apply exactly as in a live intake. The Phase 0 gate still requires explicit approval.
 
@@ -227,7 +226,7 @@ The "Analyst calibration" row in `current-context.md` carries three 1–5 scores
 
 Record the routing decision in `current-context.md` under "Calibration routing" (one sentence per axis that deviates from the default), so later skills can inherit it without re-computing.
 
-**Note on form calibration (F5):** the seed-prompt form currently collects the three 1–5 scores but does not display behavioral anchors for each level. When next updating the seed-prompt form, add a tooltip or label per scale showing what 1 and 5 mean. Until then, the routing above is the canonical definition; the form scores are the input, and this table is the mapping.
+**Note on form calibration (F5):** the seed-prompt form displays behavioral anchors for each 1–5 level (a hover tooltip per button, plus a caption for the selected level). The routing above remains the canonical definition; the form scores are the input, and this table is the mapping. If the anchors and this table ever diverge, this table wins.
 
 ## Brief-complete fast path (E2)
 
@@ -271,7 +270,7 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 ## Steps
 
 1. **Conditionally dispatch the doc-freshness-checker sub-agent in background.** Before opening the conversation, read `memory/long-term/freshness-report.md` and check the "Last refresh" run date. If the last check was fewer than 7 days ago AND the report shows zero Drifted or Unreachable entries → skip the dispatch and plan to note at the gate: "Doc citations verified [N days ago] — current." Only dispatch the sub-agent if the last check was 7 or more days ago, OR the report shows any open Drifted or Unreachable entries. When dispatching, call the `Agent` tool with `subagent_type: doc-freshness-checker` and `run_in_background: true`. The sub-agent refreshes Dynatrace doc citation status while the consultant answers Q1–Q9; its wall-clock work is hidden inside the user-input phase. It writes to `memory/long-term/freshness-report.md` only — it never edits long-term memory. Then **open the conversation** with the prompt above if the consultant has not described the engagement yet.
-2. **Ask clarifying questions** one at a time in adaptive order, skipping any already answered. If the opening message was a seed-prompt brief, first absorb it per **Seed-prompt intake** — then question the gaps and sharpen the provisional answers before summarizing.
+2. **Ask clarifying questions** using the two-phase structure (Phase A narrative funnel Q1–Q3, then Phase B closed drill block Q4–Q9 in one message), skipping any already answered. If the opening message was a seed-prompt brief, first absorb it per **Seed-prompt intake** — then question the gaps and sharpen the provisional answers before summarizing.
 3. **Create the engagement folder (new engagements only — skip if reframing an existing one).**
 
    Once Q1 has been answered and the client name is known:
@@ -346,7 +345,7 @@ Below the front-matter, the body sections:
 
 - **Treating Q3 as a single question.** Q3 is a four-part C.S.I.R. sub-sequence. Skipping Specific Information means orientation hypotheses will be generic. Skipping Intent means the consulting objective won't reflect what the consultant actually needs. Skipping Response Format means Phase 3 packaging decisions are made too late.
 - **Jumping to Phase 1 before the gate.** The insight narrative is only as strong as the context underneath it. A wrong scope in Phase 0 propagates through every subsequent artifact.
-- **Asking all clarifying questions at once.** One question at a time. A wall of questions produces short, low-quality answers.
+- **Skipping the Phase A funnel.** Q1–Q3 are a conversation, not a form — dumping them into one message alongside the Phase B drill block produces short, low-quality answers on exactly the questions that need depth. Batch only the closed factual block (Q4–Q9) and the SHOULD-HAVE confirmations.
 - **Skipping the capabilities checklist.** Open-ended capability questions produce vague answers. Always use the checklist for Q5.
 - **Assuming RUM is active.** Never assume. If RUM is not enabled, the user experience story is not available and the insight narrative must be reanchored.
 - **Ignoring the vertical.** Retail and FSI leadership have completely different KPI vocabularies. The vertical determines which tech → business linkages are load-bearing in Phase 1.

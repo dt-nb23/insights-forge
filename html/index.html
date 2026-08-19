@@ -490,7 +490,8 @@
     <div class="card card-sm"><h3 style="font-size:13px">⏸ Investigation reset</h3><p style="font-size:12px;margin:0">Archive complete engagement or pause/resume in-progress one</p></div>
     <div class="card card-sm"><h3 style="font-size:13px">👤 Stakeholder overlay</h3><p style="font-size:12px;margin:0">Capture named leader profile in client workspace</p></div>
     <div class="card card-sm"><h3 style="font-size:13px">🌐 Environment intake</h3><p style="font-size:12px;margin:0">Capture persistent client Dynatrace environment facts</p></div>
-    <div class="card card-sm"><h3 style="font-size:13px">📈 Value highlight</h3><p style="font-size:12px;margin:0">QBR/renewal backward-looking value summary from the client's prior completed engagements + contract.md</p>
+    <div class="card card-sm"><h3 style="font-size:13px">📈 Value highlight</h3><p style="font-size:12px;margin:0">QBR/renewal backward-looking value summary from the client's prior completed engagements + contract.md</p></div>
+    <div class="card card-sm"><h3 style="font-size:13px">🎯 Drill (/drill)</h3><p style="font-size:12px;margin:0">Chat-native intake without a seed-prompt brief — same two-phase questions, same brief format</p></div>
   </div>
 </section>
 
@@ -502,9 +503,9 @@
   <div class="card" style="max-width:640px;margin-bottom:10px">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:12px;color:var(--gray-lt)">
       <div><code>domain-knowledge.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">Signal patterns, tech→UX→business mappings, DT terminology</div></div>
-      <div><code>dynatrace-playbooks.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">8 investigation workflows with step sequences and exit criteria</div></div>
+      <div><code>dynatrace-playbooks.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">hub index only — the 8 playbooks (step sequences + exit criteria) live in <code>playbooks/</code>, read when a hypothesis matches</div></div>
       <div><code>frameworks.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">MECE, ICE formula, issue-tree → hypothesis rules</div></div>
-      <div><code>stakeholder-profiles.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">8 role archetypes + named-leader overlays for Phase 3</div></div>
+      <div><code>stakeholder-profiles.md</code><div style="color:var(--gray);font-size:11px;margin-top:2px">hub index only — the 8 archetype files (+ title overlays) live in <code>profiles/</code>, read when Phase 3 names a stakeholder</div></div>
     </div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--card-border);font-size:12px;color:var(--gray-lt);display:flex;gap:20px">
       <div style="flex:1"><span class="tag tag-teal" style="margin-bottom:6px;display:inline-block">New engagement</span><br>Phase 0 creates <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code> and holds that path.</div>
@@ -537,22 +538,18 @@
 
   <h2>Procedure</h2>
   <ol class="steps">
-    <li><div><strong>Background: dispatch doc-freshness-checker</strong><br><span>If last check &gt;7 days ago, launch the doc-freshness sub-agent in background while questions are answered.</span></div></li>
-    <li><div><strong>Q1 — Customer &amp; business description</strong><br><span>Who is the customer, what do they do?</span></div></li>
-    <li><div><strong>Q2 — Industry vertical</strong><br><span>Shapes which DT playbooks and signal patterns are most relevant.</span></div></li>
-    <li><div><strong>Q3 — C.S.I.R. (4-part sub-sequence)</strong><br><span>Context · Specific Information · Intent · Response format. Establishes the consulting frame.</span></div></li>
-    <li><div><strong>Q4 — Tenant type</strong><br><span>SaaS vs Managed. Affects DPS, Grail, and capability availability.</span></div></li>
-    <li><div><strong>Q5 — Active capabilities</strong><br><span>Multi-select checklist: which DT capabilities are active (OneAgent, RUM, Synthetics, Grail, etc.).</span></div></li>
-    <li><div><strong>Q6 — RUM status on target application</strong><br><span>Conditional on Q5. Scopes frontend signal availability.</span></div></li>
-    <li><div><strong>Q7 — Stakeholder leader + archetype</strong><br><span>Names who will receive Phase 3 deliverables. Triggers stakeholder-overlay skill if no profile exists.</span></div></li>
-    <li><div><strong>Q8 — Technical team priorities</strong><br><span>What the engineering team cares about; shapes action-plan framing.</span></div></li>
-    <li><div><strong>Q9 — Engagement trigger</strong><br><span>QBR / renewal / expansion / incident follow-up. Shapes value narrative.</span></div></li>
-    <li><div><strong>Check prior investigations</strong><br><span>Surface key lesson if a prior investigation exists for this client.</span></div></li>
+    <li><div><strong>Background: dispatch doc-freshness-checker</strong><br><span>If the last check was ≥7 days ago, or the report has open drifted/unreachable entries, launch the doc-freshness sub-agent in background while questions are answered.</span></div></li>
+    <li><div><strong>Absorb a seed-prompt brief if one opens the session</strong><br><span>A pasted <code># Insights Forge intake brief</code> (or a <code>/drill</code> run) maps every value as a provisional answer — only the gaps get asked. A complete brief collapses questioning to one sharpening message (fast path).</span></div></li>
+    <li><div><strong>Phase A — narrative funnel (Q1–Q3, conversational)</strong><br><span>Q1 customer &amp; what they do · Q2 vertical · Q3 the C.S.I.R. sub-sequence (Context · Specific Information · Intent · Response format). Each answer drives the next question.</span></div></li>
+    <li><div><strong>Phase B — closed drill block (Q4–Q9, one batched message)</strong><br><span>Q4 tenant type · Q5 active-capabilities checklist · Q6 RUM status (conditional) · Q7 stakeholder leader + archetype (triggers stakeholder-overlay if no profile) · Q8 technical team priorities · Q9 engagement trigger.</span></div></li>
+    <li><div><strong>Create the engagement folder + write the active-client marker</strong><br><span>New dated folder under <code>memory/clients/&lt;client&gt;/engagements/</code>; <code>.claude/active-client</code> arms the client-isolation hook.</span></div></li>
+    <li><div><strong>Route the calibration dials</strong><br><span>The three 1–5 scores (experience / account familiarity / customer DT maturity) tune drill depth, council size, gate verbosity, and the plan's ambition ceiling.</span></div></li>
+    <li><div><strong>Check prior investigations — this client and cross-client</strong><br><span>Surface this client's key lessons, plus a cross-client readback: match lessons-learned front-matter tags (vertical / problem shape / capabilities) and surface each match's "Cross-engagement hook" line.</span></div></li>
     <li><div><strong>Reframe as consulting objective</strong><br><span>Translate Q&amp;A into a clear, bounded consulting objective.</span></div></li>
     <li><div><strong>Surface 3–5 orientation hypotheses</strong><br><span>From capabilities + vertical, propose initial hypotheses before Phase 1 begins.</span></div></li>
-    <li><div><strong>Write current-context.md</strong><br><span>All MUST-HAVE fields populated. SHOULD-HAVE fields or "declined".</span></div></li>
+    <li><div><strong>Write current-context.md</strong><br><span>All MUST-HAVE fields populated. Open SHOULD-HAVEs are closed in one batched confirmation message (stop after two consecutive skips).</span></div></li>
     <li><div><strong>Surface freshness report</strong><br><span>Present doc-freshness results at gate. Flag drifted citations for user approval before promotion.</span></div></li>
-    <li><div><strong>Present &amp; pause at Phase 0 gate</strong></div></li>
+    <li><div><strong>Present &amp; pause at Phase 0 gate</strong><br><span>Presented as the five-part gate summary block: Conclusion · What changed · Assumptions &amp; confidence gaps · Out-of-scope cost · Approve / Redirect / Iterate.</span></div></li>
   </ol>
 
   <h2>Exit criteria (current-context.md)</h2>
@@ -565,15 +562,16 @@
         <li>Active capabilities</li>
         <li>Consulting objective</li>
         <li>Stakeholder archetype</li>
-        <li>Phase 0 gate decision</li>
+        <li>RUM status (when the intent is UX-focused)</li>
       </ul>
     </div>
     <div class="card card-sm" style="flex:1;min-width:200px">
       <div class="tag tag-blue" style="margin-bottom:8px">SHOULD-HAVE</div>
       <ul style="font-size:12px;color:var(--gray-lt);padding-left:14px">
         <li>Tenant type</li>
-        <li>RUM status (conditional)</li>
+        <li>RUM status (when the intent is not UX-focused)</li>
         <li>Leadership priorities</li>
+        <li>Technical team priorities</li>
         <li>Engagement trigger</li>
       </ul>
     </div>
@@ -629,7 +627,7 @@
     <div class="skill-header" onclick="toggleSkill('p1bc')">
       <div class="skill-header-left">
         <div class="skill-icon" style="background:rgba(25,102,255,.12)">💡</div>
-        <div><div style="font-size:13px;font-weight:500">1b/c — Hypothesis Generation + ICE Scoring</div><div style="font-size:11px;color:var(--gray)">Testable claims per branch, scored and ranked</div></div>
+        <div><div style="font-size:13px;font-weight:500">1b — Hypothesis Generation · 1c — Signal Mapping · 1d — ICE Scoring</div><div style="font-size:11px;color:var(--gray)">Testable claims per branch → signals mapped to KPIs → scored and ranked (ICE runs last)</div></div>
       </div>
       <div class="chevron" id="chev-p1bc">▾</div>
     </div>
@@ -687,7 +685,7 @@
       <div class="gate-opts">
         <span class="tag tag-teal">Approve → Phase 2</span>
         <span class="tag tag-blue">Redirect → revise artifacts</span>
-        <span class="tag tag-magenta">Iterate through lens → MECE / Optimist / Skeptic / ICE</span>
+        <span class="tag tag-magenta">Iterate through lens → any of the six (MECE / Optimist / ICE / Consultative / Customer / Skeptic)</span>
       </div>
     </div>
   </div>
@@ -791,36 +789,37 @@
     </div>
   </div>
 
-  <h2>HTML visual rules</h2>
+  <h2>HTML visual rules (layout-system.md)</h2>
   <div class="card card-sm" style="max-width:560px;font-size:12px;color:var(--gray-lt)">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px">
-      <div><strong style="color:var(--white)">Header</strong><br>Insights-Lockup-Horizontal-RGB_REV.svg (24–26px height)</div>
-      <div><strong style="color:var(--white)">Fonts</strong><br>DT Flow Medium (headings), DT Flow Light (body), Arial fallback</div>
-      <div><strong style="color:var(--white)">Wave backgrounds</strong><br>datalargebeam or datatrail — never particle series behind text &lt;13px</div>
-      <div><strong style="color:var(--white)">Layout</strong><br>Two-column; balance left/right heights</div>
+      <div><strong style="color:var(--white)">Header</strong><br>assets/insights-lockup-rev.png (24px) in the HdrA/HdrB component over assets/wave-bg.png</div>
+      <div><strong style="color:var(--white)">Fonts</strong><br>All six DTFlow weights loaded; 'DTFlow', Arial, sans-serif stack</div>
+      <div><strong style="color:var(--white)">Structure</strong><br>Component catalog + recipe selection (HdrX · TL;DR · 01X–05X · FtrB) — no fixed template; copy must fit named component slots</div>
+      <div><strong style="color:var(--white)">Enforcement</strong><br>Canonical :root token block copied verbatim; lint with tools/onepager-lint.py</div>
     </div>
     <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--card-border)">
       <strong style="color:var(--white)">Color semantics:</strong>
-      <span style="color:#49C2B3">teal = confirmed</span> ·
-      <span style="color:#C93FDB">magenta = gaps/risks</span> ·
-      <span style="color:#6fa8ff">blue = open/CTA</span>
+      <span style="color:#1A7A70">guide = confirmed</span> ·
+      <span style="color:#5E28E5">plan = open hypotheses</span> ·
+      <span style="color:#C93FDB">stakes = risks/gaps</span> ·
+      <span style="color:#8B1DC0">problem = problem statement</span>
     </div>
   </div>
 
   <!-- 3b -->
   <h2 style="margin-top:32px">3b — PowerPoint deck</h2>
-  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:16px">Only generated after explicit one-pager approval. Run via <code>tools/pptx-generator.py</code> with a JSON spec.</p>
+  <p style="color:var(--gray-lt);font-size:13px;margin-bottom:16px">Only generated after explicit one-pager approval. Run via <code>tools/pptx-generator.py</code> with a JSON spec — wave backgrounds (<code>wave_background</code> / <code>wave_overlay_opacity</code>) and branded chart slides (<code>"layout": "Chart"</code>) are spec fields. tools/ also holds <code>onepager-lint.py</code> (Phase 3 HTML lint), <code>conformance-check.py</code> (workspace checks), and <code>client-isolation-hook.sh</code> (isolation enforcement).</p>
 
   <div class="card" style="max-width:560px">
     <h3 style="font-size:13px;margin-bottom:10px">Deck structure (6 sections)</h3>
     <div style="font-size:12px;color:var(--gray-lt);display:flex;flex-direction:column;gap:6px">
       <div><span class="tag tag-gray" style="margin-right:8px">1</span>Title slide — problem name, audience, date, presenter</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">2</span>Section divider — transition visual</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">3</span>Executive summary — problem + business impact on one slide</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">4</span>Top findings — 3–5 findings in cards or detail slides</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">5</span>Recommended actions — 3–4 column table</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">6</span>Risks &amp; decision asks — leadership questions + named decisions</div>
-      <div><span class="tag tag-gray" style="margin-right:8px">+</span>Appendix (optional) — issue tree, signals map, ICE table</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">2</span>Executive summary — problem + business impact on one slide</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">3</span>Top findings — 3–5 findings in cards or detail slides</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">4</span>Recommended actions — 3–4 column table</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">5</span>Risks &amp; decision asks — leadership questions + named decisions</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">6</span>Appendix (optional) — issue tree, signals map, ICE table</div>
+      <div><span class="tag tag-gray" style="margin-right:8px">+</span>Section dividers and Closing slide — unnumbered extras, each bound to a named template layout</div>
     </div>
   </div>
 
@@ -833,7 +832,7 @@
 <!-- ══════════════ SKILLS ══════════════ -->
 <section class="page" id="page-skills">
   <h1>Skills</h1>
-  <p class="lead">14 procedural skill files, each read immediately before its artifact is produced. Click any skill to see its procedure.</p>
+  <p class="lead">15 procedural skill files, each read immediately before its artifact is produced. Click any skill to see its procedure.</p>
 
   <h2>Phase-bound skills</h2>
 
@@ -846,7 +845,7 @@
       <div class="chevron" id="chev-sk-cf">▾</div>
     </div>
     <div class="skill-body" id="body-sk-cf">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">9-question intake sequence to frame the engagement. Dispatches doc-freshness-checker in background. Writes <code>current-context.md</code>.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Two-phase intake (Q1–Q3 conversational funnel, Q4–Q9 batched drill block) to frame the engagement; absorbs seed-prompt briefs with a complete-brief fast path. Dispatches doc-freshness-checker in background. Writes <code>current-context.md</code> and the <code>.claude/active-client</code> marker.</p>
       <p style="font-size:12px;color:var(--gray-lt)">Key questions: Customer · Vertical · C.S.I.R. · Tenant type · Active capabilities · RUM status · Stakeholder · Technical priorities · Engagement trigger</p>
     </div>
   </div>
@@ -882,7 +881,7 @@
     <div class="skill-header" onclick="toggleSkill('sk-ice')">
       <div class="skill-header-left">
         <div class="skill-icon" style="background:rgba(25,102,255,.12)">⚖️</div>
-        <div><div style="font-size:13px;font-weight:500">ice-scoring</div><div style="font-size:11px;color:var(--gray)">Phase 1c · skills/ice-scoring/SKILL.md</div></div>
+        <div><div style="font-size:13px;font-weight:500">ice-scoring</div><div style="font-size:11px;color:var(--gray)">Phase 1d (runs last) · skills/ice-scoring/SKILL.md</div></div>
       </div>
       <div class="chevron" id="chev-sk-ice">▾</div>
     </div>
@@ -895,7 +894,7 @@
     <div class="skill-header" onclick="toggleSkill('sk-sm')">
       <div class="skill-header-left">
         <div class="skill-icon" style="background:rgba(201,63,219,.12)">🔗</div>
-        <div><div style="font-size:13px;font-weight:500">signal-mapping</div><div style="font-size:11px;color:var(--gray)">Phase 1d · skills/signal-mapping/SKILL.md</div></div>
+        <div><div style="font-size:13px;font-weight:500">signal-mapping</div><div style="font-size:11px;color:var(--gray)">Phase 1c · skills/signal-mapping/SKILL.md</div></div>
       </div>
       <div class="chevron" id="chev-sk-sm">▾</div>
     </div>
@@ -959,6 +958,19 @@
   <h2>On-demand skills</h2>
 
   <div class="skill-card">
+    <div class="skill-header" onclick="toggleSkill('sk-dr')">
+      <div class="skill-header-left">
+        <div class="skill-icon" style="background:rgba(111,168,255,.12)">🎯</div>
+        <div><div style="font-size:13px;font-weight:500">drill</div><div style="font-size:11px;color:var(--gray)">On demand (/drill) · skills/drill/SKILL.md</div></div>
+      </div>
+      <div class="chevron" id="chev-sk-dr">▾</div>
+    </div>
+    <div class="skill-body" id="body-sk-dr">
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">Chat-native intake — the Seed Prompt Generator without the browser form. Type <code>/drill</code> and the agent collects the same fields conversationally (partial drills supported), emits the exact <code># Insights Forge intake brief</code> format, then hands off to context-framing.</p>
+    </div>
+  </div>
+
+  <div class="skill-card">
     <div class="skill-header" onclick="toggleSkill('sk-er')">
       <div class="skill-header-left">
         <div class="skill-icon" style="background:rgba(111,168,255,.12)">🔎</div>
@@ -1019,7 +1031,7 @@
       <div class="chevron" id="chev-sk-vh">▾</div>
     </div>
     <div class="skill-body" id="body-sk-vh">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">QBR/renewal brief from the client's prior <strong style="color:var(--white)">completed engagements</strong> (their <code>engagements/</code> folders + <code>contract.md</code>). Requires at least one <code>state: complete</code> engagement. Identifies 2–4 value narrative threads: Discovery · Improvement · Risk mitigation · Strategic insight · Instrumentation progress.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">QBR/renewal brief from the client's prior <strong style="color:var(--white)">completed engagements</strong> (their <code>engagements/</code> folders + <code>contract.md</code>). Requires at least one <code>state: complete</code> engagement that contains a confirmed finding or verifiable outcome. Identifies 2–4 value narrative threads: Discovery · Improvement · Risk mitigation · Strategic insight · Instrumentation progress.</p>
     </div>
   </div>
 </section>
@@ -1034,7 +1046,7 @@
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
         <div style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></div>
         <strong>MECE lens</strong>
-        <span class="tag tag-gray" style="font-size:10px">Haiku</span>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
       <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 (on the issue tree) and Phase 2 (on the opportunity set), before the work is presented.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: overlap between branches · gaps (third-party, biz process, instrumentation, deploy) · mixed abstraction levels · solution vs problem phrasing</p>
@@ -1043,7 +1055,7 @@
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
         <div style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></div>
         <strong>ICE lens</strong>
-        <span class="tag tag-gray" style="font-size:10px">Haiku</span>
+        <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
       <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 (after the signals map exists) and Phase 2 (re-rank after the persona council).</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Scores I/C/E (1–10 each); produces ranked table; flags where one dimension is doing most of the work</p>
@@ -1178,11 +1190,14 @@
       <h3 style="color:var(--teal)">Root library</h3>
       <div style="font-size:11px;color:var(--gray);margin-bottom:8px">memory/long-term/</div>
       <span class="mem-file">domain-knowledge.md</span>
-      <span class="mem-file">dynatrace-playbooks.md</span>
+      <span class="mem-file">dynatrace-playbooks.md (hub index)</span>
+      <span class="mem-file">playbooks/ (8 playbook files, read on match)</span>
       <span class="mem-file">frameworks.md</span>
-      <span class="mem-file">stakeholder-profiles.md</span>
+      <span class="mem-file">stakeholder-profiles.md (hub index)</span>
+      <span class="mem-file">profiles/ (8 archetype files, read on need)</span>
       <span class="mem-file">terminology.md</span>
       <span class="mem-file">client-question-bank.md</span>
+      <span class="mem-file">phased-plan-timeline-framing.md</span>
       <span class="mem-file">freshness-report.md</span>
       <span class="mem-file">brand/brand-spec.md</span>
       <span class="mem-file">brand/reference/pptx-layout-index.md</span>
@@ -1217,7 +1232,7 @@
 
   <h2>Context isolation rule</h2>
   <div class="card" style="max-width:600px;font-size:13px;color:var(--gray-lt)">
-    After loading the root library, the agent establishes the active engagement (created at Phase 0, or resumed by scanning engagement-folder <code>state:</code> front-matter) and derives the client name from its path. For the rest of the session, all client-specific reads come <strong style="color:var(--white)">only from</strong> <code>memory/clients/&lt;active-client-name&gt;/</code>. The agent never reads another client's folder, even if the user's question names one. There is no global pointer file, so two concurrent sessions for different clients can never collide.
+    After loading the root library, the agent establishes the active engagement (created at Phase 0, or resumed by scanning engagement-folder <code>state:</code> front-matter) and derives the client name from its path. For the rest of the session, all client-specific reads come <strong style="color:var(--white)">only from</strong> <code>memory/clients/&lt;active-client-name&gt;/</code>. The agent never reads another client's folder, even if the user's question names one — and a PreToolUse hook (<code>tools/client-isolation-hook.sh</code>, keyed on the <code>.claude/active-client</code> marker written at Phase 0) mechanically blocks cross-client Read/Write/Edit calls. There is no global pointer file, so two concurrent sessions for different clients can never collide.
   </div>
 
   <h2>Promotion path: client → long-term</h2>
@@ -1236,9 +1251,9 @@
       <tr><th>File</th><th>Phase</th><th>Contents</th><th>Gate</th></tr>
     </thead>
     <tbody>
-      <tr><td>current-context.md</td><td>0</td><td>Engagement frame: customer, vertical, C.S.I.R., capabilities, consulting objective, stakeholder archetype</td><td>Phase 0 gate</td></tr>
+      <tr><td>current-context.md</td><td>0</td><td>YAML status front-matter (state/phase/opened/last-touched) + engagement frame: customer, vertical, C.S.I.R., capabilities, out-of-scope exclusions, analyst calibration, consulting objective, orientation hypotheses, stakeholder archetype</td><td>Phase 0 gate</td></tr>
       <tr><td>issue-tree.md</td><td>1a</td><td>4–7 MECE branches. Each branch includes: problem framing + "what we'd see if true." Version history appended.</td><td>Part of Phase 1 gate</td></tr>
-      <tr><td>hypotheses.md</td><td>1b/c</td><td>2–4 testable claims per branch, each with expected signals, validation approach, required metrics, status, and ICE scores after 1c</td><td>Part of Phase 1 gate</td></tr>
+      <tr><td>hypotheses.md</td><td>1b/1d</td><td>2–4 testable claims per branch, each with expected signals, validation approach, required metrics, status, and ICE scores added after 1d (ICE runs last)</td><td>Part of Phase 1 gate</td></tr>
       <tr><td>signals-map.md</td><td>1d</td><td>SLIs/SLOs → UX outcomes → Business KPIs. Instrumentation gaps explicitly listed.</td><td>Phase 1 gate</td></tr>
       <tr><td>action-plan.md</td><td>2</td><td>Investigation actions (with exit criteria) + Recommended actions (ranked) + Decision asks + Risks & tradeoffs</td><td>Phase 2 gate</td></tr>
       <tr><td>decisions-log.md</td><td>All</td><td>Every gate decision: phase, response type (Approve/Redirect/Lens), date, notes</td><td>Updated at every gate</td></tr>
@@ -1253,7 +1268,7 @@
 <!-- ══════════════ GATES ══════════════ -->
 <section class="page" id="page-gates">
   <h1>Gates &amp; controls</h1>
-  <p class="lead">Every phase gate offers the same three options. The agent records every decision. No phase begins without the prior one's approval.</p>
+  <p class="lead">Every phase gate offers the same three options, presented as a five-part gate summary block — <strong>Conclusion</strong> (the single most important finding, one sentence) · <strong>What changed</strong> since the prior gate · <strong>Assumptions &amp; confidence gaps</strong> · <strong>Out-of-scope cost</strong> (anything excluded because it touched an out-of-scope capability) · the <strong>Approve / Redirect / Iterate</strong> ask. The agent records every decision and bumps the engagement's phase front-matter at each approval. No phase begins without the prior one's approval.</p>
 
   <h2>Gate options</h2>
   <div class="card-grid">
@@ -1291,6 +1306,7 @@
     <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No reading another client's folder, even if user names one</div></div>
     <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No advancing to the next phase without explicit user approval of the current one</div></div>
     <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No writing to long-term memory or client overlays without user confirmation</div></div>
+    <div class="principle"><div class="principle-icon">🚫</div><div class="principle-text">No surfacing anything that depends on an out-of-scope capability — engagement-wide, even when the capability is active; exclusions are copied verbatim into every lens dispatch</div></div>
   </div>
 </section>
 
@@ -1362,7 +1378,7 @@
       <div class="qs-num">3</div>
       <div>
         <strong style="font-size:13px">Answer up to 9 clarifying questions</strong>
-        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">One at a time, in adaptive order. If your opening paragraph covers Q1 and Q2, the agent skips them. See the table below.</p>
+        <p style="font-size:12px;color:var(--gray-lt);margin:4px 0 0">Two phases: Q1–Q3 as a flowing conversation, then Q4–Q9 as one batched factual message. If your opening paragraph covers Q1 and Q2, the agent skips them. See the table below.</p>
       </div>
     </div>
     <div class="qs-row">
@@ -1438,6 +1454,7 @@
       <div class="panel-item" data-doc="research" onclick="selectDoc(this,'research')">Research</div>
       <div class="panel-item" data-doc="deliverables" onclick="selectDoc(this,'deliverables')">Deliverables</div>
       <div class="panel-item" data-doc="customizing" onclick="selectDoc(this,'customizing')">Customizing</div>
+      <div class="panel-item" data-doc="seed-prompt-generator" onclick="selectDoc(this,'seed-prompt-generator')">Seed Prompt Generator</div>
     </div>
     <div class="panel-right">
       <div class="md-content" id="doc-content">Loading…</div>
@@ -1459,6 +1476,7 @@
       <div class="panel-item panel-item-mono" data-file="signals-map" onclick="selectFile(this,'signals-map')">signals-map.md</div>
       <div class="panel-item panel-item-mono" data-file="action-plan" onclick="selectFile(this,'action-plan')">action-plan.md</div>
       <div class="panel-item panel-item-mono" data-file="decisions-log" onclick="selectFile(this,'decisions-log')">decisions-log.md</div>
+      <div class="panel-item panel-item-mono" data-file="lessons-learned" onclick="selectFile(this,'lessons-learned')">lessons-learned.md</div>
       <div class="panel-group">Client template</div>
       <div class="panel-item panel-item-mono" data-file="client-readme" onclick="selectFile(this,'client-readme')">README.md</div>
       <div class="panel-item panel-item-mono" data-file="environment" onclick="selectFile(this,'environment')">environment.md</div>
@@ -1504,6 +1522,8 @@
       <div class="panel-item panel-item-mono" data-source="sk-stakeholder-overlay" onclick="selectSource(this,'sk-stakeholder-overlay')">stakeholder-overlay</div>
       <div class="panel-item panel-item-mono" data-source="sk-environment-intake" onclick="selectSource(this,'sk-environment-intake')">environment-intake</div>
       <div class="panel-item panel-item-mono" data-source="sk-value-highlight" onclick="selectSource(this,'sk-value-highlight')">value-highlight</div>
+      <div class="panel-item panel-item-mono" data-source="sk-drill" onclick="selectSource(this,'sk-drill')">drill</div>
+      <div class="panel-item panel-item-mono" data-source="sk-brand-humanizer" onclick="selectSource(this,'sk-brand-humanizer')">brand-humanizer</div>
 
       <div class="panel-group">Sub-Agents</div>
       <div class="panel-item panel-item-mono" data-source="ag-mece-lens" onclick="selectSource(this,'ag-mece-lens')">mece-lens</div>
@@ -1539,7 +1559,7 @@ The single most important thing to internalize before you start: **the agent wil
 
 **Installation = open this folder in Claude Code.**
 
-Open the `insights-forge/` directory in VS Code with the Claude Code extension installed. The agent's operating manual (`CLAUDE.md`) loads automatically on every session — you don't do anything to "load" it. The Claude Code extension is the recommended surface because you can watch the agent write artifacts in the file explorer as it works, which makes the four-phase loop easier to follow. Claude Code in a terminal (`claude`) works too.
+Open the `insights-forge/` directory in VS Code with the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code) installed. The agent's operating manual ([`CLAUDE.md`](../CLAUDE.md)) loads automatically on every session — you don't do anything to "load" it. The Claude Code extension is the recommended surface because you can watch the agent write artifacts in the file explorer as it works, which makes the four-phase loop easier to follow. Claude Code in a terminal (`claude`) works too.
 
 > **Other surfaces.** Claude.ai as a Project can run a partial version of the workflow but lacks the local filesystem, so phase artifacts won't persist between sessions. Stick with the VS Code extension or terminal for real engagements.
 
@@ -1549,29 +1569,40 @@ Before diving into setup, it helps to understand how memory is organized. It has
 
 **Root library (`memory/long-term/`)** — universal knowledge: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic stakeholder archetypes. This knowledge applies to every client. The agent reads it on every session. **You never put client-specific information here.**
 
-**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile (`environment.md`), commercial/consumption context (`contract.md`), named leader profiles (`stakeholder-overlays.md`), and every engagement under `engagements/`. The agent only reads the active client's folder — never another client's.
+**Client workspaces (`memory/clients/<client-name>/`)** — one isolated folder per client. Contains everything specific to that client: their Dynatrace environment profile, named leader profiles, and all archived investigations. The agent only reads the active client's folder — never another client's. Each workspace has:
+
+```
+memory/clients/<client-name>/
+├── README.md                    (engagement history + status index)
+├── environment.md               (DT environment facts)
+├── contract.md                  (commercial & consumption — confidential)
+├── stakeholder-overlays.md      (named leaders at this client)
+└── engagements/                 (one dated folder per engagement; all phase files live here)
+```
 
 **Active investigation — the engagement folder.** The currently open engagement's files live in its dated folder under the client, `memory/clients/<client-name>/engagements/<YYYY-MM-DD-slug>/`. There is no separate "active project" location and no global pointer — the engagement folder is the session's working directory, and a status front-matter block in its `current-context.md` marks it `active`. Because each session works in its own dated folder, running two clients at once never crosses wires.
 
-See memory.md for the full architecture.
+See [memory.md](memory.md) for the full architecture.
 
 ## One-time workspace setup
 
-Before your first real engagement, take 15 minutes to populate the root library with knowledge that applies to every client.
+Before your first real engagement, take 15 minutes to populate the root library with knowledge that applies to every client. These are the files that make the workspace *yours*, not generic.
 
 ### 1. Terminology
 
-Open `memory/long-term/terminology.md` and add acronyms or internal service names your team uses that aren't already there. Internal names matter most — the agent will refer to them by your name, not a generic one.
+Open [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) and add acronyms or internal service names your team uses that aren't already there. Internal names matter most — the agent will refer to them by your name, not a generic one.
 
 ### 2. Domain knowledge — org-level slots only
 
-Open `memory/long-term/domain-knowledge.md` and look for `[team to note: …]` slots. These are for **org-level operational context only** — for example, which DPS capabilities your org's standard contract includes, or internal tool conventions that apply across all clients.
+Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) and look for `[team to note: …]` slots. These are for **org-level operational context only** — for example, which DPS capabilities your org's standard contract includes, or internal tool conventions that apply across all clients. 
 
-**Do not put client-specific environment details here.** Those go into each client's `environment.md`.
+**Do not put client-specific environment details here.** Those go into each client's `environment.md` (see "Before your first engagement with a new client" below).
 
 ### 3. (Optional) Adjust `CLAUDE.md`
 
-`CLAUDE.md` is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
+[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (additional operating constraints, changed phase gates, different out-of-scope handling), adjust them here. The citation-freshness window lives in `skills/external-research/SKILL.md`, not here.
+
+You do **not** need to pre-create any engagement files — the agent creates each engagement's dated folder and its files at Phase 0.
 
 ## Before your first engagement with a new client
 
@@ -1590,11 +1621,19 @@ In the Claude Code chat, start with:
 
 > *"Describe the problem you're trying to solve."*
 
-…or just describe the problem and client directly. The agent will read `skills/context-framing/SKILL.md` and begin Phase 0.
+…or just describe the problem and client directly.
+
+> **Faster path — the Seed Prompt Generator.** If you already know the customer, open [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html) in VS Code or Claude Code Desktop App, fill it out, and paste the generated seed prompt as your opening message. Phase 0 then starts with the context already loaded instead of extracting it question-by-question. Full walkthrough in [seed-prompt-generator.md](seed-prompt-generator.md).
+
+The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
+- Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
+- Establishes the active engagement — the one this session creates at Phase 0, or one you resume (the agent scans engagement folders' status front-matter to offer resumable ones)
+- Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)
+- Conditionally dispatches the doc-freshness-checker background sub-agent (if the last check was ≥ 7 days ago, or the freshness report shows any open drifted/unreachable entries)
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent walks you through up to nine clarifying questions, one at a time, in adaptive order.
+The agent walks you through up to nine clarifying questions in two phases: Q1–Q3 as a flowing conversation (each answer drives the next question), then Q4–Q9 as one batched factual message. If your opening paragraph already covers Q1 and Q2, it skips them.
 
 | Q | What it asks |
 |---|---|
@@ -1608,6 +1647,8 @@ The agent walks you through up to nine clarifying questions, one at a time, in a
 | Q8 | What the technical team cares about day-to-day |
 | Q9 | Trigger for this engagement (QBR, renewal, expansion, other) |
 
+If you name a specific leader in Q7 and no overlay exists for them, the agent will flag it: `skills/stakeholder-overlay/SKILL.md` should run at the gate to capture their profile in the client's workspace.
+
 ### Step 3 — Phase 0 gate
 
 The agent presents a reframed engagement summary and writes it to `current-context.md` inside the new engagement folder (`memory/clients/<client>/engagements/<dated-slug>/`). At this gate you have three options:
@@ -1616,15 +1657,17 @@ The agent presents a reframed engagement summary and writes it to `current-conte
 - **Redirect** — change scope, framing, or priority. The agent updates and re-presents.
 - **Iterate through a lens** — ask for a re-review through MECE, Optimist, ICE, Consultative, Customer, or Skeptic. The agent revises before re-presenting.
 
+The agent will not advance until you explicitly approve. See [workflow.md](workflow.md) for the full ritual.
+
 ### Step 4 — Continue through Phases 1, 2, 3
 
-Each phase has its own gate and its own set of artifacts. Don't skip phases — the gate exists to let you redirect before downstream work bakes in a bad assumption.
+Each phase has its own gate and its own set of artifacts. Don't skip phases — the gate exists to let you redirect before downstream work bakes in a bad assumption. [workflow.md](workflow.md) has the full details. [skills.md](skills.md) indexes every procedural skill.
 
 ## Finishing an engagement
 
 When Phase 3 deliverables are approved, use the investigation-reset skill to close out:
 
-> *"Archive this investigation."*
+> *"Archive this investigation and reset the workspace."*
 
 The agent will:
 1. Ask you four lessons-learned questions (what worked, what to avoid, new knowledge, proposed memory updates).
@@ -1633,7 +1676,7 @@ The agent will:
 4. Execute any approved updates to the root library (e.g., a new playbook insight you identified).
 5. Mark the engagement `state: complete` in its `current-context.md`.
 
-Nothing moves — the engagement folder stays at `memory/clients/<client-name>/engagements/<dated-slug>/`. The client's environment profile, contract, stakeholder overlays, and every past engagement remain in `memory/clients/<client-name>/` for the next engagement.
+Nothing moves — the engagement folder stays at `memory/clients/<client-name>/engagements/<dated-slug>/`. The next session starts fresh, and the client's environment profile, contract, stakeholder overlays, and every past engagement remain in `memory/clients/<client-name>/` for the next engagement with the same client.
 
 ## Working with multiple clients
 
@@ -1645,7 +1688,7 @@ The agent marks the current engagement `state: paused` in its `current-context.m
 
 > *"Resume [client name]."*
 
-The agent scans engagement folders for paused/active status, you pick one, it flips that engagement back to `state: active` and reminds you where you left off. Client data never crosses client boundaries.
+The agent scans engagement folders for paused/active status, you pick the one to resume, it flips that engagement back to `state: active`, and reminds you where you left off. Client data never crosses client boundaries — each client's workspace is read only when that client is active.
 
 ## Checking where you are
 
@@ -1655,36 +1698,38 @@ Open the active engagement's `current-context.md` (under `memory/clients/<client
 
 | The agent reads… | At this file |
 |---|---|
-| Operating manual | `CLAUDE.md` |
-| Phase 0 procedure | `skills/context-framing/SKILL.md` |
+| Operating manual | [`CLAUDE.md`](../CLAUDE.md) |
+| Phase 0 procedure | [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) |
 | Active / resumable engagements | scan `memory/clients/*/engagements/*/current-context.md` for `state` |
 | Client environment (if populated) | `memory/clients/<client-name>/environment.md` |
+| Client stakeholder overlays | `memory/clients/<client-name>/stakeholder-overlays.md` |
 | Live investigation state | the active engagement folder, `memory/clients/<client>/engagements/<dated-slug>/` |
 </script>
 
 <script type="text/plain" id="raw-workflow">
 # The four-phase workflow
 
-This page walks you through what actually happens in each phase, what the gate feels like in practice, and where the artifacts land.
+This page walks you through what actually happens in each phase, what the gate feels like in practice, and where the artifacts land. If you've read [getting-started.md](getting-started.md) and want the deeper picture, you're in the right place.
 
 The workspace is built around a simple rhythm: **work, present, gate, repeat**. The agent produces something, stops, asks you to weigh in, and only moves forward when you say so. This isn't ceremony — it's the load-bearing safety mechanism that keeps the workspace useful for ambiguous problems. A bad framing in Phase 0 will produce confident-sounding nonsense in Phase 3 if there's no gate to catch it.
 
-The canonical phase rules live in `CLAUDE.md`. This page expands on what each phase actually feels like.
+The canonical phase rules live in [`CLAUDE.md`](../CLAUDE.md). This page expands on what each phase actually feels like.
 
 ## Phase 0 — Context
 
 **What it's for.** Take a vague problem statement and reframe it into a scoped, stakeholder-aware engagement. This is where you turn *"latency is bad on checkout"* into *"P95 checkout latency is up 40% week-over-week for the EU region; the VP of Reliability needs an answer before next Thursday's QBR."*
 
-**The skill the agent reads.** `skills/context-framing/SKILL.md` — open it if you want to see every step the agent runs through, including the nine clarifying questions and the C.S.I.R. sub-sequence for Q3.
+**The skill the agent reads.** [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) — open it if you want to see every step the agent runs through, including the nine clarifying questions and the C.S.I.R. sub-sequence for Q3. Four behaviors worth knowing: questioning is **two-phase** (Q1–Q3 as a conversation, Q4–Q9 as one batched message); a pasted **seed-prompt intake brief** is absorbed as provisional answers and only the gaps get asked — collapsing to a single sharpening message when the brief arrives complete; the three **analyst calibration scores** route drill depth, council size, gate verbosity, and the plan's ambition ceiling; and Phase 0 writes the `.claude/active-client` marker that arms the client-isolation hook.
 
 **Files the agent reads before asking you anything.**
 
-- `memory/long-term/stakeholder-profiles.md` — so it can recognize which leaders you might be producing outputs for.
-- `memory/long-term/domain-knowledge.md` — to anchor in the tech → UX → business linkage table.
-- `memory/long-term/terminology.md` — to use language consistent with the team.
-- `memory/long-term/client-question-bank.md` — when you tell it the discovery is happening **live with the customer**, it switches to the client-facing phrasings.
+- [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) — so it can recognize which leaders you might be producing outputs for.
+- [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) — to anchor in the tech → UX → business linkage table.
+- [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) — to use language consistent with the team.
+- [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md) — when you tell it the discovery is happening **live with the customer**, it switches to the client-facing phrasings.
+- `memory/clients/<client>/README.md` — the client's engagement-history index, to spot prior engagements on the same customer and surface relevant lessons. There is no shared cross-client investigations file; prior-engagement detection is per-client.
 
-**What lands on disk.** `current-context.md` inside the engagement folder — `memory/clients/<client>/engagements/<YYYY-MM-DD-slug>/`. Open it during Phase 0 to see the agent's running understanding of the problem. It opens with a status front-matter block (`state`, `phase`, …) that makes the engagement self-describing.
+**What lands on disk.** `current-context.md` inside the engagement folder — `memory/clients/<client>/engagements/<YYYY-MM-DD-slug>/`. Open it during Phase 0 to see the agent's running understanding of the problem — it's not hidden from you. It opens with a status front-matter block (`state`, `phase`, …) that makes the engagement self-describing.
 
 **The gate question.** *"Does this framing match what you actually need?"*
 
@@ -1692,18 +1737,14 @@ The canonical phase rules live in `CLAUDE.md`. This page expands on what each ph
 
 **What it's for.** Decompose the framed problem into a MECE issue tree, generate ranked hypotheses per branch, and map the technical signals that would prove or disprove each one.
 
-You'll feel three distinct shifts during this phase:
+The phase runs in a fixed order, and the order resolves a real dependency — ICE cannot anchor Impact to a business KPI until the signals map exists, so scoring comes last:
 
-- First, the **issue tree** appears — a structured decomposition of where the problem could be coming from, where every branch is mutually exclusive and the union is collectively exhaustive.
-- Then **hypotheses** populate under each branch, each one written as a testable statement with a stated exit criterion.
-- Finally, the **signals map** connects each hypothesis to the SLI/SLO, RUM event, or APM trace that would validate it — and importantly, calls out the gaps where the instrumentation doesn't exist.
+1. **Issue tree** ([`mece-decomposition`](../skills/mece-decomposition/SKILL.md)) — a structured decomposition of where the problem could be coming from, where every branch is mutually exclusive and the union is collectively exhaustive. The [MECE lens](../.claude/agents/mece-lens.md) critiques the tree here.
+2. **Hypotheses** ([`hypothesis-generation`](../skills/hypothesis-generation/SKILL.md)) — each branch gets 2–4 testable statements with stated exit criteria. Any hypothesis that depends on telemetry the team doesn't have is marked, on its own row, with Status **"blocked: instrumentation"** — the gap is recorded *in* `hypotheses.md`, not yet in the signals map. The [Consultative lens](../.claude/agents/consultative-lens.md) then runs a **framing pass** on the issue-tree and hypotheses *wording* — confirming branches and claims read as business outcomes and decisions — before hand-off. It corrects wording only; it does not touch structure or scores. Hand-off goes to signal-mapping, **not** to ICE.
+3. **Signals map** ([`signal-mapping`](../skills/signal-mapping/SKILL.md)) — connects each hypothesis to the SLI/SLO, RUM event, or APM trace that would validate it. This step also **scans `hypotheses.md` for the "blocked: instrumentation" rows and consolidates them** into the signals-map "Instrumentation gaps" section. Hand-off goes to ICE.
+4. **ICE scoring** ([`ice-scoring`](../skills/ice-scoring/SKILL.md)) — now that the signals map exists, Impact can be anchored to a business KPI. Before scoring, ICE consumes the instrumentation gaps: if a hypothesis can't be validated until a gap is closed, Effort rises (the instrumentation work is now in scope), Confidence drops (it can't be confirmed yet), and Impact drops if the KPI link can't be quantified. The [ICE lens](../.claude/agents/ice-lens.md) sanity-checks the scoring, and ice-scoring itself then presents the Phase 1 gate — the five-part gate summary block with the ranked table.
 
-**Skills the agent reads.**
-
-- `skills/mece-decomposition/SKILL.md` — building the tree.
-- `skills/hypothesis-generation/SKILL.md` — drafting testable hypotheses per branch.
-- `skills/ice-scoring/SKILL.md` — scoring each hypothesis on Impact × Confidence / Effort.
-- `skills/signal-mapping/SKILL.md` — connecting signals to UX outcomes and business KPIs.
+In Phase 1, ICE Confidence means *the likelihood the hypothesis is validated by telemetry* and Impact means *the magnitude if it is confirmed*. (Phase 2 re-scores both against execution — see below.)
 
 **What lands on disk.**
 
@@ -1711,7 +1752,7 @@ You'll feel three distinct shifts during this phase:
 - `<engagement folder>/hypotheses.md`
 - `<engagement folder>/signals-map.md`
 
-**Lenses the agent runs by default before presenting.** MECE and ICE. You can ask for any of the others on top.
+**Lenses the phase runs (all mandatory).** [MECE](../.claude/agents/mece-lens.md) on the tree, [Consultative](../.claude/agents/consultative-lens.md) as the framing pass on tree + hypotheses wording, then [ICE](../.claude/agents/ice-lens.md) on the scoring after the signals map exists. You can ask for any of the six on top at the gate.
 
 **The gate question.** *"Does this diagnosis frame the problem the right way, and are the top hypotheses worth pursuing?"*
 
@@ -1719,13 +1760,22 @@ You'll feel three distinct shifts during this phase:
 
 **What it's for.** Turn ranked hypotheses into an investigation plan with named owners, timeframes, and unambiguous exit criteria for "confirmed" versus "ruled out."
 
-This is the phase where the **Dynatrace playbooks** become load-bearing. The agent reads `memory/long-term/dynatrace-playbooks.md`, matches each hypothesis to the playbook that most closely fits its problem shape (latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem), and pulls the playbook's procedural steps and exit criteria straight into the live action plan.
+This is the phase where the **Dynatrace playbooks** become load-bearing. The agent matches each hypothesis against the index in [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) (latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem), reads only the matched playbook file(s) in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), and pulls that playbook's procedural steps and exit criteria straight into the live action plan. The playbooks are how the workspace stays specialized to Dynatrace without you having to re-explain Dynatrace investigation patterns every time. The agent also reads the client's `environment.md` and grounds every action in what this client can actually observe — flagging any action that depends on instrumentation the client lacks rather than silently recommending it.
 
-**The skill the agent reads.** `skills/action-plan-builder/SKILL.md`.
+**The skill the agent reads.** [`skills/action-plan-builder/SKILL.md`](../skills/action-plan-builder/SKILL.md).
+
+Phase 2 is built by a **deliberating council of perspectives in a deliberate order**, and like Phase 1 the sequence is the point:
+
+1. **MECE on the opportunity set.** Before drafting, the agent lays out the full set of opportunities and levers the plan could pull, then runs the [MECE lens](../.claude/agents/mece-lens.md) on that set as a completeness check — no viable opportunity missed, no two overlapping. This is the candidate pool the recommended actions are drawn from.
+2. **Draft the plan** against that set — investigation actions with exit criteria, recommended actions, decision asks, and risks paired with their mitigations.
+3. **Convene the persona council — over two to three rounds.** [Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), and [Consultative](../.claude/agents/consultative-lens.md) deliberate: **Round 1** each gives an independent position in parallel, blind to the others; **Round 2** each reacts to the others' positions; **Round 3** runs only if a material tension survives Round 2 — each converges on a final position and flags what it won't concede (more rounds if they're still moving; skipped entirely if the panel has already converged). Every panelist is grounded in the client's real instrumentation (`environment.md`), not generic capability. Then the **agent reconciles** every material disagreement — not just Skeptic-vs-Optimist or Customer-vs-Consultative — logging each ruling in the plan's "Tensions resolved" subsection rather than averaging the difference, and folds Skeptic's "questions a leader will ask" into the decision-asks section.
+4. **Re-rank with ICE — after the council.** Only once the critique is in does the [ICE lens](../.claude/agents/ice-lens.md) re-score and re-rank the opportunities; the ranking that lands in the plan is this post-council order, not the first cut. Ranking before the council bakes in the pre-critique view and wastes it.
+
+ICE re-scores against **execution**, not validation: in Phase 2, Confidence is *the likelihood the action executes given coordination and risk* and Impact is *the magnitude if the mitigation lands* — a partial fix scores below the problem it targets. So a hypothesis that scored, say, Confidence 7 in Phase 1 may land at Confidence 5 as a Phase 2 action because of coordination risk.
 
 **What lands on disk.** `<engagement folder>/action-plan.md`.
 
-**Lenses the phase runs (all mandatory).** MECE on the opportunity set first, then a **deliberating persona council over two to three rounds** — Skeptic, Optimist, Customer, Consultative. **Round 1** each gives an independent position in parallel, blind to the others; **Round 2** each reacts to the others' positions; **Round 3** runs only if a material tension survives Round 2 — each converges and flags what it won't concede (skipped when the panel has already converged; more rounds if still moving). Every panelist is grounded in the client's real instrumentation (`environment.md`). Then the **agent reconciles** every material disagreement — logging each in the plan's "Tensions resolved" section — and finally ICE re-ranks. You can ask for any of the six on top at the gate.
+**Lenses the phase runs (all mandatory).** [MECE](../.claude/agents/mece-lens.md) on the opportunity set, then the persona council over 2–3 rounds — [Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md) — then the agent reconciles, then [ICE](../.claude/agents/ice-lens.md) to re-rank. You can ask for any of the six on top at the gate.
 
 **The gate question.** *"Is this the right plan, with the right exit criteria, and are the decision asks clear?"*
 
@@ -1737,29 +1787,39 @@ The order matters here: **one-pager first, deck second**. The one-pager forces t
 
 **Skills the agent reads, in this order.**
 
-- `skills/exec-onepager/SKILL.md` — one-page written summary.
-- `skills/pptx-builder/SKILL.md` — PowerPoint deck.
+- [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md) — five-step orchestrator: recipe selection, content draft, brand-humanizer pre-pass (mandatory Step 3, runs before HTML is built), HTML build, and brand gate.
+- [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md) — PowerPoint deck (only after the one-pager is approved).
 
 **Files the agent reads before producing anything.**
 
-- `memory/long-term/brand/brand-spec.md` — colors, typography, layouts, voice, terminology, footer conventions.
-- The matching profile in `memory/long-term/stakeholder-profiles.md`. Voice and emphasis come from here — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product.
+- [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) — colors, typography, layouts, voice, terminology, footer conventions. The brand spec is authoritative; the agent never improvises off-spec. See [deliverables.md](deliverables.md) for what this means in practice.
+- The matching profile file in [`memory/long-term/profiles/`](../memory/long-term/profiles/), found via the index in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md). Voice and emphasis come from the profile file — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product.
 
-**Lenses the agent runs by default before finalizing.** Consultative, Customer, and Skeptic, often in parallel.
+**Lenses the phase runs.** None. Phase 3 is **pure packaging** of a plan the persona panel already reviewed and you already approved at the Phase 2 gate. No critique lens runs here — the substance, framing, priorities, and risks were settled in Phase 2, and re-opening them in Phase 3 is a signal to reopen Phase 2, not to patch the one-pager. What remains in Phase 3 is mechanical: the brand-humanizer pre-pass (Step 3 — fixes AI writing patterns and DT voice violations on structured copy before the HTML is built), the one-page constraint, brand conformance (sentence-case headings, product-name trademarks, footer, palette), and the brand gate checklist. Those are formatting gates, not critique. You can still invoke any of the six lenses on demand at the gate if you want a second look, but none runs automatically.
 
-**The gate question.** *"Is this ready to send to the named stakeholder?"*
+**The gate question.** *"Is this ready to send to the named stakeholder?"* — asked separately for the one-pager and the deck.
 
 ## What every gate looks like, in practice
 
-At each gate the agent **stops and presents**. You always have three responses available:
+At each gate the agent **stops and presents** using the five-part gate summary block defined in `CLAUDE.md`: **1 Conclusion** (the single most important finding, one sentence), **2 What changed** since the prior gate, **3 Assumptions and confidence gaps**, **4 Out-of-scope cost** (anything excluded because it touched an out-of-scope capability), and **5 the ask**. At each approval the agent also bumps `phase:` and `last-touched:` in the engagement's `current-context.md`. You always have three responses available:
 
 | Response | What it does |
 |---|---|
 | **Approve** | Agent proceeds to the next phase. |
 | **Redirect** | You change scope, framing, or priority. Agent updates artifacts and re-presents. |
-| **Iterate through a lens** | You ask for re-review through one of the six lenses. Agent revises before re-presenting. |
+| **Iterate through a lens** | You ask for re-review through one of the six lenses. Agent revises before re-presenting. See [lenses.md](lenses.md) for what each lens catches. |
 
-Every gate decision is appended to `<engagement folder>/decisions-log.md`. That file is the audit trail.
+Every gate decision is appended to `<engagement folder>/decisions-log.md`. That file is the audit trail — if anyone asks weeks later *"why did we pursue that hypothesis?"*, the answer is there.
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| The operating manual the agent reads on every session | [`CLAUDE.md`](../CLAUDE.md) |
+| All eight phase skills | [`skills/`](../skills/) |
+| The six critique lenses and the doc-freshness-checker | [`.claude/agents/`](../.claude/agents/) |
+| The live investigation state (during a session) | the active engagement folder, `memory/clients/<client>/engagements/<dated-slug>/` |
+| The audit trail for the current investigation | `<engagement folder>/decisions-log.md` |
 </script>
 
 <script type="text/plain" id="raw-skills">
@@ -1767,93 +1827,98 @@ Every gate decision is appended to `<engagement folder>/decisions-log.md`. That 
 
 Each phase deliverable has a corresponding **skill** the agent reads before producing the artifact. Skills are the workspace's procedural memory: they capture the steps, the inputs, the output location, and the common pitfalls for each deliverable.
 
-If you think of `CLAUDE.md` as the agent's *job description*, the skills under `skills/` are its *standard operating procedures*. The agent reads the relevant `SKILL.md` first, then produces the artifact — never the other way around.
+If you think of [`CLAUDE.md`](../CLAUDE.md) as the agent's *job description*, the skills under [`skills/`](../skills/) are its *standard operating procedures*. The agent reads the relevant `SKILL.md` first, then produces the artifact — never the other way around.
+
+This page is the index. To see exactly what a skill does, click through to its `SKILL.md` — they're short (40–240 lines each), well-structured, and intended to be read by humans as well as agents.
 
 ## Phase 0 — Framing the engagement
 
-### context-framing
+### [`context-framing`](../skills/context-framing/SKILL.md)
+The required first step of every engagement. Runs the two-phase questioning flow over nine clarifying questions (Q1–Q3 as a conversational funnel, Q4–Q9 as one batched drill message), absorbs a pasted seed-prompt intake brief when one opens the session (with a brief-complete fast path when every required field arrives filled), routes the three analyst calibration scores to drill depth / council size / gate verbosity / ambition, and walks (Q3 is the C.S.I.R. sub-sequence — Context, Specific Information, Intent, Response Format), surfaces 3–5 orientation hypotheses as starting candidates (not findings), and produces the engagement's `current-context.md` (which opens with a status front-matter block that marks the engagement `active`).
 
-The required first step of every engagement. Walks the consultant through nine clarifying questions (Q3 is the C.S.I.R. sub-sequence — Context, Stakeholders, Intent, Result), surfaces 3–5 orientation hypotheses as starting candidates (not findings), and produces `current-context.md`.
+When the consultant signals that discovery is happening *live with the customer*, this skill pulls phrasings from [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md) instead of the consultant-facing prompts.
 
-When the consultant signals that discovery is happening *live with the customer*, this skill pulls phrasings from `memory/long-term/client-question-bank.md` instead of the consultant-facing prompts.
+### [`drill`](../skills/drill/SKILL.md)
+Chat-native intake — the Seed Prompt Generator without the browser form. Type `/drill` and the agent collects the same fields conversationally (partial drills supported), emits the exact `# Insights Forge intake brief` format the browser form produces, then hands off to context-framing.
 
 ## Phase 1 — Diagnosing the problem
 
-### mece-decomposition
+### [`mece-decomposition`](../skills/mece-decomposition/SKILL.md)
+Build a MECE issue tree from the framed problem. Mutually exclusive branches, collectively exhaustive coverage, consistent abstraction within a branch. Output: the engagement's `issue-tree.md`.
 
-Build a MECE issue tree from the framed problem. Mutually exclusive branches, collectively exhaustive coverage, consistent abstraction within a branch. Output: `issue-tree.md`.
+### [`hypothesis-generation`](../skills/hypothesis-generation/SKILL.md)
+Draft testable hypotheses per branch of the issue tree, each one written as a falsifiable statement with a stated exit criterion. A hypothesis that depends on telemetry the team doesn't have is marked, on its own row, with Status **"blocked: instrumentation"** — the gap originates here, in `hypotheses.md`. The [Consultative lens](../.claude/agents/consultative-lens.md) then runs a framing pass on the issue-tree and hypotheses wording before hand-off to signal-mapping. Output: the engagement's `hypotheses.md`.
 
-### hypothesis-generation
+### [`signal-mapping`](../skills/signal-mapping/SKILL.md)
+Map technical signals (SLI/SLO, RUM, APM) through user-visible UX outcomes to business KPIs. This step also **scans `hypotheses.md` for the "blocked: instrumentation" rows and consolidates them** into the signals-map "Instrumentation gaps" section, so the gaps land in one place for the action plan to address. Runs after hypotheses, before ICE. Output: the engagement's `signals-map.md`.
 
-Draft testable hypotheses per branch of the issue tree, each one written as a falsifiable statement with a stated exit criterion. Output: `hypotheses.md`.
-
-### ice-scoring
-
-Score each hypothesis with Impact × Confidence / Effort and rank. This is how the workspace decides what to pursue first — and what to deprioritize even when it's tempting.
-
-### signal-mapping
-
-Map technical signals (SLI/SLO, RUM, APM) through user-visible UX outcomes to business KPIs. The signals map is also where **instrumentation gaps** get surfaced — if a hypothesis can't be validated with the data available, this is where that limitation lives. Output: `signals-map.md`.
+### [`ice-scoring`](../skills/ice-scoring/SKILL.md)
+Score each hypothesis with Impact × Confidence / Effort and rank — run **last** in Phase 1, after the signals map exists, so Impact can be anchored to a business KPI. Before scoring, ICE consumes the consolidated instrumentation gaps: a hypothesis blocked on an unclosed gap gets higher Effort (the instrumentation work is now in scope), lower Confidence (it can't be confirmed yet), and lower Impact if the KPI link can't be quantified. This is how the workspace decides what to pursue first — and what to deprioritize even when it's tempting.
 
 ## Phase 2 — Building the action plan
 
-### action-plan-builder
+### [`action-plan-builder`](../skills/action-plan-builder/SKILL.md)
+Translate ranked hypotheses into a named investigation plan with owners, timeframes, and "confirmed" versus "ruled out" exit criteria. Pulls procedural steps from the matched playbook file in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), found via the index in [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — eight playbooks for the most common Dynatrace investigation shapes.
 
-Translate ranked hypotheses into a named investigation plan with owners, timeframes, and "confirmed" versus "ruled out" exit criteria. Pulls procedural steps from `memory/long-term/dynatrace-playbooks.md` — eight playbooks for the most common Dynatrace investigation shapes.
+The plan is built in a deliberate order: the [MECE lens](../.claude/agents/mece-lens.md) checks the opportunity set is complete, the plan is drafted against it **and the client's real instrumentation** (`environment.md`), the **persona council** ([Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md)) deliberates over **two to three rounds** (independent positions → cross-examination → convergence, with Round 3 skipped when the panel has converged) and the agent reconciles, and the [ICE lens](../.claude/agents/ice-lens.md) re-ranks **after** the council. See [workflow.md](workflow.md) for why ICE runs last.
 
-Output: `action-plan.md`.
+Output: the engagement's `action-plan.md`.
 
 ## Phase 3 — Producing exec-ready deliverables
 
-### exec-onepager
+### [`exec-onepager`](../skills/exec-onepager/SKILL.md)
+Produce a one-page written summary tailored to a *named* stakeholder. Runs in five steps: recipe selection from `layout-system.md`, content draft from the engagement files, brand-humanizer pre-pass (mandatory Step 3 — runs on all structured copy before any HTML is built), HTML build, and brand gate. Reads the matching profile file in [`memory/long-term/profiles/`](../memory/long-term/profiles/) (indexed in [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md)) and applies brand directives from [`brand-spec.md`](../memory/long-term/brand/brand-spec.md). See [deliverables.md](deliverables.md) for the brand specifics.
 
-Produce a one-page written summary tailored to a *named* stakeholder. Runs as a **5-step orchestrator**: (1) recipe selection from `layout-system.md`, (2) content draft in structured text, (3) brand-humanizer pre-pass (mandatory), (4) HTML build, (5) brand gate checklist. Reads the matching profile in `stakeholder-profiles.md` and brand directives from `brand-spec.md`.
+### [`brand-humanizer`](../skills/brand-humanizer/SKILL.md)
+Polish Phase 3 copy so it passes two independent bars: it reads like a person wrote it (no em dashes, no hedging, no AI vocabulary, no rule-of-three lists) and it reads like Dynatrace wrote it (sentence case, active voice, correct product names and trademarks, American spelling, serial commas, no disallowed phrasings). In the exec-onepager workflow this runs as mandatory Step 3 on all structured draft copy before the HTML is built. In the pptx-builder workflow it runs as mandatory Step 3 on slide copy before any slides are generated. Can also be run standalone when someone asks to "humanize this," "brand-check this," or "make this sound like Dynatrace."
 
-### brand-humanizer
-
-Mandatory Phase 3 pre-pass for all copy before HTML is built. Clears two independent bars: reads like a person wrote it (no em dashes, hedging, or AI filler) and reads like Dynatrace wrote it (correct product names, trademark symbols, sentence case, serial commas). Cross-checks against `brand-spec.md` Sections 6–7.
-
-### pptx-builder
-
-Produce a PowerPoint deck. Adapter that delegates to the standard pptx skill when available and applies the brand spec on top. **Only produced after the one-pager is approved.**
+### [`pptx-builder`](../skills/pptx-builder/SKILL.md)
+Produce a PowerPoint deck. The in-repo `tools/pptx-generator.py` is the primary renderer, driven by a JSON spec written to the engagement folder; the external pptx skill is a fallback only when the generator is not runnable, with a markdown outline as last resort. The brand spec is applied throughout. **Only produced after the one-pager is approved** — see [workflow.md](workflow.md) for the rationale.
 
 ## Cross-cutting
 
-### external-research
-
-Used by any other skill when local memory is silent, contradictory, or stale. Defines the allowlist (`docs.dynatrace.com` and `community.dynatrace.com`), the citation requirement, and the freshness policy.
+### [`external-research`](../skills/external-research/SKILL.md)
+Used by any other skill when local memory is silent, contradictory, or stale. Defines the allowlist (`docs.dynatrace.com` and `community.dynatrace.com`), the citation requirement, and the freshness policy. See [research.md](research.md) for the full story.
 
 ## Workspace and client management
 
-### investigation-reset
+### [`investigation-reset`](../skills/investigation-reset/SKILL.md)
+Archives the current engagement and resets the workspace for the next one — or pauses it to work on a different client. Runs the four lessons-learned questions before archiving, executes any approved root library promotions, and marks the engagement `complete` in its `current-context.md` — nothing moves; the engagement folder stays in `engagements/`. Also handles pausing (`state: paused`) and resuming a paused engagement.
 
-Handles all engagement state transitions — nothing ever moves. **Archive:** runs the four lessons-learned questions, writes `lessons-learned.md` into the engagement folder, adds an outcome row to the client `README.md`, and marks the engagement `state: complete` in its `current-context.md`. **Pause:** marks `state: paused`. **Resume:** scans `memory/clients/*/engagements/*/current-context.md` for `state: active` or `paused`, lets you pick, and flips the chosen one back to `state: active`.
+**Trigger:** "Archive this investigation," "Reset the workspace," "Pause this engagement," or "Resume [client name]."
 
-**Trigger:** "Archive this investigation," "Pause this engagement," or "Resume [client name]."
+### [`stakeholder-overlay`](../skills/stakeholder-overlay/SKILL.md)
+Captures a specific named leader at a client (e.g., "Sarah Chen, VP of Engineering") as a stakeholder overlay in the active client's workspace at `memory/clients/<client-name>/stakeholder-overlays.md`. Builds on the parent role archetype from the shared root library. Requires explicit user approval before writing.
 
-### stakeholder-overlay
+**Never writes named individuals to the shared profile library** — `memory/long-term/stakeholder-profiles.md` is an index, and the archetype files in `memory/long-term/profiles/` carry only generic title-type content.
 
-Captures a specific named leader at a client as a stakeholder overlay in the active client's workspace. Builds on the parent role archetype from the shared root library. Requires explicit user approval before writing.
+**Trigger:** Named automatically during Phase 0 Q7 when a specific leader is identified and no overlay exists. Can also be run on demand: "Create a stakeholder profile for [name]."
 
-**Never writes named individuals to `memory/long-term/stakeholder-profiles.md`** — that file contains only generic title-type archetypes.
+### [`environment-intake`](../skills/environment-intake/SKILL.md)
+Captures client-specific Dynatrace environment details that persist across engagements: Management Zones, defined SLOs, load-bearing synthetic monitors, instrumentation gaps, DPS quota status. Writes to `memory/clients/<client-name>/environment.md`. Run at the Phase 0 gate on first engagement; update when the client's environment changes.
 
-**Trigger:** Named automatically during Phase 0 Q7 when a specific leader is identified and no overlay exists.
+**Trigger:** Flagged automatically by context-framing when no environment file exists for the active client. Can also be run on demand: "Capture their environment setup."
 
-### environment-intake
+### [`value-highlight`](../skills/value-highlight/SKILL.md)
+Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads prior completed engagements from the active client's `engagements/` folders (and the client's `contract.md` for commercial framing) and synthesizes confirmed findings, resolved hypotheses, and actions taken into a 1–2 page written summary.
 
-Captures client-specific Dynatrace environment details that persist across engagements: Management Zones, defined SLOs, load-bearing synthetic monitors, instrumentation gaps, DPS quota status. Writes to `memory/clients/<client-name>/environment.md`.
+**Prerequisite:** At least one completed investigation must be archived for the active client.
 
-**Trigger:** Flagged automatically by context-framing when no environment file exists for the active client.
-
-### value-highlight
-
-Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, and expansion conversations. Reads the active client's prior **completed engagements** from their `engagements/` folders (plus `contract.md` for the commercial picture).
-
-**Prerequisite:** At least one completed engagement (`state: complete`) must exist for the active client.
+**Trigger:** When the engagement trigger (Q9) is a QBR or renewal. Can also be run on demand: "Create a value summary for [client]."
 
 ## How skills are triggered
 
-Skills are **not slash commands** — you don't call them directly. The main agent reads the relevant `SKILL.md` file via its Read tool immediately before producing the artifact it governs. The agent tells you which skill it's reading before it starts.
+Skills are generally **not slash commands** — the main agent reads the relevant `SKILL.md` file via its `Read` tool immediately before producing the artifact it governs. (The one exception is `drill`, which you invoke yourself by typing `/drill`.) The trigger is the agent's own operating logic (defined in `CLAUDE.md`) and the phase the engagement is in.
+
+The agent tells you which skill it's reading before it starts — so if you want to know what's about to happen, you can open that `SKILL.md` yourself.
+
+## Look inside
+
+| Where to find them | What's there |
+|---|---|
+| [`skills/`](../skills/) | Fifteen skill folders |
+| Each `SKILL.md` file | When-to-use, inputs, procedure, output location, common pitfalls |
+| [`memory/long-term/frameworks.md`](../memory/long-term/frameworks.md) | The shared procedural reference skills draw on (MECE, ICE definitions, exit-criteria patterns) |
 </script>
 
 <script type="text/plain" id="raw-lenses">
@@ -1861,100 +1926,108 @@ Skills are **not slash commands** — you don't call them directly. The main age
 
 The workspace ships with six sub-agents whose only job is to **critique work product through a single, narrow point of view**. They don't produce artifacts themselves — they read what the main agent has produced and either bless it, suggest revisions, or push back hard.
 
-You'll meet them in three situations:
+You'll meet them in two situations, and both are always true at once:
 
-1. **Mandatory within a phase.** Phases 1 and 2 each run a fixed set of lenses as part of the phase procedure — they are not optional. The per-phase table below is the authority for which run when. Phase 0 and Phase 3 run **no** critique lens automatically.
-2. **On demand at any gate.** You can always say *"run this through the Skeptic lens"* or *"check this issue tree with MECE"* — any of the six, regardless of phase.
-3. **In parallel when several can review independently.** When three or more lenses can review the same artifact independently (Consultative + Customer + Skeptic on a one-pager you ask for in Phase 3 is the typical case), the agent dispatches them in parallel.
+1. **Mandatory within a phase.** Phases 1 and 2 each run a fixed set of lenses as part of the phase procedure — they are not optional add-ons. The [per-phase table below](#when-each-lens-runs) is the authority for which lenses run in which phase. Phase 0 and Phase 3 run **no** critique lens.
+2. **On demand at any gate.** On top of the mandatory set, you can always say *"run this through the Skeptic lens"* or *"check this issue tree with MECE"* — the agent will dispatch the lens and re-present. Any of the six is available at any gate, regardless of phase.
+
+These are not mutually exclusive: the mandatory per-phase lenses always run, and you can request any lens on demand in addition.
+
+Each lens's full definition — including its system prompt and output format — lives at [`.claude/agents/<lens>.md`](../.claude/agents/). Open the file if you want to see exactly what the lens has been told to do.
 
 ## Meet the six
 
-### MECE lens
+### [MECE lens](../.claude/agents/mece-lens.md)
+**When it runs.** Mandatory in Phase 1 (on the issue tree, before presenting it) and again in Phase 2 (as a completeness check on the opportunity set, before the plan is drafted against it).
 
-**When you'll use it.** After a Phase 1 issue tree is drafted, before presenting it.
+**What it catches.** Branches that overlap (not mutually exclusive). Gaps in coverage (not collectively exhaustive). Abstraction levels that drift within a branch (Marketing-grade buckets mixed with engineering-grade buckets). Silent missing categories.
 
-**What it catches.** Branches that overlap (not mutually exclusive). Gaps in coverage (not collectively exhaustive). Abstraction levels that drift within a branch. Silent missing categories.
+A clean MECE structure is the foundation everything else builds on — a clean tree in Phase 1, a complete opportunity set in Phase 2 — so this lens runs mandatorily at the start of both diagnosis and planning.
 
-A clean MECE tree is the foundation everything else in Phase 1 builds on, so this lens is invoked by default before any tree leaves Phase 1.
-
-### Optimist lens
-
-**When you'll use it.** Before finalizing a Phase 2 action plan or a Phase 3 one-pager.
+### [Optimist lens](../.claude/agents/optimist-lens.md)
+**When it runs.** Mandatory in Phase 2 as a member of the persona panel that critiques the draft action plan. Available on demand at any other gate.
 
 **What it catches.** Plans that have been over-defended. Upside the team has under-weighted. Investigation threads that could run in parallel but are sequenced as if they can't. Recommendations that could be more ambitious without losing rigor.
 
-Think of it as the counterweight to Skeptic — invoke them both, and your plan ends up balanced.
+Think of it as the counterweight to Skeptic — on the Phase 2 council they critique the plan and each other across rounds, and the plan ends up balanced.
 
-### ICE lens
-
-**When you'll use it.** After hypotheses or actions are drafted.
+### [ICE lens](../.claude/agents/ice-lens.md)
+**When it runs.** Mandatory in Phase 1 (sanity-check on hypothesis scoring, run **after** the signals map exists so Impact can be anchored to a business KPI) and again in Phase 2 (re-rank the opportunities **after** the persona panel has weighed in).
 
 **What it catches.** Mis-ranked priorities. Hypotheses that have high Impact but low Confidence and high Effort, masquerading as "the top hypothesis." Actions that look cheap but are buried in dependencies.
 
-### Consultative lens
+The two runs score different things. In Phase 1, Confidence is the likelihood the hypothesis is validated by telemetry and Impact is the magnitude if it is confirmed. In Phase 2, Confidence is the likelihood the action executes given coordination and risk, and Impact is the magnitude if the mitigation lands — a partial fix scores below the problem it targets. So a hypothesis that scored well in Phase 1 can be re-scored lower as a Phase 2 action.
 
-**When you'll use it.** Before finalizing exec one-pagers or decks.
+### [Consultative lens](../.claude/agents/consultative-lens.md)
+**When it runs.** Mandatory in Phase 1 as a **framing pass** on the issue-tree and hypotheses wording — checking that branches and claims are stated as business outcomes and decisions, not buried in engineering minutiae. It corrects wording only; it does not change the analytical structure (that is the MECE lens's job) or the scores. Mandatory again in Phase 2 as a member of the persona panel on the action plan.
 
-**What it catches.** Passages that read as engineering-internal when the audience is leadership. Generic statements that any consulting firm could have written. Voice mismatches with the named stakeholder profile.
+**What it catches.** Passages that read as engineering-internal when the audience is leadership. Generic statements that any consulting firm could have written. Tradeoffs stated as advocacy rather than counsel. Voice mismatches with the named stakeholder profile.
 
-This is the lens that makes the Phase 3 output sound like *your firm*, not *a competent AI*.
+This is the lens that gets the framing right *going into* each gate rather than patching it downstream. It does **not** run in Phase 3 — by then the framing is already settled, and Phase 3 is pure packaging.
 
-### Customer lens
-
-**When you'll use it.** Before finalizing any deliverable that recommends action.
+### [Customer lens](../.claude/agents/customer-lens.md)
+**When it runs.** Mandatory in Phase 2 as a member of the persona panel — checking that the plan targets what users actually experience, not just what is easiest to measure. Available on demand at any other gate.
 
 **What it catches.** Recommendations grounded in a backend SLI that has no observable user impact. Wins that don't move anything the customer would notice. Investigations that "succeed" without actually improving anyone's experience.
 
 A common failure mode this lens catches: a 30% improvement to a metric the user never sees.
 
-### Skeptic lens
-
-**When you'll use it.** Before any Phase 2 action plan or Phase 3 deliverable goes to leadership.
+### [Skeptic lens](../.claude/agents/skeptic-lens.md)
+**When it runs.** Mandatory in Phase 2 as a member of the persona panel on the action plan — its "questions a leader will ask" fold into the decision-asks section so the plan answers them up front. Available on demand at any other gate.
 
 **What it catches.** Failure modes that have been hand-waved. The most uncomfortable question a VP could ask. The spots where the evidence is thinnest. The unsaid assumptions.
 
-If you're going to be in a room defending the work, Skeptic is the lens that simulates the room first.
+If you're going to be in a room defending the work, Skeptic is the lens that simulates the room first — which is why it runs while the plan can still change, in Phase 2, not after it has been packaged in Phase 3.
 
 ## When each lens runs
 
-This table is the single source of truth for which lenses are mandatory in which phase. On top of them, you may invoke **any** of the six on demand at that phase's gate.
+This table is the single source of truth for which lenses run in which phase. The mandatory lenses are part of the phase procedure — they always run. On top of them, you may invoke **any** of the six on demand at that phase's gate.
 
-| Phase | Mandatory lenses (part of the phase) | Also available on demand |
+| Phase | Mandatory lenses (run as part of the phase) | Also available on demand |
 |---|---|---|
-| 0 — Context | None (a background doc-freshness check runs conditionally, but it is not a critique lens) | Any of the six |
-| 1 — Diagnose | MECE on the issue tree, then Consultative as a framing pass on the tree + hypotheses wording, then ICE on scoring (**after** the signals map exists) | Any of the six |
-| 2 — Solution | MECE on the opportunity set, then the **persona council** — Skeptic, Optimist, Customer, Consultative — deliberating over **2–3 rounds** (independent → cross-examination → convergence; Round 3 skipped when the panel has converged), then the agent reconciles, then ICE re-ranks **after** the council | Any of the six |
-| 3 — Deliver | **None.** Pure packaging of the already-reviewed plan plus mechanical gates (one-page constraint, brand conformance, HTML legibility) | Any of the six |
+| 0 — Context | None. (A background [doc-freshness-checker](#look-inside) runs conditionally, but it is not a critique lens.) | Any of the six |
+| 1 — Diagnose | [MECE](../.claude/agents/mece-lens.md) on the issue tree, then [Consultative](../.claude/agents/consultative-lens.md) as a framing pass on the issue-tree and hypotheses wording, then [ICE](../.claude/agents/ice-lens.md) on hypothesis scoring (ICE runs **after** the signals map exists) | Any of the six |
+| 2 — Solution | [MECE](../.claude/agents/mece-lens.md) on the opportunity set, then the **persona council** — [Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md) — deliberating over **2–3 rounds** (independent → cross-examination → convergence; Round 3 is skipped when the panel has converged after Round 2), then the agent reconciles, then [ICE](../.claude/agents/ice-lens.md) re-ranks **after** the council | Any of the six |
+| 3 — Deliver | **None.** Phase 3 is pure packaging of the already-reviewed plan plus mechanical gates (one-page constraint, brand conformance, HTML legibility). No critique lens runs. | Any of the six |
+
+The order inside Phase 1 and Phase 2 matters and is not interchangeable — see [workflow.md](workflow.md) for the full sequence and why ICE runs last in each.
 
 ## The Phase 2 council runs in rounds
 
 The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over two to three rounds:
 
-1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** — each reads only the draft plan (plus the client's `environment.md`) and gives its own position, having seen none of the others.
+1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** in a single message — each receives the draft plan, the client's `environment.md` facts, and the engagement's out-of-scope exclusions copied verbatim, and gives its own position, having seen none of the others.
 2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
-3. **Round 3 — convergence (conditional).** Runs only when a material tension survives Round 2. Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. Skipped when the panel has already converged; more rounds run if positions are still moving.
+3. **Round 3 — convergence (conditional).** Runs only when a material tension survives Round 2. Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. If the panel has already converged after Round 2, Round 3 is skipped and the agent proceeds to reconciliation; more rounds run if positions are still moving.
 
-Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. You can also ask for this council explicitly at any gate:
+Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. `skills/action-plan-builder/SKILL.md` step 6 is the authoritative procedure. You can also ask for this council explicitly at any gate:
 
 > *"Run the action plan through the Skeptic, Optimist, Customer, and Consultative council."*
 
-(Phase 3 lens passes are unchanged: when you invoke Consultative, Customer, and Skeptic on a one-pager on demand, they can still run in parallel.)
+## Look inside
 
-## The background agent
+| Lens file | What you'll find |
+|---|---|
+| [`.claude/agents/mece-lens.md`](../.claude/agents/mece-lens.md) | System prompt and output format for MECE critique |
+| [`.claude/agents/optimist-lens.md`](../.claude/agents/optimist-lens.md) | Steelmanning prompt and upside output format |
+| [`.claude/agents/ice-lens.md`](../.claude/agents/ice-lens.md) | Scoring rubric, ranking output |
+| [`.claude/agents/consultative-lens.md`](../.claude/agents/consultative-lens.md) | Leadership-voice rewrite directives |
+| [`.claude/agents/customer-lens.md`](../.claude/agents/customer-lens.md) | UX-grounding heuristics |
+| [`.claude/agents/skeptic-lens.md`](../.claude/agents/skeptic-lens.md) | Failure-mode and hostile-question probes |
 
-There's a seventh sub-agent — `doc-freshness-checker` — that isn't a lens. It runs as a background job during Phase 0 to check citation drift. It re-fetches every cited URL in the root library and writes a freshness report to `memory/long-term/freshness-report.md`. It never edits long-term memory directly.
+There's a seventh sub-agent in that folder — [`doc-freshness-checker.md`](../.claude/agents/doc-freshness-checker.md) — that isn't a lens. It runs as a background job during Phase 0 to check citation drift. See [research.md](research.md) for what it does.
 </script>
 
 <script type="text/plain" id="raw-memory">
 # How memory works
 
-The workspace splits memory into two tiers with strict rules about what goes where. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
+The workspace splits memory into two tiers, with the live investigation living **inside** the client tier. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
 
 If you remember one thing: the agent reads freely from the root library on every session, and reads only the **active client's** workspace for anything client-specific. It never reads another client's folder.
 
 ## The two tiers
 
-### Tier 1 — Root library (memory/long-term/)
+### Tier 1 — Root library (`memory/long-term/`)
 
 The root library holds knowledge that is true regardless of which client is active: Dynatrace concepts, investigation playbooks, consulting frameworks, brand spec, and generic role archetypes.
 
@@ -1965,30 +2038,33 @@ The root library holds knowledge that is true regardless of which client is acti
 
 | File | What it contains |
 |---|---|
-| `frameworks.md` | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. |
-| `domain-knowledge.md` | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. The `[team to note: …]` slots are for org-level context only. |
-| `dynatrace-playbooks.md` | Eight client-agnostic procedural patterns for common Dynatrace problem shapes. |
-| `terminology.md` | Glossary of recurring terms and Dynatrace platform glossary with citations. |
-| `stakeholder-profiles.md` | Eight generic role archetypes. **No named individuals. No client associations.** |
-| `client-question-bank.md` | Client-facing phrasings of the Phase 0 clarifying questions. |
-| `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer). |
+| [`frameworks.md`](../memory/long-term/frameworks.md) | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. |
+| [`domain-knowledge.md`](../memory/long-term/domain-knowledge.md) | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. The `[team to note: …]` slots are for org-level context only — not client-specific. |
+| [`dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) | Hub index for the eight client-agnostic procedural patterns. The playbook content itself lives in [`playbooks/`](../memory/long-term/playbooks/) — one file per problem shape, read only when a hypothesis matches that shape. |
+| [`playbooks/`](../memory/long-term/playbooks/) | The eight individual playbook files (latency, errors, RUM, Grail logs, SLO burn, deploy correlation, third-party, Davis problem), each with its investigation sequence, exit criteria, and doc citations. |
+| [`terminology.md`](../memory/long-term/terminology.md) | Glossary of recurring terms and Dynatrace platform glossary with citations. |
+| [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) | Hub index for the eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). Profile content lives in [`profiles/`](../memory/long-term/profiles/) — read only when calibrating for a named stakeholder. **No named individuals. No client associations.** Named leaders at specific clients go in that client's `stakeholder-overlays.md`. |
+| [`profiles/`](../memory/long-term/profiles/) | The eight individual archetype files, with title-type overlays co-located in their parent archetype's file. |
+| [`client-question-bank.md`](../memory/long-term/client-question-bank.md) | Client-facing phrasings of the Phase 0 clarifying questions, grouped by rubric tier. |
+| [`brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) | Dynatrace brand specification (colors, typography, layouts, voice, footer) authoritative for Phase 3 deliverables. |
+| [`freshness-report.md`](../memory/long-term/freshness-report.md) | Operational — the doc-freshness-checker sub-agent's output. No client data. |
 
-> Two items in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier.
+> Archives and environments live in the client tier (below). Earlier architectures kept a shared `past-investigations.md` and a `client-environments/` folder in this tier; both have been removed.
 
-### Tier 2 — Client workspaces (memory/clients/)
+### Tier 2 — Client workspaces (`memory/clients/`)
 
-Each client has a fully isolated folder, and the live investigation lives **inside** it. The agent reads only the active client's folder for any client-specific context.
+Each client has a fully isolated folder. The agent reads only the active client's folder for any client-specific context.
 
 ```
 memory/clients/
-├── _template/                       ← Copy this to create a new client workspace
+├── _template/                   ← Copy this to create a new client workspace
 └── <client-name>/
-    ├── README.md                     ← Engagement history and status index
-    ├── environment.md                ← DT environment: MZs, SLOs, monitors, gaps
-    ├── contract.md                   ← Commercial & consumption: DPS commit, renewal date, burn (confidential)
-    ├── stakeholder-overlays.md       ← Named leaders (confidential to this client)
-    └── engagements/                  ← One dated subfolder per engagement
-        └── YYYY-MM-DD-<slug>/        ← ALL phase files for that engagement live here
+    ├── README.md                 ← Engagement history and status index
+    ├── environment.md            ← DT environment: MZs, SLOs, monitors, RUM coverage, gaps
+    ├── contract.md               ← Commercial & consumption: DPS commit, renewal date, burn (confidential)
+    ├── stakeholder-overlays.md   ← Named leaders (confidential to this client)
+    └── engagements/              ← One dated subfolder per engagement
+        └── YYYY-MM-DD-<slug>/    ← All phase files for that engagement live here
 ```
 
 **How client folders are populated:**
@@ -1999,7 +2075,9 @@ memory/clients/
 
 ### The live investigation — the engagement folder
 
-The active client's investigation files live in a **dated engagement folder**: `memory/clients/<client>/engagements/YYYY-MM-DD-<slug>/`. There is **no global pointer file and no shared `memory/project-space/`.** The engagement folder is *self-describing*: its `current-context.md` opens with a YAML status front-matter block —
+The active client's investigation files live in a **dated engagement folder** under that client: `memory/clients/<client>/engagements/YYYY-MM-DD-<slug>/`. This is the agent's working directory for the session — it reads and writes here freely.
+
+There is **no global pointer file and no shared `project-space/`.** The engagement folder is *self-describing*: its `current-context.md` opens with a YAML status front-matter block —
 
 ```yaml
 ---
@@ -2012,7 +2090,7 @@ last-touched: YYYY-MM-DD
 ---
 ```
 
-The session holds the engagement path it created (at Phase 0) or resumed, and reads/writes only there. A fresh session resumes by scanning `memory/clients/*/engagements/*/current-context.md` for `state: active` or `state: paused`.
+The session holds the engagement path it created (at Phase 0) or resumed, and reads/writes only there. A fresh session resumes by scanning `memory/clients/*/engagements/*/current-context.md` for `state: active` or `state: paused` and letting you pick.
 
 | File | Phase | What it contains |
 |---|---|---|
@@ -2025,6 +2103,12 @@ The session holds the engagement path it created (at Phase 0) or resumed, and re
 | `lessons-learned.md` | archive | Written by `investigation-reset` when the engagement is archived. |
 | `one-pager-YYYY-MM-DD.md` | 3 | The exec one-pager, if produced. |
 
+Open any of these during a session to see what the agent is working with — they're not hidden.
+
+## Why this prevents cross-session contamination
+
+Because each session holds its **own** dated engagement folder and no shared file decides "which engagement is active," two concurrent sessions for two different clients write to different folders and never contend. State changes (pause, complete) flip a field inside each engagement's *own* `current-context.md`, so any number of engagements can be paused at once without disturbing one another. This is the fix for the failure mode of a single shared "active" pointer that two sessions would race on.
+
 ## Engagement states
 
 Each engagement exists in one of three states, all recorded **inside the engagement folder** — nothing ever moves:
@@ -2035,20 +2119,22 @@ Each engagement exists in one of three states, all recorded **inside the engagem
 | **Paused** | Same folder — nothing moves | `state: paused` in `current-context.md` |
 | **Completed** | Same folder — nothing moves | `state: complete` in `current-context.md` + an outcome row in the client `README.md` |
 
-Because each session holds its own dated folder and no shared file decides "which is active," two concurrent sessions for different clients cannot collide, and any number of engagements can be paused at once.
+Use `skills/investigation-reset/SKILL.md` for all state transitions (archive, pause, resume).
 
 ## Context isolation rule
 
-At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads — environment, contract, stakeholder overlays, prior engagements — come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+
+This is what prevents investigation context from one client polluting another. It's enforced by both the agent instructions (CLAUDE.md) and the skill procedures (context-framing, stakeholder-overlay, environment-intake all resolve the engagement path before reading any client file).
 
 ## Why the read/write asymmetry exists
 
 **Root library writes require explicit user approval** because auto-promoting session-specific findings into shared memory creates two failure modes:
 
-1. **One-off context bleeds into future investigations as if it were universal truth.**
-2. **The agent slowly accumulates wrong or stale knowledge nobody asked it to remember.**
+1. **One-off context bleeds into future investigations as if it were universal truth.** A quirk specific to one client environment gets memorized as a general rule, and three engagements later the agent is "confidently" applying it to a client that doesn't have it.
+2. **The agent slowly accumulates wrong or stale knowledge nobody asked it to remember.** Long-term memory becomes untrusted, and the team starts ignoring it — at which point the whole "durable knowledge" idea collapses.
 
-**Client workspace writes also require explicit approval** for the same reason: the agent should not silently accumulate facts about a client that you haven't confirmed are accurate.
+**Client workspace writes also require explicit approval** (via the overlay and environment-intake skills) for the same reason: the agent should not silently accumulate facts about a client that you haven't confirmed are accurate.
 
 ## Triggering a root library write
 
@@ -2056,9 +2142,22 @@ The agent writes to `memory/long-term/` only when you ask clearly:
 
 - *"Add [name] to `terminology.md` as [definition]."*
 - *"Log a lesson learned: when SDK version segmentation is missing in RUM, always flag it as an instrumentation gap in Phase 1."*
-- *"Update `dynatrace-playbooks.md` with the investigation sequence we just validated."*
+- *"Update the `slo-burn` playbook in `memory/long-term/playbooks/` with the investigation sequence we just validated."* (New playbooks get a new file there plus an index row in `dynatrace-playbooks.md`.)
+- *"Promote this observation into `domain-knowledge.md`."*
 
-Vague phrases — *"this seems important"*, *"remember this"* — are logged in `decisions-log.md` but not promoted.
+Vague phrases — *"this seems important"*, *"remember this"* — are logged in `decisions-log.md` but not promoted. The agent will ask you to confirm before writing to any root library file.
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| Active / paused engagements | scan `memory/clients/*/engagements/*/current-context.md` for `state` |
+| Live investigation state | the active engagement folder, `memory/clients/<client-name>/engagements/<dated-slug>/` |
+| Current client's environment | `memory/clients/<client-name>/environment.md` |
+| Current client's contract & consumption | `memory/clients/<client-name>/contract.md` |
+| Current client's leader profiles | `memory/clients/<client-name>/stakeholder-overlays.md` |
+| Root library rules | [`memory/long-term/README.md`](../memory/long-term/README.md) |
+| Client workspace structure template | [`memory/clients/_template/`](../memory/clients/_template/) |
 </script>
 
 <script type="text/plain" id="raw-research">
@@ -2066,15 +2165,18 @@ Vague phrases — *"this seems important"*, *"remember this"* — are logged in 
 
 Dynatrace updates its documentation almost daily. If the workspace cites a doc page and that page changed last week, your Phase 3 one-pager could be defending a behavior that no longer exists. This page explains the three policies the workspace uses to stay honest: **memory-first**, **allowlisted sources only**, and **citation freshness**.
 
+The canonical procedure lives in [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md). What follows is the friendly tour.
+
 ## Policy 1 — Memory first, web second
 
 Before reaching for the web, the agent reads what's already on disk:
 
-- `memory/long-term/dynatrace-playbooks.md` — for **procedural** questions. Eight playbooks cover the most common problem shapes; each one already carries its own doc citations.
-- `memory/long-term/domain-knowledge.md` — for Dynatrace concept definitions and the approved-sources list.
-- `memory/long-term/terminology.md` — for terms the team has already defined.
+- [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — the index for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/) cover the most common problem shapes; the agent reads the matched file, which carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
+- [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) — for Dynatrace concept definitions and the approved-sources list.
+- [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) — for terms the team has already defined.
+- The active engagement's `current-context.md` (at `memory/clients/<client>/engagements/<dated-slug>/current-context.md`) — to scope the question to the active investigation.
 
-The agent only fetches externally when local memory is **silent, contradictory, or stale**.
+The agent only fetches externally when local memory is **silent, contradictory, or stale**. This isn't just to save tokens — it's how the workspace stays grounded in the team's own institutional knowledge rather than re-discovering Dynatrace's documentation each session.
 
 ## Policy 2 — Allowlisted external sources
 
@@ -2082,10 +2184,16 @@ External research is **allowlisted**. The agent will fetch from these two domain
 
 | Source | URL root | What it's good for |
 |---|---|---|
-| Dynatrace product documentation | `https://docs.dynatrace.com/` | Authoritative reference for features, defaults, configuration, concepts, supported behavior. |
-| Dynatrace Community | `https://community.dynatrace.com/` | Practitioner discussions, known issues, workarounds, migration experience. Treat as practitioner reporting, not vendor commitment. |
+| Dynatrace product documentation | [`https://docs.dynatrace.com/`](https://docs.dynatrace.com/) | Authoritative reference for features, defaults, configuration, concepts, supported behavior. |
+| Dynatrace Community | [`https://community.dynatrace.com/`](https://community.dynatrace.com/) | Practitioner discussions, known issues, workarounds, migration experience. Treat as practitioner reporting, not vendor commitment. |
 
-The agent **never silently expands the allowlist**. Adding a new domain requires extending `skills/external-research/SKILL.md` — not a one-off ask.
+**Reserved for future integration** (not in use yet — adding them requires user approval and a dedicated tool integration in [`tools/`](../tools/)):
+
+- Internal Slack channels — practitioner discussion, incident retros, oncall handoffs.
+- Salesforce — customer tickets, account-specific context, support history.
+- Internal wikis.
+
+The agent **never silently expands the allowlist**. If something you'd like the agent to read isn't on this list, that's a conversation about extending [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) and likely adding a tool integration — not a one-off ask.
 
 ## Policy 3 — Citation requirement
 
@@ -2095,45 +2203,62 @@ Every externally sourced fact lands in the phase artifact with three pieces of i
 2. The page's own **"Last updated"** date — as published by Dynatrace.
 3. The **agent's retrieval date** — when the agent actually fetched the page.
 
-Without all three, the citation is incomplete.
+Without all three, the citation is incomplete. This is what makes a Phase 3 deliverable defensible to leadership weeks later: anyone can re-walk the trail and check whether the source has changed since.
 
 ## Policy 4 — Freshness
 
 Two rules:
 
 - **Citations older than 7 days are presumed stale** and must be re-validated before reuse in any phase artifact.
-- **Every citation is re-validated at the Phase 2 → Phase 3 transition**, regardless of age.
+- **Every citation is re-validated at the Phase 2 → Phase 3 transition**, regardless of age. Phase 3 is the leadership-facing surface, so it gets a final sweep.
 
-The 7-day threshold is tuned to Dynatrace's actual update cadence. You can adjust the window in `CLAUDE.md`.
+The 7-day threshold is tuned to Dynatrace's actual update cadence. If your team operates in an environment where docs change more slowly, adjust the window in [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) (the staleness rule) and the matching dispatch condition in [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) Step 1.
 
 ## The doc-freshness-checker
 
-At the start of every engagement (Phase 0), the main agent dispatches a background sub-agent that runs in parallel while you're answering the Phase 0 clarifying questions.
+At the start of an engagement (Phase 0) — when the last check is 7+ days old or the report carries open findings — the main agent dispatches a background sub-agent — [`.claude/agents/doc-freshness-checker.md`](../.claude/agents/doc-freshness-checker.md) — that runs in parallel while you're answering the Phase 0 clarifying questions.
 
-Its job:
+Its job, in plain terms:
 
-1. Reads cited URLs from `domain-knowledge.md`, `dynatrace-playbooks.md`, and `terminology.md`.
-2. Re-fetches each one via WebFetch.
+1. Reads cited URLs from [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md), all playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), and [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
+2. Re-fetches each one via `WebFetch`.
 3. Compares stored "Last updated" dates against the current ones.
-4. Writes findings to `memory/long-term/freshness-report.md` — and **only** that file.
+4. Writes findings to [`memory/long-term/freshness-report.md`](../memory/long-term/freshness-report.md) — and **only** that file.
 
-This sub-agent **never edits long-term memory directly**. It surfaces drift; the human decides what to do about it.
+Crucially, this sub-agent **never edits long-term memory directly**. It surfaces drift; the human decides what to do about it. At the Phase 0 gate, the main agent shows you the report so you can approve memory updates inline with Phase 0 approval.
+
+You can also trigger a manual refresh outside of Phase 0:
+
+> *"Refresh the docs."*
 
 ## What this is NOT
 
+Three things the external-research path deliberately does not do:
+
 - **Not a live query path.** The agent never logs in, runs DQL, or submits forms.
-- **Not a write path to long-term memory.** Promotion to durable memory still requires explicit user approval.
+- **Not a write path to long-term memory.** Web fetches inform the *current* investigation. Promotion to durable memory still requires explicit user approval — see [memory.md](memory.md).
 - **Not an autonomous research agent.** The agent fetches in service of a specific phase artifact, not to "go learn things."
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| The full external-research procedure | [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) |
+| The doc-freshness-checker sub-agent definition | [`.claude/agents/doc-freshness-checker.md`](../.claude/agents/doc-freshness-checker.md) |
+| The latest freshness report (updated each Phase 0) | [`memory/long-term/freshness-report.md`](../memory/long-term/freshness-report.md) |
+| Approved external sources list | [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) (Authoritative external references section) |
 </script>
 
 <script type="text/plain" id="raw-deliverables">
 # Phase 3 deliverables — brand, layout, voice
 
-Phase 3 is where the workspace earns its keep — a one-page written summary and a PowerPoint deck, both brand-conformant and tuned to a *named* stakeholder.
+Phase 3 is where the workspace earns its keep — a one-page written summary and a PowerPoint deck, both brand-conformant and tuned to a *named* stakeholder. This page walks you through what the brand spec actually requires, how the one-pager and deck come together, and how to spot-check brand conformance before sending.
 
-The **brand spec is authoritative**. The agent will not improvise off-palette colors, off-brand fonts, or made-up layouts. The spec lives at `memory/long-term/brand/brand-spec.md` and is loaded before any Phase 3 artifact gets produced.
+If you remember one thing: the **brand spec is authoritative**. The agent will not improvise off-palette colors, off-brand fonts, or made-up layouts — and you shouldn't either. The spec lives at [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) and is loaded before any Phase 3 artifact gets produced.
 
 ## What the brand spec covers
+
+The spec is the single source of truth for these eight dimensions:
 
 | Dimension | Where in the spec |
 |---|---|
@@ -2142,133 +2267,235 @@ The **brand spec is authoritative**. The agent will not improvise off-palette co
 | Slide format (16:9, 13.33" × 7.5") | Header |
 | Layout templates (64 named slide layouts) | Layout patterns section |
 | Logo lockups (horizontal preferred for headers) | Logo usage section |
-| Voice and tone | Voice section |
-| Product-name capitalization | Terminology section |
+| Voice and tone | Voice section, sourced from `styleguide.dynatrace.com` |
+| Product-name capitalization (Dynatrace®, OneAgent®, Grail®, Smartscape®, AppEngine, ActiveGate, Davis AI) | Terminology section |
 | Footer conventions | Footer section |
 
-When the official PowerPoint template and the brand PDF disagree, the **PowerPoint wins** because it's what gets rendered.
+Each of these is sourced from one of three places — the spec's "Sources" table lists which source confirms which dimension. When the official PowerPoint template and the brand PDF disagree, the **PowerPoint wins** because it's what gets rendered.
+
+**Source files in this repo.**
+
+- [`Dynatrace_Brand_Insights-Forge.pptx`](../Dynatrace_Brand_Insights-Forge.pptx) — the rendered theme; source of truth.
+- [`DTFlow/`](../DTFlow/) — the DT Flow typeface files.
+- [`memory/long-term/brand/`](../memory/long-term/brand/) — the spec and supporting reference notes.
 
 ## What the one-pager looks like
 
-Produced by `skills/exec-onepager/SKILL.md` via a **5-step orchestrator**. One page, written for a *named* stakeholder. The voice and emphasis genuinely change between stakeholders — the same investigation produces different one-pagers for a VP of Reliability versus a VP of Product:
+Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md). One page, written for a *named* stakeholder whose profile file is read from [`memory/long-term/profiles/`](../memory/long-term/profiles/) via the index in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md). This isn't decoration — the voice and emphasis genuinely change between stakeholders. A VP of Reliability and a VP of Product get different one-pagers from the same investigation:
 
-- **VP of Reliability** — error-budget framing, SLO impact, on-call burden, post-incident learnings.
-- **VP of Product** — feature impact, customer-experience surface, release velocity, competitive considerations.
+- VP of Reliability — error-budget framing, SLO impact, on-call burden, post-incident learnings.
+- VP of Product — feature impact, customer-experience surface, release velocity, competitive considerations.
 
-### The five steps
+There is no fixed template: the skill selects components per engagement from the catalog in `skills/exec-onepager/reference/layout-system.md` (recipe selection driven by what the story needs), drafts the copy, runs the brand-humanizer pre-pass, then builds the HTML. Open the `SKILL.md` to see the five steps.
 
-1. **Recipe selection** — reads `layout-system.md`, answers three narrative questions (tension, reader need, strongest evidence) before picking components from the catalog.
-2. **Content draft** — structured labeled text for every component; plan-fidelity rules apply (no re-ranking, no new findings).
-3. **Brand-humanizer pre-pass** (mandatory) — runs `skills/brand-humanizer/SKILL.md` on every piece of copy *before* HTML is built. Clears two bars: reads like a person, reads like Dynatrace.
-4. **HTML build** — assembles the page from humanized copy and selected recipe; no improvised CSS.
-5. **Brand gate** — full checklist (one-page constraint, plan fidelity, brand text, accessibility, handoff readiness).
+The exec-onepager skill runs in five steps: recipe selection, content draft, brand-humanizer pre-pass, HTML build, and brand gate. The brand-humanizer pre-pass (Step 3) runs on all drafted copy before any HTML is assembled, catching AI writing patterns and DT voice violations while the copy is still in plain text and easy to fix.
 
 ## What the deck looks like
 
-Produced by `skills/pptx-builder/SKILL.md`, **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.
+Produced by [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md), **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.
 
-Practical implications you'll see in the output:
+The in-repo `tools/pptx-generator.py` is the primary renderer — the skill writes a JSON deck spec into the engagement folder and runs the generator against the official template (the external pptx skill is only a fallback). Practical implications you'll see in the output:
 
-- **Slide format.** 16:9 widescreen, 13.33" × 7.5".
-- **Typography.** DT Flow Medium / DT Flow Light. Arial is the rendering-side fallback only.
-- **Layouts.** 64 named layouts from the template — content card, chart, table, swimlane, gantt, timeline, funnel, hashtag-stat, and so on.
-- **Logo lockup.** Horizontal lockup preferred for slide title bars and one-pager headers.
-- **Product names.** Capitalized and trademarked as the spec requires.
+- **Slide format.** 16:9 widescreen, 13.33" × 7.5". No square slides, no 4:3.
+- **Typography.** DT Flow Medium / DT Flow Light. Arial is the rendering-side fallback only — if a viewer doesn't have DT Flow installed, the slide falls back gracefully. The agent never substitutes a different font on its own.
+- **Layouts.** 64 named layouts from the template — content card, chart, table, swimlane, gantt, timeline, funnel, hashtag-stat, and so on. The agent picks from this set, not freeform.
+- **Logo lockup.** Horizontal lockup preferred for slide title bars and one-pager headers where horizontal space allows.
+- **Wave backgrounds and branded charts.** Any slide can carry a brand wave background with a dark overlay (`wave_background` / `wave_overlay_opacity` spec fields), and chart slides use the six brand series colors automatically — never red or green.
+- **Product names.** Capitalized and trademarked as the spec requires. The agent never coins variants like "Dynatraces" or "the Dynatrace platform" when the spec says "Dynatrace®".
 
 ## Voice and tone
 
-Voice comes from `styleguide.dynatrace.com` and the matching stakeholder profile. The **brand-humanizer** (mandatory Step 3 in exec-onepager) handles most of the enforcement before HTML is built. The three Phase 3 lenses add a final check:
+Voice comes from `styleguide.dynatrace.com/docs/best-practices/top-10-tips` and from the matching stakeholder profile. **No critique lens runs in Phase 3** — the voice and framing were already enforced upstream, while the work could still change:
 
-- The **Consultative lens** makes sure the deliverable reads as the firm's voice for a technical-leadership audience.
-- The **Customer lens** checks that the deliverable matches what users actually experience.
-- The **Skeptic lens** stress-tests for hostile leadership questions before send.
+- The [Consultative lens](../.claude/agents/consultative-lens.md) ran a framing pass on the issue tree and hypotheses in Phase 1, and reviewed the action plan as a panel member in Phase 2, so the firm's voice is baked into the plan the one-pager summarizes.
+- The [Customer lens](../.claude/agents/customer-lens.md) and [Skeptic lens](../.claude/agents/skeptic-lens.md) were both on the Phase 2 persona panel, so user-impact grounding and the hostile-leadership questions are already answered in the approved plan.
+
+Phase 3 inherits that reviewed plan and packages it faithfully — it does not re-open the message. The deliverable stays in voice because the plan it summarizes was already in voice. You can still ask for any lens on demand at the Phase 3 gate, but none runs automatically. If you want to know exactly which lens catches what and when it runs, [lenses.md](lenses.md) has the full breakdown.
 
 ## Spot-checking before you send
 
+Before you send a one-pager or deck, run the mechanical check first — `python3 tools/onepager-lint.py <file.html>` verifies the HTML against the design system (canonical tokens, palette, font fallback, structural markers). Then you can ask the agent for an explicit verification pass:
+
 > *"Verify this one-pager against the brand spec — colors, typography, layout, terminology."*
 
-The agent will load `brand-spec.md`, walk the artifact section by section, and flag anything off-spec.
+The agent will load [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md), walk the artifact section by section, and flag anything off-spec. This catches the kinds of drift that are easy to miss: a trademarked product name without the ®, an Arial fallback that shouldn't be visible, a HEX value that's close to but not exactly the palette.
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| The authoritative brand spec | [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) |
+| Supporting reference notes (which page in the source PDF maps to which pattern) | [`memory/long-term/brand/reference/`](../memory/long-term/brand/reference/) |
+| The rendered PowerPoint theme | [`Dynatrace_Brand_Insights-Forge.pptx`](../Dynatrace_Brand_Insights-Forge.pptx) |
+| The DT Flow typeface files | [`DTFlow/`](../DTFlow/) |
+| The one-pager skill | [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md) |
+| The deck skill | [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md) |
 </script>
 
 <script type="text/plain" id="raw-customizing">
 # Customizing Insights Forge for your team
 
-Insights Forge is designed to be **specialized to your team** — it's not really useful straight out of the box. The skills, lenses, and workflow are generic; the files under `memory/long-term/` are where *your team* lives.
+Insights Forge is designed to be **specialized to your team** — it's not really useful straight out of the box. The skills, lenses, and workflow are generic; the files under [`memory/long-term/`](../memory/long-term/) are where *your team* lives. This page walks you through what to customize first, in order of how much value each change unlocks, and closes with the things you should think hard about before changing.
 
 ## High impact — do these first
 
 ### 1. Stakeholder profiles
+Open the profile index in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md); the profile content lives in [`memory/long-term/profiles/`](../memory/long-term/profiles/) — one file per archetype.
 
-Open `memory/long-term/stakeholder-profiles.md`.
-
-Add one profile per leader you produce outputs for. Each profile should capture what they care about, what they ignore, decisions they own, and how they prefer to receive information.
+Add one profile per leader you produce outputs for: create (or extend) the file in `profiles/` and add an index row to the hub. Each profile should capture what they care about, what they ignore, decisions they own, and how they prefer to receive information. The Phase 3 [`exec-onepager`](../skills/exec-onepager/SKILL.md) skill reads the matching profile file to shape voice and emphasis.
 
 A profile like *"VP of Engineering"* is generic. A profile like *"VP of Engineering, came up through platform, allergic to vague timelines, owns error-budget policy, reads on mobile during commute"* produces a noticeably sharper one-pager.
 
-**Trigger phrase:** *"Add [name] to the stakeholder profiles as [role]."*
+Trigger phrase: *"Add [name] to the stakeholder profiles as [role]."*
 
 ### 2. Domain knowledge — fill in the slots
+Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md).
 
-Open `memory/long-term/domain-knowledge.md`.
+The vendor-sourced Dynatrace concept definitions are populated. The `[team to note: …]` slots are where **your environment's specifics** belong. Retention policy, DPS quota, custom RUM tagging, named SLOs, anything an agent reading the file would otherwise have to guess. Fill these in as you learn them.
 
-The vendor-sourced Dynatrace concept definitions are populated. The `[team to note: …]` slots are where **your environment's specifics** belong: retention policy, DPS quota, custom RUM tagging, named SLOs, anything an agent reading the file would otherwise have to guess.
+This is the file the agent reads in Phase 0 and Phase 1 to ground signal mapping in your reality, not a generic Dynatrace tenant.
 
 ### 3. Terminology
+Open [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
 
-Open `memory/long-term/terminology.md`.
-
-Add acronyms and product names your team uses that aren't already listed. Especially valuable: internal service names, custom dashboards, named SLOs, internal nicknames for shared infrastructure.
+Add acronyms and product names your team uses that aren't already listed. Especially valuable: internal service names, custom dashboards, named SLOs, internal nicknames for shared infrastructure. The agent will refer to them by *your* name, not a generic one — which makes Phase 3 deliverables sound like a colleague wrote them.
 
 ## Medium impact
 
 ### 4. Dynatrace playbooks
+Open the playbook index in [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md); the playbook content lives in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/) — one file per problem shape.
 
-Open `memory/long-term/dynatrace-playbooks.md`.
+Eight playbooks ship out of the box: latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem. Each is a client-agnostic procedural pattern that gets pulled into Phase 2 action plans.
 
-Eight playbooks ship out of the box: latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem. You can extend them with org-specific procedural patterns, or add new playbooks for problem shapes the eight don't cover (cost/quota investigations and security-event triage are common additions).
+You can extend the individual playbook files with org-specific procedural patterns the team has converged on, or add new playbooks for problem shapes the eight don't cover (cost / quota investigations and security-event triage are common additions) — a new playbook is a new file in `playbooks/` plus an index row in the hub.
 
-**Trigger phrase:** *"Promote this Phase 2 investigation sequence into a new playbook called `<name>`."*
+Trigger phrase: *"Promote this Phase 2 investigation sequence into a new playbook called `<name>`."*
 
 ### 5. Client question bank
+Open [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md).
 
-Open `memory/long-term/client-question-bank.md`.
-
-If your discovery conversations regularly need question phrasings that aren't in the bank, add them — grouped by the MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE rubric.
+If your discovery conversations regularly need question phrasings that aren't in the bank, add them — grouped by the MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE rubric. The [`context-framing`](../skills/context-framing/SKILL.md) skill uses these phrasings when you're doing live customer discovery.
 
 ### 6. The operating manual itself
+Open [`CLAUDE.md`](../CLAUDE.md).
 
-Open `CLAUDE.md`.
+The operating principles are sensible defaults, but you may want to adjust:
 
-You may want to adjust: the list of stakeholder roles, the default vertical or domain, the citation-freshness window (default 7 days), or the phased workflow if you've added or removed phases.
+- The gate summary block or gate cadence, if your review process differs.
+- The out-of-scope handling rules, if your engagements scope differently.
+- The phased workflow if you've added or removed phases.
+
+(The stakeholder archetype list lives in `memory/long-term/stakeholder-profiles.md`, and the citation-freshness window in `skills/external-research/SKILL.md` — adjust those there, not in `CLAUDE.md`.)
 
 ## Lower impact — adjust as needed
 
 ### 7. Brand spec
+Open [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md).
 
-Open `memory/long-term/brand/brand-spec.md`.
+Refresh when the Dynatrace brand template changes. The spec is sourced from the official PowerPoint template — when Brandfolder publishes a new version, mirror the changes here. The supporting notes in [`memory/long-term/brand/reference/`](../memory/long-term/brand/reference/) map each pattern in the spec to a page in the source PDF, which makes refreshes easier.
 
-Refresh when the Dynatrace brand template changes. The spec is sourced from the official PowerPoint template.
+See [deliverables.md](deliverables.md) for how the brand spec gets used during Phase 3.
 
-### 8. Prior-engagement detection
+### 8. Prior-engagement history (per client)
+There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared `memory/long-term/past-investigations.md` has been removed.)
 
-Prior-engagement detection is **per-client**: in Phase 0 the agent reads the active client's own `README.md` engagement-history table to spot earlier work on the same customer and surface its key lessons.
+## The `tools/` boundary
 
-> The old shared `memory/long-term/past-investigations.md` index is **deprecated** — it carries a "do not use" banner and is read by no skill. Don't add to it.
-
-## The tools/ boundary
-
-Any tool added to `tools/` must respect the operating principles in `CLAUDE.md`:
+The [`tools/`](../tools/) folder holds the in-repo tooling — the pptx deck generator, the one-pager lint, the workspace conformance check, the client-isolation hook, and the seed-prompt bundler (see [`tools/README.md`](../tools/README.md) for the full table). Any tool added there **must respect the operating principles** in [`CLAUDE.md`](../CLAUDE.md):
 
 - A tool **may** read from internal docs, design files, or local artifacts.
 - A tool **may** render outputs into formats the team uses (PPTX, PDF, Markdown).
-- A tool **must not** execute DQL, SQL, or any query language against production telemetry.
+- A tool **may** fetch from approved external sources (currently `docs.dynatrace.com` and `community.dynatrace.com`).
+- A tool **must not** execute DQL, SQL, or any query language against production telemetry or data warehouses.
 - A tool **must not** push configuration, deploy code, or modify production state.
+
+The full rule, including suggested future integrations: [`tools/README.md`](../tools/README.md).
 
 ## What you should NOT customize lightly
 
-- **The four-phase workflow.** Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee.
-- **The memory split.** Auto-promoting engagement-folder findings into long-term memory was an explicit *non*-design.
-- **The external allowlist.** Adding a new domain requires explicit user approval per investigation, not a silent edit.
+A few load-bearing design decisions exist for non-obvious reasons. Before changing them, read the linked source carefully.
+
+- **The four-phase workflow.** The phase boundaries and the gate-between-phases pattern are the workspace's load-bearing structure. Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee that the entire workspace is designed around.
+- **The memory split.** Auto-promoting per-engagement findings into long-term memory was an explicit *non*-design. The full reasoning is in [memory.md](memory.md). Don't quietly add a script that does this.
+- **The external allowlist.** Adding a new domain to [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) requires explicit user approval per investigation, not a silent edit. See [research.md](research.md).
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| Every long-term memory file you can edit | [`memory/long-term/`](../memory/long-term/) |
+| The operating manual | [`CLAUDE.md`](../CLAUDE.md) |
+| All eight phase skills | [`skills/`](../skills/) |
+| Six critique lenses + the doc-freshness-checker | [`.claude/agents/`](../.claude/agents/) |
+| The tooling boundary | [`tools/README.md`](../tools/README.md) |
+</script>
+
+<script type="text/plain" id="raw-seed-prompt-generator">
+# The Seed Prompt Generator
+
+Phase 0 normally starts cold: you describe the customer, and the agent pulls the context out of you through the two-phase questioning flow. The **Seed Prompt Generator** flips that around. It's a self-contained browser form that you fill out *before* the session; it assembles your answers into a single **seed prompt** — a structured Phase 0 intake brief — that you paste into Claude Code to open the engagement with the context already loaded.
+
+It doesn't replace Phase 0 or its gate. It front-loads the intake so the agent spends its first questions sharpening the framing instead of collecting basics from scratch.
+
+The tool lives at [`html/Insights Forge (Seed Prompt Generator).html`](../html/) — a single browser-runnable file: no install, no build, no network. (The readable application source is [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html); edit it and repack with `tools/seed-prompt-generator-bundle.py` — the src file alone will not render in a browser.)
+
+## When to use it
+
+Use it when you already know the customer and want the engagement to start from a shared, complete picture — most QBR, renewal, and expansion prep. Skip it and just describe the problem in chat when the situation is genuinely exploratory (or type `/drill` for a chat-native version of the same intake), or when discovery is happening *live with the customer* (Phase 0 has a client-facing question mode for that — see [workflow.md](workflow.md)).
+
+Either path lands in the same place: a framed `current-context.md` and a Phase 0 gate. The generator is a faster on-ramp, not a different road.
+
+## The flow, end to end
+
+1. **Open the file** in a browser.
+2. **Work through the ten sections** using the left rail (or Next). A live **Seed-prompt brief** panel on the right updates as you type.
+3. **Fill every Required field.** Copy and Download stay disabled until they're all in — the Review panel lists what's still missing.
+4. **Copy to clipboard** (or **Download .md** to keep a file).
+5. **Paste it into the Claude Code chat** as your opening message — or save the `.md` into the engagement and point the agent at it. Either way the agent reads it and begins Phase 0.
+6. **Answer the follow-ups.** The brief opens with a "For the agent — read first" preamble that tells the agent to still ask 1–3 rounds of clarifying questions and to stop at the Phase 0 gate. Anything you left blank shows up as `not provided` — a genuine gap the agent will probe, not a value it invents. If every required item arrives filled and substantial, the agent uses the **brief-complete fast path**: one combined sharpening message instead of multiple rounds.
+
+The preview text is read-only by design (you can't select or drag it out) — use the Copy button so the whole brief, preamble included, travels intact.
+
+## The ten sections
+
+Fields are tagged **Required** or left optional; the brief's preamble groups them for the agent as **Required context** and **Recommended context**. Only Required fields gate export.
+
+| # | Section | Captures |
+|---|---|---|
+| 1 | **Outputs & trigger** | Which presentation formats to build on top of the action plan (the customer action plan is always the baseline), what prompted the engagement (QBR, renewal, expansion, incident follow-up), and **your role** (required). |
+| 2 | **Analyst context** | Three optional 1–5 self-calibrations — your Dynatrace consulting experience, account familiarity, and the **customer's Dynatrace maturity**. Each level shows a behavioral anchor (hover any button, and the selected level's meaning appears below the scale). Rate one and you must rate all three. Tunes depth, tone, and the plan's ambition ceiling. |
+| 3 | **Customer basics** | Name, what they do, vertical, **customer size (ACV band)**, tenant type, and **region(s)** (NORAM / LATAM / EMEA / APAC). Region flags laws like GDPR that can shape what the plan may recommend. |
+| 4 | **Stakeholders & audience** | Who consumes or influences the deliverable — role archetype (required; at least one), name (strongly preferred), communication level, and what they judge success by. |
+| 5 | **Relationship Context** | How the relationship stands — history, commitments, tensions, prior outcomes. Required. |
+| 6 | **Customer Pain Points** | The pain and constraints the plan must respect — alert noise, slow root cause, toil, on-call load, plus commitments and limits. Required; this single field carries what the live questions split across Q3-Specific and Q8. |
+| 7 | **Goals & success** | Intent as **two required questions**: what *Dynatrace* wants from the engagement (prove value, secure renewal, justify expansion) and what the *customer* would call success. You cannot write the objective without both. |
+| 8 | **Active capabilities** | What's actually live in the tenant. This is the **boundary of what insight can be surfaced** — the agent won't propose value that depends on a capability you didn't check. Davis AI is always on; at least one capability beyond Davis (or "unsure") is required. |
+| 9 | **Out of scope** | A **hard do-not-suggest list** — capabilities the agent must not recommend even if they're active (e.g. no Session Replay under GDPR). |
+| 10 | **Focus applications** | Named apps with RUM and Session Replay status. Becomes required when your goals mention improving digital experience. |
+
+The Required fields that unlock export are: at least one requested output; your role; customer name / what-they-do / vertical; Relationship & context; Pain & constraints; both Goals & success answers; at least one active capability beyond Davis (or "unsure"); at least one stakeholder role archetype; all three calibration scores once any is set; and a focus app with RUM status when the intent is digital-experience. Everything else sharpens the result but won't block you.
+
+## How the brief maps to Phase 0
+
+The generated markdown is organized so the agent can read it against the [context-framing skill](../skills/context-framing/SKILL.md) directly — its **Seed-prompt intake** section carries the exact section-to-question mapping table. In short: `Requested outputs & trigger` covers Q3-R, Q9, and the analyst calibration; `Customer context` covers Q1/Q2/Q4 plus size, regions, and Q3-Context; `Stakeholders & audience` covers Q7; `Goals & success criteria` covers Q3-Intent; `Pain & constraints` covers Q3-Specific and Q8; and `Active capabilities`, `Out of scope`, and `Focus applications` cover Q5, the exclusions, and Q6. The preamble states two hard rules for the agent: **active capabilities are the boundary** of surfaceable insight, and **out-of-scope items are a hard exclusion**.
+
+The agent consumes the brief through a dedicated intake path: context-framing detects the `# Insights Forge intake brief` header, maps every populated value as a provisional answer, closes MUST-HAVE gaps first, then sharpens — collapsing to a single sharpening message when the brief arrives complete.
+
+## What it does *not* do
+
+- It **does not skip the Phase 0 gate.** The agent still reframes, still asks follow-ups, and still waits for your explicit approval before Phase 1.
+- It **does not fabricate.** Blank fields become `not provided`, which the agent treats as a gap to close — consistent with the workspace's "name the gap, don't invent it" principle.
+- It **does not run anything.** It's a static form that produces text. No queries, no network, no writes to the workspace.
+
+## Look inside
+
+| What you'll find | Where to look |
+|---|---|
+| The tool itself (browser-runnable bundle) | [`html/`](../html/) — `Insights Forge (Seed Prompt Generator).html` |
+| The editable application source + repack tool | [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html) · [`tools/seed-prompt-generator-bundle.py`](../tools/seed-prompt-generator-bundle.py) |
+| Screenshots of each section | [`html/screenshots/`](../html/screenshots/) |
+| The Phase 0 procedure that consumes the brief | [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) |
+| The nine clarifying questions and the rubric | [getting-started.md](getting-started.md) · [workflow.md](workflow.md) |
 </script>
 
 <!-- ══ File content ══ -->
@@ -2296,50 +2523,72 @@ last-touched: 2026-06-22
 </script>
 
 <script type="text/plain" id="raw-current-context">
-# Current Context
+---
+client: acme-corp
+slug: checkout-latency
+state: active
+phase: 1
+opened: 2026-06-18
+last-touched: 2026-06-20
+---
 
-The single source of truth for the active investigation's framing. The agent updates this file at every gate.
+# Engagement context — Acme Corp — checkout latency
 
-## Problem statement (as user described it)
+## Engagement Framing (C.S.I.R.)
+- **Context:** Acme Corp, mid-market online retail; consultant owns the post-sales BI motion for this account.
+- **Specific Information:** DPS contract in renewal phase; EU region (GDPR — Session Replay ruled out); prior engagement confirmed Davis AI noise reduction.
+- **Intent:** Dynatrace — prove value ahead of the Q3 renewal. Customer — checkout conversion recovered to baseline.
+- **Response Format:** One-pager for the Executive Sponsor plus a leadership deck; concise, business-first tone.
 
-> [The user's original problem statement, verbatim. Capture how they actually said it — including the ambiguity, the urgency, the noise. The reframed version goes in the next section.]
+## Customer
+Acme Corp — online retail. Size: $500K–$1M ACV. Region: EMEA.
 
-## Reframed problem (after MECE structuring)
+## Vertical
+Retail / e-commerce
 
-> [The problem restated as a question, at a single level of abstraction, after Phase 0 framing. This is what the issue tree decomposes.]
+## Tenant type
+SaaS
 
-## Scope and out-of-scope
+## Active capabilities
+Full-Stack (OneAgent) · RUM · Davis AI · Grail log analytics · Synthetic (HTTP monitors)
 
-**In scope**:
-- [What this investigation will look at.]
-- [...]
+## Out-of-scope exclusions
+- Session Replay (GDPR — ruled out by the customer; never suggest, even though licensed)
 
-**Out of scope**:
-- [What this investigation will explicitly not touch — usually because it is owned by another team, deferred to a later phase, or out of bounds for the decision being made.]
-- [...]
+## Analyst calibration
+Experience 4 · Account familiarity 3 · Customer Dynatrace maturity 2
 
-## Stakeholders
+## RUM status
+Enabled on the checkout app; Session Replay off (excluded)
 
-| Role | Name | Owns | Affected by | Decides on |
-|---|---|---|---|---|
-| [VP of Engineering] | [name] | [what they own] | [how they're affected] | [what they have authority to decide] |
-| [Director of Reliability] | [name] | [...] | [...] | [...] |
+## Consulting objective
+Surface the checkout-latency drivers Acme's team can act on before the Q3 renewal QBR, quantified against checkout conversion.
 
-## Current phase
+## Leadership priorities
+Checkout conversion · revenue per session · MTTR
 
-**Phase**: [0 / 1 / 2 / 3]
-**Status**: [in progress / awaiting user approval / approved, moving to next phase]
+## Technical team priorities
+Alert noise · slow root cause on checkout services · on-call load
 
-## Last user approval
+## Engagement trigger
+Renewal QBR (Q3)
 
-- **Date**: [YYYY-MM-DD]
-- **Approved**: [what specifically was approved]
-- **Conditions**: [any conditions the user attached to the approval]
+## Orientation hypotheses (pre-scoring candidates — not findings)
+1. Third-party payment API latency drives the p95 checkout time regression
+2. Davis AI problem grouping understates incident volume on checkout services
+3. Frontend JS errors on the payment step suppress conversions
 
-## Open questions for the user
+## Capability gaps
+Session Replay excluded (GDPR) — UX evidence limited to RUM metrics
 
-- [Specific question the agent needs answered before continuing.]
-- [...]
+## Stakeholder role archetype
+Executive Sponsor (+ VP of Engineering overlay) — named leader recorded in stakeholder-overlays.md
+
+## Prior engagement reference
+engagements/2026-03-02-davis-noise/ (state: complete)
+
+## Gate decision
+Phase 0 approved 2026-06-18 (see decisions-log.md)
 </script>
 
 <script type="text/plain" id="raw-issue-tree">
@@ -2499,40 +2748,88 @@ The Phase 2 deliverable. Two categories of actions live here: **investigation ac
 </script>
 
 <script type="text/plain" id="raw-decisions-log">
-# Decisions Log
+# [Client Name] — [YYYY-MM-DD-slug] — Decisions Log
 
-An **append-only** record of every gate decision the user has made during this investigation. The agent writes a new entry whenever the user approves, redirects, or asks for iteration through a lens. Never edit or delete prior entries — they are the audit trail.
+**Engagement:** memory/clients/[client-name]/engagements/[YYYY-MM-DD-slug]/
+**Started:** YYYY-MM-DD
 
-## Entry format
+Append-only record of every human-in-the-loop gate decision. One row per gate
+event. Never edit or delete a prior row — corrections are added as a new row.
 
-Each entry must include:
+<!--
+Per row:
+- Date          — YYYY-MM-DD of the gate decision
+- Phase / Gate  — Phase 0 Context | Phase 1 Diagnose | Phase 2 Plan | Phase 3 Deliver
+- Decision      — Approve | Redirect | Iterate-through-a-lens
+- Lens invoked  — MECE | Optimist | ICE | Consultative | Customer | Skeptic
+                  (or "—" when no lens was used)
+- Rationale     — 1-2 sentences: why the user chose this, and what changed as a result
+-->
 
-- **Timestamp** — ISO 8601 (YYYY-MM-DD HH:MM)
-- **Phase** — 0 / 1 / 2 / 3
-- **Presented** — what the agent presented at this gate (one sentence)
-- **Decision** — approve / redirect / iterate
-- **Rationale** — the user's reasoning, captured in their words where possible
-- **Next action** — what the agent does next as a result of this decision
+| Date | Phase / Gate | Decision | Lens invoked | Rationale |
+|---|---|---|---|---|
+| YYYY-MM-DD | Phase 0 Context | Approve | — | [Why the user approved / what was confirmed] |
+| YYYY-MM-DD | Phase 1 Diagnose | Iterate-through-a-lens | Skeptic | [What the lens surfaced and what was revised before re-presenting] |
+| YYYY-MM-DD | Phase 1 Diagnose | Redirect | — | [What scope/framing/priority changed and why] |
 
-## Entries
+<!--
+Decision vocabulary (from CLAUDE.md "Human-in-the-loop gates"):
+- Approve                 — proceed to the next phase.
+- Redirect                — change scope, framing, or priority; artifacts updated and re-presented.
+- Iterate-through-a-lens  — re-review through a named lens, then revise before re-presenting.
 
-### YYYY-MM-DD HH:MM — Phase 0 framing presented
+Mandatory-per-phase lenses still record a row here when run at a gate:
+- Phase 1: MECE + Consultative (framing) + ICE (after signal-mapping)
+- Phase 2: MECE + persona panel (Skeptic, Optimist, Customer, Consultative) + ICE (re-rank)
+On-demand lens invocations (any of the six, at any gate) are logged the same way.
+-->
+</script>
 
-- **Phase**: 0
-- **Presented**: Reframed problem statement, scope, stakeholder list, initial candidate hypotheses.
-- **Decision**: [approve / redirect / iterate]
-- **Rationale**: [user's reasoning]
-- **Next action**: [e.g., "Proceed to Phase 1 — build MECE issue tree."]
+<script type="text/plain" id="raw-lessons-learned">
+---
+name: lessons-learned
+description: |
+  Post-engagement lessons for this client engagement. Tagged with vertical,
+  problem-shape, and capabilities so Phase 0 cross-client readback can surface
+  relevant lessons from other completed engagements.
+vertical: ""          # e.g. retail, financial-services, healthcare, saas, logistics
+problem-shape: ""     # e.g. api-latency, rum-adoption, davis-tuning, release-quality, cost-optimization
+capabilities: []      # list active DT capabilities that were central: rum, apm, synthetic, davis, log-management, business-analytics, dps
+state: draft          # draft | complete
+engagement: ""        # YYYY-MM-DD-slug of the parent engagement folder
+---
 
-### YYYY-MM-DD HH:MM — Phase 1 diagnosis presented
+# Lessons Learned
 
-- **Phase**: 1
-- **Presented**: MECE issue tree, ranked hypotheses with ICE scores, signals map.
-- **Decision**: [...]
-- **Rationale**: [...]
-- **Next action**: [...]
+## What we got right
 
-### [Append new entries below this line — newest at the bottom]
+Decisions, framings, or instincts that held up. Worth repeating in future engagements with a similar vertical or problem-shape.
+
+- 
+
+## What we got wrong
+
+Hypotheses that wasted time, framings that misdirected the team, signals we trusted that turned out to be misleading.
+
+- 
+
+## What we discovered that we did not know before
+
+New mappings between technical signals and business outcomes, new failure modes, new things to instrument, or new stakeholder dynamics.
+
+- 
+
+## What should change in the playbook
+
+Candidates for promotion to `memory/long-term/` — updates to `frameworks.md`, `domain-knowledge.md`, a playbook file in `playbooks/`, or a profile file in `profiles/` (plus the hub index row for new files). The user must explicitly approve any promotion to long-term memory.
+
+- 
+
+## Cross-engagement hook
+
+One sentence that a future Phase 0 readback can use to judge relevance: what was the core problem, what was the key lesson, and what vertical/capabilities context makes this lesson useful elsewhere.
+
+>
 </script>
 
 <script type="text/plain" id="raw-client-readme">
@@ -2552,9 +2849,8 @@ Each entry must include:
 ## Quick links
 
 - [environment.md](environment.md) — DT environment profile
-- [contract.md](contract.md) — commercial & consumption (confidential)
 - [stakeholder-overlays.md](stakeholder-overlays.md) — named leaders
-- [engagements/](engagements/) — one dated folder per engagement (state recorded in each current-context.md)
+- [engagements/](engagements/) — all engagements for this client (one dated folder each)
 </script>
 
 <script type="text/plain" id="raw-environment">
@@ -2599,26 +2895,35 @@ Each entry must include:
 </script>
 
 <script type="text/plain" id="raw-contract">
-# [Client Name] — Commercial & Consumption
+# [Client Name] — Contract & Consumption
 
-**Confidential.** Read only when this client is active. Captured (and updated) only on explicit user approval. Read by `skills/value-highlight/SKILL.md` for renewal/QBR briefs.
+**Confidential client data.** Lives only in this client's workspace; never promoted to `memory/long-term/`. Update with explicit user approval (same binary-approval gate as `environment.md`).
 
-**Last updated:** YYYY-MM-DD
+This is the durable home for the commercial and consumption context that is part of understanding a client — distinct from `environment.md`, which holds the *technical* instrumentation facts. `value-highlight` (renewal / QBR briefs) reads this file so commercial framing is not re-derived from scratch each engagement.
 
-## DPS commitment
-<!-- Annual Dynatrace Platform Subscription commit ($ / capability mix), or "unknown" -->
+## Commercial owner
+- [CSM / AE / account owner — name and role, or "unknown"]
 
-## Renewal
-<!-- Renewal date; notice window; owner on both sides -->
+## Contract
+- **Licensing model:** [DPS (Dynatrace Platform Subscription) | classic SKU | other | unknown]
+- **Annual commit:** [$ amount or "unknown"]
+- **Term:** [start – end dates, or "unknown"]
+- **Renewal date:** [YYYY-MM-DD or "unknown"]
+- **Contract phase:** [new | renewal | expansion | at-risk | unknown]
 
-## On-demand / overage burn
-<!-- Current burn vs commit; trend; headroom or overage risk -->
+## Consumption posture
+- **Capabilities in contract:** [which DPS / platform capabilities the commit covers]
+- **On-demand / overage burn:** [trend — under, on, or over commit; notable spikes; or "unknown"]
+- **Headroom:** [budget remaining this term, or "unknown"]
 
-## Capability entitlements
-<!-- Which DPS capabilities are licensed vs available to expand into -->
+## Notes
+- [Anything commercially relevant: negotiation history, discount structure, expansion levers, procurement constraints.]
 
-## Commercial notes
-<!-- Expansion conversations in flight, contractual constraints, or "none noted" -->
+<!--
+Keep this factual. If a field is unknown, write "unknown" rather than guessing — fabricated commercial
+numbers are worse than an acknowledged gap. The `## DPS quota` line in environment.md is a technical
+capacity note; the commercial commit, renewal timing, and burn posture belong here.
+-->
 </script>
 
 <script type="text/plain" id="raw-stakeholder-overlays">
@@ -2713,7 +3018,7 @@ const SF_DATA = {
     tag: 'exec-onepager (5-step) → brand-humanizer → pptx-builder',
     desc: 'Produces exec-ready deliverables via a 5-step orchestrator: (1) recipe selection, (2) content draft, (3) brand-humanizer pre-pass (mandatory — fixes AI writing + DT voice before HTML is touched), (4) HTML build, (5) brand gate. Deck is generated only after one-pager approval.',
     skills: ['exec-onepager (5-step)', 'brand-humanizer', 'pptx-builder'],
-    lenses: ['Consultative', 'Customer', 'Skeptic'],
+    lenses: [],
     artifacts: ['one-pager-YYYY-MM-DD.md', '&lt;deliverable&gt;.html', 'deck-YYYY-MM-DD.pptx']
   }
 };
@@ -2722,10 +3027,10 @@ const SF_LENS_MAP = {
   freshness:    ['p0'],
   mece:         ['p1', 'p2'],
   ice:          ['p1', 'p2'],
-  consultative: ['p1', 'p2', 'p3'],
-  skeptic:      ['p2', 'p3'],
+  consultative: ['p1', 'p2'],
+  skeptic:      ['p2'],
   optimist:     ['p2'],
-  customer:     ['p2', 'p3']
+  customer:     ['p2']
 };
 
 function sfSelect(el, key) {
@@ -2785,7 +3090,8 @@ const DOC_IDS = {
   'memory': 'raw-memory',
   'research': 'raw-research',
   'deliverables': 'raw-deliverables',
-  'customizing': 'raw-customizing'
+  'customizing': 'raw-customizing',
+  'seed-prompt-generator': 'raw-seed-prompt-generator'
 };
 
 let docsInited = false;
@@ -2817,16 +3123,15 @@ const FILE_DEFS = {
   },
   'current-context': {
     path: 'memory/clients/acme-corp/engagements/2026-06-18-checkout/current-context.md',
-    desc: 'Single source of truth for the active investigation\'s framing. The agent updates this at every phase gate. Read it any time to see the agent\'s current understanding.',
+    desc: 'Single source of truth for the active investigation\'s framing. Opens with the YAML status front-matter that makes the engagement self-describing; the agent bumps phase and last-touched at every gate approval.',
     raw: 'raw-current-context',
     ann: [
-      ['## Problem statement', 'The user\'s original words, verbatim — including ambiguity, urgency, and noise. Never edited.'],
-      ['## Reframed problem', 'The problem restated as a single question after Phase 0 framing. This is what the issue tree decomposes in Phase 1.'],
-      ['## Scope and out-of-scope', 'Explicit boundaries prevent scope creep. Out-of-scope items are usually owned by another team or deferred deliberately.'],
-      ['## Stakeholders', 'The table of people who own, are affected by, or decide on this investigation. Drives Phase 3 framing.'],
-      ['## Current phase', 'Phase 0–3 plus status. Always current — check this to know where the investigation stands.'],
-      ['## Last user approval', 'Records what was approved and any conditions attached. Part of the audit trail.'],
-      ['## Open questions', 'Blockers the agent needs answered before continuing. If this is non-empty, the investigation is paused waiting on input.'],
+      ['--- front-matter ---', 'state / phase / opened / last-touched — the self-describing status block a resuming session scans for. No front-matter means a lost engagement.'],
+      ['## Engagement Framing (C.S.I.R.)', 'Context, Specific Information, Intent, Response Format — the four-part framing captured in Q3.'],
+      ['## Out-of-scope exclusions', 'Hard engagement-wide boundary. Later phases never surface anything that depends on these, even when the capability is active.'],
+      ['## Analyst calibration', 'The three 1–5 scores. Routes drill depth, council size, gate verbosity, and the plan\'s ambition ceiling.'],
+      ['## Orientation hypotheses', 'Pre-scoring candidates, not findings — they seed Phase 1.'],
+      ['## Gate decision', 'Approved / Redirected / Iterating, with date. The full record lives in decisions-log.md.'],
     ]
   },
   'issue-tree': {
@@ -2882,12 +3187,20 @@ const FILE_DEFS = {
     desc: 'Append-only audit trail of every gate decision. If anyone asks "why did we pursue that hypothesis?" — the answer is here. Never edited or deleted.',
     raw: 'raw-decisions-log',
     ann: [
-      ['**Timestamp**', 'ISO 8601 format. Establishes when each decision was made in the investigation timeline.'],
-      ['**Phase**', 'Which phase was being presented at this gate (0, 1, 2, or 3).'],
-      ['**Presented**', 'One sentence describing what the agent showed at this gate.'],
-      ['**Decision**', 'approve / redirect / iterate — exactly one of these three. No other values.'],
-      ['**Rationale**', 'The user\'s reasoning, captured in their words where possible. This is what makes the log useful months later.'],
-      ['**Next action**', 'What the agent does as a result. Makes the consequences of each decision explicit.'],
+      ['| Date |', 'One table row per gate event, append-only. Never edit or delete a prior row — corrections are added as a new row.'],
+      ['Decision', 'Approve | Redirect | Iterate-through-a-lens — exactly the CLAUDE.md gate vocabulary. No other values.'],
+      ['Lens invoked', 'Which of the six lenses ran at this gate, or "—" when none. Mandatory per-phase lenses record rows here too.'],
+      ['Rationale', 'Why the user chose this and what changed as a result. This is what makes the log useful months later.'],
+    ]
+  },
+  'lessons-learned': {
+    path: 'memory/clients/_template/engagements/lessons-learned.md',
+    desc: 'Written by investigation-reset when an engagement is archived. Its front-matter tags (vertical, problem-shape, capabilities) are what Phase 0\'s cross-client readback matches on; the Cross-engagement hook line is what gets surfaced as a "Prior lesson" note.',
+    raw: 'raw-lessons-learned',
+    ann: [
+      ['vertical / problem-shape / capabilities', 'Front-matter tags the Phase 0 cross-client readback matches on. Keep them accurate — mismatched tags hide the lesson.'],
+      ['## Cross-engagement hook', 'The single line surfaced to future engagements. Write it for a stranger opening a different client\'s engagement.'],
+      ['## What should change in the playbook', 'Promotion candidates for memory/long-term/ — every promotion needs explicit user approval.'],
     ]
   },
   'client-readme': {
@@ -2914,13 +3227,12 @@ const FILE_DEFS = {
   },
   'contract': {
     path: 'memory/clients/_template/contract.md',
-    desc: 'Confidential commercial & consumption context for this client: DPS commit, renewal date, on-demand burn, capability entitlements. Captured only on explicit approval. Read by value-highlight for renewal/QBR briefs.',
+    desc: 'Confidential contract & consumption context for this client: licensing model, annual commit, renewal date, consumption posture. Captured only on explicit approval. Read by value-highlight for renewal/QBR briefs.',
     raw: 'raw-contract',
     ann: [
-      ['## DPS commitment', 'The annual Dynatrace Platform Subscription commit and capability mix. Anchors the renewal conversation.'],
-      ['## Renewal', 'Renewal date, notice window, and owners — the calendar that drives value-highlight timing.'],
-      ['## On-demand / overage burn', 'Burn vs commit and trend. Surfaces headroom for expansion or overage risk to flag.'],
-      ['## Capability entitlements', 'What is licensed vs what the client could expand into — feeds expansion narratives.'],
+      ['## Commercial owner', 'The CSM / AE / account owner — who holds the commercial relationship.'],
+      ['## Contract', 'Licensing model, annual commit, term, renewal date, contract phase. Anchors the renewal conversation; write "unknown" rather than guessing.'],
+      ['## Consumption posture', 'Capabilities in contract, on-demand/overage burn trend, and headroom — surfaces expansion levers or overage risk.'],
     ]
   },
   'stakeholder-overlays': {
@@ -3020,6 +3332,8 @@ const SOURCE_DEFS = {
   'sk-stakeholder-overlay': { label: 'stakeholder-overlay/SKILL.md',path: '../skills/stakeholder-overlay/SKILL.md' },
   'sk-environment-intake':  { label: 'environment-intake/SKILL.md', path: '../skills/environment-intake/SKILL.md' },
   'sk-value-highlight':     { label: 'value-highlight/SKILL.md',    path: '../skills/value-highlight/SKILL.md' },
+  'sk-drill':               { label: 'drill/SKILL.md',              path: '../skills/drill/SKILL.md' },
+  'sk-brand-humanizer':     { label: 'brand-humanizer/SKILL.md',    path: '../skills/brand-humanizer/SKILL.md' },
   'ag-mece-lens':           { label: 'mece-lens.md',                path: '../.claude/agents/mece-lens.md' },
   'ag-ice-lens':            { label: 'ice-lens.md',                 path: '../.claude/agents/ice-lens.md' },
   'ag-skeptic-lens':        { label: 'skeptic-lens.md',             path: '../.claude/agents/skeptic-lens.md' },

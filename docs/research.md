@@ -49,11 +49,11 @@ Two rules:
 - **Citations older than 7 days are presumed stale** and must be re-validated before reuse in any phase artifact.
 - **Every citation is re-validated at the Phase 2 → Phase 3 transition**, regardless of age. Phase 3 is the leadership-facing surface, so it gets a final sweep.
 
-The 7-day threshold is tuned to Dynatrace's actual update cadence. If your team operates in an environment where docs change more slowly, you can adjust the window in [`CLAUDE.md`](../CLAUDE.md).
+The 7-day threshold is tuned to Dynatrace's actual update cadence. If your team operates in an environment where docs change more slowly, adjust the window in [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) (the staleness rule) and the matching dispatch condition in [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) Step 1.
 
 ## The doc-freshness-checker
 
-At the start of every engagement (Phase 0), the main agent dispatches a background sub-agent — [`.claude/agents/doc-freshness-checker.md`](../.claude/agents/doc-freshness-checker.md) — that runs in parallel while you're answering the Phase 0 clarifying questions.
+At the start of an engagement (Phase 0) — when the last check is 7+ days old or the report carries open findings — the main agent dispatches a background sub-agent — [`.claude/agents/doc-freshness-checker.md`](../.claude/agents/doc-freshness-checker.md) — that runs in parallel while you're answering the Phase 0 clarifying questions.
 
 Its job, in plain terms:
 

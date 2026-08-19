@@ -28,7 +28,7 @@ The root library holds knowledge that is true regardless of which client is acti
 | [`brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) | Dynatrace brand specification (colors, typography, layouts, voice, footer) authoritative for Phase 3 deliverables. |
 | [`freshness-report.md`](../memory/long-term/freshness-report.md) | Operational — the doc-freshness-checker sub-agent's output. No client data. |
 
-> Two files in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier (below).
+> Archives and environments live in the client tier (below). Earlier architectures kept a shared `past-investigations.md` and a `client-environments/` folder in this tier; both have been removed.
 
 ### Tier 2 — Client workspaces (`memory/clients/`)
 

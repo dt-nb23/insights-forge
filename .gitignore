@@ -4,13 +4,6 @@ Data-Visual-waves/
 # macOS metadata
 .DS_Store
 
-# Active investigation artifacts — written by skills during sessions, not for main.
-# These files stay on disk and are created by the agent; clones get a clean slate.
-memory/project-space/*.md
-!memory/project-space/README.md
-memory/project-space/*.pptx
-memory/project-space/*.json
-
 # Client engagement workspaces — only _template/ belongs in the repo.
 # Real client folders live locally (or on a personal branch) and never reach main.
 memory/clients/*/
@@ -20,3 +13,6 @@ memory/clients/*/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Session working artifacts (audit runs, SDD task records) — local only
+.superpowers/

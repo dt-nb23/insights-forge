@@ -46,10 +46,11 @@ Open [`CLAUDE.md`](../CLAUDE.md).
 
 The operating principles are sensible defaults, but you may want to adjust:
 
-- The list of stakeholder roles.
-- The default vertical or domain.
-- The citation-freshness window (default 7 days — see [research.md](research.md)).
+- The gate summary block or gate cadence, if your review process differs.
+- The out-of-scope handling rules, if your engagements scope differently.
 - The phased workflow if you've added or removed phases.
+
+(The stakeholder archetype list lives in `memory/long-term/stakeholder-profiles.md`, and the citation-freshness window in `skills/external-research/SKILL.md` — adjust those there, not in `CLAUDE.md`.)
 
 ## Lower impact — adjust as needed
 
@@ -61,11 +62,11 @@ Refresh when the Dynatrace brand template changes. The spec is sourced from the 
 See [deliverables.md](deliverables.md) for how the brand spec gets used during Phase 3.
 
 ### 8. Prior-engagement history (per client)
-There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared `memory/long-term/past-investigations.md` is deprecated; do not use it.)
+There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared `memory/long-term/past-investigations.md` has been removed.)
 
 ## The `tools/` boundary
 
-The [`tools/`](../tools/) folder is reserved for future integrations — MCP servers, file output helpers, format converters. Any tool added there **must respect the operating principles** in [`CLAUDE.md`](../CLAUDE.md):
+The [`tools/`](../tools/) folder holds the in-repo tooling — the pptx deck generator, the one-pager lint, the workspace conformance check, the client-isolation hook, and the seed-prompt bundler (see [`tools/README.md`](../tools/README.md) for the full table). Any tool added there **must respect the operating principles** in [`CLAUDE.md`](../CLAUDE.md):
 
 - A tool **may** read from internal docs, design files, or local artifacts.
 - A tool **may** render outputs into formats the team uses (PPTX, PDF, Markdown).
@@ -89,6 +90,6 @@ A few load-bearing design decisions exist for non-obvious reasons. Before changi
 |---|---|
 | Every long-term memory file you can edit | [`memory/long-term/`](../memory/long-term/) |
 | The operating manual | [`CLAUDE.md`](../CLAUDE.md) |
-| All eight phase skills | [`skills/`](../skills/) |
+| All fifteen procedural skills | [`skills/`](../skills/) |
 | Six critique lenses + the doc-freshness-checker | [`.claude/agents/`](../.claude/agents/) |
 | The tooling boundary | [`tools/README.md`](../tools/README.md) |

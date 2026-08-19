@@ -15,17 +15,17 @@ Read these in order. About 20 minutes total.
 
 ## If you're customizing or extending
 
-These four cover the *why* behind the workspace's design rules and how to safely change them.
+These five cover the *why* behind the workspace's design rules and how to safely change them.
 
-4. **[memory.md](memory.md)** — how live investigation state and durable knowledge are kept apart, and why auto-promotion was deliberately not built.
-5. **[research.md](research.md)** — the external-reference allowlist, the citation policy, and the background sub-agent that watches Dynatrace docs for drift.
-6. **[skills.md](skills.md)** — index of the procedural skills the agent reads before producing each phase's artifact.
-7. **[deliverables.md](deliverables.md)** — Phase 3 brand specification: fonts, layouts, voice, terminology.
-8. **[customizing.md](customizing.md)** — what to tune for your team first, and what *not* to change without thinking twice.
+5. **[memory.md](memory.md)** — how live investigation state and durable knowledge are kept apart, and why auto-promotion was deliberately not built.
+6. **[research.md](research.md)** — the external-reference allowlist, the citation policy, and the background sub-agent that watches Dynatrace docs for drift.
+7. **[skills.md](skills.md)** — index of the procedural skills the agent reads before producing each phase's artifact.
+8. **[deliverables.md](deliverables.md)** — Phase 3 brand specification: fonts, layouts, voice, terminology.
+9. **[customizing.md](customizing.md)** — what to tune for your team first, and what *not* to change without thinking twice.
 
 ## Where the truth lives
 
-`/docs/` is the tour. The actual authoritative behavior lives in these files. When the docs and the source disagree, **the source wins** — and please [open an issue](https://github.com/) or just edit the docs so the next person doesn't get tripped up.
+`/docs/` is the tour. The actual authoritative behavior lives in these files. When the docs and the source disagree, **the source wins** — just edit the docs so the next person doesn't get tripped up.
 
 | Topic | Read the docs page | Read the source |
 |---|---|---|

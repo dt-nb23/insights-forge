@@ -72,7 +72,7 @@ The order inside Phase 1 and Phase 2 matters and is not interchangeable — see 
 
 The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over two to three rounds:
 
-1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** — each reads only the draft plan (plus the client's `environment.md`) and gives its own position, having seen none of the others.
+1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** in a single message — each receives the draft plan, the client's `environment.md` facts, and the engagement's out-of-scope exclusions copied verbatim, and gives its own position, having seen none of the others.
 2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
 3. **Round 3 — convergence (conditional).** Runs only when a material tension survives Round 2. Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. If the panel has already converged after Round 2, Round 3 is skipped and the agent proceeds to reconciliation; more rounds run if positions are still moving.
 

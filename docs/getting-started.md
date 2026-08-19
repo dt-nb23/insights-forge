@@ -53,7 +53,7 @@ Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowled
 
 ### 3. (Optional) Adjust `CLAUDE.md`
 
-[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
+[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (additional operating constraints, changed phase gates, different out-of-scope handling), adjust them here. The citation-freshness window lives in `skills/external-research/SKILL.md`, not here.
 
 You do **not** need to pre-create any engagement files — the agent creates each engagement's dated folder and its files at Phase 0.
 
@@ -82,11 +82,11 @@ The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At sess
 - Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
 - Establishes the active engagement — the one this session creates at Phase 0, or one you resume (the agent scans engagement folders' status front-matter to offer resumable ones)
 - Reads that client's `environment.md` and `stakeholder-overlays.md` (if they exist)
-- Conditionally dispatches the doc-freshness-checker background sub-agent (only if the last check was ≥ 7 days ago)
+- Conditionally dispatches the doc-freshness-checker background sub-agent (if the last check was ≥ 7 days ago, or the freshness report shows any open drifted/unreachable entries)
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent walks you through up to nine clarifying questions, one at a time, in adaptive order. If your opening paragraph already covers Q1 and Q2, it skips them.
+The agent walks you through up to nine clarifying questions in two phases: Q1–Q3 as a flowing conversation (each answer drives the next question), then Q4–Q9 as one batched factual message. If your opening paragraph already covers Q1 and Q2, it skips them.
 
 | Q | What it asks |
 |---|---|

@@ -43,7 +43,6 @@ The `[team to note: …]` slots in `domain-knowledge.md` are for **org-level ope
 
 For client-specific data, use the appropriate skill instead: `skills/environment-intake/SKILL.md` or `skills/stakeholder-overlay/SKILL.md`.
 
-## Deprecated files in this folder
+## Removed legacy files
 
-- `client-environments/README.md` — marked deprecated. Client environment profiles moved to `memory/clients/<client-name>/environment.md`.
-- `past-investigations.md` — marked deprecated. Engagement artifacts now live in `memory/clients/<client-name>/engagements/<dated-slug>/`; nothing is moved on archive (the folder is marked `state: complete`).
+Two tombstones from an earlier architecture (`past-investigations.md` and `client-environments/`) have been deleted. Client environment profiles live in `memory/clients/<client-name>/environment.md`; engagement artifacts live in `memory/clients/<client-name>/engagements/<dated-slug>/` (nothing is moved on archive — the folder is marked `state: complete`).

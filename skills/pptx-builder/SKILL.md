@@ -117,8 +117,9 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 - **Preferred: run `tools/pptx-generator.py`** with a JSON spec file.
   The generator is the in-repo equivalent of the standard pptx skill.
   It handles template loading, sample-slide removal, layout dispatch,
-  placeholder filling, and output path. Use it instead of the external
-  skill check unless the environment explicitly provides `/mnt/skills/public/pptx/SKILL.md`.
+  placeholder filling, and output path. The external skill at
+  `/mnt/skills/public/pptx/SKILL.md` is a secondary option — check for it
+  only if the generator is unavailable.
 
   ```bash
   # Generate the deck
@@ -142,7 +143,7 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 - **Re-thinking the message in the adaptation.** The one-pager is the message. The deck is its visual form. Do not introduce new findings or new framings at this step.
 - **Over-packing slides.** A deck is not a one-pager in landscape format. Each slide should carry one idea well, not five ideas poorly.
 - **Skipping the appendix decision.** Read the stakeholder profile. Some leaders read appendices; some never look past slide 4. Build accordingly.
-- **Assuming the renderer exists.** Always check for the standard pptx skill at runtime — environments differ.
+- **Assuming the renderer exists.** Confirm the in-repo generator is runnable at Step 1 (`python3 -c "import pptx"`); fall back to the external pptx skill only if the generator is unavailable, and to a markdown outline last.
 - **Going off-brand.** Using off-palette colors, title-case headings, or improvised layouts breaks the brand. Stick to the patterns in `brand-spec.md` — the eight-card grid, three-bucket layout, swimlane, gantt, timeline, hashtag-stat, table, and funnel are the approved compositions. If the content doesn't fit one of those, the content is wrong, not the template.
 - **Sourcing the lockup from Brandfolder when local files exist.** `DT Insights Lockup RGB/` contains all eight lockup variants. Use the correct variant for the slide background (REV on dark, Black on white) — do not generate, trace, or recolor any lockup regardless of source.
 - **Using the wrong lockup variant.** REV on a white background makes the color lockup nearly invisible; Black on a dark background disappears. Always match the variant to the surface.
