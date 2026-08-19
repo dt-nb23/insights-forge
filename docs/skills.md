@@ -30,19 +30,19 @@ Score each hypothesis with Impact × Confidence / Effort and rank — run **last
 ## Phase 2 — Building the action plan
 
 ### [`action-plan-builder`](../skills/action-plan-builder/SKILL.md)
-Translate ranked hypotheses into a named investigation plan with owners, timeframes, and "confirmed" versus "ruled out" exit criteria. Pulls procedural steps from [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — eight playbooks for the most common Dynatrace investigation shapes.
+Translate ranked hypotheses into a named investigation plan with owners, timeframes, and "confirmed" versus "ruled out" exit criteria. Pulls procedural steps from the matched playbook file in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), found via the index in [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — eight playbooks for the most common Dynatrace investigation shapes.
 
-The plan is built in a deliberate order: the [MECE lens](../.claude/agents/mece-lens.md) checks the opportunity set is complete, the plan is drafted against it **and the client's real instrumentation** (`environment.md`), the **persona council** ([Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md)) deliberates over **at least three rounds** (independent positions → cross-examination → convergence) and the agent reconciles, and the [ICE lens](../.claude/agents/ice-lens.md) re-ranks **after** the council. See [workflow.md](workflow.md) for why ICE runs last.
+The plan is built in a deliberate order: the [MECE lens](../.claude/agents/mece-lens.md) checks the opportunity set is complete, the plan is drafted against it **and the client's real instrumentation** (`environment.md`), the **persona council** ([Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md)) deliberates over **two to three rounds** (independent positions → cross-examination → convergence, with Round 3 skipped when the panel has converged) and the agent reconciles, and the [ICE lens](../.claude/agents/ice-lens.md) re-ranks **after** the council. See [workflow.md](workflow.md) for why ICE runs last.
 
 Output: the engagement's `action-plan.md`.
 
 ## Phase 3 — Producing exec-ready deliverables
 
 ### [`exec-onepager`](../skills/exec-onepager/SKILL.md)
-Produce a one-page written summary tailored to a *named* stakeholder. Runs in five steps: recipe selection from `layout-system.md`, content draft from the engagement files, brand-humanizer pre-pass (mandatory Step 3 — runs on all structured copy before any HTML is built), HTML build, and brand gate. Reads the matching profile in [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) and applies brand directives from [`brand-spec.md`](../memory/long-term/brand/brand-spec.md). See [deliverables.md](deliverables.md) for the brand specifics.
+Produce a one-page written summary tailored to a *named* stakeholder. Runs in five steps: recipe selection from `layout-system.md`, content draft from the engagement files, brand-humanizer pre-pass (mandatory Step 3 — runs on all structured copy before any HTML is built), HTML build, and brand gate. Reads the matching profile file in [`memory/long-term/profiles/`](../memory/long-term/profiles/) (indexed in [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md)) and applies brand directives from [`brand-spec.md`](../memory/long-term/brand/brand-spec.md). See [deliverables.md](deliverables.md) for the brand specifics.
 
 ### [`brand-humanizer`](../skills/brand-humanizer/SKILL.md)
-Polish Phase 3 copy so it passes two independent bars: it reads like a person wrote it (no em dashes, no hedging, no AI vocabulary, no rule-of-three lists) and it reads like Dynatrace wrote it (sentence case, active voice, correct product names and trademarks, American spelling, serial commas, no disallowed phrasings). In the exec-onepager workflow this runs as mandatory Step 3 on all structured draft copy before the HTML is built. In the pptx-builder workflow it runs as mandatory Step 4a on slide copy before any slides are generated. Can also be run standalone when someone asks to "humanize this," "brand-check this," or "make this sound like Dynatrace."
+Polish Phase 3 copy so it passes two independent bars: it reads like a person wrote it (no em dashes, no hedging, no AI vocabulary, no rule-of-three lists) and it reads like Dynatrace wrote it (sentence case, active voice, correct product names and trademarks, American spelling, serial commas, no disallowed phrasings). In the exec-onepager workflow this runs as mandatory Step 3 on all structured draft copy before the HTML is built. In the pptx-builder workflow it runs as mandatory Step 3 on slide copy before any slides are generated. Can also be run standalone when someone asks to "humanize this," "brand-check this," or "make this sound like Dynatrace."
 
 ### [`pptx-builder`](../skills/pptx-builder/SKILL.md)
 Produce a PowerPoint deck. Adapter that delegates to the standard pptx skill when available and applies the brand spec on top. **Only produced after the one-pager is approved** — see [workflow.md](workflow.md) for the rationale.
@@ -62,7 +62,7 @@ Archives the current engagement and resets the workspace for the next one — or
 ### [`stakeholder-overlay`](../skills/stakeholder-overlay/SKILL.md)
 Captures a specific named leader at a client (e.g., "Sarah Chen, VP of Engineering") as a stakeholder overlay in the active client's workspace at `memory/clients/<client-name>/stakeholder-overlays.md`. Builds on the parent role archetype from the shared root library. Requires explicit user approval before writing.
 
-**Never writes named individuals to `memory/long-term/stakeholder-profiles.md`** — that file contains only generic title-type archetypes.
+**Never writes named individuals to the shared profile library** — `memory/long-term/stakeholder-profiles.md` is an index, and the archetype files in `memory/long-term/profiles/` carry only generic title-type content.
 
 **Trigger:** Named automatically during Phase 0 Q7 when a specific leader is identified and no overlay exists. Can also be run on demand: "Create a stakeholder profile for [name]."
 

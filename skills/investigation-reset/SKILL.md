@@ -56,7 +56,7 @@ Ask the user four questions, one at a time. Do not batch them.
 1. "What did we get right in this engagement that's worth repeating?"
 2. "What wasted time or misdirected the team?"
 3. "What did we learn that we didn't know going in — new signal patterns, new failure modes, or new business linkages?"
-4. "Are there any updates worth promoting to `dynatrace-playbooks.md`, `domain-knowledge.md`, or `stakeholder-profiles.md`? If yes, summarize what to add."
+4. "Are there any updates worth promoting to the long-term library — a playbook file in `memory/long-term/playbooks/`, `domain-knowledge.md`, or a profile file in `memory/long-term/profiles/`? If yes, summarize what to add."
 
 Write the four answers to `<ENGAGEMENT_PATH>/lessons-learned.md` under these headings:
 - What worked
@@ -80,7 +80,7 @@ Append one row to the investigation history table in `memory/clients/<CLIENT_NAM
 
 Review the "Proposed long-term memory updates" from Step 2.
 
-For each proposed update, present it to the user and ask for explicit approval before writing. Example: "Proposed addition to `dynatrace-playbooks.md`: [summary]. Approve?" Write only on approval. Tell the user which file was updated and what was added.
+For each proposed update, present it to the user and ask for explicit approval before writing. Example: "Proposed addition to the `slo-burn` playbook in `memory/long-term/playbooks/`: [summary]. Approve?" Write only on approval. Tell the user which file was updated and what was added. (A new playbook or profile also gets an index row in its hub file.)
 
 If no updates were proposed, skip this step.
 
@@ -138,5 +138,5 @@ No files are copied — the engagement folder was always in the client workspace
 
 - **Skipping lessons-learned.** This is the highest-value step. Never skip it — if the user declines to answer, record "declined" explicitly so the archive is honest about what was captured.
 - **Archiving without confirming phase completion.** If Phase 3 was never approved, the investigation is incomplete. Label it so.
-- **Promoting long-term memory without approval.** Every write to `dynatrace-playbooks.md`, `domain-knowledge.md`, or `stakeholder-profiles.md` requires explicit user confirmation per the Memory model rules in `CLAUDE.md`.
+- **Promoting long-term memory without approval.** Every write to the long-term library — the hub files, any file in `memory/long-term/playbooks/` or `memory/long-term/profiles/`, or `domain-knowledge.md` — requires explicit user confirmation per the Memory model rules in `CLAUDE.md`.
 - **Looking for a global pointer or `memory/project-space/`.** There is none — it was removed. An engagement's state lives in its own `current-context.md` front-matter (`state:`), and its phase files live in the engagement folder. If you are looking for `current-context.md`, it is at `<ENGAGEMENT_PATH>/current-context.md`.

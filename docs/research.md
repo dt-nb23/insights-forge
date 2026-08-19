@@ -8,7 +8,7 @@ The canonical procedure lives in [`skills/external-research/SKILL.md`](../skills
 
 Before reaching for the web, the agent reads what's already on disk:
 
-- [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbooks cover the most common problem shapes; each one already carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
+- [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — the index for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/) cover the most common problem shapes; the agent reads the matched file, which carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
 - [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) — for Dynatrace concept definitions and the approved-sources list.
 - [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) — for terms the team has already defined.
 - The active engagement's `current-context.md` (at `memory/clients/<client>/engagements/<dated-slug>/current-context.md`) — to scope the question to the active investigation.
@@ -57,7 +57,7 @@ At the start of every engagement (Phase 0), the main agent dispatches a backgrou
 
 Its job, in plain terms:
 
-1. Reads cited URLs from [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md), [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md), and [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
+1. Reads cited URLs from [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md), all playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), and [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
 2. Re-fetches each one via `WebFetch`.
 3. Compares stored "Last updated" dates against the current ones.
 4. Writes findings to [`memory/long-term/freshness-report.md`](../memory/long-term/freshness-report.md) — and **only** that file.

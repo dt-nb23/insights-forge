@@ -29,7 +29,7 @@ Each of these is sourced from one of three places — the spec's "Sources" table
 
 ## What the one-pager looks like
 
-Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md). One page, written for a *named* stakeholder pulled from [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md). This isn't decoration — the voice and emphasis genuinely change between stakeholders. A VP of Reliability and a VP of Product get different one-pagers from the same investigation:
+Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md). One page, written for a *named* stakeholder whose profile file is read from [`memory/long-term/profiles/`](../memory/long-term/profiles/) via the index in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md). This isn't decoration — the voice and emphasis genuinely change between stakeholders. A VP of Reliability and a VP of Product get different one-pagers from the same investigation:
 
 - VP of Reliability — error-budget framing, SLO impact, on-call burden, post-incident learnings.
 - VP of Product — feature impact, customer-experience surface, release velocity, competitive considerations.

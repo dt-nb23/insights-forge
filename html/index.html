@@ -711,11 +711,11 @@
   </div>
 
   <h2>Procedure</h2>
-  <p style="font-size:13px;color:var(--gray-lt);max-width:640px;margin-bottom:12px">A deliberate order — MECE lays out the opportunity space, the plan is drafted against it and against the client's real instrumentation, a persona <strong>council deliberates over ≥3 rounds</strong>, the agent reconciles, then ICE re-ranks. The sequence is the point.</p>
+  <p style="font-size:13px;color:var(--gray-lt);max-width:640px;margin-bottom:12px">A deliberate order — MECE lays out the opportunity space, the plan is drafted against it and against the client's real instrumentation, a persona <strong>council deliberates over 2–3 rounds</strong>, the agent reconciles, then ICE re-ranks. The sequence is the point.</p>
   <ol class="steps">
     <li><div><strong>MECE on the opportunity set</strong> — invoke <span class="tag tag-magenta" style="font-size:10px">MECE lens</span><br><span>Lay out the full set of levers the plan could pull; check it is collectively exhaustive and mutually exclusive. This is the candidate pool.</span></div></li>
     <li><div><strong>Draft the plan</strong> — investigation actions (with confirmed / ruled-out exit criteria), recommended actions, decision asks, risks + mitigations<br><span>Ground every action in <code>environment.md</code> — if the client lacks the instrumentation, rewrite it as an instrumentation work item or flag the dependency. Never recommend instrumentation the client lacks.</span></div></li>
-    <li><div><strong>Convene the persona council — over ≥3 rounds</strong> <span class="tag tag-magenta" style="font-size:10px">Skeptic</span> <span class="tag tag-magenta" style="font-size:10px">Optimist</span> <span class="tag tag-magenta" style="font-size:10px">Customer</span> <span class="tag tag-magenta" style="font-size:10px">Consultative</span><br><span>Round 1 — independent positions, in parallel and blind. Round 2 — each reacts to the others. Round 3 — each converges and flags what it won't concede. More rounds if still moving. Each panelist is grounded in the client's real instrumentation.</span></div></li>
+    <li><div><strong>Convene the persona council — over 2–3 rounds</strong> <span class="tag tag-magenta" style="font-size:10px">Skeptic</span> <span class="tag tag-magenta" style="font-size:10px">Optimist</span> <span class="tag tag-magenta" style="font-size:10px">Customer</span> <span class="tag tag-magenta" style="font-size:10px">Consultative</span><br><span>Round 1 — independent positions, in parallel and blind. Round 2 — each reacts to the others. Round 3 — only if a material tension survives Round 2: each converges and flags what it won't concede (skipped when the panel has already converged; more rounds if still moving). Each panelist is grounded in the client's real instrumentation.</span></div></li>
     <li><div><strong>Agent reconciles</strong> — rules on every material disagreement<br><span>Logs each ruling in the plan's "Tensions resolved" subsection rather than averaging it away; folds Skeptic's "questions a leader will ask" into the decision asks.</span></div></li>
     <li><div><strong>ICE re-ranks — after the council</strong> — invoke <span class="tag tag-magenta" style="font-size:10px">ICE lens</span><br><span>Re-scored to execution semantics (Confidence = likelihood it executes; Impact = magnitude if the mitigation lands). The post-council ranking is what lands in the plan.</span></div></li>
     <li><div>Revise and write to <code>action-plan.md</code></div></li>
@@ -913,7 +913,7 @@
       <div class="chevron" id="chev-sk-ap">▾</div>
     </div>
     <div class="skill-body" id="body-sk-ap">
-      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">MECE on the opportunity set → draft against the client's instrumentation → persona council (Skeptic, Optimist, Customer, Consultative) over ≥3 rounds → agent reconciles into "Tensions resolved" → ICE re-ranks. Produces five sections: investigation actions · recommended actions (ranked) · decision asks · risks & tradeoffs · Tensions resolved. Writes <code>action-plan.md</code>.</p>
+      <p style="font-size:12px;color:var(--gray-lt);margin-top:10px">MECE on the opportunity set → draft against the client's instrumentation → persona council (Skeptic, Optimist, Customer, Consultative) over 2–3 rounds → agent reconciles into "Tensions resolved" → ICE re-ranks. Produces five sections: investigation actions · recommended actions (ranked) · decision asks · risks & tradeoffs · Tensions resolved. Writes <code>action-plan.md</code>.</p>
     </div>
   </div>
 
@@ -1054,7 +1054,7 @@
         <strong>Skeptic lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (2–3 rounds). On demand at any other gate.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: hidden assumptions · weak evidence (single signal as truth) · instrumentation gaps · scenarios where plan misleads · the questions a leader will ask</p>
     </div>
     <div class="lens-card">
@@ -1063,7 +1063,7 @@
         <strong>Optimist lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (2–3 rounds). On demand at any other gate.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Surfaces: overly conservative plan · upside left on table · compounding benefits not named · opportunities to parallelize</p>
     </div>
     <div class="lens-card">
@@ -1072,7 +1072,7 @@
         <strong>Consultative lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 as a framing pass on tree + hypotheses wording, and in the Phase 2 persona council (≥3 rounds). Does <strong>not</strong> run in Phase 3.</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory in Phase 1 as a framing pass on tree + hypotheses wording, and in the Phase 2 persona council (2–3 rounds). Does <strong>not</strong> run in Phase 3.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Checks: voice matches senior leader expectations · SLI/SLO/RUM terminology precise · tradeoffs surfaced not buried · vendor-neutral where possible</p>
     </div>
     <div class="lens-card">
@@ -1081,7 +1081,7 @@
         <strong>Customer lens</strong>
         <span class="tag tag-gray" style="font-size:10px">Sonnet</span>
       </div>
-      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (≥3 rounds). On demand at any other gate.</p>
+      <p style="font-size:12px;margin-bottom:8px;color:var(--gray-lt)"><strong style="color:var(--white)">When:</strong> Mandatory member of the Phase 2 persona council (2–3 rounds). On demand at any other gate.</p>
       <p style="font-size:12px;margin:0;color:var(--gray-lt)">Asks: does work match user experience? Which journeys are deprioritized? Are we solving the right problem vs the easiest one?</p>
     </div>
   </div>
@@ -1278,7 +1278,7 @@
     <tbody>
       <tr><td>Phase 0 gate</td><td>None</td><td>Any of the six</td></tr>
       <tr><td>Phase 1 gate</td><td>MECE (tree) → Consultative (framing pass) → ICE (after signals map)</td><td>Any of the six</td></tr>
-      <tr><td>Phase 2 gate</td><td>MECE (opportunity set) → council: Skeptic · Optimist · Customer · Consultative over ≥3 rounds → agent reconciles → ICE re-ranks</td><td>Any of the six</td></tr>
+      <tr><td>Phase 2 gate</td><td>MECE (opportunity set) → council: Skeptic · Optimist · Customer · Consultative over 2–3 rounds → agent reconciles → ICE re-ranks</td><td>Any of the six</td></tr>
       <tr><td>Phase 3 gate</td><td>None — pure packaging</td><td>Any of the six</td></tr>
     </tbody>
   </table>
@@ -1725,7 +1725,7 @@ This is the phase where the **Dynatrace playbooks** become load-bearing. The age
 
 **What lands on disk.** `<engagement folder>/action-plan.md`.
 
-**Lenses the phase runs (all mandatory).** MECE on the opportunity set first, then a **deliberating persona council over at least three rounds** — Skeptic, Optimist, Customer, Consultative. **Round 1** each gives an independent position in parallel, blind to the others; **Round 2** each reacts to the others' positions; **Round 3** each converges and flags what it won't concede (more rounds if still moving). Every panelist is grounded in the client's real instrumentation (`environment.md`). Then the **agent reconciles** every material disagreement — logging each in the plan's "Tensions resolved" section — and finally ICE re-ranks. You can ask for any of the six on top at the gate.
+**Lenses the phase runs (all mandatory).** MECE on the opportunity set first, then a **deliberating persona council over two to three rounds** — Skeptic, Optimist, Customer, Consultative. **Round 1** each gives an independent position in parallel, blind to the others; **Round 2** each reacts to the others' positions; **Round 3** runs only if a material tension survives Round 2 — each converges and flags what it won't concede (skipped when the panel has already converged; more rounds if still moving). Every panelist is grounded in the client's real instrumentation (`environment.md`). Then the **agent reconciles** every material disagreement — logging each in the plan's "Tensions resolved" section — and finally ICE re-ranks. You can ask for any of the six on top at the gate.
 
 **The gate question.** *"Is this the right plan, with the right exit criteria, and are the decision asks clear?"*
 
@@ -1923,16 +1923,16 @@ This table is the single source of truth for which lenses are mandatory in which
 |---|---|---|
 | 0 — Context | None (a background doc-freshness check runs conditionally, but it is not a critique lens) | Any of the six |
 | 1 — Diagnose | MECE on the issue tree, then Consultative as a framing pass on the tree + hypotheses wording, then ICE on scoring (**after** the signals map exists) | Any of the six |
-| 2 — Solution | MECE on the opportunity set, then the **persona council** — Skeptic, Optimist, Customer, Consultative — deliberating over **≥3 rounds** (independent → cross-examination → convergence), then the agent reconciles, then ICE re-ranks **after** the council | Any of the six |
+| 2 — Solution | MECE on the opportunity set, then the **persona council** — Skeptic, Optimist, Customer, Consultative — deliberating over **2–3 rounds** (independent → cross-examination → convergence; Round 3 skipped when the panel has converged), then the agent reconciles, then ICE re-ranks **after** the council | Any of the six |
 | 3 — Deliver | **None.** Pure packaging of the already-reviewed plan plus mechanical gates (one-page constraint, brand conformance, HTML legibility) | Any of the six |
 
 ## The Phase 2 council runs in rounds
 
-The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over at least three rounds:
+The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over two to three rounds:
 
 1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** — each reads only the draft plan (plus the client's `environment.md`) and gives its own position, having seen none of the others.
 2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
-3. **Round 3 — convergence.** Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. More rounds run if positions are still moving.
+3. **Round 3 — convergence (conditional).** Runs only when a material tension survives Round 2. Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. Skipped when the panel has already converged; more rounds run if positions are still moving.
 
 Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. You can also ask for this council explicitly at any gate:
 
@@ -2703,7 +2703,7 @@ const SF_DATA = {
   p2: {
     title: 'Phase 2 — Plan',
     tag: 'action-plan-builder + full persona council',
-    desc: 'Translates ranked hypotheses into an action plan with owners, exit criteria, and timeframes. A deliberating persona council runs ≥3 rounds, each panelist blind to others in Round 1. Agent reconciles every material disagreement into "Tensions resolved." ICE re-ranks before the gate.',
+    desc: 'Translates ranked hypotheses into an action plan with owners, exit criteria, and timeframes. A deliberating persona council runs 2–3 rounds, each panelist blind to others in Round 1. Agent reconciles every material disagreement into "Tensions resolved." ICE re-ranks before the gate.',
     skills: ['action-plan-builder'],
     lenses: ['MECE (opportunity set)', 'Skeptic', 'Optimist', 'Customer', 'Consultative', 'ICE (re-rank)'],
     artifacts: ['action-plan.md']

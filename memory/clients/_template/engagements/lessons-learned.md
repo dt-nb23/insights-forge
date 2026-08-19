@@ -33,7 +33,7 @@ New mappings between technical signals and business outcomes, new failure modes,
 
 ## What should change in the playbook
 
-Candidates for promotion to `memory/long-term/` — updates to `frameworks.md`, `domain-knowledge.md`, `dynatrace-playbooks.md`, or `stakeholder-profiles.md`. The user must explicitly approve any promotion to long-term memory.
+Candidates for promotion to `memory/long-term/` — updates to `frameworks.md`, `domain-knowledge.md`, a playbook file in `playbooks/`, or a profile file in `profiles/` (plus the hub index row for new files). The user must explicitly approve any promotion to long-term memory.
 
 - 
 

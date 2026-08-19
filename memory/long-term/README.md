@@ -19,9 +19,11 @@ The `[team to note: …]` slots in `domain-knowledge.md` are for **org-level ope
 | File | What it contains | Read frequency |
 |---|---|---|
 | `domain-knowledge.md` | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. | Every session (session initialization) |
-| `dynatrace-playbooks.md` | Eight client-agnostic investigation patterns for common Dynatrace problem shapes. | Every session (session initialization) |
+| `dynatrace-playbooks.md` | Hub index for the eight client-agnostic investigation patterns. Playbook content lives in `playbooks/`. | Every session (hub only, at session initialization) |
+| `playbooks/` | The eight individual playbook files (investigation sequence, exit criteria, citations per problem shape). | On demand (when Phase 1 matches a hypothesis to a problem shape) |
 | `frameworks.md` | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. | Every session (session initialization) |
-| `stakeholder-profiles.md` | Eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). **No named individuals.** | Every session (session initialization) |
+| `stakeholder-profiles.md` | Hub index for the eight generic role archetypes and title-type overlays. Profile content lives in `profiles/`. **No named individuals.** | Every session (hub only, at session initialization) |
+| `profiles/` | The eight individual archetype files, with title-type overlays co-located in the parent archetype's file. | On demand (when Phase 3 calibrates for a named stakeholder) |
 | `terminology.md` | Glossary of recurring terms and Dynatrace platform glossary with citations. | On demand |
 | `client-question-bank.md` | Client-facing phrasings of Phase 0 questions, by rubric tier. | Phase 0 (when doing live discovery with the customer) |
 | `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer) for Phase 3 deliverables. | Phase 3 |
@@ -37,7 +39,7 @@ The `[team to note: …]` slots in `domain-knowledge.md` are for **org-level ope
 
 - *"Add [term] to `terminology.md` as [definition]."*
 - *"Update `domain-knowledge.md` — DPS-based reporting recently changed."*
-- *"Promote this investigation sequence into a new playbook in `dynatrace-playbooks.md`."*
+- *"Promote this investigation sequence into a new playbook."* (A new playbook is a new file in `playbooks/` plus an index row in `dynatrace-playbooks.md`.)
 
 For client-specific data, use the appropriate skill instead: `skills/environment-intake/SKILL.md` or `skills/stakeholder-overlay/SKILL.md`.
 

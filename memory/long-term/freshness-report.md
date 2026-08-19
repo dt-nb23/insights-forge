@@ -3,7 +3,7 @@
 Written by the `doc-freshness-checker` sub-agent (defined in `.claude/agents/doc-freshness-checker.md`).
 The main agent dispatches it as a Haiku background task at the start of every Phase 0 (context-framing) and reads this report at the Phase 0 gate. The user can also trigger a manual refresh at any time.
 
-The sub-agent **never edits `domain-knowledge.md` or `dynatrace-playbooks.md` directly**. It only writes here. Updates to long-term memory require explicit user approval at a phase gate.
+The sub-agent **never edits `domain-knowledge.md`, the `dynatrace-playbooks.md` hub, or any file in `memory/long-term/playbooks/` directly**. It only writes here. Updates to long-term memory require explicit user approval at a phase gate.
 
 ---
 
@@ -12,7 +12,7 @@ The sub-agent **never edits `domain-knowledge.md` or `dynatrace-playbooks.md` di
 - **Run date:** 2026-05-20
 - **Source:** `doc-freshness-checker` sub-agent (manual test dispatch via general-purpose+haiku) + post-run baseline migration approved by user
 - **Cadence:** per engagement (every Phase 0) + on-demand
-- **URLs in scope:** 23 unique Dynatrace doc citations across `domain-knowledge.md` (8 citations), `dynatrace-playbooks.md` (16 citations after the 2026-05-20 cleanup of the broken `service-level-objective-basics` URL), and `terminology.md` (8 citations — 7 URLs overlap with `domain-knowledge.md`, so no new unique URLs added)
+- **URLs in scope:** 23 unique Dynatrace doc citations across `domain-knowledge.md` (8 citations), the playbook files now in `memory/long-term/playbooks/` (16 citations after the 2026-05-20 cleanup of the broken `service-level-objective-basics` URL), and `terminology.md` (8 citations — 7 URLs overlap with `domain-knowledge.md`, so no new unique URLs added)
 
 ## Drifted (page rewritten since our citation, or baseline missing)
 
@@ -41,9 +41,9 @@ Baselines captured 2026-05-20. The next sub-agent run will compare each stored p
 
 ### terminology.md
 
-The 8 citations in `terminology.md` (Grail, DQL, Smartscape, Davis AI, OneAgent, Management Zones, DPS, RUM session) all reference URLs that also appear in `domain-knowledge.md` (entries above) plus one in `dynatrace-playbooks.md`. Stored page-last-updated values and last-checked dates match the corresponding rows in those sections; no separate baselines required.
+The 8 citations in `terminology.md` (Grail, DQL, Smartscape, Davis AI, OneAgent, Management Zones, DPS, RUM session) all reference URLs that also appear in `domain-knowledge.md` (entries above) plus one in `memory/long-term/playbooks/log-grail.md`. Stored page-last-updated values and last-checked dates match the corresponding rows in those sections; no separate baselines required.
 
-### dynatrace-playbooks.md
+### Playbook citations (canonical location since the hub split: `memory/long-term/playbooks/`)
 
 | URL | Stored page-last-updated | Last checked |
 |---|---|---|

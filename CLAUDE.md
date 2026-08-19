@@ -18,9 +18,9 @@ At session start — before Phase 0 begins — read the following files in this 
 3. `memory/long-term/frameworks.md`
 4. `memory/long-term/stakeholder-profiles.md` — **hub only** (profile index table + overlay index). Individual profiles live in `memory/long-term/profiles/`. Do **not** load individual profile files at session start.
 
-**Traverse-on-need rule.** After session init, read individual files only when they are needed:
-- **Playbooks** — when Phase 1 (`skills/hypothesis-generation/SKILL.md`) matches a hypothesis to a problem shape, read the specific file named in the playbook index (e.g., `memory/long-term/playbooks/latency-backend.md`). Read only the matched playbook(s); do not load all eight.
-- **Profiles** — when Phase 3 (`skills/exec-onepager/SKILL.md`, `skills/pptx-builder/SKILL.md`) needs to calibrate for a named stakeholder, read the specific profile file named in the profile index. Read only the matched profile.
+**Traverse-on-need rule.** After session init, read individual files only when they are needed. The primary consumers:
+- **Playbooks** — when Phase 1 (`skills/hypothesis-generation/SKILL.md`, `skills/signal-mapping/SKILL.md`) matches a hypothesis to a problem shape, or Phase 2 (`skills/action-plan-builder/SKILL.md`) seeds investigation actions, read the specific file named in the playbook index (e.g., `memory/long-term/playbooks/latency-backend.md`). Read only the matched playbook(s); do not load all eight. (The doc-freshness checker and `skills/external-research/SKILL.md` read playbook files for citation work.)
+- **Profiles** — when any phase needs to calibrate for a named stakeholder — Phase 0 (`skills/context-framing/SKILL.md`), Phase 2 (`skills/action-plan-builder/SKILL.md`, the Consultative lens), or Phase 3 (`skills/exec-onepager/SKILL.md`, `skills/pptx-builder/SKILL.md`) — read the specific profile file named in the profile index. Read only the matched profile.
 
 Then establish the **active engagement for this session**. There is no global pointer file; the dated engagement folder under the client *is* the session's state, and you hold its path (`ENGAGEMENT_PATH`) in working context for the whole session.
 

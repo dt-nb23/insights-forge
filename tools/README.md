@@ -8,6 +8,10 @@ This folder contains in-repo tools and their support files.
 |---|---|
 | `pptx-generator.py` | Generates branded `.pptx` decks from a JSON spec against the Dynatrace template. Primary renderer for Phase 3 deck output. |
 | `pptx-spec-example.json` | Annotated example spec showing all supported slide types and fields. Read this before writing a new deck spec. |
+| `onepager-lint.py` | Lints HTML one-pagers against the design system in `skills/exec-onepager/reference/layout-system.md` (canonical `:root` tokens, design-system color palette, Arial fallback, structural markers). Run after Phase 3 HTML build: `python3 tools/onepager-lint.py <file.html>`. |
+| `conformance-check.py` | Workspace conformance: repo-rooted paths in skills/agents resolve, no concrete client names in the shared tier, every critique lens carries a Hard-exclusions block. Run after editing skills or agents: `python3 tools/conformance-check.py`. |
+| `client-isolation-hook.sh` | PreToolUse hook wired in `.claude/settings.json`. Blocks Read/Write/Edit/NotebookEdit calls into a different client's `memory/clients/` folder than the active one (marker: `.claude/active-client`). |
+| `seed-prompt-generator-bundle.py` | Unpacks/repacks the application source embedded in the Seed Prompt Generator's Claude Artifact bundle export (`html/`), so the form can be edited and re-bundled. |
 | `requirements.txt` | Python package dependencies. Install with `pip install -r tools/requirements.txt`. |
 
 ## Using the deck generator
@@ -44,14 +48,14 @@ The wave PNG is inserted at the bottom of the z-stack; the dark overlay sits abo
 
 ### Chart spec fields
 
-Use `"layout": "Chart"` to generate a branded chart slide. The `chart` object contains:
+Use `"layout": "Chart"` to generate a branded chart slide. `"Chart"` is a dispatch key, not a template layout name — the chart is placed on `Blank_graphic` unless the slide spec sets `slide_layout` to another real layout name. The `chart` object contains:
 
 | Field | Required | Values / notes |
 |---|---|---|
 | `type` | No | `XL_CHART_TYPE` name: `BAR_CLUSTERED`, `COLUMN_CLUSTERED`, `LINE`, `PIE`, etc. Default `BAR_CLUSTERED` |
-| `categories` | Yes | List of category label strings |
-| `series` | Yes | List of `{"name": "...", "values": [...]}` objects |
-| `left`, `top`, `width`, `height` | No | Position/size in EMUs. Omit for full-slide default |
+| `categories` | Yes | List of category label strings (omitting logs a warning and the slide is created without a chart) |
+| `series` | Yes | List of `{"name": "...", "values": [...]}` objects (omitting logs a warning and the slide is created without a chart) |
+| `left`, `top`, `width`, `height` | No | Position/size in EMUs. Omit for the default: 0.5in left / 1.5in top insets, slide width − 1.0in, slide height − 2.0in |
 
 Brand series colors (Teal → Light blue → Royal blue → Purple → Violet → Magenta) are applied automatically, cycling if there are more than six series.
 

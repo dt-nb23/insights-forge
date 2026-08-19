@@ -36,7 +36,7 @@ from pptx.chart.data import ChartData
 from pptx.dml.color import RGBColor
 from pptx.enum.chart import XL_CHART_TYPE
 from pptx.oxml.ns import qn
-from pptx.util import Emu, Inches, Pt
+from pptx.util import Emu, Inches
 from lxml import etree
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -125,14 +125,15 @@ def ensure_dtflow_fonts(verbose: bool = True) -> int:
 
 def _slide_dimensions(slide):
     """Return (width, height) in EMUs from the presentation."""
-    prs = slide.part.package.presentation
+    prs = slide.part.package.presentation_part.presentation
     return prs.slide_width, prs.slide_height
 
 
 def _move_shape_in_spTree(slide, shape, position: int) -> None:
     """Reposition a shape element in the slide's spTree to control z-order.
 
-    position=2 is just after the bg/bgRef elements (bottom of the stack).
+    spTree children 0–1 are <p:nvGrpSpPr> and <p:grpSpPr>, so position=2
+    is the bottom of the shape stack (renders behind every other shape).
     """
     spTree = slide.shapes._spTree
     spTree.remove(shape._element)
@@ -171,14 +172,11 @@ def add_wave_background(slide, wave: str, overlay_opacity: float = 0.80) -> None
                      Use 0.80–0.85 for dark slides with body text.
 
     Z-order after this call (bottom → top):
-        [0] spTree background elements (<p:bg>, <p:bgRef>)
-        [1] wave PNG picture
-        [2] dark overlay rectangle
-        [3+] all existing slide content shapes (placeholders etc.)
+        [0] wave PNG picture
+        [1] dark overlay rectangle
+        [2+] all existing slide content shapes (placeholders etc.)
     """
-    slide_w, slide_h = _slide_dimensions(slide)
-
-    # Resolve the wave asset path
+    # Resolve the wave asset path first so a missing file skips cleanly
     if wave in WAVE_ASSETS:
         wave_path = WAVE_ASSETS[wave]
     else:
@@ -191,13 +189,15 @@ def add_wave_background(slide, wave: str, overlay_opacity: float = 0.80) -> None
               file=sys.stderr)
         return
 
+    slide_w, slide_h = _slide_dimensions(slide)
+    overlay_opacity = min(max(float(overlay_opacity), 0.0), 1.0)
+
     # 1. Wave PNG — inserted last so we can move it immediately
     pic = slide.shapes.add_picture(str(wave_path), 0, 0, slide_w, slide_h)
-    _move_shape_in_spTree(slide, pic, 2)  # just above bg/bgRef
+    _move_shape_in_spTree(slide, pic, 2)  # bottom of the shape stack
 
     # 2. Dark overlay — full-slide rectangle with semi-transparency
     # Use a textbox as the rectangle primitive (cleanest in python-pptx)
-    from pptx.util import Emu
     overlay = slide.shapes.add_textbox(Emu(0), Emu(0), slide_w, slide_h)
     overlay.fill.solid()
     overlay.fill.fore_color.rgb = _OVERLAY_COLOR
@@ -211,12 +211,20 @@ def apply_brand_chart_colors(chart) -> None:
 
     Removes the Office theme color reference so the explicit RGB wins
     regardless of what theme is embedded in the template.
+
+    Line-family charts (LINE*, XY_SCATTER_LINES*, RADAR*) draw their series
+    color from the line element (a:ln), not the shape fill, so those get
+    the brand color on the line as well.
     """
+    is_line_family = any(tag in str(chart.chart_type)
+                         for tag in ("LINE", "RADAR"))
     for i, series in enumerate(chart.series):
         color = BRAND_CHART_COLORS[i % len(BRAND_CHART_COLORS)]
         try:
             series.format.fill.solid()
             series.format.fill.fore_color.rgb = color
+            if is_line_family:
+                series.format.line.color.rgb = color
 
             # Clear the theme color reference (<c:spPr><a:solidFill><a:schemeClr>)
             # so the explicit srgbClr we just wrote is not overridden by the theme.
@@ -398,8 +406,8 @@ def handle_text_columns(prs, spec):
     cols = spec.get("columns", [])
     count = max(2, min(len(cols), 6))
     if count not in (2, 3, 4, 6):
-        print(f"  ⚠ handle_text_columns: {len(cols)}-column layout not supported (valid: 2, 3, 4, 6). Falling back to 3; column(s) {count+1}+ discarded.", file=sys.stderr)
         count = 3
+        print(f"  ⚠ handle_text_columns: {len(cols)}-column layout not supported (valid: 2, 3, 4, 6). Falling back to {count}; column(s) {count+1}+ discarded.", file=sys.stderr)
     layout = spec.get("layout", f"{count} text columns")
     slide, n = add_slide(prs, layout)
     fill_first(slide, ["title"], spec.get("title", ""), n)
@@ -432,16 +440,19 @@ def handle_chart(prs, spec):
     """Add a slide with a branded chart built from spec data.
 
     Spec keys:
-        layout        — slide layout name (default "Blank_graphic")
+        layout        — "Chart" (the dispatch key; not a template layout name)
+        slide_layout  — real template layout to place the chart on
+                        (default "Blank_graphic")
         title         — optional slide title (filled into the title placeholder)
         chart         — dict with:
             type          — XL_CHART_TYPE name string (default "BAR_CLUSTERED")
             categories    — list of category labels
             series        — list of {name, values} dicts
-            left, top     — position in EMUs (default: left-aligned with some margin)
-            width, height — size in EMUs (default: most of the slide)
+            left, top     — position in EMUs (default: 0.5in left / 1.5in top inset)
+            width, height — size in EMUs (default: slide minus 1.0in / 2.0in insets)
     """
-    layout = spec.get("layout", "Blank_graphic")
+    # "Chart" is a dispatch key, not a template layout — resolve to a real one.
+    layout = spec.get("slide_layout", "Blank_graphic")
     slide, n = add_slide(prs, layout)
 
     if spec.get("title"):
@@ -460,11 +471,17 @@ def handle_chart(prs, spec):
               file=sys.stderr)
         chart_type = XL_CHART_TYPE.BAR_CLUSTERED
 
-    # Build ChartData
-    chart_data = ChartData()
+    # Build ChartData — both fields are required; python-pptx cannot build
+    # a chart without categories, so skip the chart rather than crash.
     categories = chart_spec.get("categories", [])
+    series_list = chart_spec.get("series", [])
+    if not categories or not series_list:
+        print("  ⚠ handle_chart: 'categories' and 'series' are required — "
+              "slide added without a chart", file=sys.stderr)
+        return slide
+    chart_data = ChartData()
     chart_data.categories = categories
-    for s in chart_spec.get("series", []):
+    for s in series_list:
         chart_data.add_series(s.get("name", ""), s.get("values", []))
 
     # Default position/size: small insets on all four sides (inches → EMUs)

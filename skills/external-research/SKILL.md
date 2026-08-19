@@ -98,7 +98,7 @@ The sub-agent:
    - **Unreachable** — URL returned 404, redirected, or timed out. The report captures the redirect target (if any) and the failure mode.
    - **Skipped — out of allowlist** — URL points outside the allowlisted Dynatrace domains. Recorded for visibility; not fetched.
 
-The sub-agent **does not modify `domain-knowledge.md` or `dynatrace-playbooks.md` directly** — that would violate the "no silent writes to long-term memory" rule. It writes only to the freshness report.
+The sub-agent **does not modify `domain-knowledge.md`, the `dynatrace-playbooks.md` hub, or any file in `memory/long-term/playbooks/` directly** — that would violate the "no silent writes to long-term memory" rule. It writes only to the freshness report.
 
 ### Surfacing drift to the user
 

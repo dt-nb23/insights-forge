@@ -221,7 +221,7 @@ The "Analyst calibration" row in `current-context.md` carries three 1–5 scores
 | **Consultant experience** | Deeper drill in Phase A (more CSIR follow-up turns); explain signal → business linkages explicitly in orientation hypotheses | Default depth | Terse orientation hypotheses; assume the consultant follows signal logic without elaboration |
 | **Account familiarity** | Ask more S (Specific Information) follow-up questions; probe for unknown constraints | Default | Skip basic S clarifications the consultant has likely already covered |
 | **Customer DT maturity** | Use simpler Dynatrace terminology in hypotheses and signals map; avoid jargon-dense phrasing | Default | Assume Dynatrace fluency; use precise DT product and capability names without definition |
-| **Council size (Phase 2)** | Low experience + low maturity → reduce panel to 3 lenses (drop Consultative for internal framing) | Default 4 lenses | High experience + high maturity → 4 lenses standard; consider adding a second Skeptic pass |
+| **Council size (Phase 2)** | Low experience + low maturity → *propose* dropping the Consultative lens for internal framing at the Phase 1 gate; the 4-lens council per `docs/lenses.md` remains the default unless the user approves the reduction | Default 4 lenses | High experience + high maturity → 4 lenses standard; consider adding a second Skeptic pass |
 | **Gate verbosity (Phase gates)** | Low familiarity → longer gate narrative, more context for each decision | Default | High familiarity + high experience → terse gate block; lead with the decision ask, not the summary |
 | **Ambition ceiling (Phase 2)** | Low maturity → cap at "confirm and fix" scope; do not propose transformation-level actions | Default | High maturity → full ambition ceiling; propose strategic capability builds if evidence supports |
 
@@ -261,7 +261,7 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 | Leadership priorities (named KPIs) | **SHOULD-HAVE** | Flag if missing but don't block. Vertical + archetype gives a reasonable default KPI list; consultant can validate it before Phase 1 signal-mapping. |
 | Technical team priorities | **SHOULD-HAVE** | Strongly recommended but not gating. Needed for Phase 2 action-plan ownership language and Phase 3 dual-audience framing; Phase 1 hypotheses can proceed without it. |
 | Engagement trigger (QBR / renewal / etc.) | **SHOULD-HAVE** | Flag if missing but don't block. Q3-Intent often captures the underlying motivation; trigger is a useful label but not analytically load-bearing. |
-| Stakeholder role archetype (+ named overlay) | **MUST-HAVE** | Phase 3 reads stakeholder-profiles.md against this match. No match → generic deliverable. |
+| Stakeholder role archetype (+ named overlay) | **MUST-HAVE** | Phase 3 reads the matched profile file in `memory/long-term/profiles/` (via the stakeholder-profiles.md index) against this match. No match → generic deliverable. |
 | Capability gaps | Derived in Step 6 | Not asked of the consultant — agent derives from Q5 + Q6. |
 | Orientation hypotheses (3–5) | Derived in Step 5 | Not asked of the consultant — agent produces from active capabilities + vertical. |
 | Prior engagement reference | **NICE-TO-HAVE** | Recorded if Step 3 finds a match; absent otherwise. |
@@ -297,9 +297,9 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
 
    **Marginal-value stopping rule:** if the consultant has skipped or answered "don't know" to two consecutive SHOULD-HAVE gaps, stop asking the remaining SHOULD-HAVE fields for this session — additional asks have diminishing returns. Record the remaining fields as `"not provided (declined at gate)"`. MUST-HAVE gaps still require an answer regardless of this rule.
 10. **Check freshness results (if dispatch occurred in Step 1).** If the sub-agent was dispatched, read `memory/long-term/freshness-report.md`. If the report shows entries in the **Drifted** or **Unreachable** buckets, list them as a short addendum to the gate presentation — e.g., *"The freshness sub-agent flagged 2 drifted citations and 1 unreachable URL; want to approve those updates as part of this gate?"* If the sub-agent has not completed yet, briefly wait (typically 30–60 seconds for ~30 URLs). If the wait runs longer than ~60 seconds, present the gate without freshness findings and note results will be surfaced at the next phase gate. If the dispatch was **skipped** (last check < 7 days, no Drifted/Unreachable), state at the gate: "Doc citations last verified [date from report] — current, no refresh needed."
-11. **Present and pause at the gate.** State clearly:
+11. **Present and pause at the gate** using the five-part gate summary block defined in `CLAUDE.md` (Conclusion / What changed / Assumptions and confidence gaps / Out-of-scope cost / Approve-Redirect-Iterate). For Phase 0: the Conclusion is the consulting objective in one sentence; What changed covers the framing, orientation hypotheses, and scope just established; Assumptions lists any provisional answers or thin fields; Out-of-scope cost names anything the exclusions removed from the framing. Close with:
 
-    > "This is the Phase 0 framing. Please **approve**, **redirect**, or **iterate** before I begin the diagnosis."
+    > "**Approve** to proceed to Phase 1, **Redirect** [scope or framing change to make], or **Iterate** [lens to run on the output]."
 
     Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md`. When the user approves any freshness updates from Step 10, edit the relevant long-term memory file inline (bump page-last-updated and retrieved), then clear those entries from `freshness-report.md`.
 

@@ -2,15 +2,20 @@
 # tools/client-isolation-hook.sh
 # PreToolUse hook: enforce client isolation on memory/clients reads and writes.
 #
-# Reads the hook JSON payload from stdin. Exits 1 to block the tool call,
-# exits 0 to allow it. When blocking, prints a human-readable reason to stderr.
+# Reads the hook JSON payload from stdin. Exits 2 to block the tool call
+# (Claude Code PreToolUse hooks block ONLY on exit code 2; exit 1 is a
+# non-blocking error), exits 0 to allow it. When blocking, prints a
+# human-readable reason to stderr.
 #
 # Mechanism: Phase 0 (context-framing) writes the active client name to
-# .claude/active-client. This hook reads that file and blocks any Read or
-# Write call that targets a different client's workspace folder.
+# .claude/active-client. This hook reads that file and blocks any Read,
+# Write, Edit, or NotebookEdit call that targets a different client's
+# workspace folder.
 #
 # Allowed without restriction:
-#   - All tools other than Read and Write
+#   - Tools other than Read/Write/Edit/NotebookEdit (known gap: Grep and
+#     Bash can still reach other client folders; hook-payload command
+#     parsing is out of scope for this guard)
 #   - Paths outside memory/clients/
 #   - Paths inside memory/clients/_template/ (shared template, not client data)
 #   - Calls made before .claude/active-client is written (Phase 0 setup)
@@ -31,7 +36,8 @@ path=$(echo "$input" | python3 -c "
 import sys, json
 try:
     d = json.load(sys.stdin)
-    print(d.get('tool_input', {}).get('file_path', ''))
+    ti = d.get('tool_input', {})
+    print(ti.get('file_path', '') or ti.get('notebook_path', ''))
 except Exception:
     print('')
 " 2>/dev/null || echo "")
@@ -45,8 +51,8 @@ except Exception:
     print('')
 " 2>/dev/null || echo "")
 
-# Only enforce on Read and Write
-[[ "$tool" == "Read" || "$tool" == "Write" ]] || exit 0
+# Only enforce on file-path tools
+[[ "$tool" == "Read" || "$tool" == "Write" || "$tool" == "Edit" || "$tool" == "NotebookEdit" ]] || exit 0
 
 # Normalize to absolute path
 if [[ -n "$cwd" && "$path" != /* ]]; then
@@ -72,7 +78,7 @@ active=$(tr -d '[:space:]' < "$marker")
 if [[ "$client_in_path" != "$active" ]]; then
     echo "CLIENT ISOLATION BLOCKED: attempted ${tool} on '${client_in_path}/' but active client is '${active}'." >&2
     echo "To access another client's data, use investigation-reset/SKILL.md to archive the current engagement first." >&2
-    exit 1
+    exit 2
 fi
 
 exit 0

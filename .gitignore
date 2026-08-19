@@ -16,3 +16,7 @@ memory/project-space/*.json
 memory/clients/*/
 !memory/clients/_template/
 !memory/clients/_template/**
+
+# Python bytecode
+__pycache__/
+*.pyc

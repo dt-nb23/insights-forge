@@ -19,9 +19,11 @@ The root library holds knowledge that is true regardless of which client is acti
 |---|---|
 | [`frameworks.md`](../memory/long-term/frameworks.md) | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. |
 | [`domain-knowledge.md`](../memory/long-term/domain-knowledge.md) | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. The `[team to note: …]` slots are for org-level context only — not client-specific. |
-| [`dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) | Eight client-agnostic procedural patterns for common Dynatrace problem shapes. |
+| [`dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) | Hub index for the eight client-agnostic procedural patterns. The playbook content itself lives in [`playbooks/`](../memory/long-term/playbooks/) — one file per problem shape, read only when a hypothesis matches that shape. |
+| [`playbooks/`](../memory/long-term/playbooks/) | The eight individual playbook files (latency, errors, RUM, Grail logs, SLO burn, deploy correlation, third-party, Davis problem), each with its investigation sequence, exit criteria, and doc citations. |
 | [`terminology.md`](../memory/long-term/terminology.md) | Glossary of recurring terms and Dynatrace platform glossary with citations. |
-| [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) | Eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). **No named individuals. No client associations.** Named leaders at specific clients go in that client's `stakeholder-overlays.md`. |
+| [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) | Hub index for the eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). Profile content lives in [`profiles/`](../memory/long-term/profiles/) — read only when calibrating for a named stakeholder. **No named individuals. No client associations.** Named leaders at specific clients go in that client's `stakeholder-overlays.md`. |
+| [`profiles/`](../memory/long-term/profiles/) | The eight individual archetype files, with title-type overlays co-located in their parent archetype's file. |
 | [`client-question-bank.md`](../memory/long-term/client-question-bank.md) | Client-facing phrasings of the Phase 0 clarifying questions, grouped by rubric tier. |
 | [`brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) | Dynatrace brand specification (colors, typography, layouts, voice, footer) authoritative for Phase 3 deliverables. |
 | [`freshness-report.md`](../memory/long-term/freshness-report.md) | Operational — the doc-freshness-checker sub-agent's output. No client data. |
@@ -119,7 +121,7 @@ The agent writes to `memory/long-term/` only when you ask clearly:
 
 - *"Add [name] to `terminology.md` as [definition]."*
 - *"Log a lesson learned: when SDK version segmentation is missing in RUM, always flag it as an instrumentation gap in Phase 1."*
-- *"Update `dynatrace-playbooks.md` with the investigation sequence we just validated."*
+- *"Update the `slo-burn` playbook in `memory/long-term/playbooks/` with the investigation sequence we just validated."* (New playbooks get a new file there plus an index row in `dynatrace-playbooks.md`.)
 - *"Promote this observation into `domain-knowledge.md`."*
 
 Vague phrases — *"this seems important"*, *"remember this"* — are logged in `decisions-log.md` but not promoted. The agent will ask you to confirm before writing to any root library file.

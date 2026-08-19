@@ -63,18 +63,18 @@ This table is the single source of truth for which lenses run in which phase. Th
 |---|---|---|
 | 0 — Context | None. (A background [doc-freshness-checker](#look-inside) runs conditionally, but it is not a critique lens.) | Any of the six |
 | 1 — Diagnose | [MECE](../.claude/agents/mece-lens.md) on the issue tree, then [Consultative](../.claude/agents/consultative-lens.md) as a framing pass on the issue-tree and hypotheses wording, then [ICE](../.claude/agents/ice-lens.md) on hypothesis scoring (ICE runs **after** the signals map exists) | Any of the six |
-| 2 — Solution | [MECE](../.claude/agents/mece-lens.md) on the opportunity set, then the **persona council** — [Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md) — deliberating over **≥3 rounds** (independent → cross-examination → convergence), then the agent reconciles, then [ICE](../.claude/agents/ice-lens.md) re-ranks **after** the council | Any of the six |
+| 2 — Solution | [MECE](../.claude/agents/mece-lens.md) on the opportunity set, then the **persona council** — [Skeptic](../.claude/agents/skeptic-lens.md), [Optimist](../.claude/agents/optimist-lens.md), [Customer](../.claude/agents/customer-lens.md), [Consultative](../.claude/agents/consultative-lens.md) — deliberating over **2–3 rounds** (independent → cross-examination → convergence; Round 3 is skipped when the panel has converged after Round 2), then the agent reconciles, then [ICE](../.claude/agents/ice-lens.md) re-ranks **after** the council | Any of the six |
 | 3 — Deliver | **None.** Phase 3 is pure packaging of the already-reviewed plan plus mechanical gates (one-page constraint, brand conformance, HTML legibility). No critique lens runs. | Any of the six |
 
 The order inside Phase 1 and Phase 2 matters and is not interchangeable — see [workflow.md](workflow.md) for the full sequence and why ICE runs last in each.
 
 ## The Phase 2 council runs in rounds
 
-The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over at least three rounds:
+The Phase 2 persona panel is a **deliberating council**, not a single pass. It runs over two to three rounds:
 
 1. **Round 1 — independent positions.** All four lenses are dispatched **in parallel and blind** — each reads only the draft plan (plus the client's `environment.md`) and gives its own position, having seen none of the others.
 2. **Round 2 — cross-examination.** Each lens is handed the other three Round-1 positions and reacts: where it agrees, where it contradicts another lens and why, what it concedes.
-3. **Round 3 — convergence.** Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. More rounds run if positions are still moving.
+3. **Round 3 — convergence (conditional).** Runs only when a material tension survives Round 2. Each lens reads the Round-2 reactions and states its final position, flagging any tension it will not concede. If the panel has already converged after Round 2, Round 3 is skipped and the agent proceeds to reconciliation; more rounds run if positions are still moving.
 
 Only then does the **agent reconcile** — ruling on every material disagreement and logging each in the plan's "Tensions resolved" subsection — before ICE re-ranks. "Parallel" (Round 1) and "critique each other" (Rounds 2+) are *different rounds*, not a contradiction. `skills/action-plan-builder/SKILL.md` step 6 is the authoritative procedure. You can also ask for this council explicitly at any gate:
 

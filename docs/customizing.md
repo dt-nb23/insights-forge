@@ -5,9 +5,9 @@ Insights Forge is designed to be **specialized to your team** — it's not reall
 ## High impact — do these first
 
 ### 1. Stakeholder profiles
-Open [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md).
+Open the profile index in [`memory/long-term/stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md); the profile content lives in [`memory/long-term/profiles/`](../memory/long-term/profiles/) — one file per archetype.
 
-Add one profile per leader you produce outputs for. Each profile should capture what they care about, what they ignore, decisions they own, and how they prefer to receive information. The Phase 3 [`exec-onepager`](../skills/exec-onepager/SKILL.md) skill reads the matching profile to shape voice and emphasis.
+Add one profile per leader you produce outputs for: create (or extend) the file in `profiles/` and add an index row to the hub. Each profile should capture what they care about, what they ignore, decisions they own, and how they prefer to receive information. The Phase 3 [`exec-onepager`](../skills/exec-onepager/SKILL.md) skill reads the matching profile file to shape voice and emphasis.
 
 A profile like *"VP of Engineering"* is generic. A profile like *"VP of Engineering, came up through platform, allergic to vague timelines, owns error-budget policy, reads on mobile during commute"* produces a noticeably sharper one-pager.
 
@@ -28,11 +28,11 @@ Add acronyms and product names your team uses that aren't already listed. Especi
 ## Medium impact
 
 ### 4. Dynatrace playbooks
-Open [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md).
+Open the playbook index in [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md); the playbook content lives in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/) — one file per problem shape.
 
 Eight playbooks ship out of the box: latency, errors, RUM regression, Grail logs, SLO burn, deploy correlation, third-party dependency, Davis problem. Each is a client-agnostic procedural pattern that gets pulled into Phase 2 action plans.
 
-You can extend them with org-specific procedural patterns the team has converged on, or add new playbooks for problem shapes the eight don't cover (cost / quota investigations and security-event triage are common additions).
+You can extend the individual playbook files with org-specific procedural patterns the team has converged on, or add new playbooks for problem shapes the eight don't cover (cost / quota investigations and security-event triage are common additions) — a new playbook is a new file in `playbooks/` plus an index row in the hub.
 
 Trigger phrase: *"Promote this Phase 2 investigation sequence into a new playbook called `<name>`."*
 

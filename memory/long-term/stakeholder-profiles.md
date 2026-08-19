@@ -9,7 +9,10 @@ When a Phase 3 one-pager or deck is intended for a specific reader:
 1. **Match to a role archetype** using the index below. Focus on what the person owns and decides, not what their badge says.
 2. **Read the specific profile file** for full content (tone notes, questions, decision ownership).
 3. **Check the individual file for overlays** — VP of Engineering overlays live in `executive-sponsor.md`; Director of Reliability in `sre-reliability.md`; Head of Data Analytics in `data-analytics.md`.
-4. **If no archetype is close enough,** ask the consultant whether to create a new one.
+4. **Apply an overlay on top of its archetype** — start from the parent archetype's defaults and apply only the fields the overlay overrides; if the overlay is silent on a field, use the archetype value.
+5. **If no archetype is close enough,** ask the consultant whether to create a new one.
+
+When writing or editing profile content, keep entries short and concrete — "they ignore vendor logos in the appendix" is more useful than "they value clarity."
 
 Named-leader overlays (specific individuals at specific clients) belong in `memory/clients/<client-name>/stakeholder-overlays.md` — never here.
 

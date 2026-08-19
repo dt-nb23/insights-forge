@@ -130,7 +130,7 @@
     },
 
     {
-      "_comment": "Chart slide. The 'Chart' layout key routes to handle_chart(), which uses python-pptx ChartData. chart.type must be a valid XL_CHART_TYPE name (BAR_CLUSTERED, COLUMN_CLUSTERED, LINE, PIE, etc.). chart.left/top/width/height are in EMUs; omit them to use the full-slide default. Brand series colors (Teal → Magenta) are applied automatically.",
+      "_comment": "Chart slide. 'Chart' is a dispatch key, not a template layout — the chart lands on Blank_graphic unless 'slide_layout' names another real layout. chart.type must be a valid XL_CHART_TYPE name (BAR_CLUSTERED, COLUMN_CLUSTERED, LINE, PIE, etc.). chart.left/top/width/height are in EMUs; omit them for the default inset position (0.5in/1.5in insets). Brand series colors (Teal → Magenta) are applied automatically, including line colors for LINE charts.",
       "layout": "Chart",
       "title": "Error Rate by Service — 30-day trend",
       "chart": {
