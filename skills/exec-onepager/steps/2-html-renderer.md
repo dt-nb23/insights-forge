@@ -12,6 +12,8 @@ Read this file at step 4 of the exec-onepager skill. The humanized copy is ready
 
 **Do not improvise CSS or invent new color values.** Every component has a defined pattern in `skills/exec-onepager/reference/layout-system.md`. Use those patterns exactly.
 
+**Do not add text outside a component's defined slots.** No legends, footnotes, "Note:" callouts, "Source:" inline annotations, qualifier sentences, or free-standing `<p>` tags within section bodies. The only permitted prose extensions per section are the slots the layout system names: `beat-line` (optional one-line setup sentence before the component), `concurrency` (after 03A/03D phase cards), `tie-line` (after 01D stats), `claim-support` (inside 01A bold statement), `guide-thesis`/`pos-line`/`g-statement` (per 02 variant). If content does not fit in a defined slot, choose a different component variant — do not add supplemental text. All citations and source references go exclusively in `.foot-src` in the FtrB footer.
+
 ## File setup
 
 **Output path:** Write the HTML to `<deliverable-name>.html` in the project root (e.g., `acme-api-latency-exec-brief.html`). Use a kebab-case name that reflects the client and engagement.
