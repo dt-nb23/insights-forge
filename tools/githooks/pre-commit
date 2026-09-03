@@ -1,0 +1,10 @@
+#!/bin/sh
+# tools/githooks/pre-commit
+# Blocks a commit when the repo fails the conformance checker.
+#
+# Not active by default — git only runs hooks from .git/hooks unless told
+# otherwise. Activate once per clone with:
+#
+#   git config core.hooksPath tools/githooks
+
+python3 tools/conformance-check.py || exit 1

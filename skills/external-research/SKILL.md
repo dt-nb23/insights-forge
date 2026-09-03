@@ -45,7 +45,7 @@ Reserved for future integration (do **not** invoke without user approval and a c
 - Internal Slack channels — practitioner discussion, incident retros, oncall handoffs.
 - Salesforce — customer tickets, account-specific context, support history.
 
-If the user names a different external source during an investigation, capture it in this section's table only after they confirm it should be added durably.
+If the user names a different external source during an investigation, capture it in this section's table only after they confirm it should be added durably — and add it to `tools/fetch-allowlist.txt` and the matching `WebFetch(domain:…)` allow rule in `.claude/settings.json` in the same change. The allowlist is enforced mechanically: a PreToolUse hook (`tools/fetch-allowlist-hook.sh`) forces any fetch outside the listed hosts into a human prompt, so this table, the allowlist file, and the settings rule must agree.
 
 ## Tools
 

@@ -19,7 +19,7 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 | ID | Item | Status | Disposition |
 |---|---|---|---|
 | B1 | One generator-first pptx procedure | done | `skills/pptx-builder/SKILL.md` rewritten: renderer priority (generator → external skill → outline), numbered steps lead with the spec JSON and the generator run, deck-side Phase 3 gate as step 8 |
-| B2 | Deck output path | done | `tools/pptx-generator.py` defaults the output alongside the spec (the dead `memory/project-space` path is gone); the documented command in `skills/pptx-builder/SKILL.md` and `tools/README.md` passes the output path explicitly; `CLAUDE.md` states every Phase 3 artifact lives in `<ENGAGEMENT_PATH>/`; `.gitignore` no longer references project-space |
+| B2 | Deck output path | done | `tools/pptx-generator.py` defaults the output alongside the spec (the dead project-space default is gone); the documented command in `skills/pptx-builder/SKILL.md` and `tools/README.md` passes the output path explicitly; `CLAUDE.md` states every Phase 3 artifact lives in `<ENGAGEMENT_PATH>/`; `.gitignore` no longer references project-space |
 | B3 | Skill promises match generator capability | done | Chose the "build it" side: wave background + overlay (with white text and a re-added footer so body layouts stay legible) and branded chart slides implemented in `tools/pptx-generator.py`; the skill's wave section now describes only the two shipped assets and no longer points at a nonexistent ".ai rendering" procedure; chart-series labels reconciled to §5 in `memory/long-term/brand/brand-spec.md` |
 | B4 | Brand-gate linter + gate-1 fix | done | `tools/onepager-lint.py` (gates 1/3/4/5 + design checks; gate 1 via headless Chrome, plus a `GATE1-BUDGET` content-budget check against the reference one-pager so the fit signal survives without Chrome); wired into `skills/exec-onepager/steps/3-brand-gate.md` |
 | B5 | Canonical reference one-pager | done | `skills/exec-onepager/reference/reference-onepager.html` (sanitized: fictional client, people, and vendor; passes the linter with 0 FAIL); retargeted in `skills/exec-onepager/reference/layout-system.md`, which was also made self-consistent with the gate (9px floor, no dash day ranges) |
@@ -28,11 +28,11 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| C1 | Out-of-scope rule reaches the whole pipeline | pending | Gate-side scans already land with A1 (Phase 2 and Phase 3 gate blocks); lens blocks and dispatch rule pending |
-| C2 | Mechanical client isolation | pending | |
-| C3 | Fetch allowlist + everything-else gate | pending | |
+| C1 | Out-of-scope rule reaches the whole pipeline | done | Identical `## Hard exclusions` block in all six `.claude/agents/*-lens.md` files (verified by conformance check 3); verbatim-inline dispatch rule in `CLAUDE.md`; exclusion handling added to `skills/signal-mapping/SKILL.md`, `skills/ice-scoring/SKILL.md`, and `skills/value-highlight/SKILL.md`; exclusion scans at the Phase 2 gate (`skills/action-plan-builder/SKILL.md`), the one-pager gate (`skills/exec-onepager/steps/3-brand-gate.md`), and the deck gate (`skills/pptx-builder/SKILL.md`) |
+| C2 | Mechanical client isolation | done | Hook-managed auto-lock in `tools/client-isolation-hook.sh` (session-keyed markers, realpath, fail-closed for the six file tools, Grep/Glob coverage, carve-outs matching the two named exceptions) + `tools/session-start-hook.sh` + `tools/session-end-hook.sh`; wired in `.claude/settings.json` with `Write` and `Edit` on the marker folder denied; unlock path in `skills/investigation-reset/SKILL.md`; behavior and residual gaps documented in `docs/memory.md` |
+| C3 | Fetch allowlist + everything-else gate | done | `WebFetch(domain:…)` allow rules and the `WebSearch` ask rule in `.claude/settings.json`; off-list hosts forced to a human prompt by `tools/fetch-allowlist-hook.sh` (source of truth `tools/fetch-allowlist.txt`); semantics stated honestly in `tools/README.md` and `docs/research.md` |
 | C4 | Opt-in font install | done | `tools/pptx-generator.py`: default run performs a read-only `check_dtflow_fonts()` and prints one platform-aware notice; installation only via `--install-fonts` (macOS/Linux; Windows documented as manual) |
-| C5 | Conformance check, wired | pending | |
+| C5 | Conformance check, wired | done | Five named checks in `tools/conformance-check.py` (paths resolve — including markdown links in docs and `CLAUDE.md`; no client names in the shared tier; lens exclusion blocks; brief-contract sync; ledger integrity); three trigger layers: PostToolUse hook `tools/conformance-posttool-hook.sh` registered in `.claude/settings.json`, committed `tools/githooks/pre-commit`, and the habit line in `CLAUDE.md` |
 
 ## Group D — Memory and retrieval
 
@@ -43,7 +43,7 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 | D3 | Client name scrubbed from shared tier | done | Names, people, and vendor removed from `skills/exec-onepager/reference/layout-system.md`, `skills/exec-onepager/steps/1-content-assembly.md`, `skills/exec-onepager/steps/2-html-renderer.md`, and the reference one-pager (Group B); the mechanical name-form scan lands with C5 |
 | D4 | Cross-client lessons lookup | done | Tagged front-matter + glob in `skills/context-framing/SKILL.md` Step 4, functional now that the write side (`skills/investigation-reset/SKILL.md`) produces matching tags; embeddings search stays a roadmap item in `plans/ROADMAP.md` until there is a corpus |
 | D5 | Fill the eight [Team to note] slots | deferred | Org-level context that only a senior consultant can supply; the slots remain in `memory/long-term/domain-knowledge.md` and nothing claims otherwise. The two definition-less entries (Service-flow, Synthetic monitoring) are called out in the round summary as the highest-value slots to fill first |
-| D6 | Dangling references and stale docs | done | `memory/long-term/phased-plan-timeline-framing.md` written and made a real read in `skills/exec-onepager/steps/1-content-assembly.md` (no more "(if loaded)" hedge); tombstones `memory/long-term/past-investigations.md` and `memory/long-term/client-environments/` deleted; inventory tables updated in `memory/long-term/README.md` and `docs/memory.md`; `tools/README.md` was rewritten in Group B |
+| D6 | Dangling references and stale docs | done | `memory/long-term/phased-plan-timeline-framing.md` written and made a real read in `skills/exec-onepager/steps/1-content-assembly.md` (no more "(if loaded)" hedge); the two tombstones under `memory/long-term/` (past-investigations and client-environments) deleted; inventory tables updated in `memory/long-term/README.md` and `docs/memory.md`; `tools/README.md` was rewritten in Group B |
 
 ## Group E — Workflow speed
 
@@ -92,5 +92,5 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| X1 | Model aliases instead of pinned model IDs | pending | |
+| X1 | Model aliases instead of pinned model IDs | done | `.claude/settings.json` sets `sonnet`; the six lens files in `.claude/agents/` use `sonnet` and `.claude/agents/doc-freshness-checker.md` uses `haiku`, so the repo can no longer pin itself a model generation back (the round-2 runbook's decision D15) |
 | X2 | Docs drift found during the review (C.S.I.R. expansion, one-pager "default structure") | partial | One-pager structure corrected in `docs/deliverables.md` (five-beat arc, no fixed template); the C.S.I.R. expansion in `docs/skills.md` lands with Group F |

@@ -92,7 +92,9 @@ The brand gate is the agent's own checklist; the Phase 3 gate below is the user'
 
 ## Phase 3 gate — one-pager
 
-Present the **Phase 3 gate summary block** (per CLAUDE.md "Gate summary block"):
+Before presenting, run the **exclusion scan**: read the Out-of-scope exclusions recorded in `<ENGAGEMENT_PATH>/current-context.md` and scan the one-pager against them. Any recommendation, decision ask, capability mention in the Guide section, or framing that depends on an excluded capability is a Phase 2 fidelity failure surfacing late — remove it, flag it to the user, and report the hit in part 4 below.
+
+Then present the **Phase 3 gate summary block** (per CLAUDE.md "Gate summary block"):
 
 1. **Conclusion** — the single decision or finding the one-pager leads with, in one sentence.
 2. **What changed** — what Phase 3 produced: the recipe selected and the one-sentence why, what the brand-humanizer pre-pass changed, and any brand-gate failures found and fixed.

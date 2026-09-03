@@ -1,0 +1,381 @@
+#!/usr/bin/env python3
+"""
+tools/conformance-check.py — Insights Forge workspace conformance check
+
+Checks:
+  1. Repo-rooted file paths referenced in skill and agent files, CLAUDE.md,
+     the READMEs, and docs/*.md resolve — both backticked paths and
+     relative markdown links ([text](../skills/x/SKILL.md)). Only paths
+     anchored at a known top-level directory are checked — bare filenames
+     (current-context.md), engagement-relative paths, placeholders, and
+     domains (docs.dynatrace.com) are not repo references.
+  2. No concrete client names appear in shared-tier files. Two layers:
+     (a) path-form — memory/clients/<name>/ references in memory/long-term/
+     and skills/ (the documented placeholder 'acme-corp' is allowed);
+     (b) name-form — client names derived from the directory names under
+     memory/clients/ (excluding _template), matched case-insensitively on
+     word boundaries, including '-', ' ', and '' separator variants
+     (acme-corp → "acme corp", "acmecorp"), across skills/, memory/long-term/,
+     docs/, .claude/agents/, and tools/. plans/ (pre-existing roadmap
+     planning docs) and html/ (generated bundles) are excluded from the
+     name-form scan by approved decision.
+  3. Every critique lens agent (.claude/agents/*-lens.md) contains the
+     exact heading line "## Hard exclusions". Non-lens sub-agents (e.g.
+     the doc-freshness checker) are exempt.
+  4. Brief contract sync: the "## "-level section headings listed in
+     docs/brief-contract.md (canon), emitted by the drill output template
+     in skills/drill/SKILL.md, and pushed by buildBrief() in
+     html/seed-prompt-generator-src.html must be identical ordered lists.
+     (Skipped, with a printed note, only while neither the canon nor the
+     drill skill exists yet; once either lands the check is mandatory.)
+  5. Backlog ledger: plans/BACKLOG-STATUS.md must exist; every row's
+     Status must be one of pending/done/partial/diverged/deferred/dropped;
+     and done/partial/diverged rows must cite repo paths that resolve.
+
+Exit code 0 = clean. Exit code 1 = violations found (lists them).
+"""
+
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+# ── Check 1: referenced paths resolve ─────────────────────────────────────
+
+SCAN_DIRS = ["skills", ".claude/agents"]
+# Prose files that also carry load-bearing paths and links (docs/ is scanned
+# non-recursively — docs/superpowers/ holds historical plans, not live docs).
+DOC_FILES = ["CLAUDE.md", "README.md", "tools/README.md",
+             "memory/long-term/README.md", "memory/clients/README.md"]
+# Match backtick-quoted paths that look like local repo paths (no <placeholders>);
+# leading '.' admits .claude/... references
+PATH_RE = re.compile(r"`([a-z_\-\.][a-zA-Z0-9_/\-\.]+\.[a-z]+)`")
+# Relative markdown links: [text](../skills/x/SKILL.md) or [text](docs/x.md#anchor)
+LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
+TEMPLATE_SKIP = re.compile(r"<[A-Za-z_-]+>")
+# Only paths anchored at a real top-level repo directory count as repo references
+REPO_ROOTS = ("skills/", "memory/", "tools/", "docs/", ".claude/",
+              "assets/", "html/", "plans/", "DTFlow/")
+# Documented example paths that intentionally do not exist in the repo
+EXAMPLE_PATH_RE = re.compile(r"memory/clients/(?!_template/)")
+EXTERNAL_LINK_PREFIXES = ("http://", "https://", "mailto:", "#")
+
+def _scan_files():
+    for scan_dir in SCAN_DIRS:
+        yield from sorted((ROOT / scan_dir).rglob("*.md"))
+    for name in DOC_FILES:
+        p = ROOT / name
+        if p.exists():
+            yield p
+    yield from sorted((ROOT / "docs").glob("*.md"))
+
+def check_paths():
+    violations = []
+    for md in _scan_files():
+        text = md.read_text(encoding="utf-8", errors="replace")
+        rel_md = md.relative_to(ROOT)
+        # (a) backticked repo-rooted paths, resolved against the repo root
+        for match in PATH_RE.finditer(text):
+            ref = match.group(1)
+            if TEMPLATE_SKIP.search(ref):
+                continue  # skip template placeholders like <ENGAGEMENT_PATH>
+            if not ref.startswith(REPO_ROOTS):
+                continue  # bare filename, domain, or engagement-relative path
+            if EXAMPLE_PATH_RE.match(ref):
+                continue  # example client paths (client folders are created at runtime)
+            if not (ROOT / ref).exists():
+                violations.append(f"  MISSING PATH: {rel_md} → {ref}")
+        # (b) relative markdown links, resolved against the file's own folder
+        for match in LINK_RE.finditer(text):
+            link = match.group(1).strip()
+            if not link or link.startswith(EXTERNAL_LINK_PREFIXES) or "<" in link:
+                continue
+            link = link.split("#", 1)[0]
+            if not link:
+                continue
+            target = (md.parent / link).resolve()
+            try:
+                rel = target.relative_to(ROOT).as_posix()
+            except ValueError:
+                violations.append(f"  LINK OUTSIDE REPO: {rel_md} → {match.group(1)}")
+                continue
+            if EXAMPLE_PATH_RE.match(rel):
+                continue
+            if not target.exists():
+                violations.append(f"  BROKEN LINK: {rel_md} → {match.group(1)}")
+    return violations
+
+# ── Check 2: no client names in shared tier ────────────────────────────────
+
+SHARED_DIRS = ["memory/long-term", "skills"]
+# Match concrete client paths like memory/clients/<name>/ where <name> is not a placeholder
+CLIENT_PATH_RE = re.compile(r"memory/clients/(?!_template/)([a-z][a-z0-9\-]+)/")
+# The documented placeholder client used in examples throughout the skills
+PLACEHOLDER_CLIENTS = {"acme-corp", "client-name", "that-client-name"}
+
+CLIENTS_DIR = ROOT / "memory" / "clients"
+# Name-form scan tiers. plans/ (pre-existing roadmap planning docs) and
+# html/ (generated bundles) are excluded by approved decision.
+NAME_SCAN_DIRS = ["skills", "memory/long-term", "docs", ".claude/agents", "tools"]
+TEXT_SUFFIXES = (".md", ".py", ".json", ".html", ".sh", ".txt", ".yml", ".yaml", "")
+
+def client_name_variants(name):
+    """acme-corp → acme-corp, acme corp, acmecorp (dash, space, empty separators)."""
+    parts = [p for p in re.split(r"[-_ ]+", name) if p]
+    variants = {name, "-".join(parts), " ".join(parts), "".join(parts)}
+    return sorted(v for v in variants if v)
+
+def check_no_client_names_in_shared():
+    violations = []
+    # Layer 1: path-form references in the shared tier (unchanged check)
+    for scan_dir in SHARED_DIRS:
+        for f in (ROOT / scan_dir).rglob("*"):
+            if not f.is_file():
+                continue
+            if f.suffix not in (".md", ".py", ".json", ".html"):
+                continue
+            text = f.read_text(encoding="utf-8", errors="replace")
+            for match in CLIENT_PATH_RE.finditer(text):
+                client = match.group(1)
+                if client in PLACEHOLDER_CLIENTS:
+                    continue
+                violations.append(
+                    f"  CLIENT NAME IN SHARED: {f.relative_to(ROOT)} contains '{client}'"
+                )
+    # Layer 2: name-form references — derive names from memory/clients/
+    client_dirs = []
+    if CLIENTS_DIR.is_dir():
+        client_dirs = [d.name for d in sorted(CLIENTS_DIR.iterdir())
+                       if d.is_dir() and d.name != "_template"]
+    if client_dirs:
+        alternatives = []
+        for name in client_dirs:
+            for v in client_name_variants(name):
+                alternatives.append(r"\b" + re.escape(v) + r"\b")
+        name_re = re.compile("|".join(alternatives), re.IGNORECASE)
+        for scan_dir in NAME_SCAN_DIRS:
+            base = ROOT / scan_dir
+            if not base.is_dir():
+                continue
+            for f in sorted(base.rglob("*")):
+                if not f.is_file() or f.suffix not in TEXT_SUFFIXES:
+                    continue
+                if "__pycache__" in f.parts:
+                    continue
+                text = f.read_text(encoding="utf-8", errors="replace")
+                for m in name_re.finditer(text):
+                    line_no = text.count("\n", 0, m.start()) + 1
+                    violations.append(
+                        f"  CLIENT NAME IN SHARED: {f.relative_to(ROOT)}:{line_no}"
+                        f" contains '{m.group(0)}'"
+                    )
+    return violations
+
+# ── Check 3: all lens agent files have the exact Hard exclusions heading ───
+
+AGENTS_DIR = ROOT / ".claude" / "agents"
+HARD_EXCLUSIONS_RE = re.compile(r"^## Hard exclusions$", re.MULTILINE)
+
+def check_agent_exclusions():
+    violations = []
+    # Only critique lenses receive engagement dispatches that must honor
+    # out-of-scope exclusions; utility sub-agents (doc-freshness-checker.md)
+    # are exempt (and don't match the *-lens.md glob).
+    for agent_file in sorted(AGENTS_DIR.glob("*-lens.md")):
+        text = agent_file.read_text(encoding="utf-8")
+        if not HARD_EXCLUSIONS_RE.search(text):
+            violations.append(
+                f"  MISSING '## Hard exclusions' HEADING: {agent_file.relative_to(ROOT)}"
+            )
+    return violations
+
+# ── Check 4: brief contract headings stay in sync across producers ─────────
+
+BRIEF_CANON = ROOT / "docs" / "brief-contract.md"
+DRILL_SKILL = ROOT / "skills" / "drill" / "SKILL.md"
+GENERATOR_SRC = ROOT / "html" / "seed-prompt-generator-src.html"
+
+# Canon lists the eight headings as a numbered list of backticked headings:
+#   1. `## Requested outputs & trigger`
+CANON_HEADING_RE = re.compile(r"^\d+\.\s+`## (.+?)`\s*$", re.MULTILINE)
+# Fenced code blocks (the drill template is a ```markdown fence)
+FENCE_RE = re.compile(r"```[^\n]*\n(.*?)\n```", re.DOTALL)
+HEADING_LINE_RE = re.compile(r"^## (.+?)\s*$", re.MULTILINE)
+# buildBrief() emits headings as JS string literals: '\n## Customer context\n'
+JS_HEADING_RE = re.compile(r"""["'](?:\\n)+## (.+?)(?:\\n)+["']""")
+
+def parse_canon_headings():
+    return CANON_HEADING_RE.findall(BRIEF_CANON.read_text(encoding="utf-8"))
+
+def parse_drill_headings():
+    text = DRILL_SKILL.read_text(encoding="utf-8")
+    for m in FENCE_RE.finditer(text):
+        block = m.group(1)
+        if "# Insights Forge intake brief" in block:
+            return HEADING_LINE_RE.findall(block)
+    return []
+
+def parse_buildbrief_headings():
+    text = GENERATOR_SRC.read_text(encoding="utf-8")
+    m = re.search(r"buildBrief\(\)\s*\{", text)
+    if not m:
+        return []
+    # Brace-match to isolate the function body; fall back to rest of file.
+    depth, end = 0, len(text)
+    for i in range(m.end() - 1, len(text)):
+        c = text[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                end = i
+                break
+    body = text[m.end():end]
+    return JS_HEADING_RE.findall(body)
+
+def check_brief_contract():
+    if not BRIEF_CANON.exists() and not DRILL_SKILL.exists():
+        # Pre-contract state: neither producer exists yet. The moment either
+        # lands, the sync check is mandatory (deleting the canon while the
+        # drill skill exists is a violation, not a skip).
+        print("  (skipped: docs/brief-contract.md and skills/drill/SKILL.md "
+              "are not present yet — mandatory once the intake-brief contract lands)")
+        return []
+    sources = [
+        ("canon      docs/brief-contract.md", parse_canon_headings),
+        ("drill      skills/drill/SKILL.md", parse_drill_headings),
+        ("buildBrief html/seed-prompt-generator-src.html", parse_buildbrief_headings),
+    ]
+    parsed = []
+    violations = []
+    for label, parser in sources:
+        try:
+            headings = parser()
+        except FileNotFoundError:
+            violations.append(f"  BRIEF CONTRACT: source file missing for {label}")
+            headings = []
+        if not headings:
+            violations.append(
+                f"  BRIEF CONTRACT: could not parse any '## ' headings from {label}"
+            )
+        parsed.append((label, headings))
+    if violations:
+        return violations
+    lists = [h for _, h in parsed]
+    if lists[0] == lists[1] == lists[2]:
+        return []
+    # Three-way diff: show each source's ordered list, position by position.
+    lines = ["  BRIEF CONTRACT DRIFT: section headings are not identical ordered lists:"]
+    width = max(len(h) for _, h in parsed)
+    for label, headings in parsed:
+        lines.append(f"    {label}:")
+        for i in range(width):
+            h = headings[i] if i < len(headings) else "(absent)"
+            marker = " "
+            others = [hl[i] if i < len(hl) else "(absent)" for hl in lists]
+            if len(set(others)) > 1:
+                marker = "*"
+            lines.append(f"      {marker} {i + 1}. ## {h}")
+    return ["\n".join(lines)]
+
+# ── Check 5: backlog ledger is present, statused, and cites real paths ─────
+
+LEDGER = ROOT / "plans" / "BACKLOG-STATUS.md"
+ALLOWED_STATUSES = {"pending", "done", "partial", "diverged", "deferred", "dropped"}
+PATH_REQUIRED_STATUSES = {"done", "partial", "diverged"}
+# Path-like tokens inside prose: word chars/dots/dashes joined by slashes
+PATH_TOKEN_RE = re.compile(r"[.\w\-]+(?:/[.\w\-]+)+")
+SEPARATOR_CELL_RE = re.compile(r":?-{2,}:?")
+
+def check_backlog_ledger():
+    if not LEDGER.exists():
+        return ["  MISSING LEDGER: plans/BACKLOG-STATUS.md does not exist — "
+                "the backlog status ledger is mandatory"]
+    violations = []
+    text = LEDGER.read_text(encoding="utf-8")
+    in_table = False
+    header_found = False
+    data_rows = 0
+    for line_no, line in enumerate(text.splitlines(), 1):
+        s = line.strip()
+        if not s.startswith("|"):
+            in_table = False
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        lowered = [c.lower().strip("* ") for c in cells]
+        if lowered[:4] == ["id", "item", "status", "disposition"]:
+            in_table = True
+            header_found = True
+            continue
+        if all(SEPARATOR_CELL_RE.fullmatch(c) for c in cells if c):
+            continue
+        if not in_table:
+            continue
+        if len(cells) < 4:
+            violations.append(
+                f"  LEDGER MALFORMED ROW: plans/BACKLOG-STATUS.md:{line_no} "
+                f"has {len(cells)} column(s), expected |ID|Item|Status|Disposition|"
+            )
+            continue
+        data_rows += 1
+        row_id, status, disposition = cells[0], cells[2], cells[3]
+        st = status.strip("*_` ").lower()
+        if st not in ALLOWED_STATUSES:
+            violations.append(
+                f"  LEDGER BAD STATUS: plans/BACKLOG-STATUS.md:{line_no} "
+                f"row '{row_id}' has status '{status}' — allowed: "
+                f"{', '.join(sorted(ALLOWED_STATUSES))}"
+            )
+            continue
+        if st in PATH_REQUIRED_STATUSES:
+            for token in PATH_TOKEN_RE.findall(disposition):
+                token = token.rstrip(".,;:")
+                if not token.startswith(REPO_ROOTS):
+                    continue  # prose fragment or external reference, not a repo path
+                if not (ROOT / token).exists():
+                    violations.append(
+                        f"  LEDGER MISSING PATH: plans/BACKLOG-STATUS.md:{line_no} "
+                        f"row '{row_id}' ({st}) cites '{token}' which does not exist"
+                    )
+    if not header_found:
+        violations.append(
+            "  LEDGER MALFORMED: plans/BACKLOG-STATUS.md has no "
+            "|ID|Item|Status|Disposition| table header"
+        )
+    elif data_rows == 0:
+        violations.append(
+            "  LEDGER EMPTY: plans/BACKLOG-STATUS.md table has no data rows"
+        )
+    return violations
+
+# ── Main ───────────────────────────────────────────────────────────────────
+
+def main():
+    all_violations = []
+
+    checks = [
+        ("Check 1: referenced paths resolve...", check_paths),
+        ("Check 2: no client names in shared tier...", check_no_client_names_in_shared),
+        ("Check 3: lens agent files contain '## Hard exclusions' heading...", check_agent_exclusions),
+        ("Check 4: brief contract headings in sync...", check_brief_contract),
+        ("Check 5: backlog ledger statused with real paths...", check_backlog_ledger),
+    ]
+    for label, check in checks:
+        print(label)
+        v = check()
+        all_violations.extend(v)
+        print(f"  {len(v)} violation(s).")
+
+    if all_violations:
+        print(f"\n{len(all_violations)} conformance violation(s) found:\n")
+        for line in all_violations:
+            print(line)
+        sys.exit(1)
+    else:
+        print("\nAll checks passed.")
+        sys.exit(0)
+
+if __name__ == "__main__":
+    main()

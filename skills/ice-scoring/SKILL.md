@@ -33,6 +33,7 @@ Then read these files:
 - `<ENGAGEMENT_PATH>/hypotheses.md` — the items to score.
 - `memory/long-term/frameworks.md` — for the calibration definitions of Impact, Confidence, and Effort. Apply consistently within a single scoring pass.
 - `<ENGAGEMENT_PATH>/signals-map.md` — for the business KPI mappings that anchor Impact scores.
+- `<ENGAGEMENT_PATH>/current-context.md` — for the **Out-of-scope exclusions**. An item whose confirmation or execution depends on an excluded capability is not scored — remove it from the scoring list, note the removal, and report it in part 4 of the gate summary block. Paste the exclusions verbatim into the ICE-lens dispatch prompt (CLAUDE.md dispatch rule).
 
 ## Steps
 

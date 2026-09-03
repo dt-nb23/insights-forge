@@ -93,7 +93,14 @@ The agent does not render new wave variants: the Illustrator design kit is outsi
    ```
 
    If the generator is unavailable, check for the external skill at `/mnt/skills/public/pptx/SKILL.md` and invoke it; if that is also absent, write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`. When the team renders manually, instruct them to start from the official Dynatrace `.potx` — the theme colors and fonts are embedded in it.
-8. **Present the deck at the Phase 3 gate — do not end silently.** After generation, present the deck using the same Phase 3 gate frame as the one-pager (per CLAUDE.md "Gate summary block"): Conclusion, What changed (what the deck adds or condenses versus the one-pager), Assumptions and confidence gaps, Out-of-scope cost, closing with "**Approve** to finalize the Phase 3 deliverables, **Redirect** [slide, emphasis, or structure change], or **Iterate** [lens to run on the deck]." Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md`.
+8. **Present the deck at the Phase 3 gate — do not end silently.** After generation, first run the **exclusion scan**: read the Out-of-scope exclusions in `<ENGAGEMENT_PATH>/current-context.md` and scan the deck spec JSON (every title, bullet, card, column, and appendix line) against them; remove any hit, regenerate, and report it. Then present the deck using the same Phase 3 gate frame as the one-pager (per CLAUDE.md "Gate summary block"):
+   1. **Conclusion** — the decision the deck asks for, in one sentence.
+   2. **What changed** — what the deck adds or condenses versus the approved one-pager (slide count, appendix decisions, charts included), and any generator warnings acted on (dropped or re-sized slots, fallback fonts).
+   3. **Assumptions and confidence gaps** — any chart built from numbers the engagement folder does not fully support, any slide where compression changed a qualifier, anything the reader's profile suggests they may skip.
+   4. **Out-of-scope cost** — hits from the exclusion scan, with what was removed; otherwise "No out-of-scope items arose this phase."
+   5. **Approve / Redirect / Iterate** — "**Approve** to finalize the Phase 3 deliverables, **Redirect** [slide, emphasis, or structure change], or **Iterate** [lens to run on the deck]."
+
+   Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (row label `Phase 3 Deliver — deck`); on approval, set today's `last-touched:` in `current-context.md` (`phase:` stays `3`; archiving is a separate `investigation-reset` step).
 
 ## Output
 

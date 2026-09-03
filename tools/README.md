@@ -9,6 +9,14 @@ In-repo tooling and its support files. Every tool here is **read-only with respe
 | `pptx-generator.py` | Generates branded `.pptx` decks from a JSON spec against `Dynatrace_Brand_Insights-Forge.pptx`. The primary renderer for Phase 3 deck output. A default run performs **no writes outside the output deck** — a missing-font check prints a one-line notice; fonts install only via `--install-fonts`. Supports wave backgrounds with a dark overlay (text turned white, footer re-added) and branded chart slides. |
 | `pptx-spec-example.json` | Annotated example spec showing every supported slide type and field. Read this before writing a deck spec. |
 | `onepager-lint.py` | Brand-gate linter for Phase 3 one-pagers. Mechanizes gate 1 (one-Letter-page fit via a headless-Chrome render and PDF page count, plus a Chrome-free content-budget check against the reference one-pager), gate 3 (em/en dashes, banned phrasings, trademark first-mentions, sentence-case headings; serial-comma / AI-lexicon / British-spelling heuristics as WARNs), gate 4 (aria/role attributes, font-size minimums, white-on-teal contrast), gate 5 (`.foot-src` citation format, footer boilerplate), and the design-system checks (declared `var(--x)` tokens, palette, Arial fallback). Exit codes: 0 no FAILs · 1 FAILs present · 2 usage/parse error · 3 gate 1 unverifiable (no Chrome — do the manual print preview). Invoked by the Phase 3 brand gate: `python3 tools/onepager-lint.py <ENGAGEMENT_PATH>/<slug>-onepager.html --action-plan <ENGAGEMENT_PATH>/action-plan.md --proper-noun "<Client>"`. |
+| `conformance-check.py` | Workspace conformance: (1) repo-rooted paths in skills, agents, `CLAUDE.md`, and docs resolve — backticked paths and relative markdown links alike; (2) no client names in the shared tier — path form anywhere, plus a name-form prose scan over `skills/`, `memory/long-term/`, `docs/`, `.claude/agents/`, `tools/` (client names derived from `memory/clients/` directory names; `plans/` and `html/` deliberately excluded); (3) every critique lens carries the exact `## Hard exclusions` block; (4) the intake-brief contract stays in sync across its producers; (5) `plans/BACKLOG-STATUS.md` uses only the closed status vocabulary and every done/partial/diverged row's cited paths resolve. Run after editing skills, agents, long-term memory, docs, or tools: `python3 tools/conformance-check.py`. |
+| `client-isolation-hook.sh` | PreToolUse hook wired in `.claude/settings.json` (matcher `Read\|Write\|Edit\|NotebookEdit\|Grep\|Glob`). **Hook-managed auto-lock**: on the session's first substantive touch of a client folder it writes a session-keyed marker at `.claude/session-clients/<session_id>` (the hook writes it — no skill step, no shared pointer file), then blocks file-tool access to any *other* client's folder. Read carve-outs, always allowed cross-client: `current-context.md` (resume scans) and `lessons-learned.md` (Phase 0 lessons readback). `../` and symlink traversal are neutralized by realpath; malformed input fails closed for the six file tools. Switching clients mid-session: `skills/investigation-reset/SKILL.md` has you approve `rm .claude/session-clients/<session-id>`. |
+| `session-start-hook.sh` | SessionStart hook: announces the session id and marker path into context, and prunes isolation markers older than 7 days. |
+| `session-end-hook.sh` | SessionEnd hook: best-effort removal of this session's isolation marker (leftovers are inert — markers are session-keyed). |
+| `fetch-allowlist.txt` | Machine source of truth for approved WebFetch domains (one per line). Consumed by `fetch-allowlist-hook.sh`; keep in sync with the allow rules in `.claude/settings.json` and the table in `skills/external-research/SKILL.md`. |
+| `fetch-allowlist-hook.sh` | PreToolUse WebFetch hook: hosts on (or subdomains of) an allowlist entry pass; any other host is forced to a human prompt via a `permissionDecision: "ask"` response. |
+| `conformance-posttool-hook.sh` | PostToolUse Write/Edit hook: runs `conformance-check.py` after any edit under `skills/`, `.claude/agents/`, `memory/long-term/`, `tools/`, or `docs/` and surfaces violations to the agent for in-session correction (PostToolUse cannot block a completed write — it is a feedback layer; the pre-commit hook is the gate). |
+| `githooks/pre-commit` | Committed git hook running `conformance-check.py`; blocks the commit on violations. One-time activation per clone: `git config core.hooksPath tools/githooks`. |
 | `seed-prompt-generator-bundle.py` | Unpacks/repacks the application source embedded in the Seed Prompt Generator's Claude Artifact bundle export (`html/`), so the form can be edited and re-bundled. |
 | `requirements.txt` | Python package dependencies (`python-pptx`; scripts require **Python 3.9+**). Install with `pip install -r tools/requirements.txt`. |
 
@@ -17,6 +25,9 @@ In-repo tooling and its support files. Every tool here is **read-only with respe
 ```bash
 # Python dependencies
 pip install -r tools/requirements.txt
+
+# Activate the conformance pre-commit gate (per clone)
+git config core.hooksPath tools/githooks
 
 # Optional: install the DT Flow fonts (the only command that writes outside the repo;
 # macOS and Linux only — on Windows, right-click each DTFlow/*.otf and choose Install)
@@ -77,14 +88,21 @@ This agent does not run live queries or execute production changes. Any tool add
 
 If a future integration is genuinely valuable but would cross this boundary, raise it with the user first. Do not silently expand the agent's scope by adding tools that exceed these limits.
 
-## External reference allowlist
+## Fetch policy — what is and is not enforced
 
-External documentation lookup is governed by [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) and the "Authoritative external references" table in [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md). Today the allowlist is:
+External documentation lookup is governed by [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) and the "Authoritative external references" table in [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md). The approved domains live in `tools/fetch-allowlist.txt`:
 
-- `https://docs.dynatrace.com/` — Dynatrace product documentation (vendor-authoritative).
-- `https://community.dynatrace.com/` — Dynatrace community threads (practitioner reporting).
+- `docs.dynatrace.com` — Dynatrace product documentation (vendor-authoritative).
+- `community.dynatrace.com` — Dynatrace community threads (practitioner reporting).
 
-Any other domain — and any internal system (Slack, Salesforce, internal wikis) — requires explicit user approval and, where applicable, a dedicated tool integration in this folder before the agent will reach for it.
+Enforcement, stated honestly against the platform's actual semantics:
+
+- The two domains are `WebFetch(domain:…)` **allow** rules in `.claude/settings.json`, so allowlisted fetches never prompt.
+- Any other host is forced to a **human prompt** by `fetch-allowlist-hook.sh` (a PreToolUse hook answering `permissionDecision: "ask"`). A pure permission-rule "deny everything else" is not expressible in Claude Code — deny rules outrank allow rules, so a broad WebFetch deny would also kill the allowlisted domains — which is why the hook exists.
+- `WebSearch` carries an explicit **ask** rule; explicit ask rules still prompt even in permission modes where allow rules are moot.
+- WebFetch rules do **not** constrain `curl`/`wget` through Bash; those go through the normal Bash permission prompt.
+
+Any other domain — and any internal system (Slack, Salesforce, internal wikis) — requires explicit user approval and, where applicable, a dedicated tool integration in this folder before the agent will reach for it. Adding a domain means updating all three places together: the allowlist file, the settings allow rule, and the skill's table.
 
 ## Candidate future integrations
 

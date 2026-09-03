@@ -249,7 +249,8 @@ Phase 0 is done when every **MUST-HAVE** field below is populated in `current-co
    e. Check whether `memory/clients/<client-short-name>/` exists. If not, create it by copying the template: `memory/clients/_template/README.md`, `memory/clients/_template/environment.md`, `memory/clients/_template/contract.md`, `memory/clients/_template/stakeholder-overlays.md`, and `memory/clients/_template/engagements/README.md`.
    f. Create the engagement folder.
    g. Set ENGAGEMENT_PATH and CLIENT_NAME in working context and **hold them for the rest of this session** — every later skill uses this held value, not a shared file. There is no global pointer to write; the engagement folder is the state, and its `current-context.md` status front-matter (written in Step 8) records that it is active.
-   h. Confirm briefly: "Engagement folder created at `<path>`."
+   h. **Client isolation locks automatically.** The client-isolation hook (`tools/client-isolation-hook.sh`) locks this session to the client on the first write into `memory/clients/<client>/` (steps 3e and 3f) — so that first write must use the exact short-name path chosen in 3a. There is no marker file to write by hand. Switching clients mid-session goes through `skills/investigation-reset/SKILL.md`.
+   i. Confirm briefly: "Engagement folder created at `<path>`."
 
 4. **Check past engagements — current client and cross-client lessons.**
    - **Current client:** Read `memory/clients/<CLIENT_NAME>/README.md` for prior engagement history. Surface the key lesson from the most recent engagement if found.

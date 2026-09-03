@@ -16,3 +16,10 @@ __pycache__/
 
 # Session working artifacts (audit runs, SDD task records) — local only
 .superpowers/
+
+# Per-session client-isolation markers, written by tools/client-isolation-hook.sh.
+# One file per session id; stale files are inert and pruned at session start.
+.claude/session-clients/
+
+# Legacy single-pointer marker (removed from the architecture; never commit if present)
+.claude/active-client

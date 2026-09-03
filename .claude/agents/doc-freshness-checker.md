@@ -1,7 +1,7 @@
 ---
 name: doc-freshness-checker
 description: Background freshness check for Dynatrace documentation citations. Dispatched by the main agent at the start of Phase 0 (context-framing) and runs while the consultant answers clarifying questions. Reads cited URLs from `memory/long-term/domain-knowledge.md`, every file in `memory/long-term/playbooks/`, and `memory/long-term/terminology.md`, fetches each via WebFetch, compares stored page-last-updated dates against current values, and writes findings to `memory/long-term/freshness-report.md`. Never edits long-term memory files directly. Use whenever a new engagement is starting or the user explicitly asks to refresh the docs.
-model: claude-haiku-4-5-20251001
+model: haiku
 ---
 
 # Doc Freshness Checker

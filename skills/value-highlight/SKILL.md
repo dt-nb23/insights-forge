@@ -32,7 +32,7 @@ Then read these files:
 - `memory/clients/<CLIENT_NAME>/engagements/<dated-slug>/lessons-learned.md` — "What worked / new knowledge."
 - `memory/clients/<CLIENT_NAME>/environment.md` — for environment context (if the file exists).
 - `memory/clients/<CLIENT_NAME>/contract.md` — for commercial/consumption context (DPS commit, renewal date, on-demand burn, commercial owner), if the file exists. Anchors the renewal/QBR framing in the client's actual commercial posture; if absent or fields are "unknown", say so rather than inventing numbers.
-- `<ENGAGEMENT_PATH>/current-context.md` — for the current engagement's scope and named stakeholder.
+- `<ENGAGEMENT_PATH>/current-context.md` — for the current engagement's scope, named stakeholder, and **Out-of-scope exclusions**. The brief never credits, proposes, or builds its "Remaining opportunity" bridge on an excluded capability, even if a prior engagement used it — a value story that leans on something the customer has ruled out undermines the renewal conversation it is meant to support.
 
 ## Procedure
 

@@ -61,7 +61,7 @@ Refresh when the Dynatrace brand template changes. The spec is sourced from the 
 See [deliverables.md](deliverables.md) for how the brand spec gets used during Phase 3.
 
 ### 8. Prior-engagement history (per client)
-There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared `memory/long-term/past-investigations.md` has been removed.) One deliberate cross-client channel exists: Phase 0 also reads **other** clients' `engagements/*/lessons-learned.md` front-matter and Cross-engagement hook lines, filtered by vertical and problem shape, so lessons carry across clients — see the context isolation rule in [memory.md](memory.md). The tags that make this work are written by `investigation-reset` at archive time; nothing to maintain by hand.
+There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared past-investigations index under `memory/long-term/` has been removed.) One deliberate cross-client channel exists: Phase 0 also reads **other** clients' `engagements/*/lessons-learned.md` front-matter and Cross-engagement hook lines, filtered by vertical and problem shape, so lessons carry across clients — see the context isolation rule in [memory.md](memory.md). The tags that make this work are written by `investigation-reset` at archive time; nothing to maintain by hand.
 
 ## The `tools/` boundary
 
@@ -81,7 +81,8 @@ A few load-bearing design decisions exist for non-obvious reasons. Before changi
 
 - **The four-phase workflow.** The phase boundaries and the gate-between-phases pattern are the workspace's load-bearing structure. Adjusting the *contents* of a phase is fine; removing the gate between phases breaks the human-in-the-loop guarantee that the entire workspace is designed around.
 - **The memory split.** Auto-promoting per-engagement findings into long-term memory was an explicit *non*-design. The full reasoning is in [memory.md](memory.md). Don't quietly add a script that does this.
-- **The external allowlist.** Adding a new domain to [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) requires explicit user approval per investigation, not a silent edit. See [research.md](research.md).
+- **The external allowlist.** A new domain is added in three places together — the table in [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md), `tools/fetch-allowlist.txt` (what the fetch hook enforces), and the matching `WebFetch(domain:…)` allow rule in `.claude/settings.json` — after explicit user approval, never as a silent edit. See [research.md](research.md).
+- **The hooks in `.claude/settings.json`.** The client-isolation hook, the fetch-allowlist hook, and the conformance hook are the mechanical half of the guardrails; the prose rules in `CLAUDE.md` are the other half. Removing a hook turns a guarantee back into advice.
 
 ## Look inside
 

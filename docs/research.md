@@ -30,7 +30,7 @@ External research is **allowlisted**. The agent will fetch from these two domain
 - Salesforce — customer tickets, account-specific context, support history.
 - Internal wikis.
 
-The agent **never silently expands the allowlist**. If something you'd like the agent to read isn't on this list, that's a conversation about extending [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) and likely adding a tool integration — not a one-off ask.
+The agent **never silently expands the allowlist** — and since this round it cannot: the two domains are `WebFetch(domain:…)` allow rules in `.claude/settings.json`, the same two are listed in `tools/fetch-allowlist.txt`, and a PreToolUse hook (`tools/fetch-allowlist-hook.sh`) forces a fetch to any other host into a human prompt. `WebSearch` carries an explicit ask rule. If something you'd like the agent to read isn't on this list, that's a conversation about extending [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md), the allowlist file, and the settings rule together — not a one-off ask. (What the hook does and does not cover is spelled out in [`tools/README.md`](../tools/README.md).)
 
 ## Policy 3 — Citation requirement
 

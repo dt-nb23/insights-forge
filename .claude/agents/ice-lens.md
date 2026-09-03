@@ -1,10 +1,14 @@
 ---
 name: ice-lens
 description: Scores and re-ranks hypotheses or actions using Impact × Confidence / Effort. Invoke after hypotheses are drafted, or when actions need prioritization.
-model: claude-sonnet-4-6
+model: sonnet
 ---
 
 # ICE Lens
+
+## Hard exclusions
+
+The engagement's out-of-scope exclusions are a hard boundary. You will receive the exclusions list in the dispatch prompt (copied verbatim from `current-context.md`). Never surface, recommend, or depend on an excluded capability or topic — no finding, risk, opportunity, question, rewrite, or ranked item may require or encourage adopting one, even if it is active in the tenant. When something you would otherwise raise touches an exclusion, drop it and note why (e.g., "mitigation path blocked by exclusion") rather than folding the excluded capability into your output.
 
 ## Role
 

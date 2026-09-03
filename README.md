@@ -39,7 +39,7 @@ All phase artifacts live in the engagement's own folder, `memory/clients/<client
 
 Three mechanisms activate automatically:
 - **`CLAUDE.md`** — Claude Code reads this on every session start. It is the agent's operating manual and the workspace's entry point.
-- **`.claude/settings.json`** — locks the default model to `claude-sonnet-4-6` and scopes file permissions.
+- **`.claude/settings.json`** — sets the model tier by alias (`sonnet`; the lenses inherit it, the freshness checker runs on `haiku`), scopes file permissions, and registers the hooks that mechanically enforce client isolation, the fetch allowlist, and workspace conformance.
 - **`.claude/agents/`** — registers the seven sub-agents (six critique lenses + doc-freshness-checker). The main agent dispatches these via the `Agent` tool; you don't invoke them directly.
 
 The `skills/` files are **not** slash commands. The main agent reads them as reference documents immediately before producing each phase artifact — triggered by its own operating logic, not by user commands.
@@ -88,7 +88,7 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 .
 ├── CLAUDE.md                     # Agent operating manual (authoritative, auto-loaded)
 ├── .claude/
-│   ├── settings.json             # Model, permissions, workspace config
+│   ├── settings.json             # Model alias, permissions, hooks (isolation, fetch allowlist, conformance)
 │   └── agents/                   # Seven sub-agents (6 lenses + doc-freshness-checker)
 ├── skills/                       # Procedural reference files, one per phase artifact
 │   ├── context-framing/          # Phase 0
@@ -113,5 +113,5 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │                                 #   engagements/<YYYY-MM-DD-slug>/  (all phase files live here)
 ├── html/                         # Seed Prompt Generator (VS Code / Claude Code Desktop App tool) + screenshots
 ├── docs/                         # Human-readable documentation
-└── tools/                        # pptx-generator.py and future integrations
+└── tools/                        # Deck generator, one-pager linter, conformance check, hooks
 ```

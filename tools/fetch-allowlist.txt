@@ -1,0 +1,3 @@
+# Allowed WebFetch hosts, one per line — read by tools/fetch-allowlist-hook.sh (subdomains of a listed host are also allowed).
+docs.dynatrace.com
+community.dynatrace.com

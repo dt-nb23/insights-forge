@@ -1,13 +1,84 @@
 {
-  "model": "claude-sonnet-4-6",
+  "model": "sonnet",
   "permissions": {
     "allow": [
       "Read(memory/**)",
       "Read(skills/**)",
       "Read(.claude/**)",
-      "Write(memory/long-term/freshness-report.md)",
+      "Read(tools/**)",
+      "Read(docs/**)",
       "Write(memory/clients/**)",
-      "Bash(python3 tools/pptx-generator.py*)"
+      "Edit(memory/clients/**)",
+      "Write(memory/long-term/freshness-report.md)",
+      "Edit(memory/long-term/freshness-report.md)",
+      "Bash(python3 tools/pptx-generator.py:*)",
+      "Bash(python3 tools/onepager-lint.py:*)",
+      "Bash(python3 tools/conformance-check.py:*)",
+      "Bash(python tools/pptx-generator.py:*)",
+      "Bash(python tools/onepager-lint.py:*)",
+      "Bash(python tools/conformance-check.py:*)",
+      "WebFetch(domain:docs.dynatrace.com)",
+      "WebFetch(domain:community.dynatrace.com)"
+    ],
+    "ask": [
+      "WebSearch"
+    ],
+    "deny": [
+      "Write(.claude/session-clients/**)",
+      "Edit(.claude/session-clients/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Write|Edit|NotebookEdit|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/client-isolation-hook.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/fetch-allowlist-hook.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/conformance-posttool-hook.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/session-start-hook.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/session-end-hook.sh"
+          }
+        ]
+      }
     ]
   }
 }
