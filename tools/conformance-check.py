@@ -8,7 +8,9 @@ Checks:
      relative markdown links ([text](../skills/x/SKILL.md)). Only paths
      anchored at a known top-level directory are checked — bare filenames
      (current-context.md), engagement-relative paths, placeholders, and
-     domains (docs.dynatrace.com) are not repo references.
+     domains (docs.dynatrace.com) are not repo references. The hand-written
+     html/index.html agent guide is scanned too: every href/src/url() that
+     climbs out of html/ must resolve (the generated form bundle is not).
   2. No concrete client names appear in shared-tier files. Two layers:
      (a) path-form — memory/clients/<name>/ references in memory/long-term/
      and skills/ (the documented placeholder 'acme-corp' is allowed);
@@ -60,6 +62,32 @@ REPO_ROOTS = ("skills/", "memory/", "tools/", "docs/", ".claude/",
 # Documented example paths that intentionally do not exist in the repo
 EXAMPLE_PATH_RE = re.compile(r"memory/clients/(?!_template/)")
 EXTERNAL_LINK_PREFIXES = ("http://", "https://", "mailto:", "#")
+# Hand-written HTML pages whose relative links must resolve (the generated
+# seed-prompt bundle is not scanned). Matches href/src attributes and CSS url()
+# values that climb out of html/ into the repo.
+HTML_FILES = ["html/index.html"]
+HTML_REF_RE = re.compile(r"""(?:href|src)=["'](\.\./[^"'#]+)["']|url\(['"]?(\.\./[^'")]+)['"]?\)""")
+
+def _html_link_violations():
+    violations = []
+    for name in HTML_FILES:
+        page = ROOT / name
+        if not page.exists():
+            continue
+        text = page.read_text(encoding="utf-8", errors="replace")
+        for match in HTML_REF_RE.finditer(text):
+            ref = match.group(1) or match.group(2)
+            target = (page.parent / ref).resolve()
+            try:
+                rel = target.relative_to(ROOT).as_posix()
+            except ValueError:
+                violations.append(f"  LINK OUTSIDE REPO: {name} → {ref}")
+                continue
+            if EXAMPLE_PATH_RE.match(rel):
+                continue
+            if not target.exists():
+                violations.append(f"  BROKEN LINK: {name} → {ref}")
+    return violations
 
 def _scan_files():
     for scan_dir in SCAN_DIRS:
@@ -104,6 +132,7 @@ def check_paths():
                 continue
             if not target.exists():
                 violations.append(f"  BROKEN LINK: {rel_md} → {match.group(1)}")
+    violations.extend(_html_link_violations())
     return violations
 
 # ── Check 2: no client names in shared tier ────────────────────────────────
