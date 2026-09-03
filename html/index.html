@@ -545,7 +545,7 @@
     <li><div><strong>Q5 — Active capabilities</strong><br><span>Multi-select checklist: which DT capabilities are active (OneAgent, RUM, Synthetics, Grail, etc.).</span></div></li>
     <li><div><strong>Q6 — RUM status on target application</strong><br><span>Conditional on Q5. Scopes frontend signal availability.</span></div></li>
     <li><div><strong>Q7 — Stakeholder leader + archetype</strong><br><span>Names who will receive Phase 3 deliverables. Triggers stakeholder-overlay skill if no profile exists.</span></div></li>
-    <li><div><strong>Q8 — Technical team priorities</strong><br><span>What the engineering team cares about; shapes action-plan framing.</span></div></li>
+    <li><div><strong>Q8 — Technical team priorities (vertical drill sheet)</strong><br><span>Five pre-targeted questions from the customer's vertical sheet in memory/long-term/drill-sheets/, asked in one message after the closed drill block and pruned by the Q5 capabilities; shapes action-plan framing.</span></div></li>
     <li><div><strong>Q9 — Engagement trigger</strong><br><span>QBR / renewal / expansion / incident follow-up. Shapes value narrative.</span></div></li>
     <li><div><strong>Check prior investigations</strong><br><span>Surface key lesson if a prior investigation exists for this client.</span></div></li>
     <li><div><strong>Reframe as consulting objective</strong><br><span>Translate Q&amp;A into a clear, bounded consulting objective.</span></div></li>
@@ -1390,7 +1390,7 @@
     <tr><td>Q5</td><td>Active Dynatrace capabilities (checklist)</td></tr>
     <tr><td>Q6</td><td>RUM status on the application in question</td></tr>
     <tr><td>Q7</td><td>Who will consume the deliverable and what they care about — triggers stakeholder-overlay skill if no profile exists</td></tr>
-    <tr><td>Q8</td><td>What the technical team cares about day-to-day</td></tr>
+    <tr><td>Q8</td><td>What the technical team cares about day-to-day — asked through the customer's vertical drill sheet (five targeted questions in one message), not as a generic prompt</td></tr>
     <tr><td>Q9</td><td>Trigger for this engagement (QBR, renewal, expansion, incident follow-up)</td></tr>
   </table>
 
@@ -1594,7 +1594,7 @@ In the Claude Code chat, start with:
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent walks you through up to nine clarifying questions, one at a time, in adaptive order.
+The agent walks you through up to nine clarifying questions in three phases: Q1–Q3 as a conversation (one at a time, each answer driving the next), Q4–Q7 and Q9 as one batched factual message, then the customer's vertical drill sheet in one message. Optional fields are asked only when a different answer could change the analysis; a pasted seed-prompt brief (or `/drill`) collapses the whole exchange into one sharpening message.
 
 | Q | What it asks |
 |---|---|
@@ -1605,7 +1605,7 @@ The agent walks you through up to nine clarifying questions, one at a time, in a
 | Q5 | Active Dynatrace capabilities (checklist) |
 | Q6 | RUM status on the application in question |
 | Q7 | Who will consume the deliverable and what they care about |
-| Q8 | What the technical team cares about day-to-day |
+| Q8 | What the technical team cares about day-to-day — via the vertical drill sheet (`memory/long-term/drill-sheets/`) |
 | Q9 | Trigger for this engagement (QBR, renewal, expansion, other) |
 
 ### Step 3 — Phase 0 gate
@@ -1973,7 +1973,7 @@ The root library holds knowledge that is true regardless of which client is acti
 | `client-question-bank.md` | Client-facing phrasings of the Phase 0 clarifying questions. |
 | `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer). |
 
-> Two items in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier.
+> The `past-investigations.md` index and the `client-environments/` folder from an earlier architecture have been **removed**. Archives and environments live in the client tier; cross-engagement lessons are retrieved from each engagement's tagged `lessons-learned.md` front-matter (see Context isolation rule). The playbook and stakeholder-profile hubs now index one file per playbook (`playbooks/`) and per archetype (`profiles/`), loaded only when needed; the per-vertical drill sheets live in `drill-sheets/`.
 
 ### Tier 2 — Client workspaces (memory/clients/)
 
@@ -2251,9 +2251,9 @@ Refresh when the Dynatrace brand template changes. The spec is sourced from the 
 
 ### 8. Prior-engagement detection
 
-Prior-engagement detection is **per-client**: in Phase 0 the agent reads the active client's own `README.md` engagement-history table to spot earlier work on the same customer and surface its key lessons.
+Prior-engagement detection has two parts. **Same client:** in Phase 0 the agent reads the active client's own `README.md` engagement-history table to spot earlier work on the same customer and surface its key lessons. **Other clients:** through a named, read-only exception it scans every engagement's `lessons-learned.md` **front-matter and Cross-engagement hook line only** (vertical, problem shape, capabilities), ranks the matches, and offers at most three — never the lessons' full text, which stays inside its client folder.
 
-> The old shared `memory/long-term/past-investigations.md` index is **deprecated** — it carries a "do not use" banner and is read by no skill. Don't add to it.
+> The old shared `memory/long-term/past-investigations.md` index has been **removed**; the tagged `lessons-learned.md` contract replaced it.
 
 ## The tools/ boundary
 
