@@ -59,12 +59,12 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| F1 | Narrative funnel then closed drill block | pending | |
-| F2 | Eight per-vertical drill sheets | pending | |
-| F3 | Ex-ante marginal-value test | pending | |
-| F4 | Calibration dial routed | pending | |
-| F5 | Un-batch the calibration scales | pending | |
-| F6 | One intake-brief contract (/drill) | pending | |
+| F1 | Narrative funnel then closed drill block | done | `skills/context-framing/SKILL.md`: three-phase structure — Phase A narrative funnel (Q1–Q3, one at a time), Phase B closed drill block (Q4–Q7 and Q9 in one labeled message), Phase C vertical drill sheet — with the ordering precondition stated as load-bearing and a pitfall for each way of getting it wrong |
+| F2 | Eight per-vertical drill sheets | partial | Frame and eight draft sheets built: `memory/long-term/drill-sheets/README.md` (index, pruning rules, validation status) plus one file per Q2 vertical (`memory/long-term/drill-sheets/retail-ecommerce.md` … `memory/long-term/drill-sheets/logistics-supply-chain.md`), each five fixed-order questions with consultant- and client-facing phrasings, a capability dependency, and a Phase 1 hook; wired as Phase C in `skills/context-framing/SKILL.md` and `skills/drill/SKILL.md`. **Remaining**: a working session per vertical with a practitioner to validate and flip each sheet's `status:` from draft |
+| F3 | Ex-ante marginal-value test | done | `skills/context-framing/SKILL.md` Step 9: the test (would a different answer change the tree, the hypotheses, or the framing?) gates which SHOULD-HAVEs enter the batch; the third record literal `not provided — not asked (low marginal value: …)` in Step 8; the Phase 0 gate lists every not-asked field so the consultant can override with "ask anyway" |
+| F4 | Calibration dial routed | done | Routing table in `skills/context-framing/SKILL.md` (drill depth, council size, gate verbosity, ambition ceiling) with a persisted Calibration routing row; consumed by `CLAUDE.md` (gate verbosity), `skills/action-plan-builder/SKILL.md` (ambition ceiling on recommended actions, forced full council, Optimist dispatch), `skills/hypothesis-generation/SKILL.md` and `skills/exec-onepager/steps/1-content-assembly.md` (terminology depth) |
+| F5 | Un-batch the calibration scales | done | `html/seed-prompt-generator-src.html`: each scale presents its five behavioral anchors as the options, the rate-one-rate-all validation is deleted, and the brief emits `N/5 — "anchor"`; the browser-runnable bundle under `html/` repacked from the edited source with `tools/seed-prompt-generator-bundle.py` (unpack round-trip verified — note that on `main` the bundle was already ahead of its committed source; the two now match); `docs/seed-prompt-generator.md` rewritten to match |
+| F6 | One intake-brief contract (/drill) | done | `docs/brief-contract.md` (canon); `skills/drill/SKILL.md` emits it, runs partially, and hands off to the fast path; registered in `CLAUDE.md`, `docs/skills.md`, and `README.md`; three-way sync (canon, drill template, form `buildBrief()`) enforced by check 4 of `tools/conformance-check.py`, now active |
 
 ## Group G — Roadmap sequencing
 
@@ -93,4 +93,4 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 | ID | Item | Status | Disposition |
 |---|---|---|---|
 | X1 | Model aliases instead of pinned model IDs | done | `.claude/settings.json` sets `sonnet`; the six lens files in `.claude/agents/` use `sonnet` and `.claude/agents/doc-freshness-checker.md` uses `haiku`, so the repo can no longer pin itself a model generation back (the round-2 runbook's decision D15) |
-| X2 | Docs drift found during the review (C.S.I.R. expansion, one-pager "default structure") | partial | One-pager structure corrected in `docs/deliverables.md` (five-beat arc, no fixed template); the C.S.I.R. expansion in `docs/skills.md` lands with Group F |
+| X2 | Docs drift found during the review (C.S.I.R. expansion, one-pager "default structure") | done | One-pager structure corrected in `docs/deliverables.md` (five-beat arc, no fixed template); the C.S.I.R. expansion in `docs/skills.md` now reads Context, Specific Information, Intent, Response Format; skill counts corrected to fifteen in `docs/skills.md` and `docs/customizing.md`; `docs/customizing.md` and `docs/getting-started.md` no longer send the citation-freshness window to `CLAUDE.md` |

@@ -26,6 +26,7 @@ The `[team to note: …]` slots in `domain-knowledge.md` are for **org-level ope
 | `profiles/` | The eight individual archetype files, with title-type overlays co-located in the parent archetype's file. | On demand (when a phase calibrates for a named stakeholder) |
 | `terminology.md` | Glossary of recurring terms and Dynatrace platform glossary with citations. | On demand |
 | `client-question-bank.md` | Client-facing phrasings of Phase 0 questions, by rubric tier. | Phase 0 (when doing live discovery with the customer) |
+| `drill-sheets/` | Eight per-vertical drill sheets (five fixed-order questions each, with capability dependencies and Phase 1 hooks) that replace the generic Q8 probe. Index in `drill-sheets/README.md`; shipped as drafts pending practitioner validation. | Phase 0, Phase C (the matched vertical's sheet only) |
 | `brand/brand-spec.md` | Dynatrace brand specification (colors, typography, layouts, voice, footer) for Phase 3 deliverables. | Phase 3 |
 | `phased-plan-timeline-framing.md` | The 30/60/90-day phased-plan framing rules for Phase 3 content assembly (day framing over week-range estimates, 90 days max). | Phase 3 |
 | `freshness-report.md` | Operational — the doc-freshness-checker sub-agent's citation drift findings. Overwritten each run. | Phase 0 gate |

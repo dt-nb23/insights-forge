@@ -52,7 +52,7 @@ The `skills/` files are **not** slash commands. The main agent reads them as ref
 
    > *"Describe the problem you're trying to solve."*
 
-   Or pre-fill the context first: open [`html/seed-prompt-generator-src.html`](html/seed-prompt-generator-src.html) in VS Code or Claude Code Desktop App, fill it out, and paste the generated seed prompt as your opening message. See [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md).
+   Or pre-fill the context first: open the browser-runnable `html/Insights Forge (Seed Prompt Generator).html`, fill it out, and paste the generated seed prompt as your opening message — or type `/drill` to run the same intake in chat. See [docs/seed-prompt-generator.md](docs/seed-prompt-generator.md).
 
 ## Cost management
 
@@ -92,6 +92,7 @@ The agent's operating manual is [`CLAUDE.md`](CLAUDE.md) — read on every sessi
 │   └── agents/                   # Seven sub-agents (6 lenses + doc-freshness-checker)
 ├── skills/                       # Procedural reference files, one per phase artifact
 │   ├── context-framing/          # Phase 0
+│   ├── drill/                    # Phase 0 chat-native intake (/drill)
 │   ├── mece-decomposition/       # Phase 1
 │   ├── hypothesis-generation/    # Phase 1
 │   ├── ice-scoring/              # Phase 1 & 2

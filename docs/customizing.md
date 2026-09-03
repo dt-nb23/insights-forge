@@ -41,26 +41,32 @@ Open [`memory/long-term/client-question-bank.md`](../memory/long-term/client-que
 
 If your discovery conversations regularly need question phrasings that aren't in the bank, add them — grouped by the MUST-HAVE / SHOULD-HAVE / NICE-TO-HAVE rubric. The [`context-framing`](../skills/context-framing/SKILL.md) skill uses these phrasings when you're doing live customer discovery.
 
-### 6. The operating manual itself
+### 6. Vertical drill sheets — validate them
+Open [`memory/long-term/drill-sheets/README.md`](../memory/long-term/drill-sheets/README.md).
+
+The eight per-vertical sheets ship as **drafts**: five fixed-order questions each, written from the domain linkages rather than from a practitioner's experience. This is the highest-value customization after the stakeholder profiles — one working session with someone who actually works a vertical turns its sheet from a strong default into the instrument your consultants run in front of customers. Keep the shape (five questions, each with a capability dependency and a Phase 1 hook), reorder or replace the questions, and flip the `status:` line to `validated: YYYY-MM-DD by <role>`.
+
+### 7. The operating manual itself
 Open [`CLAUDE.md`](../CLAUDE.md).
 
 The operating principles are sensible defaults, but you may want to adjust:
 
-- The list of stakeholder roles.
-- The default vertical or domain.
-- The citation-freshness window (default 7 days — see [research.md](research.md)).
+- The gate summary block or gate cadence, if your review process differs.
+- The out-of-scope handling rules, if your engagements scope differently.
 - The phased workflow if you've added or removed phases.
+
+(The stakeholder archetype list lives in `memory/long-term/stakeholder-profiles.md`, the vertical list in `skills/context-framing/SKILL.md` Q2 plus the drill sheets, and the citation-freshness window in `skills/external-research/SKILL.md` — adjust those there, not in `CLAUDE.md`.)
 
 ## Lower impact — adjust as needed
 
-### 7. Brand spec
+### 8. Brand spec
 Open [`memory/long-term/brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md).
 
 Refresh when the Dynatrace brand template changes. The spec is sourced from the official PowerPoint template — when Brandfolder publishes a new version, mirror the changes here. The supporting notes in [`memory/long-term/brand/reference/`](../memory/long-term/brand/reference/) map each pattern in the spec to a page in the source PDF, which makes refreshes easier.
 
 See [deliverables.md](deliverables.md) for how the brand spec gets used during Phase 3.
 
-### 8. Prior-engagement history (per client)
+### 9. Prior-engagement history (per client)
 There is no shared cross-client index to populate. Prior engagements live in each client's own workspace: the agent detects them in Phase 0 by reading that client's `memory/clients/<client-name>/README.md` history table and scanning its `engagements/` folders. The history fills in automatically as `investigation-reset` archives each engagement — nothing to pre-populate. (The old shared past-investigations index under `memory/long-term/` has been removed.) One deliberate cross-client channel exists: Phase 0 also reads **other** clients' `engagements/*/lessons-learned.md` front-matter and Cross-engagement hook lines, filtered by vertical and problem shape, so lessons carry across clients — see the context isolation rule in [memory.md](memory.md). The tags that make this work are written by `investigation-reset` at archive time; nothing to maintain by hand.
 
 ## The `tools/` boundary
@@ -90,6 +96,6 @@ A few load-bearing design decisions exist for non-obvious reasons. Before changi
 |---|---|
 | Every long-term memory file you can edit | [`memory/long-term/`](../memory/long-term/) |
 | The operating manual | [`CLAUDE.md`](../CLAUDE.md) |
-| All eight phase skills | [`skills/`](../skills/) |
+| All fifteen procedural skills | [`skills/`](../skills/) |
 | Six critique lenses + the doc-freshness-checker | [`.claude/agents/`](../.claude/agents/) |
 | The tooling boundary | [`tools/README.md`](../tools/README.md) |

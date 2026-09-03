@@ -17,6 +17,7 @@ Read this file at step 2 of the exec-onepager skill. The recipe has already been
 3. `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed/open/ruled-out status per hypothesis
 4. `memory/long-term/stakeholder-profiles.md` (hub) + the specific profile file for the named reader — depth and tone calibration
 5. `memory/long-term/terminology.md` — first-use definitions for any acronym
+6. `<ENGAGEMENT_PATH>/current-context.md` — the **Calibration routing** row: under a confirm-and-fix ceiling (low customer maturity) every Dynatrace capability named in the Guide section gets a plain-language gloss on first use, and the Plan section promises no capability the client does not already run; under the full ceiling, product names stand without gloss
 
 ## Plan-fidelity rules (enforce throughout)
 

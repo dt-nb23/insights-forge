@@ -53,7 +53,7 @@ Open [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowled
 
 ### 3. (Optional) Adjust `CLAUDE.md`
 
-[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (different default vertical, different citation-freshness window, additional operating constraints), adjust them here.
+[`CLAUDE.md`](../CLAUDE.md) is the operating manual the agent reads on every session. The defaults are sensible. If your team has preferences (additional operating constraints, changed phase gates, different out-of-scope handling), adjust them here. The citation-freshness window lives in `skills/external-research/SKILL.md`, not here.
 
 You do **not** need to pre-create any engagement files — the agent creates each engagement's dated folder and its files at Phase 0.
 
@@ -76,7 +76,7 @@ In the Claude Code chat, start with:
 
 …or just describe the problem and client directly.
 
-> **Faster path — the Seed Prompt Generator.** If you already know the customer, open [`html/seed-prompt-generator-src.html`](../html/seed-prompt-generator-src.html) in VS Code or Claude Code Desktop App, fill it out, and paste the generated seed prompt as your opening message. Phase 0 then starts with the context already loaded instead of extracting it question-by-question. Full walkthrough in [seed-prompt-generator.md](seed-prompt-generator.md).
+> **Faster path — the Seed Prompt Generator, or `/drill`.** If you already know the customer, open the browser-runnable `html/Insights Forge (Seed Prompt Generator).html` (see [seed-prompt-generator.md](seed-prompt-generator.md)), fill it out, and paste the generated seed prompt as your opening message — Phase 0 then starts with the context already loaded, and a complete brief collapses the clarifying rounds into one sharpening message. Starting in chat instead? Type `/drill` and the agent runs the same intake conversationally, emitting the same brief.
 
 The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At session start it also:
 - Reads the four root library files (domain knowledge, playbooks, frameworks, stakeholder archetypes)
@@ -86,7 +86,7 @@ The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At sess
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent walks you through up to nine clarifying questions in adaptive order — the narrative ones one at a time, the factual lookups (tenant, capabilities, RUM status) as one batched message. If your opening paragraph already covers Q1 and Q2, it skips them; if you pasted a complete seed-prompt brief, it collapses the whole exchange into one sharpening message.
+The agent walks you through up to nine clarifying questions in three phases: Q1–Q3 as a flowing conversation (each answer drives the next question), Q4–Q7 and Q9 as one batched factual message, then the five questions from your customer's vertical drill sheet in one message instead of a generic "what does the technical team care about?". If your opening paragraph already covers Q1 and Q2, it skips them; if you pasted a complete seed-prompt brief, it collapses the whole exchange into one sharpening message. Optional fields are asked only if a different answer could change the analysis — the gate tells you which ones it chose not to ask, so you can say "ask anyway."
 
 | Q | What it asks |
 |---|---|

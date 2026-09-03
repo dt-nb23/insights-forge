@@ -9,9 +9,12 @@ This page is the index. To see exactly what a skill does, click through to its `
 ## Phase 0 — Framing the engagement
 
 ### [`context-framing`](../skills/context-framing/SKILL.md)
-The required first step of every engagement. Walks the consultant through nine clarifying questions (Q3 is the C.S.I.R. sub-sequence — Context, Stakeholders, Intent, Result), surfaces 3–5 orientation hypotheses as starting candidates (not findings), and produces the engagement's `current-context.md` (which opens with a status front-matter block that marks the engagement `active`).
+The required first step of every engagement. Runs the three-phase questioning flow over nine clarifying questions — Q1–Q3 as a conversational funnel (Q3 is the C.S.I.R. sub-sequence: Context, Specific Information, Intent, Response Format), Q4–Q7 and Q9 as one batched drill message, then the customer's vertical drill sheet from [`memory/long-term/drill-sheets/`](../memory/long-term/drill-sheets/) in place of a generic "what does the technical team care about?" — applies a marginal-value test before asking any optional field, absorbs a pasted seed-prompt intake brief (with a brief-complete fast path when every required field arrives filled), routes the three analyst calibration scores to drill depth, council size, gate verbosity, and the plan's ambition ceiling, surfaces 3–5 orientation hypotheses as starting candidates (not findings), and produces the engagement's `current-context.md` (which opens with a status front-matter block that marks the engagement `active`).
 
-When the consultant signals that discovery is happening *live with the customer*, this skill pulls phrasings from [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md) instead of the consultant-facing prompts.
+When the consultant signals that discovery is happening *live with the customer*, this skill pulls phrasings from [`memory/long-term/client-question-bank.md`](../memory/long-term/client-question-bank.md) and the drill sheet's client-facing column instead of the consultant-facing prompts.
+
+### [`drill`](../skills/drill/SKILL.md)
+Chat-native intake — the Seed Prompt Generator without the browser form. Type `/drill` and the agent collects the same fields conversationally (partial drills supported — it asks only what a pasted brief or your opening message left open), emits the `# Insights Forge intake brief` format defined in [`docs/brief-contract.md`](brief-contract.md) — the same contract the browser form's export follows, kept in sync by `tools/conformance-check.py` — then hands off to context-framing, whose brief-complete fast path takes over.
 
 ## Phase 1 — Diagnosing the problem
 
@@ -80,7 +83,7 @@ Produces a backward-looking "Dynatrace value delivered" brief for QBR, renewal, 
 
 ## How skills are triggered
 
-Skills are **not slash commands** — you don't call them directly. The main agent reads the relevant `SKILL.md` file via its `Read` tool immediately before producing the artifact it governs. The trigger is the agent's own operating logic (defined in `CLAUDE.md`) and the phase the engagement is in.
+Skills are generally **not slash commands** — the main agent reads the relevant `SKILL.md` file via its `Read` tool immediately before producing the artifact it governs. (The one exception is `drill`, which you invoke yourself by typing `/drill`.) The trigger is the agent's own operating logic (defined in `CLAUDE.md`) and the phase the engagement is in.
 
 The agent tells you which skill it's reading before it starts — so if you want to know what's about to happen, you can open that `SKILL.md` yourself.
 
@@ -88,6 +91,6 @@ The agent tells you which skill it's reading before it starts — so if you want
 
 | Where to find them | What's there |
 |---|---|
-| [`skills/`](../skills/) | Fourteen skill folders |
+| [`skills/`](../skills/) | Fifteen skill folders |
 | Each `SKILL.md` file | When-to-use, inputs, procedure, output location, common pitfalls |
 | [`memory/long-term/frameworks.md`](../memory/long-term/frameworks.md) | The shared procedural reference skills draw on (MECE, ICE definitions, exit-criteria patterns) |

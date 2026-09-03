@@ -46,6 +46,7 @@ On-demand skills (read only when the task is active):
 
 | Task | Skill |
 |---|---|
+| Chat-native intake without a seed-prompt brief (`/drill`) | `skills/drill/SKILL.md` |
 | External research / web citation lookup | `skills/external-research/SKILL.md` |
 | Pause, archive, or resume an engagement | `skills/investigation-reset/SKILL.md` |
 | Add a named client leader | `skills/stakeholder-overlay/SKILL.md` |
@@ -74,7 +75,7 @@ At every phase gate — Phase 0, Phase 1, Phase 2, and both Phase 3 gates (one-p
 4. **Out-of-scope cost** — any lever or opportunity excluded because it touched an out-of-scope capability. If nothing was excluded, write "No out-of-scope items arose this phase."
 5. **Approve / Redirect / Iterate** — close with: "**Approve** to proceed to Phase N, **Redirect** [scope or framing change to make], or **Iterate** [lens to run on the output]."
 
-The gate summary block is not a recap of prose already visible in the artifact — it is the decision frame that lets the user act without re-reading everything. Part 3 is the part that answers "did the agent understand?": it must be specific to this engagement, never boilerplate. Each phase skill defines what its own block contains (`skills/context-framing/SKILL.md` Step 11, `skills/ice-scoring/SKILL.md` "Phase 1 gate", `skills/action-plan-builder/SKILL.md` "Phase 2 gate", `skills/exec-onepager/steps/3-brand-gate.md` and `skills/pptx-builder/SKILL.md` "Phase 3 gate").
+The gate summary block is not a recap of prose already visible in the artifact — it is the decision frame that lets the user act without re-reading everything. Part 3 is the part that answers "did the agent understand?": it must be specific to this engagement, never boilerplate. **Verbosity follows the engagement's Calibration routing** (recorded in `current-context.md` by Phase 0): the default is the full block; a "terse" route keeps parts 1 and 5 in full and compresses parts 2–4 to one line each; a "full" route adds a one-line "why this matters" under parts 2 and 3. No route ever omits a part. Each phase skill defines what its own block contains (`skills/context-framing/SKILL.md` Step 11, `skills/ice-scoring/SKILL.md` "Phase 1 gate", `skills/action-plan-builder/SKILL.md` "Phase 2 gate", `skills/exec-onepager/steps/3-brand-gate.md` and `skills/pptx-builder/SKILL.md` "Phase 3 gate").
 
 **On approval — before any next-phase work.** Two writes are part of the gate itself, not optional bookkeeping: (1) record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (format per the template in `memory/clients/_template/engagements/`), and (2) update the engagement's `current-context.md` status front-matter — set `phase:` to the phase being entered (Phase 0 approval → `phase: 1`, Phase 1 → `2`, Phase 2 → `3`; Phase 3 approvals leave `phase: 3`, and only `investigation-reset` changes `state:`) and set `last-touched:` to today. A gate is not complete until both land; a resumed engagement whose `phase:` is stale means a gate was closed incorrectly. Redirect and Iterate decisions are also logged, but do not move `phase:`.
 

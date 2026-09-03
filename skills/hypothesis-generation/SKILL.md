@@ -27,7 +27,7 @@ Use this skill when:
 Then read these files:
 
 - `<ENGAGEMENT_PATH>/issue-tree.md` — for the approved branches.
-- `<ENGAGEMENT_PATH>/current-context.md` — for scope, stakeholders, and the **Out-of-scope exclusions**.
+- `<ENGAGEMENT_PATH>/current-context.md` — for scope, stakeholders, the **Out-of-scope exclusions**, the drill-sheet answers under Technical team priorities (tagged by question number — the most specific pain signals Phase 0 captured), and the **Calibration routing** row: under a confirm-and-fix ceiling (low customer maturity), define Dynatrace terms on first use in hypothesis text and keep validation approaches to capabilities the client already runs.
 - `memory/long-term/domain-knowledge.md` — for the standard signal patterns, tech/UX/business linkages, and the "Authoritative external references" allowlist that seeds the "expected signals" field.
 - `memory/long-term/dynatrace-playbooks.md` — hub index (already loaded at session init). For each hypothesis, match it to a problem shape using the index, then **read the specific playbook file** (e.g., `memory/long-term/playbooks/latency-backend.md`). The playbook's investigation sequence seeds the **validation approach** field; its "confirmed" / "ruled out" criteria seed the **exit criteria**. Read only the matched file(s) — do not load all playbooks.
 - `memory/long-term/frameworks.md` — for the issue-tree-to-hypothesis mapping guidance and the exit criteria standard.

@@ -490,7 +490,7 @@
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Outputs &amp; trigger</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What you're producing and what prompted it. The customer action plan is always produced; pick the presentation formats to build on top of it.</p>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What you're producing and what prompted it. The customer action plan is always produced; the formats you pick here change the packaging, not the analysis.</p>
         <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Requested outputs <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">The customer action plan is always produced; add any presentation formats to build on top of it.</p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
@@ -528,7 +528,7 @@
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Analyst context</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who's running this and how well you know the account. It sets the plan's depth and tone.</p>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Who's running this and how well you know the account. It sets the plan's depth and tone. On each scale, pick the statement that fits (click it again to clear).</p>
         <label style="display:flex; align-items:center; gap:8px; margin:16px 0 2px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Your role <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <p style="margin:2px 0 8px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">Your seat in the account. It sets how the plan is framed and who owns follow-through.</p>
         <select data-fid="role" value="{{ answers.role }}" onchange="{{ onInput }}" style="width:100%; max-width:300px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
@@ -542,14 +542,10 @@
             <div style="margin-top:14px;">
               <label style="display:flex; align-items:center; gap:8px; margin-bottom:2px; font-size:13px; font-weight:500; color:var(--text-sub,#b1b2d2);">{{ sc.label }} <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; color:var(--text-faint,#8a8bad); border:1px dashed var(--border,#3b3b52);">Optional</span></label>
               <p style="margin:2px 0 7px; font-size:11.5px; color:var(--text-faint,#8a8bad); line-height:1.4;">{{ sc.why }}</p>
-              <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap;">
-                <span style="font-size:11px; color:var(--text-faint,#8a8bad); width:64px; text-align:right;">{{ sc.lo }}</span>
-                <div style="display:flex; gap:6px;">
-                  <sc-for list="{{ sc.buttons }}" as="b" hint-placeholder-count="5">
-                    <button onclick="{{ b.onClick }}" style="{{ b.style }}">{{ b.n }}</button>
-                  </sc-for>
-                </div>
-                <span style="font-size:11px; color:var(--text-faint,#8a8bad);">{{ sc.hi }}</span>
+              <div style="display:flex; flex-direction:column; gap:6px; max-width:560px;">
+                <sc-for list="{{ sc.options }}" as="b" hint-placeholder-count="5">
+                  <button onclick="{{ b.onClick }}" style="{{ b.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ b.label }}</button>
+                </sc-for>
               </div>
             </div>
           </sc-for>
@@ -721,17 +717,19 @@
           <h2 style="margin:0; font-size:16px; font-weight:700; color:var(--text,#ebecff);">Goals &amp; success criteria</h2>
           <span style="font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);">Required</span>
         </div>
-        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> What Dynatrace wants from this engagement and what the customer would call success. You cannot write the objective without both.</p>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">Intent — goals <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span> <span style="font-size:11px; font-weight:400; color:var(--text-faint,#8a8bad);">select any that apply</span></label>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <sc-for list="{{ intents }}" as="o" hint-placeholder-count="7">
-            <button onclick="{{ o.onClick }}" style="{{ o.style }}" style-hover="border-color:var(--border-hover,#4d4e66);">{{ o.label }}</button>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--text-faint,#8a8bad);"><span style="color:var(--text-sub,#b1b2d2);">Why —</span> Two questions: what Dynatrace wants from this engagement, and what the customer would call success. You cannot write the objective without both.</p>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does Dynatrace want from this engagement? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <textarea data-fid="dtIntent" value="{{ free.dtIntent.value }}" oninput="{{ onInput }}" placeholder="What Dynatrace is trying to achieve on this account…" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
+        <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.dtIntent.guiding }}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
+          <span style="font-size:11px; color:var(--text-faint,#8a8bad);">Starters:</span>
+          <sc-for list="{{ free.dtIntent.chips }}" as="c" hint-placeholder-count="4">
+            <button onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
           </sc-for>
         </div>
-        <sc-if value="{{ showIntentsOther }}" hint-placeholder-val="{{ false }}">
-          <input type="text" data-fid="intentsOther" value="{{ answers.intentsOther }}" oninput="{{ onInput }}" placeholder="Name the other goal" style="width:100%; max-width:360px; margin-top:9px; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:9px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);">
-        </sc-if>
-        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What does a successful outcome look like? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
+        <button onclick="{{ free.dtIntent.onToggle }}" style="margin-top:9px; background:none; border:none; color:var(--primary,#999bed); font-size:12px; cursor:pointer; padding:0;">{{ free.dtIntent.toggleLabel }}</button>
+        <sc-if value="{{ free.dtIntent.expanded }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px; border-left:2px solid var(--primary-border,#adb0ff); padding:8px 12px; background:var(--field,#1b1b30); border-radius:0 8px 8px 0; font-size:12.5px; color:var(--text-sub,#b1b2d2); line-height:1.5;">{{ free.dtIntent.tip }}</div></sc-if>
+        <label style="display:flex; align-items:center; gap:8px; margin:16px 0 8px; font-size:13px; font-weight:600; color:var(--text,#ebecff);">What would the customer call success? <span style="font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff);">Required</span></label>
         <textarea data-fid="intentSuccess" value="{{ free.intentSuccess.value }}" oninput="{{ onInput }}" placeholder="What the customer would say changed if this works…" style="width:100%; min-height:64px; resize:vertical; background:var(--field,#1b1b30); color:var(--text,#ebecff); border:1px solid var(--border,#3b3b52); border-radius:6px; padding:10px 12px; font-size:14px; outline:none;" style-focus="border-color:var(--primary-border,#adb0ff); box-shadow:0 0 0 3px rgba(25,102,255,.25);"></textarea>
         <p style="margin:7px 0 0; font-size:12px; color:var(--text-sub,#b1b2d2); line-height:1.45;">{{ free.intentSuccess.guiding }}</p>
         <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; align-items:center;">
@@ -945,6 +943,12 @@ class Component extends DCLogic {
     ];
     this.CARES_CHIPS = ['Conversion & revenue','Reliability & uptime','MTTR & incident volume','Cost / cloud spend','Security & compliance','Customer experience (CSAT/NPS)'];
     this.FREE = {
+      dtIntent: { guiding:'Prove value, secure the renewal, justify expansion: name the account outcome Dynatrace needs from this engagement.', tip:'One sentence on the account move this supports. If a renewal or expansion date exists, name it. It sets the urgency of the plan.', chips:[
+        {short:'Prove value', text:'Prove out the value of the current Dynatrace investment.'},
+        {short:'Secure renewal', text:'Secure the renewal in [quarter].'},
+        {short:'Justify expansion', text:'Justify expansion into [team / module / capability].'},
+        {short:'Prepare exec narrative', text:'Build an exec-ready narrative for [leader / QBR].'}
+      ] },
       context: { guiding:'What\u2019s the relationship history: new logo, established, or at-risk? What\u2019s the mood heading in? Any recent milestone, incident, or exec change?', tip:'Aim for two sentences: what the relationship is, and what changed recently. Note who the champion is and how the last few interactions felt.', chips:[
         {short:'Established, plateaued', text:'Established customer; renewal in [quarter]. Relationship is healthy but usage has plateaued.'},
         {short:'At-risk after incident', text:'At-risk account after [incident]. Tone is cautious and trust needs rebuilding.'},
@@ -952,9 +956,9 @@ class Component extends DCLogic {
         {short:'Expansion underway', text:'Expansion conversation: a new team or BU is evaluating adoption.'}
       ] },
       intentSuccess: { guiding:'What would the customer say changed if this works? What decision or outcome does it unlock for you?', tip:'Describe the observable "after". One concrete sentence beats a paragraph of goals. Name a metric or a decision if you can.', chips:[
-        {short:'Renews with confidence', text:'Customer renews with confidence in the value they\u2019re getting.'},
-        {short:'Approves expansion', text:'Leadership approves expansion into [team / module / BU].'},
+        {short:'Fixes a known problem', text:'The problem that triggered this engagement is fixed and stays fixed.'},
         {short:'Cuts MTTR & noise', text:'The team cuts MTTR and alert noise measurably.'},
+        {short:'Improves digital experience', text:'Digital experience measurably improves on the [app / journey] that matters.'},
         {short:'Agreed 30/60/90', text:'We land an agreed 30/60/90 roadmap.'}
       ] },
       painConstraints: { guiding:'What’s the team’s day-to-day pain, and what constrains the plan? Alert noise, slow root cause, toil, on-call load, plus known commitments, prior review outcomes, or limits (regulated data, contract phase).', tip:'List facts, not hopes: the team’s daily friction and anything off-limits. This is the boundary of what the plan can use.', chips:[
@@ -969,8 +973,15 @@ class Component extends DCLogic {
       ] }
     };
     this.VERTICALS = ['Retail / E-commerce','Financial Services (FSI)','Healthcare / Life Sciences','Manufacturing','Telco / Media','Public Sector','Technology / SaaS','Logistics / Supply Chain','Other'];
-    this.INTENTS = ['Prove value','Secure renewal','Justify expansion','Prepare exec narrative','Improve digital experience','Diagnose a problem','Other'];
     this.TRIGGERS = ['QBR','New Customer','Renewal','Expansion','Client Conversation','Incident follow-up','Other'];
+    this.SCALES = [
+      { key:'analystExp', label:'Your experience with Dynatrace consulting', why:'Your depth here. It tunes how much the plan explains vs. assumes.',
+        anchors:['New to Dynatrace consulting','A few engagements delivered','Comfortable across the common patterns','Deep experience across verticals','Expert — the person others ask'] },
+      { key:'accountFam', label:'Account familiarity', why:'How well you know this account. It sets how much discovery to prompt.',
+        anchors:['First touch — no history with this account','Read the notes, never worked it','A few working sessions in','Know the environment and the players','Deep history — multi-year relationship'] },
+      { key:'domainFluency', label:'Customer’s Dynatrace Maturity', why:'How advanced they are on Dynatrace. It sets the ambition ceiling.',
+        anchors:['Just onboarding — basics only','Core APM in place, little else','Several capabilities in active use','Broad adoption with SLOs and some automation','Advanced — full-stack, Grail, automation at scale'] }
+    ];
     this.STEP_TITLES = ['Outputs & trigger','Analyst context','Customer basics','Stakeholders & audience','Relationship Context','Customer Pain Points','Goals & success','Active capabilities','Out of scope','Focus applications'];
     this.REVIEW = 10;
     this.state = {
@@ -986,7 +997,7 @@ class Component extends DCLogic {
         outputs: ['Customer action plan'],
         analystExp: 0, accountFam: 0, domainFluency: 0,
         customerName:'', verticals:[], verticalOther:'', customerDesc:'', size:'', tenant:'SaaS', regions:[],
-        context:'', role:'Insights Analytics Consultant', roleOther:'', intents:[], intentsOther:'', intentSuccess:'',
+        context:'', role:'Insights Analytics Consultant', roleOther:'', dtIntent:'', intentSuccess:'',
         painConstraints:'',
         caps:['davis'], capsUnsure:false, capGen:{}, outOfScope:[], outOfScopeNotes:'', outOfScopeGen:{},
         apps:[ {name:'', rum:'', sr:''} ],
@@ -1053,26 +1064,33 @@ class Component extends DCLogic {
   goStep(n) { this.setState({ step: Math.max(0, Math.min(this.REVIEW, n)) }); }
   dismissIntro() { this.setState({ showIntro: false }); }
 
-  s6Req() { return this.state.answers.intents.indexOf('Improve digital experience') >= 0; }
+  s6Req() {
+    // Robustness note: this used to key on a literal "digital experience" substring across
+    // two free-text fields, so briefs that said "improve UX via RUM", "real user data", or
+    // "customer journey" silently skipped the focus-app requirement. Match a small phrase
+    // set instead ("rum" is word-bounded so "instrument"/"spectrum" don't false-positive) —
+    // the requirement should trigger on any digital-experience-shaped goal, not one exact wording.
+    const a = this.state.answers;
+    const t = ((a.dtIntent || '') + ' ' + (a.intentSuccess || '')).toLowerCase();
+    return /digital experience|user experience|\brum\b|real user|customer journey|frontend/.test(t);
+  }
 
   _F(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && ('' + v).trim())); }
   _secData(i) {
     const a = this.state.answers, F = this._F;
     const vertOk = a.verticals.length > 0 && (a.verticals.indexOf('Other') < 0 || F(a.verticalOther));
     const anyScale = a.analystExp || a.accountFam || a.domainFluency;
-    const allScale = a.analystExp && a.accountFam && a.domainFluency;
     const nonDavis = a.caps.filter(c => c !== 'davis').length > 0 || a.capsUnsure;
     const appOk = a.apps.some(ap => F(ap.name) && ap.rum && ap.sr);
     const stkOk = a.stakeholders.some(s => F(s.archetype));
-    const intentsOtherOk = a.intents.indexOf('Other') < 0 || F(a.intentsOther);
     const grp = {
       0: { fields: [F(a.outputs), F(a.triggers)], req: [F(a.outputs)] },
-      1: { fields: [F(a.role), !!anyScale], req: anyScale ? [F(a.role), !!allScale] : [F(a.role)] },
+      1: { fields: [F(a.role), !!anyScale], req: [F(a.role)] },
       2: { fields: [F(a.customerName), vertOk, F(a.customerDesc), F(a.size), F(a.regions)], req: [F(a.customerName), vertOk, F(a.customerDesc)] },
       3: { fields: [a.stakeholders.some(s => F(s.name) || s.archetype || F(s.cares))], req: [stkOk] },
       4: { fields: [F(a.context)], req: [F(a.context)] },
       5: { fields: [F(a.painConstraints)], req: [F(a.painConstraints)] },
-      6: { fields: [F(a.intents), F(a.intentSuccess)], req: [F(a.intents), intentsOtherOk, F(a.intentSuccess)] },
+      6: { fields: [F(a.dtIntent), F(a.intentSuccess)], req: [F(a.dtIntent), F(a.intentSuccess)] },
       7: { fields: [nonDavis], req: [nonDavis] },
       8: { fields: [F(a.outOfScope), F(a.outOfScopeNotes)], req: [] },
       9: { fields: [a.apps.some(ap => F(ap.name) || ap.rum || ap.sr)], req: this.s6Req() ? [appOk] : [] }
@@ -1086,16 +1104,13 @@ class Component extends DCLogic {
     const a = this.state.answers, m = [];
     if (!a.outputs.length) m.push('Requested output — pick at least one format');
     if (!a.role || !a.role.trim()) m.push('Your role');
-    const anyScale = a.analystExp || a.accountFam || a.domainFluency;
-    if (anyScale && !(a.analystExp && a.accountFam && a.domainFluency)) m.push('Analyst context — rate all three (1–5) once you start');
     if (!a.customerName.trim()) m.push('Customer name');
     if (!a.customerDesc.trim()) m.push('What the customer does');
     if (!a.verticals.length || (a.verticals.indexOf('Other') >= 0 && !a.verticalOther.trim())) m.push('Vertical');
     if (!a.context.trim()) m.push('Relationship & context');
     if (!a.painConstraints.trim()) m.push('Pain & constraints');
-    if (!a.intents.length) m.push('Intent — pick at least one goal');
-    if (a.intents.indexOf('Other') >= 0 && !a.intentsOther.trim()) m.push('Name the "Other" goal');
-    if (!a.intentSuccess.trim()) m.push('What success looks like');
+    if (!a.dtIntent.trim()) m.push('What Dynatrace wants from this engagement');
+    if (!a.intentSuccess.trim()) m.push('What the customer would call success');
     const nonDavis = a.caps.filter(c => c !== 'davis');
     if (!(nonDavis.length || a.capsUnsure)) m.push('At least one capability beyond Davis, or "unsure"');
     if (this.s6Req() && !a.apps.some(ap => ap.name.trim() && ap.rum && ap.sr)) m.push('At least one focus app with RUM status (digital-experience intent)');
@@ -1109,10 +1124,9 @@ class Component extends DCLogic {
     const a = this.state.answers;
     const today = new Date().toISOString().slice(0, 10);
     const np = v => { if (Array.isArray(v)) return v.length ? v.join(', ') : 'not provided'; return (v && ('' + v).trim()) ? ('' + v) : 'not provided'; };
-    const sc = n => n ? (n + '/5') : 'not provided';
+    const sc = key => { const n = a[key]; if (!n) return 'not provided'; const s = this.SCALES.find(x => x.key === key); return n + '/5 — "' + (s ? s.anchors[n - 1] : '') + '"'; };
     const verts = a.verticals.map(x => x === 'Other' ? (a.verticalOther.trim() || 'Other') : x);
     const vert = verts.length ? verts.join(', ') : 'not provided';
-    const ints = a.intents.filter(x => x !== 'Other' || a.intentsOther.trim()).map(x => x === 'Other' ? a.intentsOther.trim() : x);
     const map = this.capLabelMap();
     let capLines = a.caps.map(id => { const it = map[id]; if (!it) return ''; const gv = a.capGen[id]; return '- ' + it.label + ((it.gen && gv) ? (' — ' + gv) : '') + (id === 'davis' ? ' (always on)' : ''); }).filter(Boolean);
     if (a.capsUnsure) capLines.push('- Capabilities unconfirmed — analyst requests help confirming during framing');
@@ -1130,7 +1144,7 @@ class Component extends DCLogic {
       + '\n> **For the agent — read first.** This is a seeded Phase 0 engagement intake, captured with Insights Forge and aligned to skills/context-framing/SKILL.md. The **baseline deliverable is always a customer action plan**; "Requested outputs" below are the presentation formats to produce on top of it.\n'
       + '>\n'
       + '> **How the inputs are categorized:**\n'
-      + '> - **Required context** — Requested outputs, Customer (name / what-they-do / vertical), Relationship & context, Pain & constraints, Goals + success criteria, Active capabilities, and at least one Stakeholder (role archetype required; a named person strongly preferred). Framing is not complete without these.\n'
+      + '> - **Required context** — Requested outputs, Customer (name / what-they-do / vertical), Relationship & context, Pain & constraints, Dynatrace intent + customer success, Active capabilities, and at least one Stakeholder (role archetype required; a named person strongly preferred). Framing is not complete without these.\n'
       + '> - **Recommended context** — Analyst calibration (1–5) + role, Tenant, Customer region(s), per-stakeholder communication level & priorities, and Trigger. These sharpen tone, depth and KPI selection.\n'
       + '> - **Active capabilities are the boundary** of what insight you can surface — do not propose value that depends on a capability not listed. Davis AI is always on.\n'
       + '> - **Out of scope is a hard exclusion** — do not suggest or reference anything the customer has flagged as out of scope, even if the underlying capability is active.\n'
@@ -1141,7 +1155,7 @@ class Component extends DCLogic {
       + '- Baseline (always): Customer action plan\n'
       + '- Additional formats: ' + outputs + '\n'
       + '- Trigger(s): ' + np(a.triggers.map(x => x === 'Other' ? (a.triggersOther.trim() || 'Other') : x)) + '\n'
-      + '- Analyst: role ' + np(a.role === 'Other' ? (a.roleOther.trim() || 'Other') : a.role) + '; experience ' + sc(a.analystExp) + ', account familiarity ' + sc(a.accountFam) + ', customer Dynatrace maturity ' + sc(a.domainFluency) + '\n'
+      + '- Analyst: role ' + np(a.role === 'Other' ? (a.roleOther.trim() || 'Other') : a.role) + '; experience ' + sc('analystExp') + ', account familiarity ' + sc('accountFam') + ', customer Dynatrace maturity ' + sc('domainFluency') + '\n'
       + '- Generated: ' + today + '\n'
       + '\n## Customer context\n'
       + '- Name: ' + np(a.customerName) + '\n'
@@ -1153,8 +1167,8 @@ class Component extends DCLogic {
       + '- Relationship & context: ' + np(a.context) + '\n'
       + '\n## Stakeholders & audience\n' + stks + '\n'
       + '\n## Goals & success criteria\n'
-      + 'Goals: ' + np(ints) + '\n'
-      + 'Success looks like: ' + np(a.intentSuccess) + '\n'
+      + 'Dynatrace intent: ' + np(a.dtIntent) + '\n'
+      + 'Customer success: ' + np(a.intentSuccess) + '\n'
       + '\n## Pain & constraints\n' + np(a.painConstraints) + '\n'
       + '\n## Active capabilities\n' + caps + '\n'
       + '\n## Out of scope / do not suggest\n' + oos + '\n'
@@ -1183,7 +1197,7 @@ class Component extends DCLogic {
   card(sel) { return 'display:block; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); border-radius:10px; padding:12px 14px; cursor:pointer; transition:border-color .15s, background .15s;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944);' : ''); }
   box(sel) { return 'display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:5px; border:1px solid var(--border-hover,#4d4e66); flex-shrink:0; background:var(--card,#212135);' + (sel ? ' border-color:var(--primary-border,#adb0ff);' : ''); }
   capRow(sel) { return 'display:flex; align-items:center; gap:10px; padding:7px 9px; border:1px solid transparent; border-radius:8px; cursor:pointer; font-size:13.5px; color:var(--text,#ebecff);' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944);' : ''); }
-  scaleBtn(sel) { return 'width:38px; height:34px; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:7px; font-size:13px; font-weight:600; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
+  scaleOpt(sel) { return 'display:block; width:100%; text-align:left; border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:8px; padding:8px 12px; font-size:12.5px; line-height:1.4; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff); font-weight:600;' : ''); }
   chipStyle(active) { return 'border:1px solid var(--border,#3b3b52); background:var(--field,#1b1b30); color:var(--text-sub,#b1b2d2); border-radius:100px; padding:5px 11px; font-size:12px; cursor:pointer; white-space:nowrap;' + (active ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
   miniSeg(sel) { return 'border:1px solid var(--border,#3b3b52); background:var(--card,#212135); color:var(--text-sub,#b1b2d2); border-radius:6px; padding:3px 10px; font-size:11.5px; cursor:pointer;' + (sel ? ' border-color:var(--primary-border,#adb0ff); background:var(--primary-bg,#292944); color:var(--text,#ebecff);' : ''); }
 
@@ -1192,8 +1206,7 @@ class Component extends DCLogic {
     const missingList = this.missing();
     const canExport = missingList.length === 0;
     const s6required = this.s6Req();
-    const anyScaleV = a.analystExp || a.accountFam || a.domainFluency;
-    const totalRequired = 11 + (anyScaleV ? 1 : 0) + (a.intents.indexOf('Other') >= 0 ? 1 : 0) + (s6required ? 1 : 0);
+    const totalRequired = 11 + (s6required ? 1 : 0);
     const filledRequired = Math.max(0, totalRequired - missingList.length);
 
     const freeVM = {};
@@ -1272,11 +1285,8 @@ class Component extends DCLogic {
 
       outputs: this.OUTPUTS.map(u => { const sel = u.always ? true : a.outputs.indexOf(u.value) >= 0; return { label:u.label, desc:u.desc, always:!!u.always, selected:sel, onClick: u.always ? (()=>{}) : (()=>this.toggleArr('outputs', u.value)), style:this.card(sel) + (u.always ? ' cursor:default;' : ''), boxStyle:this.box(sel) }; }),
 
-      scales: [
-        { label:'Your experience with Dynatrace consulting', why:'Your depth here. It tunes how much the plan explains vs. assumes.', lo:'New', hi:'Expert', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('analystExp', n), style:this.scaleBtn(a.analystExp===n) })) },
-        { label:'Account familiarity', why:'How well you know this account. It sets how much discovery to prompt.', lo:'First touch', hi:'Deep history', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('accountFam', n), style:this.scaleBtn(a.accountFam===n) })) },
-        { label:'Customer’s Dynatrace Maturity', why:'How advanced they are on Dynatrace. It sets the ambition ceiling.', lo:'Low', hi:'High', buttons:[1,2,3,4,5].map(n => ({ n, onClick:()=>this.setScale('domainFluency', n), style:this.scaleBtn(a.domainFluency===n) })) }
-      ],
+      scales: this.SCALES.map(s => { const val = a[s.key]; return { label:s.label, why:s.why,
+        options: s.anchors.map((txt, i) => { const n = i + 1; return { label:txt, onClick:()=>this.setScale(s.key, n), style:this.scaleOpt(val===n) }; }) }; }),
 
       answers: a,
       showVerticalOther: a.verticals.indexOf('Other') >= 0,
@@ -1285,8 +1295,6 @@ class Component extends DCLogic {
       regionOptions: ['NORAM','LATAM','EMEA','APAC'].map(v => { const sel = a.regions.indexOf(v) >= 0; return { label:v, selected:sel, onClick:()=>this.toggleArr('regions', v), rowStyle:this.capRow(sel), boxStyle:this.box(sel) }; }),
 
       free: freeVM,
-      intents: this.INTENTS.map(v => ({ label:v, onClick:()=>this.toggleArr('intents', v), style:this.pill(a.intents.indexOf(v) >= 0) })),
-      showIntentsOther: a.intents.indexOf('Other') >= 0,
       showRoleOther: a.role === 'Other',
       showTriggersOther: a.triggers.indexOf('Other') >= 0,
       triggers: this.TRIGGERS.map(v => ({ label:v, onClick:()=>this.toggleArr('triggers', v), style:this.pill(a.triggers.indexOf(v) >= 0) })),
@@ -1312,7 +1320,7 @@ class Component extends DCLogic {
       onAddApp: () => this.addApp(),
       s6TagLabel: s6required ? 'Required' : 'Recommended',
       s6TagStyle: s6required ? 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; background:var(--primary-bg,#292944); color:var(--primary-border,#adb0ff); border:1px solid var(--primary-border,#adb0ff);' : 'font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:100px; color:var(--text-sub,#b1b2d2); border:1px solid var(--border,#3b3b52);',
-      s6Why: s6required ? 'Your intent includes "Improve digital experience", so RUM status decides whether the user-experience story is available. It is required here. Add every app in scope.' : 'Optional for now. It becomes required if your intent includes "Improve digital experience". Add every app in scope; each can have its own RUM and Session Replay status.',
+      s6Why: s6required ? 'Your goals mention digital experience, so RUM status decides whether the user-experience story is available. It is required here. Add every app in scope.' : 'Optional for now. It becomes required if your goals mention improving digital experience. Add every app in scope; each can have its own RUM and Session Replay status.',
 
       stakeholders: a.stakeholders.map((sk, i) => ({
         label: 'Stakeholder ' + (i + 1), name: sk.name, onName:(e)=>this.setStk(i, 'name', e.target.value),
