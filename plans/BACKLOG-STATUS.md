@@ -70,10 +70,10 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| G1 | Intent before CRM pull | pending | |
-| G2 | Trigger-scoped CRM field lists | pending | |
-| G3 | Isolation hook before CRM; provisional CRM facts | pending | |
-| G4 | Dynatrace fetcher ships before CRM | pending | |
+| G1 | Intent before CRM pull | done | `plans/ROADMAP.md` CRM item, binding design decision 1: Q3-Intent is asked before any pull and is the retrieval filter; pull-then-filter explicitly rejected; the "Why" corrected to say CRM supplies Context and Specific Information only, never Intent or Response Format |
+| G2 | Trigger-scoped CRM field lists | done | `plans/ROADMAP.md` CRM item, decision 2: a closed per-trigger field list (renewal, expansion, QBR, incident follow-up) keyed to Q9, reviewable at the Phase 0 gate |
+| G3 | Isolation hook before CRM; provisional CRM facts | done | `plans/ROADMAP.md` CRM item: Boundary paragraph records that `tools/client-isolation-hook.sh` now satisfies the isolation precondition (with the caveat that the fetcher must write through file tools so the hook sees it); decision 3 makes every CRM fact provisional and dated and surfaced under Assumptions until confirmed; the same provisional-and-dated rule is applied to the Dynatrace fetcher's output |
+| G4 | Dynatrace fetcher ships before CRM | done | `plans/ROADMAP.md`: sequencing decision recorded in the fetcher item and as a CRM prerequisite — an encoded dependency, not an impact-ordering coincidence. Stale items refreshed in the same pass: semantic search now describes the tagged lessons-learned lookup and moves its index out of `memory/clients/` (where the isolation hook would lock on it); the PDF renderer reuses `tools/onepager-lint.py`'s headless-Chrome path and takes only engagement-folder input; the Skeptic deep-pass item references the `sonnet` alias instead of a dated model ID; the allowlist item names `tools/fetch-allowlist.txt` and its hook |
 
 ## Group H — Code defects
 
