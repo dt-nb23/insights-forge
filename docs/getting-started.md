@@ -86,7 +86,7 @@ The agent will read `skills/context-framing/SKILL.md` and begin Phase 0. At sess
 
 ### Step 2 — Answer Phase 0 clarifying questions
 
-The agent walks you through up to nine clarifying questions, one at a time, in adaptive order. If your opening paragraph already covers Q1 and Q2, it skips them.
+The agent walks you through up to nine clarifying questions in adaptive order — the narrative ones one at a time, the factual lookups (tenant, capabilities, RUM status) as one batched message. If your opening paragraph already covers Q1 and Q2, it skips them; if you pasted a complete seed-prompt brief, it collapses the whole exchange into one sharpening message.
 
 | Q | What it asks |
 |---|---|

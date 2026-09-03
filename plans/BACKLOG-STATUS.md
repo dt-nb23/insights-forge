@@ -49,11 +49,11 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| E1 | Conditional round 3 + force escape hatch | pending | |
-| E2 | Brief-complete fast path | pending | |
-| E3 | Batched Step 9 + environment block | pending | |
-| E4 | Follow-on interviews named at the Phase 0 gate | pending | |
-| E5 | One message per round + paths-not-paste | pending | |
+| E1 | Conditional round 3 + force escape hatch | done | `skills/action-plan-builder/SKILL.md` step 6: Round 3 runs only when a binary tension survives Round 2 (degree-only differences are ruled on in reconciliation); escape hatch forces the full council for high-stakes deliverables, on user request, or on Phase 0 calibration routing; the gate states which happened. Mirrored in `docs/lenses.md`, `docs/workflow.md`, `docs/skills.md` |
+| E2 | Brief-complete fast path | done | `skills/context-framing/SKILL.md` "Brief-complete fast path": one consolidated message (reading of the brief → 2–3 sharpeners → batched SHOULD-HAVE gaps) when every MUST-HAVE arrives filled; seed-prompt intake step 3 routes to it |
+| E3 | Batched Step 9 + environment block | done | `skills/context-framing/SKILL.md`: Q4–Q6 asked as one environment block; Step 9 SHOULD-HAVE confirmations asked in a single batch; the one-at-a-time rule now applies only to the substantive questions (Q1–Q3, Q7, Q8) and the pitfall says why |
+| E4 | Follow-on interviews named at the Phase 0 gate | done | `skills/context-framing/SKILL.md` Step 11: queued stakeholder-overlay / environment-intake interviews named with time cost and a now-or-after-Phase-1 choice; deferral recorded under Capability gaps; mirrored in `docs/workflow.md` |
+| E5 | One message per round + paths-not-paste | done | Dispatch rule in `CLAUDE.md` (landed with Group C); `skills/action-plan-builder/SKILL.md` step 6 makes each round a single message carrying paths plus verbatim exclusions, with a pitfall naming the chain anti-pattern; `docs/lenses.md` aligned. The backlog's "observe one Phase 2 run first" is a runtime check to do on the first live engagement; the rule is the fix regardless, because sub-agents only run concurrently when dispatched in one message |
 
 ## Group F — Structured intake drill
 
