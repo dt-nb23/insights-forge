@@ -68,7 +68,7 @@ Practical implications for budget-conscious users:
 
 The detailed reference lives in [`/docs/`](docs/). Start with [docs/README.md](docs/README.md) for the table of contents.
 
-**Interactive guide:** [`html/index.html`](html/index.html) is the same material as a routed documentation app — phase step-through, gates, lenses, memory model — plus a Docs browser that renders every doc, skill, and lens file live from the repository. In VS Code, right-click it → *Show Preview* (the Live Preview extension this workspace recommends) to read it in an editor tab; see [docs/getting-started.md](docs/getting-started.md) for the other ways to open it.
+**Interactive guide:** [`html/index.html`](html/index.html) is the same material as a routed documentation app — phase step-through, gates, lenses, memory model — plus a Docs browser that renders every doc, skill, and lens file. Open it straight from disk, in any browser or VS Code's integrated browser: no server, no extension. The Docs browser reads `html/agent-guide-docs.js`, a generated snapshot of the repository files that the conformance hook regenerates on every edit (and switches to the live files whenever the repository happens to be served).
 
 | If you want to… | Read |
 |---|---|

@@ -101,7 +101,7 @@ This rule is **mechanically enforced**, not just stated: a PreToolUse hook (`too
 
 ## Workspace conformance (development changes only)
 
-When a session edits the workspace itself — anything under `skills/`, `.claude/agents/`, `memory/long-term/`, `docs/`, or `tools/` — run `python3 tools/conformance-check.py` before finishing and fix every failure (a PostToolUse hook runs it after each such edit, and the committed git pre-commit hook blocks a commit that fails it). Any change to a tracked backlog item's implementation state must update `plans/BACKLOG-STATUS.md` in the same commit, and commit messages must not claim completion the ledger does not show. This section does not apply to normal engagement work, which never edits those directories.
+When a session edits the workspace itself — anything under `skills/`, `.claude/agents/`, `memory/long-term/`, `docs/`, or `tools/` — run `python3 tools/conformance-check.py` before finishing and fix every failure (a PostToolUse hook runs it after each such edit, and the committed git pre-commit hook blocks a commit that fails it). Edits to any file the agent guide's Docs browser lists also change the generated snapshot `html/agent-guide-docs.js`: the same hook regenerates it, and check 6 blocks a commit where it is stale — if the hook did not run, regenerate with `python3 tools/agent-guide-bundle.py` and commit both. Any change to a tracked backlog item's implementation state must update `plans/BACKLOG-STATUS.md` in the same commit, and commit messages must not claim completion the ledger does not show. This section does not apply to normal engagement work, which never edits those directories.
 
 ## What this agent does NOT do
 

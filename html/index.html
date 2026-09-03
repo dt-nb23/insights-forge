@@ -176,6 +176,8 @@
   .view-btn { padding: 4px 12px; font-size: 12px; font-family: inherit; background: transparent; border: 1px solid var(--line); border-radius: 4px; color: var(--gray); cursor: pointer; }
   .view-btn:hover { color: var(--white); }
   .view-btn.active { background: rgba(73,194,179,.12); border-color: var(--teal); color: var(--teal); }
+  .src-chip { align-self: center; margin-right: 6px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--gray); cursor: help; }
+  .src-chip.live { color: var(--teal); border-color: rgba(73,194,179,.4); }
   .raw-wrap { display: flex; background: #080e1a; border: 1px solid var(--line); border-radius: 8px; overflow: auto; }
   .raw-nums { padding: 14px 8px 14px 14px; color: #2e3545; font-family: var(--mono); font-size: 12px; line-height: 1.65; text-align: right; user-select: none; flex-shrink: 0; }
   .raw-nums span { display: block; }
@@ -260,7 +262,7 @@
     <div class="nav-section">Reference</div>
     <a class="nav-item" href="#/docs" data-page="docs"><span class="nav-dot" style="background:#b0b5be"></span>Docs browser</a>
   </nav>
-  <div id="sidebar-foot">When this guide and a source file disagree, the source wins. The Docs browser renders the repository files live.</div>
+  <div id="sidebar-foot">When this guide and a source file disagree, the source wins. The Docs browser renders the repository files themselves.</div>
 </aside>
 
 <!-- ── Main ── -->
@@ -699,7 +701,7 @@
 <!-- ═══════════ DOCS BROWSER ═══════════ -->
 <section class="page" id="page-docs">
   <h1>Docs browser</h1>
-  <p class="lead" style="margin-bottom:16px">The repository's documentation, skills, memory files, and sub-agents — rendered live from disk, so this browser can never drift from the source. Pick a file on the left.</p>
+  <p class="lead" style="margin-bottom:16px">The repository's documentation, skills, memory files, and sub-agents, rendered from the files themselves — live when the repository is served, otherwise from a generated snapshot the conformance hook keeps in sync — so this browser cannot drift from the source. Pick a file on the left.</p>
   <div class="two-panel">
     <div class="panel-left" id="docs-nav">
       <div class="panel-group">Docs</div>
@@ -774,6 +776,10 @@
 </main>
 </div>
 
+<!-- Generated snapshot of the files the Docs browser lists (tools/agent-guide-bundle.py).
+     A file:// page may not fetch its siblings, but it may load a script from its own folder —
+     this is what lets the Docs browser work straight from disk, with no server. -->
+<script src="agent-guide-docs.js" charset="utf-8"></script>
 <script>
 /* ───────────────────────── Router ───────────────────────── */
 const PAGE_IDS = Array.from(document.querySelectorAll('.page')).map(p => p.id.replace('page-', ''));
@@ -863,21 +869,15 @@ function showDoc(key) {
   const def = DOC_INDEX[key];
   const panel = document.getElementById('doc-panel');
   const header = (extra) => `<div class="doc-head"><span class="path-chip">${escHtml(def.src.replace(/^\.\.\//, ''))}</span>${extra || ''}</div>`;
-  if (location.protocol === 'file:') {
-    panel.innerHTML = header() +
-      `<div class="notice"><p style="font-weight:500;color:var(--white)">Live rendering needs the repository served over HTTP.</p>` +
-      `<p>Browsers block reading sibling files from <code>file://</code>. Inside VS Code, any of these opens the guide in an editor tab with the Docs browser working:</p>` +
-      `<p><strong>Live Preview</strong> (recommended by this workspace): right-click <code>html/index.html</code> → <em>Show Preview</em>.</p>` +
-      `<p><strong>Live Server</strong>: click <em>Go Live</em> in the status bar, then Command Palette → <em>Simple Browser: Show</em> → <code>http://127.0.0.1:5500/html/index.html</code>.</p>` +
-      `<p><strong>No extension</strong>: Terminal → Run Task → <em>Serve agent guide</em>, then <em>Simple Browser: Show</em> → <code>http://127.0.0.1:8000/html/index.html</code>.</p>` +
-      `<p>From a terminal instead, at the repository root:</p><pre>python3 -m http.server 8000      # then http://localhost:8000/html/</pre>` +
-      `<p>Until then, open the file directly: <a href="${def.src}">${escHtml(def.src.replace(/^\.\.\//, ''))}</a></p></div>`;
-    return;
-  }
-  panel.innerHTML = header() + '<p style="color:var(--gray)">Loading…</p>';
-  const render = (text) => {
+  const snapshot = (window.AGENT_GUIDE_DOCS && window.AGENT_GUIDE_DOCS.files) || null;
+  const snapText = snapshot ? snapshot[def.src] : undefined;
+
+  const render = (text, source) => {
     if (currentDoc !== key) return;
-    const toggle = `<div class="view-toggle"><button class="view-btn${currentView === 'rendered' ? ' active' : ''}" onclick="setView('rendered')">Rendered</button><button class="view-btn${currentView === 'raw' ? ' active' : ''}" onclick="setView('raw')">Raw</button></div>`;
+    const srcChip = source === 'live'
+      ? `<span class="src-chip live" title="Fetched from disk through the web server serving this page">live</span>`
+      : `<span class="src-chip" title="Read from html/agent-guide-docs.js — the generated snapshot the conformance hook regenerates whenever a listed file changes">snapshot</span>`;
+    const toggle = `<div class="view-toggle">${srcChip}<button class="view-btn${currentView === 'rendered' ? ' active' : ''}" onclick="setView('rendered')">Rendered</button><button class="view-btn${currentView === 'raw' ? ' active' : ''}" onclick="setView('raw')">Raw</button></div>`;
     let body;
     if (currentView === 'raw') {
       const lines = text.replace(/\r\n?/g, '\n').split('\n');
@@ -888,10 +888,33 @@ function showDoc(key) {
     panel.innerHTML = header(toggle) + body;
     panel.scrollTop = 0;
   };
-  if (docCache[key] !== undefined) { render(docCache[key]); return; }
+  const useSnapshot = () => {
+    if (snapText === undefined) return false;
+    docCache[key] = { text: snapText, source: 'snapshot' };
+    render(snapText, 'snapshot');
+    return true;
+  };
+
+  if (docCache[key] !== undefined) { render(docCache[key].text, docCache[key].source); return; }
+  // Opened straight from disk: browsers block fetch() of sibling files, so read the snapshot.
+  if (location.protocol === 'file:' || typeof fetch !== 'function') {
+    if (!useSnapshot()) panel.innerHTML = header() + missingSnapshotNotice(def);
+    return;
+  }
+  // Served over HTTP: render the live file; fall back to the snapshot if the fetch fails.
+  panel.innerHTML = header() + '<p style="color:var(--gray)">Loading…</p>';
   fetch(def.src).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-    .then(text => { docCache[key] = text; render(text); })
-    .catch(err => { if (currentDoc === key) panel.innerHTML = header() + `<div class="notice"><p style="font-weight:500;color:var(--white)">Could not load file</p><p>${escHtml(String(err))} — is the server serving the repository root?</p></div>`; });
+    .then(text => { docCache[key] = { text, source: 'live' }; render(text, 'live'); })
+    .catch(err => {
+      if (currentDoc !== key) return;
+      if (!useSnapshot()) panel.innerHTML = header() + `<div class="notice"><p style="font-weight:500;color:var(--white)">Could not load file</p><p>${escHtml(String(err))} — and no snapshot is available. Regenerate it with <code>python3 tools/agent-guide-bundle.py</code>.</p></div>`;
+    });
+}
+function missingSnapshotNotice(def) {
+  return `<div class="notice"><p style="font-weight:500;color:var(--white)">The docs snapshot is missing.</p>` +
+    `<p>Opened from <code>file://</code>, this browser reads <code>html/agent-guide-docs.js</code> — a generated snapshot of the repository files, kept in sync by the conformance hook — and it was not found next to this page. Regenerate it from the repository root:</p>` +
+    `<pre>python3 tools/agent-guide-bundle.py</pre>` +
+    `<p>Or open the file directly: <a href="${def.src}">${escHtml(def.src.replace(/^\.\.\//, ''))}</a></p></div>`;
 }
 function setView(mode) { currentView = mode; if (currentDoc) showDoc(currentDoc); }
 
