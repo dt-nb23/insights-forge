@@ -12,9 +12,11 @@ Read this file at step 4 of the exec-onepager skill. The humanized copy is ready
 
 **Do not improvise CSS or invent new color values.** Every component has a defined pattern in `skills/exec-onepager/reference/layout-system.md`. Use those patterns exactly.
 
+**Do not add text outside a component's defined slots.** No legends, footnotes, "Note:" callouts, "Source:" inline annotations, or free-standing paragraphs added outside the component's defined slots within section bodies. The only permitted prose extensions per section are the slots the layout system names: `beat-line` (optional one-line setup sentence before the component), `concurrency` (after 03A/03B/03D phase cards or steps), `tie-line` (after 01D stats), `claim-support` (inside 01A bold statement), `guide-thesis`/`pos-line`/`g-statement` (per 02 variant), `verdict` (04B single verdict sentence), `reassure` (05C reassurance line), `tk-qualifier` (05D optional qualifier sentence). If content does not fit in a defined slot, choose a different component variant — do not add supplemental text. All citations and source references go exclusively in `.foot-src` in the FtrB footer.
+
 ## File setup
 
-**Output path:** Write the HTML to `<deliverable-name>.html` in the project root (e.g., `uhaul-dxi-exec-brief.html`). Use a kebab-case name that reflects the client and engagement.
+**Output path:** Write the HTML to `<ENGAGEMENT_PATH>/<slug>-onepager.html` — inside the engagement folder, never the repo root or `html/`. Use a kebab-case name that reflects the client and engagement (e.g., `acme-api-latency-onepager.html`).
 
 **Companion markdown:** Also write `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — a plain-text version of the content for the pptx-builder. The markdown companion carries only content (sections, bullets, numbers) — not CSS or HTML structure.
 
@@ -56,10 +58,10 @@ Line 2, immediately after `<!DOCTYPE html>`:
 
 ### 2. Copy the font-face block
 
-From `reference/layout-system.md` — all six DTFlow weights. Adjust the path prefix for the HTML file's directory depth:
-- Project root: `DTFlow/DTFlow-Light.otf`
-- One level deep: `../DTFlow/DTFlow-Light.otf`
-- Five levels deep: `../../../../../DTFlow/DTFlow-Light.otf`
+From `reference/layout-system.md` — all six DTFlow weights. The HTML lives in the engagement folder, which is five directories below the repo root (`memory/clients/<client>/engagements/<dated-slug>/`), so every local asset path uses the five-up prefix:
+- `../../../../../DTFlow/DTFlow-Light.otf`
+
+(The sanitized reference file sits three levels deep under `skills/`, which is why it uses `../../../`. Count the directories for any other location; the linter's `DESIGN-ASSET` check fails the build if a font, wave, or lockup path does not resolve from the file's own directory.)
 
 ### 3. Copy the token block
 
@@ -121,7 +123,7 @@ Both the wave background and the lockup resolve from `assets/` relative to the p
 | Wave background | `assets/wave-bg.png` |
 | Insights lockup (dark headers) | `assets/insights-lockup-rev.png` |
 
-Adjust for file depth: a file five levels deep uses `../../../../../assets/wave-bg.png`.
+From the engagement folder (five levels deep) that is `../../../../../assets/wave-bg.png` and `../../../../../assets/insights-lockup-rev.png`.
 
 **Do not generate or substitute these assets.** If `assets/wave-bg.png` is missing, flag it and stop rather than substituting another image.
 

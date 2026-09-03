@@ -18,11 +18,11 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| B1 | One generator-first pptx procedure | pending | |
-| B2 | Deck output path | pending | |
-| B3 | Skill promises match generator capability | pending | |
-| B4 | Brand-gate linter + gate-1 fix | pending | |
-| B5 | Canonical reference one-pager | pending | |
+| B1 | One generator-first pptx procedure | done | `skills/pptx-builder/SKILL.md` rewritten: renderer priority (generator → external skill → outline), numbered steps lead with the spec JSON and the generator run, deck-side Phase 3 gate as step 8 |
+| B2 | Deck output path | done | `tools/pptx-generator.py` defaults the output alongside the spec (the dead `memory/project-space` path is gone); the documented command in `skills/pptx-builder/SKILL.md` and `tools/README.md` passes the output path explicitly; `CLAUDE.md` states every Phase 3 artifact lives in `<ENGAGEMENT_PATH>/`; `.gitignore` no longer references project-space |
+| B3 | Skill promises match generator capability | done | Chose the "build it" side: wave background + overlay (with white text and a re-added footer so body layouts stay legible) and branded chart slides implemented in `tools/pptx-generator.py`; the skill's wave section now describes only the two shipped assets and no longer points at a nonexistent ".ai rendering" procedure; chart-series labels reconciled to §5 in `memory/long-term/brand/brand-spec.md` |
+| B4 | Brand-gate linter + gate-1 fix | done | `tools/onepager-lint.py` (gates 1/3/4/5 + design checks; gate 1 via headless Chrome, plus a `GATE1-BUDGET` content-budget check against the reference one-pager so the fit signal survives without Chrome); wired into `skills/exec-onepager/steps/3-brand-gate.md` |
+| B5 | Canonical reference one-pager | done | `skills/exec-onepager/reference/reference-onepager.html` (sanitized: fictional client, people, and vendor; passes the linter with 0 FAIL); retargeted in `skills/exec-onepager/reference/layout-system.md`, which was also made self-consistent with the gate (9px floor, no dash day ranges) |
 
 ## Group C — Guardrail enforcement
 
@@ -31,7 +31,7 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 | C1 | Out-of-scope rule reaches the whole pipeline | pending | Gate-side scans already land with A1 (Phase 2 and Phase 3 gate blocks); lens blocks and dispatch rule pending |
 | C2 | Mechanical client isolation | pending | |
 | C3 | Fetch allowlist + everything-else gate | pending | |
-| C4 | Opt-in font install | pending | |
+| C4 | Opt-in font install | done | `tools/pptx-generator.py`: default run performs a read-only `check_dtflow_fonts()` and prints one platform-aware notice; installation only via `--install-fonts` (macOS/Linux; Windows documented as manual) |
 | C5 | Conformance check, wired | pending | |
 
 ## Group D — Memory and retrieval
@@ -79,18 +79,18 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| H1 | Column-count fallback discards content | pending | |
-| H2 | Under-supplied card layout renders empty card | pending | |
-| H3 | OUTPUT_DIR dead path | pending | |
-| H4 | Incomplete deck exits 0 | pending | |
-| H5 | Unconditional font install | pending | |
-| H6 | No requirements.txt | pending | |
-| H7 | Python version / platform limits undocumented | pending | |
-| H8 | tools/README placeholder text | pending | |
+| H1 | Column-count fallback discards content | done | `tools/pptx-generator.py`: slot layouts are sized by content — the smallest layout that holds every item (five columns land on `6 text columns`, five cards on the six-card layout); content is dropped only above six, with a loud warning; any `N text columns` / `N icon cards+title` spelling routes to the handler |
+| H2 | Under-supplied card layout renders empty card | done | `tools/pptx-generator.py`: unused slots on the smallest fitting layout are removed (header, card, subcopy, icon, icon shape), so no empty box renders; verified on the 3/4/6-card and 2/3/4/6-column layouts |
+| H3 | OUTPUT_DIR dead path | done | `tools/pptx-generator.py` (same fix as B2) |
+| H4 | Incomplete deck exits 0 | done | `tools/pptx-generator.py` `generate()`: per-slide failure count, partial-output warning, exit 1; a chart slide missing `categories`/`series` is now a counted failure rather than a silent empty slide |
+| H5 | Unconditional font install | done | `tools/pptx-generator.py` (same fix as C4) |
+| H6 | No requirements.txt | done | `tools/requirements.txt` |
+| H7 | Python version / platform limits undocumented | done | Floor lowered to Python 3.9 (`Optional[Path]` instead of `X \| None`) and stated in `tools/pptx-generator.py` and `tools/requirements.txt`; Windows font install documented as manual rather than half-implemented |
+| H8 | tools/README placeholder text | done | `tools/README.md` rewritten against the tools that exist |
 
 ## Extras — outside the backlog, done because they block "A+"
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
 | X1 | Model aliases instead of pinned model IDs | pending | |
-| X2 | Docs drift found during the review (C.S.I.R. expansion, one-pager "default structure") | pending | |
+| X2 | Docs drift found during the review (C.S.I.R. expansion, one-pager "default structure") | partial | One-pager structure corrected in `docs/deliverables.md` (five-beat arc, no fixed template); the C.S.I.R. expansion in `docs/skills.md` lands with Group F |

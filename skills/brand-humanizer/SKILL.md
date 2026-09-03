@@ -55,7 +55,7 @@ capability descriptions, plan steps and concurrency notes, stakes framing,
 takeaway line, and decision asks.
 
 **In the pptx-builder workflow, this skill runs as a mandatory pre-pass
-(step 4a) on slide copy adapted from the one-pager,** before generating or
+(step 3) on slide copy adapted from the one-pager,** before generating or
 specifying any slide content. Slide copy is shorter and more constrained than
 one-pager copy — apply the same rules but pay extra attention to title-case
 headings (a common regression when compressing sentences into slide titles)

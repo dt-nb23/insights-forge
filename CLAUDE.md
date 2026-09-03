@@ -36,6 +36,8 @@ Read each phase's skill file immediately before producing its artifact. Do not p
 | 2 — Solution | `action-plan.md` | `skills/action-plan-builder/SKILL.md` |
 | 3 — Deliver | One-pager → deck | `skills/exec-onepager/SKILL.md` → `skills/pptx-builder/SKILL.md` |
 
+All phase artifacts — including the Phase 3 one-pager HTML, the deck spec JSON, and the generated deck — are written inside `<ENGAGEMENT_PATH>/`, never at the repo root or under `html/`.
+
 On-demand skills (read only when the task is active):
 
 | Task | Skill |

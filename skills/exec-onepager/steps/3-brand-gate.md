@@ -16,7 +16,19 @@ Read this file at step 5 of the exec-onepager skill. The HTML is built. This is 
 
 ## Gate 1 — One-page constraint
 
-Open the HTML in a browser. Switch to print preview. Verify the page fits on one Letter-size sheet at `zoom:0.65` (already set in the print media query). If it overflows, cut — do not compress type or reduce padding. If it will not cut to one page without losing required content, flag to the user: the underlying plan was not sharp enough for a one-pager.
+Run the lint tool from the repo root:
+
+```bash
+python3 tools/onepager-lint.py <ENGAGEMENT_PATH>/<slug>-onepager.html --action-plan <ENGAGEMENT_PATH>/action-plan.md --proper-noun "<Client>"
+```
+
+- Fix every **FAIL** and re-run until the tool exits 0.
+- Review every **WARN**: fix it, or record a one-line justification for leaving it (report those justifications at the Phase 3 gate, part 3).
+- **Exit 3** means gate 1 could not be measured (no Chrome on this machine). The tool still reports `GATE1-BUDGET`, a character-count comparison against the reference one-pager: a budget WARN means the page will almost certainly overflow, so cut first. Then do the manual check: open the HTML in a browser, switch to print preview, and verify the page fits on one Letter-size sheet at `zoom:0.65` (already set in the print media query).
+
+If the page overflows, cut — do not compress type or reduce padding. If it will not cut to one page without losing required content, flag to the user: the underlying plan was not sharp enough for a one-pager.
+
+The linter also covers the mechanical portions of gates 3–5 below. The checklists remain for the judgment calls the tool cannot make — plan fidelity, active voice, and confirming each WARN is genuinely justified.
 
 ---
 

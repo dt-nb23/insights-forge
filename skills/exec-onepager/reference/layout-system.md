@@ -4,8 +4,8 @@ description: |
   Design system catalog for Insights Forge HTML one-pagers. Defines the
   design tokens, component catalog (headers, beats, footer), recipe selection
   guide, and HTML/CSS conventions. Read this before selecting a recipe or
-  writing any HTML. The canonical implementation is
-  memory/clients/u-haul/engagements/2026-06-29-digital-experience-parity/uhaul-digital-experience-intelligence-v3.html.
+  writing any HTML. The canonical implementation lives alongside this file at
+  skills/exec-onepager/reference/reference-onepager.html.
 ---
 
 # Insights Forge one-pager layout system
@@ -216,7 +216,7 @@ A named stakeholder's words carry the problem. Use when a real quote is availabl
 ```html
 <figure class="pquote">
   <blockquote class="pq-quote">&ldquo;[Quote text.]&rdquo;</blockquote>
-  <figcaption class="pq-attr">— [Attribution: name, role, or context]</figcaption>
+  <figcaption class="pq-attr">[Attribution: name, role, or context]</figcaption>
 </figure>
 <div class="pq-context" role="list" aria-label="Context">
   <span class="pq-pill" role="listitem">[Context fact 1]</span>
@@ -326,7 +326,7 @@ Colored header (eyebrow + phase name), panel body (days + description). No owner
       <div class="p-name">[Phase name]</div>
     </div>
     <div class="phase-body">
-      <div class="p-days">Days [N–N]</div>
+      <div class="p-days">Days [N] to [N]</div>
       <div class="p-desc">[What gets done]</div>
     </div>
   </div>
@@ -335,7 +335,7 @@ Colored header (eyebrow + phase name), panel body (days + description). No owner
 <p class="concurrency">[Concurrency or sequencing note. Key window in <b>bold</b>.]</p>
 ```
 
-Key CSS: `.phases { display:flex; gap:9px; }` `.phase { flex:1; border:1px solid #E4E8F0; border-radius:7px; overflow:hidden; }` `.phase-head { padding:7px 11px; }` `.p-eyebrow { color:rgba(255,255,255,0.82); font-size:8.5px; font-weight:700; }` `.p-name { font-size:12.5px; font-weight:600; color:#fff; }` `.phase-body { padding:9px 11px; background:var(--panel); }` `.p-days { font-size:10.5px; font-weight:700; color:var(--navy); }` `.p-desc { font-size:10px; color:#444; }`
+Key CSS: `.phases { display:flex; gap:9px; }` `.phase { flex:1; border:1px solid #E4E8F0; border-radius:7px; overflow:hidden; }` `.phase-head { padding:7px 11px; }` `.p-eyebrow { color:rgba(255,255,255,0.82); font-size:9px; font-weight:700; }` `.p-name { font-size:12.5px; font-weight:600; color:#fff; }` `.phase-body { padding:9px 11px; background:var(--panel); }` `.p-days { font-size:10.5px; font-weight:700; color:var(--navy); }` `.p-desc { font-size:10px; color:#444; }`
 
 ---
 
@@ -365,7 +365,7 @@ Sequential step circles in color-coded order with a name, timing qualifier, and 
   <div class="step" role="listitem">
     <div class="step-node" style="background:var(--guide);" aria-hidden="true">1</div>
     <div>
-      <div class="step-name">[Step name] <span class="days">· Days [N–N]</span></div>
+      <div class="step-name">[Step name] <span class="days">· Days [N] to [N]</span></div>
       <div class="step-desc">[What this step does]</div>
     </div>
   </div>
@@ -486,7 +486,7 @@ Named decisions visible as cards. Use whenever the one-pager must surface the ex
 </section>
 ```
 
-Key CSS: `.decisions { display:flex; gap:11px; margin-top:15px; }` `.decision { flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:8px; padding:10px 13px; }` `.d-num { font-size:8.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px; }` `.decision.d1 .d-num { color:var(--sky); }` `.decision.d2 .d-num { color:var(--lilac); }` `.d-name { font-size:11.5px; font-weight:600; color:#fff; }` `.d-desc { font-size:10px; font-weight:300; color:rgba(255,255,255,0.72); }`
+Key CSS: `.decisions { display:flex; gap:11px; margin-top:15px; }` `.decision { flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:8px; padding:10px 13px; }` `.d-num { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px; }` `.decision.d1 .d-num { color:var(--sky); }` `.decision.d2 .d-num { color:var(--lilac); }` `.d-name { font-size:11.5px; font-weight:600; color:#fff; }` `.d-desc { font-size:10px; font-weight:300; color:rgba(255,255,255,0.72); }`
 
 ---
 
@@ -528,7 +528,7 @@ Key CSS: `.tk-qualifier { font-size:10.5px; color:rgba(255,255,255,0.6); margin-
 </footer>
 ```
 
-Key CSS: `.foot { background:var(--footer); padding:15px 34px; text-align:center; }` `.foot-bar { width:64px; height:3px; border-radius:2px; background:var(--grad); margin:0 auto 11px; }` `.foot-copy { font-size:10px; color:rgba(255,255,255,0.72); }` `.foot-src { font-size:8.5px; color:rgba(255,255,255,0.42); margin-top:6px; line-height:1.45; max-width:760px; margin:0 auto; }`
+Key CSS: `.foot { background:var(--footer); padding:15px 34px; text-align:center; }` `.foot-bar { width:64px; height:3px; border-radius:2px; background:var(--grad); margin:0 auto 11px; }` `.foot-copy { font-size:10px; color:rgba(255,255,255,0.72); }` `.foot-src { font-size:9px; color:rgba(255,255,255,0.42); margin-top:6px; line-height:1.45; max-width:760px; margin:0 auto; }`
 
 ---
 
@@ -596,7 +596,7 @@ The recipe is a storytelling decision, not a template. Start from the plan and t
 
 ### Reference implementation
 
-The canonical approved one-pager is `memory/clients/u-haul/engagements/2026-06-29-digital-experience-parity/uhaul-digital-experience-intelligence-v3.html`. Its recipe (`HdrB · TL;DR · 01B · 02A · 03A · 04A · 05A`) is a reference, not a default — it was right for that engagement's story. A different engagement needs a different recipe.
+The canonical approved one-pager lives alongside this file at `skills/exec-onepager/reference/reference-onepager.html`. Its recipe is a reference, not a default — it was right for that engagement's story. A different engagement needs a different recipe.
 
 ### Semantic color assignments (do not reassign)
 
@@ -618,5 +618,6 @@ Apply during build, not as a post-hoc pass.
 - `role="table"`, `role="row"`, `role="columnheader"`, `role="cell"` on ptable (01B)
 - `role="note"` with `aria-label` on side-by-side comparison panels (h2h, split stakes)
 - `aria-label` on `<section>` or use `aria-labelledby` pointing to the beat-name `id`
-- Body text minimum 10px; eyebrow labels minimum 9px; stat labels minimum 9.5px
+- Body text minimum 10px; eyebrow labels, footer sources, and decision numbers minimum 9px; stat labels minimum 9.5px. Nothing in this catalog goes below 9px — `tools/onepager-lint.py` fails any smaller size
+- No em dashes (`—`) or en dashes (`–`) in visible copy, including day ranges: write "Days 1 to 30", not "Days 1–30" (the brand gate and the linter both reject dashes; the footer citation format is the one sanctioned exception)
 - Never white text on `#49C2B3` (brand teal, fails WCAG AA); use `rgba(255,255,255,0.8)` on dark backgrounds instead

@@ -19,7 +19,10 @@ memory/clients/<client-name>/
         ├── action-plan.md
         ├── decisions-log.md
         ├── lessons-learned.md   (written by investigation-reset at archive)
-        └── one-pager-YYYY-MM-DD.md  (if produced in Phase 3)
+        ├── one-pager-YYYY-MM-DD.md   (Phase 3 — companion markdown, if produced)
+        ├── <slug>-onepager.html      (Phase 3 — the one-pager HTML)
+        ├── deck-spec-YYYY-MM-DD.json (Phase 3 — deck spec fed to tools/pptx-generator.py)
+        └── deck-YYYY-MM-DD.pptx      (Phase 3 — the generated deck)
 ```
 
 The engagement folder is created by `context-framing` at Phase 0. The slug is a 2-3 word description of the problem. All phase skills read and write directly to this folder — no files are ever moved.

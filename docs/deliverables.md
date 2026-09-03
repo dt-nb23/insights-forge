@@ -34,7 +34,7 @@ Produced by [`skills/exec-onepager/SKILL.md`](../skills/exec-onepager/SKILL.md).
 - VP of Reliability — error-budget framing, SLO impact, on-call burden, post-incident learnings.
 - VP of Product — feature impact, customer-experience surface, release velocity, competitive considerations.
 
-Default structure: TL;DR → top hypothesis → recommended action → decision ask → risks. The skill defines the exact section order and word-budget guidance — open the `SKILL.md` if you want to see the template.
+There is no fixed template. The one-pager follows a five-beat arc — TL;DR, then 01 Problem, 02 Guide, 03 Plan, 04 Stakes, 05 The ask — and the skill selects a component for each beat from the catalog in `skills/exec-onepager/reference/layout-system.md` based on what the story needs (a symptom table or a bold claim for the problem, phase cards or numbered steps for the plan, and so on). The sanitized reference implementation at `skills/exec-onepager/reference/reference-onepager.html` shows one complete recipe and passes the brand gate. Open the `SKILL.md` to see the five steps.
 
 The exec-onepager skill runs in five steps: recipe selection, content draft, brand-humanizer pre-pass, HTML build, and brand gate. The brand-humanizer pre-pass (Step 3) runs on all drafted copy before any HTML is assembled, catching AI writing patterns and DT voice violations while the copy is still in plain text and easy to fix.
 
@@ -42,12 +42,13 @@ The exec-onepager skill runs in five steps: recipe selection, content draft, bra
 
 Produced by [`skills/pptx-builder/SKILL.md`](../skills/pptx-builder/SKILL.md), **only after** the one-pager is approved. The order matters — it's much easier to expand a tight one-pager into a deck than to compress a sprawling deck into a one-pager.
 
-The pptx skill is an adapter: it delegates to the standard pptx skill when available, applies the brand spec on top, and uses layouts from the official template. Practical implications you'll see in the output:
+The in-repo `tools/pptx-generator.py` is the primary renderer — the skill writes a JSON deck spec into the engagement folder and runs the generator against the official template (the external pptx skill is only a fallback, and a markdown outline the last resort). Practical implications you'll see in the output:
 
 - **Slide format.** 16:9 widescreen, 13.33" × 7.5". No square slides, no 4:3.
 - **Typography.** DT Flow Medium / DT Flow Light. Arial is the rendering-side fallback only — if a viewer doesn't have DT Flow installed, the slide falls back gracefully. The agent never substitutes a different font on its own.
 - **Layouts.** 64 named layouts from the template — content card, chart, table, swimlane, gantt, timeline, funnel, hashtag-stat, and so on. The agent picks from this set, not freeform.
 - **Logo lockup.** Horizontal lockup preferred for slide title bars and one-pager headers where horizontal space allows.
+- **Wave backgrounds and branded charts.** A closing or decision-required slide can carry one of the two brand wave backgrounds with a dark overlay (`wave_background` / `wave_overlay_opacity` spec fields — the generator turns the text white and keeps the footer), and chart slides use the six brand series colors automatically — never red or green.
 - **Product names.** Capitalized and trademarked as the spec requires. The agent never coins variants like "Dynatraces" or "the Dynatrace platform" when the spec says "Dynatrace®".
 
 ## Voice and tone
@@ -61,7 +62,7 @@ Phase 3 inherits that reviewed plan and packages it faithfully — it does not r
 
 ## Spot-checking before you send
 
-Before you send a one-pager or deck, you can ask the agent for an explicit verification pass:
+Before you send a one-pager, run the mechanical check first — `python3 tools/onepager-lint.py <file.html>` lints the **brand gates themselves**: gate 1 (one-page fit, via a headless Chrome render and PDF page count, with a content-budget comparison against the reference one-pager when Chrome is unavailable), gate 3 (em dashes, banned phrasings, trademark first-mentions, sentence-case headings), gate 4 (aria/role attributes, font-size minimums), gate 5 (sources-block citation format, footer boilerplate), plus the design-system checks (declared tokens, palette, font fallback). FAILs are mechanical certainties to fix; WARNs are heuristics to confirm by eye; exit 3 means the page-fit check couldn't run and you should do the manual print preview. The agent runs this itself at the Phase 3 brand gate; running it yourself before sending is a belt-and-suspenders habit. Then you can ask the agent for an explicit verification pass:
 
 > *"Verify this one-pager against the brand spec — colors, typography, layout, terminology."*
 

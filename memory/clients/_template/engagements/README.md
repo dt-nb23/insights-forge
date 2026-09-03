@@ -23,8 +23,13 @@ YYYY-MM-DD-<slug>/
 ├── action-plan.md         (Phase 2 — action-plan-builder)
 ├── decisions-log.md       (all phases — append-only gate record)
 ├── lessons-learned.md     (investigation-reset — written at archive)
-└── one-pager-YYYY-MM-DD.md (Phase 3 — exec-onepager, if produced)
+├── one-pager-YYYY-MM-DD.md   (Phase 3 — exec-onepager companion markdown)
+├── <slug>-onepager.html      (Phase 3 — exec-onepager HTML)
+├── deck-spec-YYYY-MM-DD.json (Phase 3 — pptx-builder spec)
+└── deck-YYYY-MM-DD.pptx      (Phase 3 — pptx-builder output)
 ```
+
+Every deliverable lives here — nothing from an engagement is ever written to the repo root or `html/`.
 
 ## Status
 

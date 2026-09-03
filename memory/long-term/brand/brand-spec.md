@@ -64,11 +64,13 @@ These HEX values are the **theme colors** programmed into the official `.pptx` t
 | Role | Name | HEX | Typical use |
 |---|---|---|---|
 | Accent 1 | Teal | `#49C2B3` | Confirmed / success state; first chart series |
-| Accent 2 | Light blue | `#3BACF0` | Informational accent; second chart series |
-| Accent 3 | Royal blue | `#1966FF` | Primary brand accent; CTAs; third chart series |
+| Accent 2 | Light blue | `#3BACF0` | Informational accent; sixth chart series |
+| Accent 3 | Royal blue | `#1966FF` | Primary brand accent; CTAs; second chart series |
 | Accent 4 | Purple | `#5E28E5` | Heading underline gradient anchor; fourth chart series |
-| Accent 5 | Violet | `#8D1CDC` | Emphasis; fifth chart series |
-| Accent 6 | Magenta | `#C93FDB` | Warning / attention; sixth chart series; gradient terminus |
+| Accent 5 | Violet | `#8D1CDC` | Emphasis; third chart series |
+| Accent 6 | Magenta | `#C93FDB` | Warning / attention; fifth chart series; gradient terminus |
+
+Chart-series order is defined in section 5, which is authoritative for chart palettes; the labels above mirror it.
 
 **Gradient bar** (used as section divider and table header): linear gradient running `Accent 2 → Accent 3 → Accent 4 → Accent 6` left to right.
 

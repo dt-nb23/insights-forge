@@ -1,0 +1,4 @@
+# Python 3.9+ (pptx-generator.py, onepager-lint.py, conformance-check.py are
+# standard-library apart from the one dependency below).
+# Install:  pip install -r tools/requirements.txt
+python-pptx>=0.6.21

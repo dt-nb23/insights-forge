@@ -72,7 +72,7 @@ Read `skills/exec-onepager/steps/2-html-renderer.md`.
 
 Build the HTML using the humanized copy and the selected recipe. Follow the component patterns from `reference/layout-system.md` exactly — do not improvise CSS or invent color values.
 
-Write the file to `<deliverable-name>.html` in the project root. Write the companion markdown to `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`.
+Write the HTML to `<ENGAGEMENT_PATH>/<slug>-onepager.html` — inside the engagement folder, never the repo root or `html/`. Write the companion markdown to `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md`.
 
 ---
 
@@ -86,7 +86,7 @@ Run the gate checklist: one-page constraint, plan fidelity, brand text rules, ac
 
 ## Output
 
-- `<deliverable-name>.html` in the project root
+- `<ENGAGEMENT_PATH>/<slug>-onepager.html` — the one-pager HTML lives inside the engagement folder, never the repo root or `html/`
 - `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` companion (required before the pptx step)
 
 After the brand gate passes, **present the Phase 3 gate for the one-pager** (the five-part gate summary block defined in `steps/3-brand-gate.md`) and wait for explicit approval. On approval, record the decision in `<ENGAGEMENT_PATH>/decisions-log.md` and set today's `last-touched:` in `<ENGAGEMENT_PATH>/current-context.md` (`phase:` is already `3`). Do not invoke the pptx-builder automatically — the deck is a separate approval.

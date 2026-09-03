@@ -15,7 +15,7 @@ Read this file at step 2 of the exec-onepager skill. The recipe has already been
 1. `<ENGAGEMENT_PATH>/action-plan.md` — recommendations, rank order, owners, timeframes, tradeoffs
 2. `<ENGAGEMENT_PATH>/signals-map.md` — business impact numbers, SLI/SLO grounding
 3. `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed/open/ruled-out status per hypothesis
-4. `memory/long-term/stakeholder-profiles.md` — depth and tone calibration for the named reader
+4. `memory/long-term/stakeholder-profiles.md` (hub) + the specific profile file for the named reader — depth and tone calibration
 5. `memory/long-term/terminology.md` — first-use definitions for any acronym
 
 ## Plan-fidelity rules (enforce throughout)
@@ -27,6 +27,7 @@ These are hard constraints, not style preferences. The Phase 2 persona panel app
 - **Business-impact-first opening.** The first sentence of the problem section states what changed in the business, not what was observed in telemetry. "Checkout conversion dropped 8%" not "p95 latency on cart-service rose 200ms."
 - **Open hypotheses keep their uncertainty qualifier.** Any hypothesis still marked "open" in `hypotheses.md` must read as open in the one-pager — "if confirmed," "pending H-01 validation," or "gated on confirmation." The no-hedging brand rule strips weasel words; it does not license upgrading an open finding to a confident claim.
 - **No new findings.** If drafting surfaces something not in the approved plan, flag it for the user rather than folding it in.
+- **No text outside component slots.** Draft only copy that maps to a named slot defined in `reference/layout-system.md` (e.g., `stat-lbl`, `beat-line`, `cmap-head`, `p-desc`, `concurrency`, `tie-line`, `claim-support`, `guide-thesis`, `pos-line`, `g-statement`, `verdict`, `reassure`, `tk-qualifier`). Do not draft legends, footnotes, "Note:" callouts, "Source:" annotations, or explanatory sentences that would appear in a section body outside a named slot. Sources belong exclusively in the footer (`foot-src`). If content does not fit in a defined slot, choose a different component variant — do not add supplemental prose.
 
 ## Draft each section
 
@@ -38,7 +39,7 @@ Work through the recipe components in order. For each, write out the copy in str
 
 Draft two things:
 
-**Summary sentence** — one sentence that answers: what already exists, what the plan does with it, and when results arrive. The key date or outcome goes in bold. Example: "uhaul.com already captures every user interaction in Dynatrace®. This plan refines that data into answers the team reaches on its own: **first results in 30 days, the full picture in 90.**"
+**Summary sentence** — one sentence that answers: what already exists, what the plan does with it, and when results arrive. The key date or outcome goes in bold. Example: "[client] already captures every user interaction in Dynatrace®. This plan refines that data into answers the team reaches on its own: **first results in 30 days, the full picture in 90.**"
 
 **4 stats** — pull from `signals-map.md`. Each stat needs a number and a label (≤ 6 words). The four stats should together answer: scope, timeline, confidence, and the ask. Use the section accent token for the color (match the stat to the section it relates to).
 
@@ -72,7 +73,7 @@ State the recommended actions with owners and timeframes. Write one of:
 - **For 03A/03B:** Phase names, day ranges, and descriptions. 03B adds: owner, gate, output per phase.
 - **For 03D:** Numbered steps with names, day ranges, and one-line descriptions.
 
-Always include the 30/60/90 framing from `memory/long-term/phased-plan-timeline-framing.md` (if loaded). Always include a concurrency or sequencing note.
+Always include the 30/60/90 framing from `memory/long-term/phased-plan-timeline-framing.md`. Always include a concurrency or sequencing note.
 
 Every action from `action-plan.md` must appear here with its paired tradeoff (plan-fidelity rule). If the tradeoff text is too long for the phase card, state it in the concurrency note or in the section's beat-line.
 

@@ -25,20 +25,17 @@ Use this skill when:
 
 Then read these files:
 
-- `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If an HTML one-pager also exists in the project root, read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
-- `memory/long-term/stakeholder-profiles.md` — the profile of the intended reader, to inform pacing, depth, and visual emphasis.
+- `<ENGAGEMENT_PATH>/one-pager-YYYY-MM-DD.md` — the approved one-pager content (markdown version). If the HTML one-pager also exists (at `<ENGAGEMENT_PATH>/<slug>-onepager.html`), read it alongside the markdown to extract the visual design decisions already made (wave choices, color emphasis, section structure) — the deck must be visually coherent with the one-pager, not a fresh design.
+- `memory/long-term/stakeholder-profiles.md` — hub index (loaded at session init). Read the specific profile file for the intended reader (e.g., `memory/long-term/profiles/executive-sponsor.md`) to calibrate pacing, depth, and visual emphasis.
 - `<ENGAGEMENT_PATH>/signals-map.md` and `<ENGAGEMENT_PATH>/action-plan.md` — for any supporting numbers, charts, or appendix material the one-pager pointed to.
 - `memory/long-term/brand/brand-spec.md` — **mandatory.** The Dynatrace brand spec. Governs cover-slide aesthetic, section-divider pattern, content-card / chart / table layouts, footer text, chart series colors, and product-name capitalization.
 - `memory/long-term/brand/reference/source-pdf-notes.md` — page-by-page index of the source brand PDF, useful when picking a layout pattern.
 - `memory/long-term/brand/reference/pptx-layout-index.md` — complete catalog of the 64 named layouts in the `.pptx` template, grouped by purpose. Consult before picking a non-default layout.
-- `DT Insights Lockup RGB/` — local SVG lockup files for all Insights variants (horizontal and vertical, in Black, Gray, REV, and White). Use these before checking Brandfolder — they are the same source files. See lockup selection rules below.
 - `assets/` — pre-rendered wave PNGs already used in the HTML one-pager. Reuse them in the deck for visual consistency rather than re-rendering from scratch.
 
-## Important: this skill does not replace the standard pptx skill
+## Renderer priority
 
-If the runtime environment provides a standard pptx skill at `/mnt/skills/public/pptx/SKILL.md`, this skill's job is to **adapt the one-pager into a deck structure and then invoke that skill** to render the actual `.pptx` file. This skill is an **adapter**, not a renderer.
-
-If the standard pptx skill is not available in the current environment, this skill falls back to writing a structured slide-by-slide markdown outline that the team can paste into their preferred deck tool. Always verify availability before assuming the renderer exists.
+The **in-repo generator is the primary renderer.** Use `tools/pptx-generator.py` unless it is not runnable (python-pptx not installed, no Python). The external skill at `/mnt/skills/public/pptx/SKILL.md` is a secondary option — check for it only if the generator is unavailable. If neither is usable, fall back to a structured slide-by-slide markdown outline at `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`.
 
 ## Deck structure
 
@@ -55,78 +52,70 @@ A six-section deck adapted from the one-pager. Adjust slide counts to match the 
 | 4 | **Recommended actions** — 3 columns (action / owner / timeframe) | `3 text columns` | |
 | 4 | **Recommended actions** — 4 columns (action / owner / timeframe / cost) | `4 text columns` | Use when cost / risk is itemized per action |
 | 5 | **Risks and decision asks** — the questions leadership must answer; the decisions being requested | `Title+content+eyebrow_left` | Eyebrow = "Decision required"; magenta accent on the asks |
-| 6 | **Appendix** — issue tree / signals map / instrumentation gap list | `Title+content_left` | One topic per appendix slide |
-| 6 | **Appendix** — ICE table | `Title+content_left` with inline gradient-header table | |
+| 6 | **Appendix** — issue tree / signals map / ICE table / instrumentation gap list | `Title+content_left` | One topic per appendix slide |
 | — | **Closing** | `Thank you slide` | Optional |
 
 Alternative layouts (`Agenda`, `Quote`, `Customer story`, `Hero image+...`, image-led variants, `Blank_graphic`/`Blank_black`) are catalogued in `memory/long-term/brand/reference/pptx-layout-index.md`. Substitute when content warrants — never improvise on the slide master.
 
 Every body slide carries the footer from brand-spec §8: `© 2026 Dynatrace, LLC.   Confidential` at lower-left in Light 2 gray (`#6F747F`); Dynatrace cube mark + ` | ` + page number at lower-right. Insights Forge deliverables are Confidential by default — do not relabel without explicit user instruction.
 
-## Lockup selection by slide type
-
-The Insights lockup SVG files are in `DT Insights Lockup RGB/`. Always pick the variant that matches the slide background — never substitute a generated or recolored version.
-
-| Slide background | Lockup variant | File |
-|---|---|---|
-| Dark (cover, section divider with photo, any navy/black slide) | **REV** — full-color reversed for dark surfaces | `BAE9730_Insights-Lockup-Horizontal-RGB_REV.svg` |
-| White or light gray (all body/content slides) | **Black** — single-color black for print-safe legibility | `BAE9730_Insights-Lockup-Horizontal-RGB_Black.svg` |
-| Grayscale print output | **Gray** | `BAE9730_Insights-Lockup-Horizontal-RGB_Gray.svg` |
-| White reversed (rare — white lockup on a non-navy dark bg) | **White** | `BAE9730_Insights-Lockup-Horizontal-RGB_White.svg` |
-
-Use the horizontal lockup for slide title bars and one-pager headers where horizontal space is available. Use the vertical lockup for cover slides and tall layouts only. The Dynatrace cube mark (standalone glyph) goes in the lower-right footer of every body slide — it is embedded in the `.pptx` master and does not need to be separately placed.
-
 ## Wave backgrounds for dark slides
 
-The brand spec describes the cover slide as "deep navy → black with a particle / bokeh visual (blue and magenta particles flowing diagonally)." This visual is sourced from the `Data-Visual-waves/` design kit. The same selection rules that govern the HTML one-pager apply here — **readability is the deciding factor**.
+The brand spec describes the cover slide as "deep navy → black with a particle / bokeh visual (blue and magenta particles flowing diagonally)." The same selection rule that governs the HTML one-pager applies here — **readability is the deciding factor**.
 
-**Which slides get a wave background:** only dark slides (cover, closing, and any "decision required" accent slide). Section dividers and all body/content slides use white backgrounds per the template; do not add wave images to them.
+**Which slides get a wave background:** only dark accent slides — the closing slide and at most one "decision required" accent slide. The cover layouts already carry the brand visual in the master, so they need no wave. Section dividers and all other body/content slides use white backgrounds per the template; do not add wave images to them.
 
-**Wave series selection for dark slides:**
+**The two waves the workflow can use** are the pre-rendered PNGs in `assets/`, the same files the HTML one-pager uses, so the deck stays visually coherent with it:
 
-| Series | Best for | Avoid when |
+| Spec key | File | Use for |
 |---|---|---|
-| `datalargebeam` | Cover slide, closing slide — smooth continuous beams do not compete with large headline text | Never avoid on dark slides; safe at all text sizes |
-| `datatrail` | Decision-required accent slides, secondary dark strips — single thin arc is minimal and decorative | Never avoid; lowest visual noise of any series |
-| `dataflow` | Cover slide only, where the only text is the large title (≥40px) and the subtitle | **Do not use on any slide with body text or label text ≤18px** — particle dots fragment letterforms |
-| `datablocks` | Decorative closing slides with minimal text | Dense text slides |
-| `dataparticles` | **Verify before use** — some files in this series were saved without PDF compatibility and render blank. Test with `qlmanage` before including |
+| `wave-bg` | `assets/wave-bg.png` | Closing slide, or any dark slide where only a large title sits over the wave (smooth beams do not compete with headline text) |
+| `wave-ask` | `assets/wave-ask.png` | The decision-required accent slide — a single thin arc, the lowest visual noise, safe under body text |
 
-The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg.png` for the cover slide to keep the visual language consistent between the one-pager and deck. If the deck needs a different wave, render the `.ai` file using the procedure in `skills/exec-onepager/SKILL.md` (wave asset rendering section).
+The agent does not render new wave variants: the Illustrator design kit is outside the repo, and a particle-style wave under body text fragments letterforms. If the deck genuinely needs a different wave, the user renders it outside this workflow and drops the PNG into `assets/`; the spec then names it by repo-relative path.
 
-**Applying a wave background in the deck:** in the `.pptx`, insert the PNG as a slide background image behind all other elements, then apply a dark overlay shape (rectangle, no border, fill `#1A2440` at 70–85% transparency) over it to ensure all text reads cleanly. The overlay opacity should be higher (80–85%) where body text appears, lower (65–70%) where only the large title sits.
+**Applying a wave background in the deck:** set the `wave_background` key on the slide's spec entry and control the dark overlay with `wave_overlay_opacity` (0.0–1.0; the generator defaults to 0.80, which suits dark slides carrying body text — lower it toward 0.70 when only the large title sits over the wave). The generator inserts the PNG behind all content, applies the deep-navy `#1A2440` overlay, turns the slide's text white so it stays legible, and re-adds the brand-spec §8 footer line above the overlay (the layout's own footer is covered by it). Do not hand-place overlay rectangles or recolor text yourself.
 
 ## Steps
 
-1. **Check for the standard pptx skill** at `/mnt/skills/public/pptx/SKILL.md`. If it exists, plan to invoke it; if not, plan a structured markdown outline.
-2. **Read `memory/long-term/brand/brand-spec.md`.** Carry the exact HEX values, font names (DT Flow Medium / DT Flow Light, Arial fallback), and footer text into whatever you produce next — outline notes for the human renderer, or parameters to the standard pptx skill.
-3. **Map the one-pager content into the six-section structure** above. Each section becomes one or more slides per the stakeholder profile and adopts the brand pattern keyed in the table.
-4. **Adapt language for slide format — then run the brand-humanizer pre-pass.**
+1. **Read `memory/long-term/brand/brand-spec.md`.** Carry the exact HEX values, font names (DT Flow Medium / DT Flow Light, Arial fallback), and footer text into whatever you produce next. Also check whether `python3 -c "import pptx"` succeeds to confirm the generator is runnable; if not, note the fallback plan now (external skill check or markdown outline).
+2. **Map the one-pager content into the six-section structure** above. Each section becomes one or more slides per the stakeholder profile and adopts the brand pattern keyed in the table.
+3. **Adapt language for slide format — then run the brand-humanizer pre-pass.**
    - Condense one-pager prose into slide-appropriate fragments: sentences become bullets, definitions move to footnotes, long caveats become a single qualifier or move to appendix. Headings remain sentence case (brand-spec §3 and §6); product names follow §7.
    - After condensing, read `skills/brand-humanizer/SKILL.md` and run the full procedure on all slide copy: titles, eyebrows, bullet text, card headers, stat labels, and decision asks. Slide titles are the highest-risk element — compression frequently reintroduces title case and em dashes. Fix them before generating any slide content.
-5. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the engagement folder, flag it and ask the user. Chart series colors follow brand-spec §5 — never use red or green.
-6. **Preserve the quality-gate outputs.** The Consultative-lens rewrites, the Customer-lens framings, and the Skeptic-lens "questions a leader will ask" are all baked into the one-pager already — do not undo them when adapting to slide format.
-7. **Carry citations into a "Sources" slide or footer.** Any externally sourced fact in the one-pager (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date. Put them on a final "Sources" slide for VP audiences who skim, or in a small footer on each slide where the fact appears for Director audiences who scrutinize. Do not drop citations during the adaptation.
-8. **Invoke the standard pptx skill** with the structured content if available; otherwise write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md` for the team to render manually. When the team renders manually, instruct them to start from the official Dynatrace `.potx` (the file the brand PDF documents) rather than a blank deck — the theme colors and theme fonts are programmed into it.
+4. **Identify which numbers, tables, or charts need to be included.** Pull from `signals-map.md` and `action-plan.md`. Do not invent data; if a chart would be needed but the data is not in the engagement folder, flag it and ask the user. Chart series colors follow brand-spec §5 — the generator applies the §5 series order (Teal → Magenta accents) to every chart automatically; never override it with red or green.
+5. **Preserve the quality-gate outputs.** The Consultative-lens rewrites, the Customer-lens framings, and the Skeptic-lens "questions a leader will ask" are all baked into the one-pager already — do not undo them when adapting to slide format.
+6. **Carry citations into a "Sources" slide or footer.** Any externally sourced fact in the one-pager (per `skills/external-research/SKILL.md`) keeps its URL + retrieval date. Put them on a final "Sources" slide for VP audiences who skim, or in a small footer on each slide where the fact appears for Director audiences who scrutinize. Do not drop citations during the adaptation.
+7. **Generate the deck.** Write the JSON spec to `<ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json` (see `tools/pptx-spec-example.json` for the format). Then run, passing the output path explicitly as the second positional argument (the generator has no `--output` flag) so the deck lands in the engagement folder:
+
+   ```bash
+   python3 tools/pptx-generator.py <ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json <ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx
+   ```
+
+   If the generator is unavailable, check for the external skill at `/mnt/skills/public/pptx/SKILL.md` and invoke it; if that is also absent, write the structured outline to `<ENGAGEMENT_PATH>/deck-outline-YYYY-MM-DD.md`. When the team renders manually, instruct them to start from the official Dynatrace `.potx` — the theme colors and fonts are embedded in it.
+8. **Present the deck at the Phase 3 gate — do not end silently.** After generation, present the deck using the same Phase 3 gate frame as the one-pager (per CLAUDE.md "Gate summary block"): Conclusion, What changed (what the deck adds or condenses versus the one-pager), Assumptions and confidence gaps, Out-of-scope cost, closing with "**Approve** to finalize the Phase 3 deliverables, **Redirect** [slide, emphasis, or structure change], or **Iterate** [lens to run on the deck]." Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md`.
 
 ## Output
 
 - **Preferred: run `tools/pptx-generator.py`** with a JSON spec file.
   The generator is the in-repo equivalent of the standard pptx skill.
   It handles template loading, sample-slide removal, layout dispatch,
-  placeholder filling, and output path. Use it instead of the external
-  skill check unless the environment explicitly provides `/mnt/skills/public/pptx/SKILL.md`.
+  placeholder filling, and output path. The external skill at
+  `/mnt/skills/public/pptx/SKILL.md` is a secondary option — check for it
+  only if the generator is unavailable.
 
   ```bash
-  # Generate the deck
-  python3 tools/pptx-generator.py <ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json
+  # Generate the deck (spec path, then output path — both explicit)
+  python3 tools/pptx-generator.py <ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json <ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx
 
   # List all available layout names
   python3 tools/pptx-generator.py --list-layouts
   ```
 
   Write the spec to `<ENGAGEMENT_PATH>/deck-spec-YYYY-MM-DD.json` before running.
-  The output `.pptx` saves to `<ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx` by default.
+  Always pass the output path (the second positional argument — there is no
+  `--output` flag) so the deck lands at `<ENGAGEMENT_PATH>/deck-YYYY-MM-DD.pptx`;
+  omitted, the generator defaults to `deck-<today>.pptx` next to the spec file.
   See `tools/pptx-spec-example.json` for the full spec format with comments.
 
 - **Fallback (if python-pptx is unavailable):** write a structured
@@ -139,10 +128,8 @@ The one-pager already has rendered wave PNGs in `assets/`. Reuse `assets/wave-bg
 - **Re-thinking the message in the adaptation.** The one-pager is the message. The deck is its visual form. Do not introduce new findings or new framings at this step.
 - **Over-packing slides.** A deck is not a one-pager in landscape format. Each slide should carry one idea well, not five ideas poorly.
 - **Skipping the appendix decision.** Read the stakeholder profile. Some leaders read appendices; some never look past slide 4. Build accordingly.
-- **Assuming the renderer exists.** Always check for the standard pptx skill at runtime — environments differ.
+- **Assuming the renderer exists.** Confirm the in-repo generator is runnable at Step 1 (`python3 -c "import pptx"`); fall back to the external pptx skill only if the generator is unavailable, and to a markdown outline last.
 - **Going off-brand.** Using off-palette colors, title-case headings, or improvised layouts breaks the brand. Stick to the patterns in `brand-spec.md` — the eight-card grid, three-bucket layout, swimlane, gantt, timeline, hashtag-stat, table, and funnel are the approved compositions. If the content doesn't fit one of those, the content is wrong, not the template.
-- **Sourcing the lockup from Brandfolder when local files exist.** `DT Insights Lockup RGB/` contains all eight lockup variants. Use the correct variant for the slide background (REV on dark, Black on white) — do not generate, trace, or recolor any lockup regardless of source.
-- **Using the wrong lockup variant.** REV on a white background makes the color lockup nearly invisible; Black on a dark background disappears. Always match the variant to the surface.
 - **Using a particle wave (dataflow series) on any slide with body text.** The same failure mode from the HTML one-pager applies in the deck: particle dots compete with letterforms at small sizes. Use `datalargebeam` or `datatrail` on any dark slide that carries text below 24pt.
 - **Re-rendering wave assets the HTML one-pager already rendered.** `assets/wave-bg.png` and `assets/wave-ask.png` are already at 2800px width. Reuse them for consistency and to avoid a duplicate render step.
 - **Designing the deck visually independently of the one-pager.** The one-pager is the approved design reference. If an HTML one-pager exists, its color choices, section order, and wave selections are already approved — carry them into the deck rather than redesigning from the brand spec alone.

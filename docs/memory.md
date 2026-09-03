@@ -78,7 +78,9 @@ The session holds the engagement path it created (at Phase 0) or resumed, and re
 | `action-plan.md` | 2 | Investigation actions, recommended actions, decision asks, risks, "Tensions resolved". |
 | `decisions-log.md` | all | Append-only record of every gate decision. |
 | `lessons-learned.md` | archive | Written by `investigation-reset` when the engagement is archived. |
-| `one-pager-YYYY-MM-DD.md` | 3 | The exec one-pager, if produced. |
+| `one-pager-YYYY-MM-DD.md` | 3 | The exec one-pager's companion markdown, if produced. |
+| `<slug>-onepager.html` | 3 | The exec one-pager HTML — the deliverable itself. |
+| `deck-spec-YYYY-MM-DD.json`, `deck-YYYY-MM-DD.pptx` | 3 | The deck spec and the generated deck, if produced. |
 
 Open any of these during a session to see what the agent is working with — they're not hidden.
 

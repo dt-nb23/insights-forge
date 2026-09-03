@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Recipe: HdrB · TL;DR · 01B · 02A · 03A · 04A · 05A · FtrB | Why: the reader is an executive sponsor who lost a familiar analytics lens; the symptom table makes the gap concrete, the capability map shows the platform already answers it, and two named decisions close. Sanitized reference: names, client, and vendor are fictional. -->
+<title>Digital experience intelligence: moving beyond the legacy session-analytics tool | Acme Retail</title>
+<style>
+  /* ═══ DT Flow (brand font) mapped to the design system's weight scale ═══ */
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Light.otf') format('opentype'); font-weight:300; }
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Medium.otf') format('opentype'); font-weight:500; }
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Semibold.otf') format('opentype'); font-weight:600; }
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Bold.otf') format('opentype'); font-weight:700; }
+  @font-face { font-family:'DTFlow'; src:url('../../../DTFlow/DTFlow-Extrabold.otf') format('opentype'); font-weight:800; }
+
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+  :root {
+    /* Beat accents — one fixed color per section (design system tokens) */
+    --setup:#1966FF;      /* TL;DR / setup   */
+    --problem:#8B1DC0;    /* 01 · problem    */
+    --guide:#1A7A70;      /* 02 · guide      */
+    --plan:#5E28E5;       /* 03 · plan       */
+    --stakes:#C93FDB;     /* 04 · stakes     */
+    /* Dark frame */
+    --frame1:#07101E; --frame2:#122040; --frame3:#1A2A4D; --footer:#0C1626;
+    /* Neutrals & tints */
+    --ink:#151A28; --navy:#1A2440; --gray:#6F747F; --stat-lbl:#41506E;
+    --line:#E2E8F4; --line2:#CBD5E8; --panel:#F8F9FC; --pagebg:#E8ECF3;
+    --tint-mag:#FDF0FF; --tint-teal:#F0FAF8; --tint-prob:#FBF3FD;
+    /* Header/takeaway highlight hues */
+    --sky:#8FB4FF; --mint:#5FE0CE; --lilac:#C9A8F5;
+    --grad:linear-gradient(90deg,#3BACF0,#1966FF,#5E28E5,#C93FDB);
+    --font:'DTFlow', Arial, sans-serif;
+  }
+
+  body { background:var(--pagebg); font-family:var(--font); font-weight:300; color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .page { width:960px; margin:22px auto; background:#fff; box-shadow:0 6px 30px rgba(12,22,38,0.14); }
+
+  .eyebrow { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+
+  /* ═══ HEADER · frame (HdrB + Insights lockup) ═══ */
+  .masthead {
+    background:
+      linear-gradient(to right, rgba(7,16,30,0.93) 0%, rgba(7,16,30,0.82) 46%, rgba(7,16,30,0.55) 100%),
+      url('../../../assets/wave-bg.png') center / cover no-repeat var(--frame1);
+    padding:20px 34px 0;
+  }
+  .mast-top { display:flex; justify-content:space-between; align-items:flex-start; gap:22px; }
+  .mast-left { display:flex; flex-direction:column; }
+  .mast-lockup { height:24px; width:auto; align-self:flex-start; margin-bottom:13px; }
+  .mast-eyebrow { color:var(--sky); }
+  .mast-title { font-size:20px; font-weight:600; color:#fff; line-height:1.2; margin-top:6px; }
+  .mast-promise { font-size:12.5px; font-weight:400; color:rgba(255,255,255,0.62); margin-top:5px; line-height:1.4; }
+  .mast-meta { text-align:right; font-size:9.5px; font-weight:300; color:rgba(255,255,255,0.58); line-height:1.65; flex-shrink:0; padding-top:2px; }
+  .mast-meta b { font-weight:600; color:rgba(255,255,255,0.9); }
+  .grad-bar { height:3px; border-radius:2px; background:var(--grad); margin-top:16px; }
+
+  /* ═══ TL;DR · setup (single fixed layout) ═══ */
+  .tldr { display:grid; grid-template-columns:1.1fr 1.35fr; gap:28px; align-items:center;
+          background:#EEF3FF; border-left:4px solid var(--setup);
+          margin:14px 34px 0; padding:13px 20px; border-radius:0 4px 4px 0; }
+  .tldr + .beat { border-top:none; }
+  .tldr-eyebrow { color:var(--setup); margin-bottom:7px; }
+  .tldr-sent { font-size:14px; font-weight:400; color:var(--navy); line-height:1.5; }
+  .tldr-sent b { font-weight:700; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; text-align:center; }
+  .stat-num { font-size:24px; font-weight:800; line-height:1; }
+  .stat-num span { font-size:13px; }
+  .stat-lbl { font-size:9.5px; color:var(--stat-lbl); margin-top:6px; line-height:1.3; }
+
+  /* ═══ Shared beat scaffold — numbered node opens every section ═══ */
+  .beat { padding:15px 34px 16px; border-top:1px solid var(--line); }
+  .beat-head { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
+  .node { width:22px; height:22px; border-radius:50%; color:#fff; font-size:10px; font-weight:800;
+          display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .beat-name { font-size:11.5px; font-weight:600; color:var(--navy); }
+  .beat-name .num { font-weight:700; }
+  .beat-line { font-size:13.5px; font-weight:600; color:var(--navy); line-height:1.35; margin:0 0 10px 31px; }
+
+  /* ── 01 Problem — symptom → consequence table (01B) ── */
+  .ptable { border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .ptable-head { display:grid; grid-template-columns:5px 1fr 1.25fr; font-size:9px; font-weight:700;
+                 letter-spacing:.1em; text-transform:uppercase; color:var(--problem); background:var(--tint-prob); }
+  .ptable-head > div { padding:6px 13px; }
+  .ptable-head .c2 { border-left:1px solid var(--line); }
+  .ptable-row { display:grid; grid-template-columns:5px 1fr 1.25fr; border-top:1px solid var(--line); }
+  .ptable-row .stripe { background:var(--stakes); }
+  .ptable-row .sym, .ptable-row .con { padding:9px 13px; font-size:11px; color:#333; line-height:1.4; }
+  .ptable-row .con { border-left:1px solid var(--line); }
+
+  /* ── 02 Guide — thesis + pain→capability map (02A) ── */
+  .guide-thesis { font-size:11.5px; color:#333; line-height:1.45; margin:0 0 12px 31px; }
+  .guide-thesis b { font-weight:600; color:var(--guide); }
+  .cmap-head { display:grid; grid-template-columns:1fr 26px 1.15fr; font-size:9px; font-weight:700;
+               letter-spacing:.1em; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+  .cmap-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .cmap-row:last-child { margin-bottom:0; }
+  .pain-pill { flex:1; background:var(--tint-mag); border-radius:7px; padding:9px 12px; font-size:11px; color:#333; line-height:1.3; }
+  .arrow { color:var(--guide); font-size:15px; font-weight:700; width:26px; text-align:center; flex-shrink:0; }
+  .cap-pill { flex:1.15; background:var(--tint-teal); border-radius:7px; padding:9px 12px; font-size:11px; font-weight:600; color:var(--guide); line-height:1.3; }
+
+  /* ── 03 Plan — phase cards, clean (03A) ── */
+  .phases { display:flex; gap:9px; }
+  .phase { flex:1; border:1px solid #E4E8F0; border-radius:7px; overflow:hidden; }
+  .phase-head { padding:7px 11px; }
+  .phase-head .p-eyebrow { color:rgba(255,255,255,0.82); font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+  .phase-head .p-name { font-size:12.5px; font-weight:600; color:#fff; line-height:1.2; }
+  .phase-body { padding:9px 11px; background:var(--panel); }
+  .phase-body .p-days { font-size:10.5px; font-weight:700; color:var(--navy); }
+  .phase-body .p-desc { font-size:10px; color:#444; margin-top:2px; line-height:1.35; }
+  
+
+  /* ── 04 Stakes — risk vs. success split, light (04A) ── */
+  .split { display:grid; grid-template-columns:1fr 1.15fr; gap:13px; }
+  .stake { border-radius:8px; padding:12px 15px; }
+  .stake-risk { background:var(--tint-mag); border-top:3px solid var(--problem); }
+  .stake-win { background:var(--tint-teal); border-top:3px solid var(--guide); }
+  .stake h3 { font-size:12px; font-weight:700; margin-bottom:8px; }
+  .stake-risk h3 { color:var(--problem); }
+  .stake-win h3 { color:var(--guide); }
+  .stake p { font-size:11px; color:#333; line-height:1.4; margin-bottom:6px; }
+  .stake p:last-child { margin-bottom:0; }
+
+  /* ═══ 05 Takeaway (dark) + 2 decisions (05A) ═══ */
+  .takeaway {
+    background:
+      linear-gradient(to right, rgba(7,16,30,0.95) 0%, rgba(7,16,30,0.88) 40%, rgba(7,16,30,0.72) 100%),
+      url('../../../assets/wave-bg.png') center / cover no-repeat var(--frame1);
+    padding:18px 34px 20px;
+  }
+  .tk-eyebrow { color:rgba(255,255,255,0.5); margin-bottom:8px; }
+  .tk-line { font-size:16px; font-weight:600; color:#fff; line-height:1.4; }
+  .tk-line .ask { color:var(--sky); }
+  .tk-line .pay { color:var(--mint); }
+  .decisions { display:flex; gap:11px; margin-top:15px; }
+  .decision { flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:8px; padding:10px 13px; }
+  .decision .d-num { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px; }
+  .decision.d1 .d-num { color:var(--sky); }
+  .decision.d2 .d-num { color:var(--lilac); }
+  .decision .d-name { font-size:11.5px; font-weight:600; color:#fff; margin-bottom:3px; }
+  .decision .d-desc { font-size:10px; font-weight:300; color:rgba(255,255,255,0.72); line-height:1.4; }
+
+  /* ═══ FOOTER · frame (FtrB, always appended) ═══ */
+  .foot { background:var(--footer); padding:15px 34px; text-align:center; }
+  .foot-bar { width:64px; height:3px; border-radius:2px; background:var(--grad); margin:0 auto 11px; }
+  .foot-copy { font-size:10px; color:rgba(255,255,255,0.72); }
+  .foot-src { font-size:9px; color:rgba(255,255,255,0.42); margin-top:6px; line-height:1.45; max-width:760px; margin-left:auto; margin-right:auto; }
+
+  [aria-hidden="true"] { pointer-events:none; }
+
+  /* ═══ PRINT: one Letter page ═══ */
+  @page { size:Letter portrait; margin:0.3in; }
+  @media print {
+    body { background:#fff; }
+    .page { margin:0 auto; box-shadow:none; zoom:0.65; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- ═══ HEADER · frame ═══ -->
+  <header class="masthead">
+    <div class="mast-top">
+      <div class="mast-left">
+        <img class="mast-lockup" src="../../../assets/insights-lockup-rev.png" alt="Dynatrace Insights" />
+        <p class="eyebrow mast-eyebrow">Digital experience assessment · Acme Retail</p>
+        <h1 class="mast-title">Digital experience intelligence</h1>
+        <p class="mast-promise">From waiting on engineering to answers your team owns.</p>
+      </div>
+      <p class="mast-meta">
+        <b>Jordan Lee</b><br>SVP, Software Development<br>
+        <b>Sam Rivera</b><br>Software Development Manager<br>June 29, 2026
+      </p>
+    </div>
+    <div class="grad-bar" aria-hidden="true"></div>
+  </header>
+
+  <!-- ═══ TL;DR · setup ═══ -->
+  <section class="tldr" aria-label="Executive summary">
+    <div>
+      <p class="eyebrow tldr-eyebrow">TL;DR</p>
+      <p class="tldr-sent">acme.example.com already captures every user interaction in Dynatrace®. This plan refines and enriches that data (business events, named user actions, action properties) into answers the product team reaches on its own: <b>first results in 30 days, the full picture in 90.</b></p>
+    </div>
+    <div class="stats" role="list">
+      <div role="listitem">
+        <div class="stat-num" style="color:var(--guide);">5<span>/5</span></div>
+        <div class="stat-lbl">capabilities already active</div>
+      </div>
+      <div role="listitem">
+        <div class="stat-num" style="color:var(--setup);">4</div>
+        <div class="stat-lbl">wishlist questions answered</div>
+      </div>
+      <div role="listitem">
+        <div class="stat-num" style="color:var(--plan);">2</div>
+        <div class="stat-lbl">approvals to proceed</div>
+      </div>
+      <div role="listitem">
+        <div class="stat-num" style="color:var(--navy);">30</div>
+        <div class="stat-lbl">days to first results</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 01 · Problem ═══ -->
+  <section class="beat" aria-labelledby="b1">
+    <div class="beat-head">
+      <span class="node" style="background:var(--problem);" aria-hidden="true">01</span>
+      <span class="beat-name" id="b1"><span class="num">01 · </span>Data behind glass</span>
+    </div>
+    <p class="beat-line">acme.example.com sees everything. The product team sees none of it.</p>
+    <div class="ptable" role="table" aria-label="Symptoms and why they hurt">
+      <div class="ptable-head" role="row">
+        <div aria-hidden="true"></div>
+        <div role="columnheader">Symptom</div>
+        <div class="c2" role="columnheader">Why it hurts</div>
+      </div>
+      <div class="ptable-row" role="row">
+        <div class="stripe" aria-hidden="true"></div>
+        <div class="sym" role="cell">Every analytics request routes through engineering.</div>
+        <div class="con" role="cell">Time-sensitive product decisions sit in a queue until the moment passes.</div>
+      </div>
+      <div class="ptable-row" role="row">
+        <div class="stripe" aria-hidden="true"></div>
+        <div class="sym" role="cell">Teams open Opportunity Insights but never act on its rankings.</div>
+        <div class="con" role="cell">Customer-impacting performance optimizations lose every prioritization fight to new features.</div>
+      </div>
+      <div class="ptable-row" role="row">
+        <div class="stripe" aria-hidden="true"></div>
+        <div class="sym" role="cell">Funnel conversion still has no capture rules defined.</div>
+        <div class="con" role="cell">Customers abandon reservations and checkouts at steps no one can name.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 02 · Guide ═══ -->
+  <section class="beat" aria-labelledby="b2">
+    <div class="beat-head">
+      <span class="node" style="background:var(--guide);" aria-hidden="true">02</span>
+      <span class="beat-name" id="b2"><span class="num">02 · </span>The wishlist, answered</span>
+    </div>
+    <p class="guide-thesis">We know what losing the legacy tool's lens felt like. The platform captures the behavior today, and where OneAgent® monitors the backend, Dynatrace links each rage click to the slow API call or error behind it: <b>the "why" the legacy tool never showed.</b></p>
+    <div class="cmap" role="list" aria-label="Each product question and the capability that answers it">
+      <div class="cmap-head" aria-hidden="true">
+        <span>The question</span><span></span><span>Answered by</span>
+      </div>
+      <div class="cmap-row" role="listitem">
+        <div class="pain-pill">Where are users getting stuck?</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="cap-pill">Rage events, JavaScript errors, and Core Web Vitals in RUM on Grail®</div>
+      </div>
+      <div class="cmap-row" role="listitem">
+        <div class="pain-pill">What causes checkout drop-off?</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="cap-pill">Business Analytics capture rules define each funnel step</div>
+      </div>
+      <div class="cmap-row" role="listitem">
+        <div class="pain-pill">Are new features being used?</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="cap-pill">Named user actions, with Session Replay for context</div>
+      </div>
+      <div class="cmap-row" role="listitem">
+        <div class="pain-pill">How do new and returning users differ?</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="cap-pill">Native segmentation by new versus returning, device, and geography</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 03 · Plan ═══ -->
+  <section class="beat" aria-labelledby="b3">
+    <div class="beat-head">
+      <span class="node" style="background:var(--plan);" aria-hidden="true">03</span>
+      <span class="beat-name" id="b3"><span class="num">03 · </span>The 90-day path</span>
+    </div>
+    <p class="beat-line">Activate, configure, connect: a phased, low-risk path.</p>
+    <div class="phases" role="list" aria-label="Three phases; Phases 1 and 2 run concurrently">
+      <div class="phase" role="listitem">
+        <div class="phase-head" style="background:var(--guide);">
+          <div class="p-eyebrow">Phase 1</div>
+          <div class="p-name">Activate</div>
+        </div>
+        <div class="phase-body">
+          <div class="p-days">Days 0 to 30</div>
+          <div class="p-desc">Surface what today's data already shows</div>
+        </div>
+      </div>
+      <div class="phase" role="listitem">
+        <div class="phase-head" style="background:var(--setup);">
+          <div class="p-eyebrow">Phase 2</div>
+          <div class="p-name">Configure</div>
+        </div>
+        <div class="phase-body">
+          <div class="p-days">Days 0 to 60</div>
+          <div class="p-desc">Configure funnel rules, user action properties, and identity tagging</div>
+        </div>
+      </div>
+      <div class="phase" role="listitem">
+        <div class="phase-head" style="background:var(--plan);">
+          <div class="p-eyebrow">Phase 3</div>
+          <div class="p-name">Connect</div>
+        </div>
+        <div class="phase-body">
+          <div class="p-days">Days 60 to 90</div>
+          <div class="p-desc">Hand Product Owners self-serve access and alerting</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 04 · Stakes (light) ═══ -->
+  <section class="beat" aria-labelledby="b4">
+    <div class="beat-head">
+      <span class="node" style="background:var(--stakes);" aria-hidden="true">04</span>
+      <span class="beat-name" id="b4"><span class="num">04 · </span>Guesswork or self-serve</span>
+    </div>
+    <div class="split">
+      <div class="stake stake-risk" role="note" aria-label="If we wait">
+        <h3>If we wait</h3>
+        <p>Product decisions stay guesswork: the data exists, but no one can reach it</p>
+        <p>Funnel drop-off stays invisible: problems surface only when someone happens to look</p>
+        <p>Nobody sets a legacy-tool baseline: before-and-after comparison stays impossible</p>
+      </div>
+      <div class="stake stake-win" role="note" aria-label="By day 90">
+        <h3>By day 90</h3>
+        <p>Product Owners open a rage-event Notebook without routing through engineering</p>
+        <p>Reservation and checkout conversion, measured step by step, refreshed continuously</p>
+        <p>A Workflow files a ticket and alerts the team the moment rage clicks spike</p>
+        <p>A Guardian watches checkout conversion around the clock</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 05 · Takeaway (dark) ═══ -->
+  <section class="takeaway" aria-labelledby="b5">
+    <p class="eyebrow tk-eyebrow" id="b5">05 · The ask</p>
+    <p class="tk-line">acme.example.com already captures the behavior its product team needs. <span class="ask">Two approvals</span> turn it into <span class="pay">answers the team reaches on its own, in 30 days.</span></p>
+    <div class="decisions" role="list">
+      <div class="decision d1" role="listitem">
+        <div class="d-num">Decision 1</div>
+        <div class="d-name">Approve the configuration sprint</div>
+        <div class="d-desc">The product lead owns the funnel schema; engineering confirms the sprint allocation.</div>
+      </div>
+      <div class="decision d2" role="listitem">
+        <div class="d-num">Decision 2</div>
+        <div class="d-name">Approve Jira and Microsoft Teams integration</div>
+        <div class="d-desc">Acme Retail IT provides API access so rage-click alerting runs automatically.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER · frame ═══ -->
+  <footer class="foot">
+    <div class="foot-bar" aria-hidden="true"></div>
+    <div class="foot-copy">© 2026 Dynatrace, LLC. &nbsp;·&nbsp; Confidential</div>
+    <div class="foot-src">Sources: Dynatrace® product documentation — docs.dynatrace.com (retrieved 2026-06-29) · Opportunity Insights — dynatrace.com/news/blog (retrieved 2026-06-29) · Legacy session-analytics vendor documentation — vendor.example.com (retrieved 2026-06-29)</div>
+  </footer>
+
+</main>
+</body>
+</html>
