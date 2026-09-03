@@ -38,12 +38,12 @@ Status meanings: `pending` — not started this round; `done` — implemented as
 
 | ID | Item | Status | Disposition |
 |---|---|---|---|
-| D1 | Lessons write/read contract | pending | |
-| D2 | Hub split / retrieval layer | pending | |
-| D3 | Client name scrubbed from shared tier | pending | |
-| D4 | Cross-client lessons lookup | pending | |
-| D5 | Fill the eight [Team to note] slots | pending | |
-| D6 | Dangling references and stale docs | pending | |
+| D1 | Lessons write/read contract | done | Write side: `skills/investigation-reset/SKILL.md` Step 2 (question → heading map, front-matter tags, Cross-engagement hook drafted and confirmed, backfill offer on resume) + the contract template `memory/clients/_template/engagements/lessons-learned.md`; read side: `skills/context-framing/SKILL.md` Step 4 (state filter, vertical/problem-shape ranking, cap of 3, front-matter + hook line only); the exception is named in `CLAUDE.md` and `docs/memory.md` |
+| D2 | Hub split / retrieval layer | done | `memory/long-term/dynatrace-playbooks.md` + `memory/long-term/playbooks/` (8 files) and `memory/long-term/stakeholder-profiles.md` + `memory/long-term/profiles/` (8 files) — verified verbatim splits of the prior hub files; session init in `CLAUDE.md` loads hubs only with a traverse-on-need rule; every consuming skill and lens points at the matched file; `.claude/agents/doc-freshness-checker.md` reads `playbooks/*` so the 16 playbook citations stay in the freshness sweep; the split's intra-document playbook links were converted to explicit file references |
+| D3 | Client name scrubbed from shared tier | done | Names, people, and vendor removed from `skills/exec-onepager/reference/layout-system.md`, `skills/exec-onepager/steps/1-content-assembly.md`, `skills/exec-onepager/steps/2-html-renderer.md`, and the reference one-pager (Group B); the mechanical name-form scan lands with C5 |
+| D4 | Cross-client lessons lookup | done | Tagged front-matter + glob in `skills/context-framing/SKILL.md` Step 4, functional now that the write side (`skills/investigation-reset/SKILL.md`) produces matching tags; embeddings search stays a roadmap item in `plans/ROADMAP.md` until there is a corpus |
+| D5 | Fill the eight [Team to note] slots | deferred | Org-level context that only a senior consultant can supply; the slots remain in `memory/long-term/domain-knowledge.md` and nothing claims otherwise. The two definition-less entries (Service-flow, Synthetic monitoring) are called out in the round summary as the highest-value slots to fill first |
+| D6 | Dangling references and stale docs | done | `memory/long-term/phased-plan-timeline-framing.md` written and made a real read in `skills/exec-onepager/steps/1-content-assembly.md` (no more "(if loaded)" hedge); tombstones `memory/long-term/past-investigations.md` and `memory/long-term/client-environments/` deleted; inventory tables updated in `memory/long-term/README.md` and `docs/memory.md`; `tools/README.md` was rewritten in Group B |
 
 ## Group E — Workflow speed
 

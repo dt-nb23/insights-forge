@@ -2,7 +2,7 @@
 
 The workspace splits memory into two tiers, with the live investigation living **inside** the client tier. This design is the primary mechanism that prevents client context from bleeding across engagements and keeps the agent's institutional knowledge trustworthy over time.
 
-If you remember one thing: the agent reads freely from the root library on every session, and reads only the **active client's** workspace for anything client-specific. It never reads another client's folder.
+If you remember one thing: the agent reads freely from the root library on every session, and reads only the **active client's** workspace for anything client-specific. It never reads another client's folder, with exactly two narrow, named, read-only exceptions: the resume scan of every engagement's `current-context.md` status front-matter, and the Phase 0 cross-client read of `lessons-learned.md` front-matter and hook lines (see the context isolation rule below).
 
 ## The two tiers
 
@@ -19,14 +19,17 @@ The root library holds knowledge that is true regardless of which client is acti
 |---|---|
 | [`frameworks.md`](../memory/long-term/frameworks.md) | MECE, ICE, issue-tree-to-hypothesis mapping, exit-criteria definitions. |
 | [`domain-knowledge.md`](../memory/long-term/domain-knowledge.md) | Observability concepts, signal patterns, tech → UX → business linkages, Dynatrace concept definitions with citations. The `[team to note: …]` slots are for org-level context only — not client-specific. |
-| [`dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) | Eight client-agnostic procedural patterns for common Dynatrace problem shapes. |
+| [`dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) | Hub index for the eight client-agnostic procedural patterns. The playbook content itself lives in [`playbooks/`](../memory/long-term/playbooks/) — one file per problem shape, read only when a hypothesis matches that shape. |
+| [`playbooks/`](../memory/long-term/playbooks/) | The eight individual playbook files (latency, errors, RUM, Grail logs, SLO burn, deploy correlation, third-party, Davis problem), each with its investigation sequence, exit criteria, and doc citations. |
 | [`terminology.md`](../memory/long-term/terminology.md) | Glossary of recurring terms and Dynatrace platform glossary with citations. |
-| [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) | Eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). **No named individuals. No client associations.** Named leaders at specific clients go in that client's `stakeholder-overlays.md`. |
+| [`stakeholder-profiles.md`](../memory/long-term/stakeholder-profiles.md) | Hub index for the eight generic role archetypes and title-type overlays (e.g., "VP of Engineering" as a role type). Profile content lives in [`profiles/`](../memory/long-term/profiles/) — read only when calibrating for a named stakeholder. **No named individuals. No client associations.** Named leaders at specific clients go in that client's `stakeholder-overlays.md`. |
+| [`profiles/`](../memory/long-term/profiles/) | The eight individual archetype files, with title-type overlays co-located in their parent archetype's file. |
 | [`client-question-bank.md`](../memory/long-term/client-question-bank.md) | Client-facing phrasings of the Phase 0 clarifying questions, grouped by rubric tier. |
 | [`brand/brand-spec.md`](../memory/long-term/brand/brand-spec.md) | Dynatrace brand specification (colors, typography, layouts, voice, footer) authoritative for Phase 3 deliverables. |
+| [`phased-plan-timeline-framing.md`](../memory/long-term/phased-plan-timeline-framing.md) | The 30/60/90-day phased-plan framing rules used by Phase 3 content assembly (day framing as the presentation layer over week-range estimates, 90 days max end to end). |
 | [`freshness-report.md`](../memory/long-term/freshness-report.md) | Operational — the doc-freshness-checker sub-agent's output. No client data. |
 
-> Two files in this tier — `past-investigations.md` and the `client-environments/` folder — are **deprecated tombstones** from an earlier architecture. They carry "do not use" banners, hold no client data, and are read by no skill. Archives and environments now live in the client tier (below).
+> Archives and environments live in the client tier (below). Earlier architectures kept a shared `past-investigations.md` and a `client-environments/` folder in this tier; both have been removed. Session start loads roughly 40% of what it used to: the two hubs replace the full playbook and profile files, and individual files load only when a phase needs them.
 
 ### Tier 2 — Client workspaces (`memory/clients/`)
 
@@ -102,9 +105,12 @@ Use `skills/investigation-reset/SKILL.md` for all state transitions (archive, pa
 
 ## Context isolation rule
 
-At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads — environment, contract, stakeholder overlays, prior engagements — come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name.
+At session start, the agent establishes the active engagement (created at Phase 0 or selected on resume) and derives the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of that session, client-specific reads — environment, contract, stakeholder overlays, prior engagements — come **only** from `memory/clients/<active-client-name>/`. The agent never reads another client's folder, even if the user's question mentions another client by name, with exactly **two narrow, named, read-only exceptions**:
 
-This is what prevents investigation context from one client polluting another. It's enforced by both the agent instructions (CLAUDE.md) and the skill procedures (context-framing, stakeholder-overlay, environment-intake all resolve the engagement path before reading any client file).
+1. **Resume scan** — at session start or resume, the agent scans every client's `engagements/*/current-context.md` **status front-matter** to list resumable work. Front-matter only; it never reads engagement bodies outside the client it then works in.
+2. **Lessons readback** — at Phase 0, the agent reads other clients' `engagements/*/lessons-learned.md` **front-matter and Cross-engagement hook line** to surface prior lessons by vertical and problem shape (`skills/context-framing/SKILL.md` Step 4). Never the full file body. This is the one deliberate channel for hard-won knowledge to cross clients: the archive interview tags each lessons file (vertical, problem shape, capabilities) and writes a one-sentence hook, and Phase 0 filters on those tags. Without it, four questions of interview would compress into a single sentence in a per-client README that only that client ever sees again.
+
+This is what prevents investigation context from one client polluting another. It's enforced by the agent instructions (CLAUDE.md) and the skill procedures (context-framing, stakeholder-overlay, environment-intake all resolve the engagement path before reading any client file).
 
 ## Why the read/write asymmetry exists
 
@@ -121,7 +127,7 @@ The agent writes to `memory/long-term/` only when you ask clearly:
 
 - *"Add [name] to `terminology.md` as [definition]."*
 - *"Log a lesson learned: when SDK version segmentation is missing in RUM, always flag it as an instrumentation gap in Phase 1."*
-- *"Update `dynatrace-playbooks.md` with the investigation sequence we just validated."*
+- *"Update the `slo-burn` playbook in `memory/long-term/playbooks/` with the investigation sequence we just validated."* (New playbooks get a new file there plus an index row in `dynatrace-playbooks.md`.)
 - *"Promote this observation into `domain-knowledge.md`."*
 
 Vague phrases — *"this seems important"*, *"remember this"* — are logged in `decisions-log.md` but not promoted. The agent will ask you to confirm before writing to any root library file.

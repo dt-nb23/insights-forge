@@ -26,7 +26,7 @@ If the answer is already in `memory/long-term/domain-knowledge.md` or `memory/lo
 
 Then read these files:
 
-- `memory/long-term/dynatrace-playbooks.md` — for **procedural** questions ("how do I investigate X in Dynatrace?"). Eight playbooks cover the common problem shapes; each carries its own doc citations. If the playbook answers the question, stop — no web fetch needed.
+- `memory/long-term/dynatrace-playbooks.md` — hub index (already loaded at session init). For **procedural** questions ("how do I investigate X in Dynatrace?"), match to the problem shape in the index, then read the specific playbook file (e.g., `memory/long-term/playbooks/latency-backend.md`). Eight playbooks cover the common problem shapes; each carries its own doc citations. If the playbook answers the question, stop — no web fetch needed.
 - `memory/long-term/domain-knowledge.md` — for the Dynatrace concept definitions and the "Authoritative external references" section that lists approved sources.
 - `memory/long-term/terminology.md` — for terms the team has already defined.
 - `<ENGAGEMENT_PATH>/current-context.md` — to scope the question to the active investigation (if an engagement is active).
@@ -56,7 +56,7 @@ The agent does **not** use these tools to fetch from arbitrary domains. If a sea
 
 ## Steps
 
-1. **Check local memory first.** For *procedural* questions ("how do I…") skim `dynatrace-playbooks.md`; for *conceptual* questions ("what is…") skim `domain-knowledge.md` and `terminology.md`. If the answer is already there and current, use it and stop.
+1. **Check local memory first.** For *procedural* questions ("how do I…") consult the playbook index (`dynatrace-playbooks.md`) and read the matched playbook file; for *conceptual* questions ("what is…") skim `domain-knowledge.md` and `terminology.md`. If the answer is already there and current, use it and stop.
 2. **Frame the lookup as a specific question.** "Does Davis AI group multi-service problems by default?" is researchable. "Tell me about Davis" is not. Write the question down before fetching anything.
 3. **Search within the allowlist when the URL is unknown.** Use `WebSearch` with a `site:docs.dynatrace.com` or `site:community.dynatrace.com` filter. Prefer documentation hits over community hits unless the question is specifically about practitioner experience.
 4. **Fetch the most authoritative result.** Prefer `docs.dynatrace.com` for feature behavior and defaults. Use `community.dynatrace.com` for known-issue corroboration, not for ground truth on product behavior.
@@ -89,7 +89,7 @@ The refresh is operationalized as a **Haiku background sub-agent** (`doc-freshne
 
 The sub-agent:
 
-1. Reads every cited URL from `memory/long-term/domain-knowledge.md`, `memory/long-term/dynatrace-playbooks.md`, and `memory/long-term/terminology.md`.
+1. Reads every cited URL from `memory/long-term/domain-knowledge.md`, all files in `memory/long-term/playbooks/`, and `memory/long-term/terminology.md`.
 2. Fetches each URL via `WebFetch` and extracts the page's current "Last updated" date.
 3. Compares the current page-last-updated against the value stored in the existing citation.
 4. Writes findings to `memory/long-term/freshness-report.md`, partitioned into four buckets:
@@ -98,7 +98,7 @@ The sub-agent:
    - **Unreachable** — URL returned 404, redirected, or timed out. The report captures the redirect target (if any) and the failure mode.
    - **Skipped — out of allowlist** — URL points outside the allowlisted Dynatrace domains. Recorded for visibility; not fetched.
 
-The sub-agent **does not modify `domain-knowledge.md` or `dynatrace-playbooks.md` directly** — that would violate the "no silent writes to long-term memory" rule. It writes only to the freshness report.
+The sub-agent **does not modify `domain-knowledge.md`, the `dynatrace-playbooks.md` hub, or any file in `memory/long-term/playbooks/` directly** — that would violate the "no silent writes to long-term memory" rule. It writes only to the freshness report.
 
 ### Surfacing drift to the user
 

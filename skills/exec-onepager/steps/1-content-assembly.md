@@ -73,7 +73,7 @@ State the recommended actions with owners and timeframes. Write one of:
 - **For 03A/03B:** Phase names, day ranges, and descriptions. 03B adds: owner, gate, output per phase.
 - **For 03D:** Numbered steps with names, day ranges, and one-line descriptions.
 
-Always include the 30/60/90 framing from `memory/long-term/phased-plan-timeline-framing.md`. Always include a concurrency or sequencing note.
+Read `memory/long-term/phased-plan-timeline-framing.md` before drafting this section and apply its 30/60/90 convention: day framing is the presentation layer over the action plan's week-range estimates, 90 days is the maximum horizon, and every phase carries a name that says what it achieves. Always include a concurrency or sequencing note.
 
 Every action from `action-plan.md` must appear here with its paired tradeoff (plan-fidelity rule). If the tradeoff text is too long for the phase card, state it in the concurrency note or in the section's beat-line.
 

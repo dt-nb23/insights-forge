@@ -11,7 +11,7 @@ description: Captures a named client leader as a stakeholder overlay in the acti
 - A Phase 3 deliverable needs to be tailored to a specific named leader not yet profiled.
 - The user says "add this stakeholder" or "create a profile for [name]."
 
-**This skill writes to `memory/clients/<active-client-name>/stakeholder-overlays.md` — the client's isolated workspace. It never writes named individuals to `memory/long-term/stakeholder-profiles.md`, which contains only generic title-type overlays. Always gate the write with the binary approval pattern — write only on an explicit yes/approve, never on "looks good" or silence.**
+**This skill writes to `memory/clients/<active-client-name>/stakeholder-overlays.md` — the client's isolated workspace. It never writes named individuals to the shared profile library — `memory/long-term/stakeholder-profiles.md` is an index, and the archetype files in `memory/long-term/profiles/` carry only generic title-type overlays. Always gate the write with the binary approval pattern — write only on an explicit yes/approve, never on "looks good" or silence.**
 
 ## Inputs
 
@@ -71,7 +71,7 @@ Stop when you have enough to distinguish this person from the generic archetype.
 
 ### Step 4 — Draft the overlay
 
-Write a draft overlay section in the format used by existing named-leader overlays in `stakeholder-profiles.md`:
+Write a draft overlay section in the format used by the existing title-type overlays in `memory/long-term/profiles/` (e.g., the VP of Engineering overlay in `executive-sponsor.md`):
 
 ```markdown
 ### [Full Name] — [Title] at [Company]

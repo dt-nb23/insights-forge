@@ -14,9 +14,13 @@
 At session start — before Phase 0 begins — read the following files in this order and hold them in working context for the entire session. Do not re-read them at each phase boundary unless the user explicitly approves an update to one of them during this session; in that case, re-read only the updated file.
 
 1. `memory/long-term/domain-knowledge.md`
-2. `memory/long-term/dynatrace-playbooks.md`
+2. `memory/long-term/dynatrace-playbooks.md` — **hub only** (index table + How-to-use section). Individual playbooks live in `memory/long-term/playbooks/`. Do **not** load individual playbook files at session start.
 3. `memory/long-term/frameworks.md`
-4. `memory/long-term/stakeholder-profiles.md`
+4. `memory/long-term/stakeholder-profiles.md` — **hub only** (profile index table + overlay index). Individual profiles live in `memory/long-term/profiles/`. Do **not** load individual profile files at session start.
+
+**Traverse-on-need rule.** After session init, read individual files only when they are needed:
+- **Playbooks** — when Phase 1 (`skills/hypothesis-generation/SKILL.md`, `skills/signal-mapping/SKILL.md`) matches a hypothesis to a problem shape, or Phase 2 (`skills/action-plan-builder/SKILL.md`) seeds investigation actions, read the specific file named in the playbook index (e.g., `memory/long-term/playbooks/latency-backend.md`). Read only the matched playbook(s); never all eight. (`skills/external-research/SKILL.md` and the doc-freshness checker read playbook files for citation work.)
+- **Profiles** — when a phase needs to calibrate for a named stakeholder — Phase 0 (`skills/context-framing/SKILL.md`), Phase 2 (`skills/action-plan-builder/SKILL.md`, the Consultative lens), or Phase 3 (`skills/exec-onepager/SKILL.md`, `skills/pptx-builder/SKILL.md`) — read the specific profile file named in the profile index. Read only the matched profile.
 
 Then establish the **active engagement for this session**. There is no global pointer file; the dated engagement folder under the client *is* the session's state, and you hold its path (`ENGAGEMENT_PATH`) in working context for the whole session.
 
@@ -88,7 +92,7 @@ Two tiers with strict isolation between client data and shared knowledge.
 
 **Active investigation — the engagement folder itself.** There is no global pointer file. Each engagement lives at `memory/clients/<client-name>/engagements/YYYY-MM-DD-<slug>/` and is **self-describing**: its `current-context.md` opens with a status front-matter block (`state: active | paused | complete`, `phase:`, `client:`, `slug:`, `opened:`, `last-touched:`). The session holds the `ENGAGEMENT_PATH` it created or resumed and reads/writes only there. All phase files (current-context.md, issue-tree.md, etc.) live inside that engagement folder. Because each concurrent session holds its own folder and no shared file decides "which engagement is active," two sessions for two different clients cannot collide, and any number of engagements can be `paused` at once.
 
-**Context isolation rule** — after loading the root library, establish the session's engagement path (created at Phase 0 or selected on resume) and derive the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<that-client-name>/`. The agent never reads another client's folder, even if the user's question names one. To use context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
+**Context isolation rule** — after loading the root library, establish the session's engagement path (created at Phase 0 or selected on resume) and derive the client name as the segment between `memory/clients/` and `/engagements/`. For the rest of the session, all client-specific reads come **only** from `memory/clients/<that-client-name>/`. The agent never reads another client's folder, even if the user's question names one, with exactly **two narrow, named, read-only exceptions**: (1) at session start or resume, scanning every client's `engagements/*/current-context.md` **status front-matter** to list resumable work; (2) at Phase 0, reading other clients' `engagements/*/lessons-learned.md` **front-matter and Cross-engagement hook line** for cross-engagement lessons retrieval (see `skills/context-framing/SKILL.md` Step 4). Nothing else crosses a client boundary. To use full context from a prior engagement, the user must explicitly archive the current engagement and resume the prior one.
 
 ## What this agent does NOT do
 

@@ -20,7 +20,7 @@ Read these files before starting. Each is required.
 | `<ENGAGEMENT_PATH>/action-plan.md` | Source of truth for recommendations, rank order, owners, timeframes, and tradeoffs |
 | `<ENGAGEMENT_PATH>/signals-map.md` | Business impact numbers and SLI/SLO grounding |
 | `<ENGAGEMENT_PATH>/hypotheses.md` | Confirmed/open/ruled-out status of each hypothesis |
-| `memory/long-term/stakeholder-profiles.md` | Named reader profile — governs recipe selection, depth, and tone |
+| `memory/long-term/stakeholder-profiles.md` | Hub index (loaded at session init) — match the reader to an archetype, then read the specific profile file (e.g., `memory/long-term/profiles/executive-sponsor.md`) for the tone, depth, and question guidance that governs recipe selection |
 | `memory/long-term/terminology.md` | First-use definitions for any acronym |
 | `memory/long-term/brand/brand-spec.md` | **Mandatory.** Voice, typography, product names, footer text |
 

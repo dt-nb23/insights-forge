@@ -28,12 +28,12 @@ Then read these files:
 - `<ENGAGEMENT_PATH>/hypotheses.md` — confirmed, open, and validating hypotheses with ICE scores.
 - `<ENGAGEMENT_PATH>/signals-map.md` — for the business KPIs that anchor recommended actions.
 - `<ENGAGEMENT_PATH>/current-context.md` — for stakeholders, owners, decision deadlines, and the **Out-of-scope exclusions**.
-- `memory/long-term/dynatrace-playbooks.md` — the playbook matched to each hypothesis at Phase 1 supplies the investigation sequence. The numbered steps in that playbook become the candidate investigation-action rows; the "confirmed" / "ruled out" sections become the exit criteria.
+- `memory/long-term/dynatrace-playbooks.md` — hub index (already loaded at session init). Read the specific playbook file for each matched hypothesis (e.g., `memory/long-term/playbooks/latency-backend.md`) — its numbered steps become candidate investigation-action rows; its "confirmed" / "ruled out" sections become exit criteria. Read only matched file(s).
 - `memory/long-term/frameworks.md` — for the exit-criteria standard.
-- `memory/long-term/stakeholder-profiles.md` — for the leaders whose decisions will be asked.
+- `memory/long-term/stakeholder-profiles.md` — hub index (already loaded at session init). Read the specific profile file for the named decision-maker (e.g., `memory/long-term/profiles/executive-sponsor.md`) to calibrate decision-ask framing.
 - `memory/clients/<CLIENT_NAME>/environment.md` — **the client's actual Dynatrace instrumentation** (Management Zones, defined SLOs, synthetic monitors, RUM / Session Replay coverage, business events, log management, instrumentation gaps, DPS headroom). Every investigation and recommended action must be grounded in what this client can actually observe — see Step 2a. If the file does not exist, note that the plan's instrumentation assumptions are unverified and flag `environment-intake` as a follow-on.
 
-**Preserve citations.** Any URL + retrieval-date citation already attached to a hypothesis or signal row (from `skills/external-research/SKILL.md` or from a playbook in `dynatrace-playbooks.md`) must flow through into the investigation-action row that consumes it. If an investigation action depends on a Dynatrace feature behavior not already cited upstream, fetch and cite it now rather than asserting it. Allowlist remains `docs.dynatrace.com` and `community.dynatrace.com`.
+**Preserve citations.** Any URL + retrieval-date citation already attached to a hypothesis or signal row (from `skills/external-research/SKILL.md` or from a playbook file in `memory/long-term/playbooks/`) must flow through into the investigation-action row that consumes it. If an investigation action depends on a Dynatrace feature behavior not already cited upstream, fetch and cite it now rather than asserting it. Allowlist remains `docs.dynatrace.com` and `community.dynatrace.com`.
 
 ## Steps
 

@@ -8,7 +8,7 @@ The canonical procedure lives in [`skills/external-research/SKILL.md`](../skills
 
 Before reaching for the web, the agent reads what's already on disk:
 
-- [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbooks cover the most common problem shapes; each one already carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
+- [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md) — the index for **procedural** questions ("how do I investigate latency in Dynatrace?"). Eight playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/) cover the most common problem shapes; the agent reads the matched file, which carries its own doc citations. If the playbook answers the question, the agent stops here — no fetch needed.
 - [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md) — for Dynatrace concept definitions and the approved-sources list.
 - [`memory/long-term/terminology.md`](../memory/long-term/terminology.md) — for terms the team has already defined.
 - The active engagement's `current-context.md` (at `memory/clients/<client>/engagements/<dated-slug>/current-context.md`) — to scope the question to the active investigation.
@@ -49,7 +49,7 @@ Two rules:
 - **Citations older than 7 days are presumed stale** and must be re-validated before reuse in any phase artifact.
 - **Every citation is re-validated at the Phase 2 → Phase 3 transition**, regardless of age. Phase 3 is the leadership-facing surface, so it gets a final sweep.
 
-The 7-day threshold is tuned to Dynatrace's actual update cadence. If your team operates in an environment where docs change more slowly, you can adjust the window in [`CLAUDE.md`](../CLAUDE.md).
+The 7-day threshold is tuned to Dynatrace's actual update cadence. If your team operates in an environment where docs change more slowly, adjust the window in [`skills/external-research/SKILL.md`](../skills/external-research/SKILL.md) (the staleness rule) and the matching dispatch condition in [`skills/context-framing/SKILL.md`](../skills/context-framing/SKILL.md) Step 1 — it does not live in `CLAUDE.md`.
 
 ## The doc-freshness-checker
 
@@ -57,7 +57,7 @@ At the start of every engagement (Phase 0), the main agent dispatches a backgrou
 
 Its job, in plain terms:
 
-1. Reads cited URLs from [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md), [`memory/long-term/dynatrace-playbooks.md`](../memory/long-term/dynatrace-playbooks.md), and [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
+1. Reads cited URLs from [`memory/long-term/domain-knowledge.md`](../memory/long-term/domain-knowledge.md), all playbook files in [`memory/long-term/playbooks/`](../memory/long-term/playbooks/), and [`memory/long-term/terminology.md`](../memory/long-term/terminology.md).
 2. Re-fetches each one via `WebFetch`.
 3. Compares stored "Last updated" dates against the current ones.
 4. Writes findings to [`memory/long-term/freshness-report.md`](../memory/long-term/freshness-report.md) — and **only** that file.
