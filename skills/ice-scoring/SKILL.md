@@ -55,6 +55,18 @@ Then read these files:
 
 Updates `<ENGAGEMENT_PATH>/hypotheses.md` with Impact, Confidence, Effort, and ICE columns populated for every row.
 
+## Phase 1 gate
+
+ICE scoring is the last Phase 1 step, so this skill closes the phase. After updating `hypotheses.md`, present the **Phase 1 gate summary block** (per CLAUDE.md "Gate summary block") with the full ranked table:
+
+1. **Conclusion** — the highest-ICE hypothesis and what it implies for the investigation, in one sentence.
+2. **What changed** — what Phase 1 produced since the Phase 0 gate: the issue tree (and what the MECE lens changed), the hypothesis set (and what the Consultative framing pass reworded), the signals map, and which hypotheses rose or fell in the ranking and why.
+3. **Assumptions and confidence gaps** — every hypothesis whose score was adjusted for an instrumentation gap (raised Effort, lowered Confidence, lowered Impact) with the gap named; every business-KPI linkage in `signals-map.md` that is qualitative rather than measured; any ICE-lens rescoring suggestion the agent declined and why.
+4. **Out-of-scope cost** — any hypothesis or signal excluded because confirming it would require an out-of-scope capability; otherwise "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — "**Approve** to proceed to Phase 2 (action planning), **Redirect** [scope or framing change], or **Iterate** [lens to re-run on the scored hypotheses]."
+
+Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md`; on approval, set `phase: 2` and today's `last-touched:` in `<ENGAGEMENT_PATH>/current-context.md`. Do not begin Phase 2 until the user explicitly approves.
+
 ## Calibration reminders
 
 - **Impact** is anchored to business KPI magnitude, not to engineering interest.

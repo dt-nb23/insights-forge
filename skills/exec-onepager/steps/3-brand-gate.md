@@ -76,6 +76,16 @@ Read `memory/long-term/brand/brand-spec.md` §6–7 alongside the HTML.
 
 ## After the gate passes
 
-Record gate completion in `<ENGAGEMENT_PATH>/decisions-log.md`. Bump `phase: 3` and `last-touched:` in `<ENGAGEMENT_PATH>/current-context.md`.
+The brand gate is the agent's own checklist; the Phase 3 gate below is the user's. Do not present the Phase 3 gate until every gate above passes — a one-pager that fails its own checklist is not ready for review.
 
-Then prompt the user to approve PPTX generation. Do not invoke the pptx-builder automatically.
+## Phase 3 gate — one-pager
+
+Present the **Phase 3 gate summary block** (per CLAUDE.md "Gate summary block"):
+
+1. **Conclusion** — the single decision or finding the one-pager leads with, in one sentence.
+2. **What changed** — what Phase 3 produced: the recipe selected and the one-sentence why, what the brand-humanizer pre-pass changed, and any brand-gate failures found and fixed.
+3. **Assumptions and confidence gaps** — any brand-gate item left unverified and how it was checked instead; any content problem flagged as a Phase 2 issue surfacing late (a missing tradeoff, an open hypothesis that reads as confirmed); any place the one-page constraint forced a cut the reader might miss.
+4. **Out-of-scope cost** — anything removed from the one-pager because it depended on an excluded capability; otherwise "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — "**Approve** to generate the deck, **Redirect** [layout, emphasis, or framing change], or **Iterate** [lens to run on the one-pager]."
+
+Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (row label `Phase 3 Deliver — one-pager`); on approval, set today's `last-touched:` in `<ENGAGEMENT_PATH>/current-context.md` (`phase:` is already `3` — it was set at the Phase 2 approval). Do not generate the deck until the user explicitly approves; the pptx-builder skill presents its own Phase 3 gate for the deck.

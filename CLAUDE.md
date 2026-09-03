@@ -54,9 +54,23 @@ Between each phase the agent **presents its output and pauses**. The user has th
 - **Redirect** — change scope, framing, or priority; the agent updates artifacts and re-presents.
 - **Iterate through a lens** — on-demand, the user may ask for re-review through any of the six lenses (MECE, Optimist, ICE, Consultative, Customer, Skeptic), and the agent revises before re-presenting. This on-demand option is in addition to — not a substitute for — the lenses mandated per phase.
 
+**Binary approval.** Only an explicit go-ahead ("approve", "approved", "go ahead", "proceed to Phase N") advances a phase. "Looks good", partial praise, silence, or a topic change are **not** approval — restate the ask, or treat the response as a Redirect. This is the same discipline the memory-write skills already apply to long-term writes.
+
 Each phase runs a specific set of critique lenses as a mandatory step, separate from the on-demand option above. `docs/lenses.md` is the authority for WHICH lenses are mandatory in each phase and WHEN each runs.
 
-The agent records every gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (where ENGAGEMENT_PATH is the engagement folder this session is working in). At each gate approval, the agent also bumps `phase:` and `last-touched:` in that engagement's `current-context.md` status front-matter so the folder stays self-describing. The decisions-log.md format follows the template in the client engagement template (`memory/clients/_template/engagements/`).
+### Gate summary block
+
+At every phase gate — Phase 0, Phase 1, Phase 2, and both Phase 3 gates (one-pager, then deck) — the agent presents its output using this **five-part block**, in order:
+
+1. **Conclusion** — the single most important finding or decision from this phase, in one sentence.
+2. **What changed** — what the agent produced, revised, or resolved in this phase compared to the prior gate.
+3. **Assumptions and confidence gaps** — places where the agent made an assumption the user should know about, or where thin evidence limits confidence. List as brief bullets; write "None" if none.
+4. **Out-of-scope cost** — any lever or opportunity excluded because it touched an out-of-scope capability. If nothing was excluded, write "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — close with: "**Approve** to proceed to Phase N, **Redirect** [scope or framing change to make], or **Iterate** [lens to run on the output]."
+
+The gate summary block is not a recap of prose already visible in the artifact — it is the decision frame that lets the user act without re-reading everything. Part 3 is the part that answers "did the agent understand?": it must be specific to this engagement, never boilerplate. Each phase skill defines what its own block contains (`skills/context-framing/SKILL.md` Step 11, `skills/ice-scoring/SKILL.md` "Phase 1 gate", `skills/action-plan-builder/SKILL.md` "Phase 2 gate", `skills/exec-onepager/steps/3-brand-gate.md` and `skills/pptx-builder/SKILL.md` "Phase 3 gate").
+
+**On approval — before any next-phase work.** Two writes are part of the gate itself, not optional bookkeeping: (1) record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md` (format per the template in `memory/clients/_template/engagements/`), and (2) update the engagement's `current-context.md` status front-matter — set `phase:` to the phase being entered (Phase 0 approval → `phase: 1`, Phase 1 → `2`, Phase 2 → `3`; Phase 3 approvals leave `phase: 3`, and only `investigation-reset` changes `state:`) and set `last-touched:` to today. A gate is not complete until both land; a resumed engagement whose `phase:` is stale means a gate was closed incorrectly. Redirect and Iterate decisions are also logged, but do not move `phase:`.
 
 ## Sub-agent lenses
 

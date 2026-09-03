@@ -9,11 +9,19 @@ event. Never edit or delete a prior row — corrections are added as a new row.
 <!--
 Per row:
 - Date          — YYYY-MM-DD of the gate decision
-- Phase / Gate  — Phase 0 Context | Phase 1 Diagnose | Phase 2 Plan | Phase 3 Deliver
+- Phase / Gate  — Phase 0 Context | Phase 1 Diagnose | Phase 2 Plan |
+                  Phase 3 Deliver — one-pager | Phase 3 Deliver — deck
 - Decision      — Approve | Redirect | Iterate-through-a-lens
 - Lens invoked  — MECE | Optimist | ICE | Consultative | Customer | Skeptic
                   (or "—" when no lens was used)
 - Rationale     — 1-2 sentences: why the user chose this, and what changed as a result
+
+Every gate is presented with the five-part gate summary block from CLAUDE.md
+(Conclusion / What changed / Assumptions and confidence gaps / Out-of-scope
+cost / Approve-Redirect-Iterate). An Approve row is only written for an
+explicit go-ahead — "looks good" or silence is not approval. Writing the
+Approve row and bumping `phase:` / `last-touched:` in current-context.md are
+both part of the gate; neither is optional.
 -->
 
 | Date | Phase / Gate | Decision | Lens invoked | Rationale |

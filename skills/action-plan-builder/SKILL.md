@@ -77,6 +77,18 @@ The Phase 2 plan is built by a **deliberating panel of perspectives**, in a deli
 8. **Revise** based on the panel and the re-ranking.
 9. **Write to `<ENGAGEMENT_PATH>/action-plan.md`.** All five sections — investigation actions, recommended actions, decision asks, risks and tradeoffs, and **"Tensions resolved"** (the panel conflicts and their resolutions from step 6) — must be populated. No placeholders in the live file.
 
+## Phase 2 gate
+
+After writing `action-plan.md`, present the **Phase 2 gate summary block** (per CLAUDE.md "Gate summary block"):
+
+1. **Conclusion** — the single highest-priority action or decision the plan surfaces, in one sentence.
+2. **What changed** — what the panel and re-ranking revised versus the first draft: tensions resolved (with the ruling on each), ICE rank shifts, instrumentation gaps converted into work items, and Skeptic questions folded into the decision asks.
+3. **Assumptions and confidence gaps** — every action where the agent assumed instrumentation the client may not have (per Step 2a — and if `environment.md` does not exist, say plainly that every instrumentation assumption is unverified), every Confidence score recalibrated downward for execution risk, and any high-severity Skeptic risk that was escalated into the decision asks rather than resolved.
+4. **Out-of-scope cost** — before presenting, **scan `action-plan.md` against the Out-of-scope exclusions recorded in `current-context.md`**: any action, opportunity, or decision ask that depends on an excluded capability is removed from the plan first, then listed here, alongside any lever excluded from the opportunity set in step 1. If the scan finds nothing and nothing was excluded, write "No out-of-scope items arose this phase."
+5. **Approve / Redirect / Iterate** — "**Approve** to proceed to Phase 3 (one-pager), **Redirect** [scope or priority change], or **Iterate** [lens to re-run on the plan]."
+
+Record the gate decision in `<ENGAGEMENT_PATH>/decisions-log.md`; on approval, set `phase: 3` and today's `last-touched:` in `<ENGAGEMENT_PATH>/current-context.md`. Do not begin Phase 3 until the user explicitly approves.
+
 ## Output
 
 `<ENGAGEMENT_PATH>/action-plan.md`, fully populated and ready for the Phase 2 gate. The **"Tensions resolved"** subsection is a required section, not optional: each panel conflict appears as claim, each side's logic, and the agent's decision.
