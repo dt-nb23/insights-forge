@@ -4,6 +4,8 @@ Welcome. This folder is the friendly tour of Insights Forge. The root [README](.
 
 Every doc in this folder follows the same shape: a short *what is this and why does it exist*, a walkthrough of how it works, and a **Look inside** section that links you to the actual agent files so you can read them yourself. Nothing here is meant to replace the source — it's meant to make the source easier to navigate.
 
+Prefer a site to a folder? [`html/index.html`](../html/index.html) is the same tour as a routed documentation app, with a Docs browser that renders these files and the agent's source files live. [getting-started.md](getting-started.md) explains how to open it inside VS Code.
+
 ## If you're new — start here
 
 Read these in order. About 20 minutes total.

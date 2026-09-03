@@ -865,10 +865,13 @@ function showDoc(key) {
   const header = (extra) => `<div class="doc-head"><span class="path-chip">${escHtml(def.src.replace(/^\.\.\//, ''))}</span>${extra || ''}</div>`;
   if (location.protocol === 'file:') {
     panel.innerHTML = header() +
-      `<div class="notice"><p style="font-weight:500;color:var(--white)">Live rendering needs a local web server.</p>` +
-      `<p>Browsers block reading sibling files from <code>file://</code>. From the repository root run one of these, then open the guide at the address shown:</p>` +
-      `<pre>python3 -m http.server 8000      # then http://localhost:8000/html/</pre>` +
-      `<p>Or use the VS Code Live Server extension on <code>html/index.html</code>. Until then, open the file directly: <a href="${def.src}">${escHtml(def.src.replace(/^\.\.\//, ''))}</a></p></div>`;
+      `<div class="notice"><p style="font-weight:500;color:var(--white)">Live rendering needs the repository served over HTTP.</p>` +
+      `<p>Browsers block reading sibling files from <code>file://</code>. Inside VS Code, any of these opens the guide in an editor tab with the Docs browser working:</p>` +
+      `<p><strong>Live Preview</strong> (recommended by this workspace): right-click <code>html/index.html</code> → <em>Show Preview</em>.</p>` +
+      `<p><strong>Live Server</strong>: click <em>Go Live</em> in the status bar, then Command Palette → <em>Simple Browser: Show</em> → <code>http://127.0.0.1:5500/html/index.html</code>.</p>` +
+      `<p><strong>No extension</strong>: Terminal → Run Task → <em>Serve agent guide</em>, then <em>Simple Browser: Show</em> → <code>http://127.0.0.1:8000/html/index.html</code>.</p>` +
+      `<p>From a terminal instead, at the repository root:</p><pre>python3 -m http.server 8000      # then http://localhost:8000/html/</pre>` +
+      `<p>Until then, open the file directly: <a href="${def.src}">${escHtml(def.src.replace(/^\.\.\//, ''))}</a></p></div>`;
     return;
   }
   panel.innerHTML = header() + '<p style="color:var(--gray)">Loading…</p>';

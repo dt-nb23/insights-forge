@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Serve agent guide (http://127.0.0.1:8000/html/)",
+      "detail": "Serves the repository root so html/index.html can render the docs live. Then: Command Palette → Simple Browser: Show → http://127.0.0.1:8000/html/index.html",
+      "type": "shell",
+      "command": "python3",
+      "args": ["-u", "-m", "http.server", "8000", "--bind", "127.0.0.1"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "presentation": { "reveal": "silent", "panel": "dedicated", "close": false },
+      "problemMatcher": {
+        "owner": "agent-guide-server",
+        "pattern": [{ "regexp": ".", "file": 1, "location": 2, "message": 3 }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^Serving HTTP",
+          "endsPattern": "^Serving HTTP"
+        }
+      }
+    }
+  ]
+}

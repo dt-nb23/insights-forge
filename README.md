@@ -68,6 +68,8 @@ Practical implications for budget-conscious users:
 
 The detailed reference lives in [`/docs/`](docs/). Start with [docs/README.md](docs/README.md) for the table of contents.
 
+**Interactive guide:** [`html/index.html`](html/index.html) is the same material as a routed documentation app — phase step-through, gates, lenses, memory model — plus a Docs browser that renders every doc, skill, and lens file live from the repository. In VS Code, right-click it → *Show Preview* (the Live Preview extension this workspace recommends) to read it in an editor tab; see [docs/getting-started.md](docs/getting-started.md) for the other ways to open it.
+
 | If you want to… | Read |
 |---|---|
 | Set up the workspace and run your first investigation | [docs/getting-started.md](docs/getting-started.md) |
