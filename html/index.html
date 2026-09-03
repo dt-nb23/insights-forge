@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insights Forge — Agent Guide</title>
-<meta name="description" content="How the Insights Forge agent works: phases, gates, lenses, skills, memory, guardrails, and how to run your first engagement.">
+<meta name="description" content="How the Insights Forge agent works: phases, gates, lenses, skills, memory, guardrails, and a live browser for the repository docs.">
 <style>
   @font-face { font-family: 'DTFlow'; src: url('../DTFlow/DTFlow-Medium.otf'); font-weight: 500; font-display: swap; }
   @font-face { font-family: 'DTFlow'; src: url('../DTFlow/DTFlow-Light.otf'); font-weight: 300; font-display: swap; }
@@ -13,640 +13,971 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --navy: #07101e;
-    --navy2: #0d1f38;
-    --teal: #49C2B3;
-    --magenta: #C93FDB;
-    --blue: #1966FF;
-    --blue-lt: #6fa8ff;
-    --gray: #6F747F;
-    --gray-lt: #b0b5be;
-    --white: #f0f4f8;
-    --card: rgba(255,255,255,.04);
-    --line: rgba(255,255,255,.09);
-    --max: 1080px;
+    --navy: #07101e; --navy2: #0d1f38;
+    --teal: #49C2B3; --magenta: #C93FDB; --blue: #1966FF; --blue-lt: #6fa8ff;
+    --gray: #6F747F; --gray-lt: #b0b5be; --white: #f0f4f8;
+    --card: rgba(255,255,255,.04); --line: rgba(255,255,255,.09);
+    --sidebar-w: 240px; --mono: ui-monospace, Menlo, Consolas, monospace;
   }
 
-  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  html, body { height: 100%; }
   body { background: var(--navy); color: var(--white); font-family: 'DTFlow', Arial, sans-serif; font-weight: 300; font-size: 15px; line-height: 1.6; }
   a { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(73,194,179,.3); }
   a:hover { border-bottom-color: var(--teal); }
-  code, .path { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 4px; color: #c8d0e0; }
+  code, .ic { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,.09); padding: 1px 6px; border-radius: 4px; color: #c8d0e0; }
   strong { font-weight: 500; color: var(--white); }
   em { color: #d8dde6; }
 
-  /* ── Header / nav ── */
-  header { position: sticky; top: 0; z-index: 10; background: rgba(7,16,30,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-  .bar { max-width: var(--max); margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .brand { display: flex; align-items: center; gap: 10px; }
-  .brand img { height: 22px; display: block; }
-  .brand .fallback { display: none; font-size: 16px; font-weight: 500; color: var(--teal); }
-  .brand .sub { font-size: 11px; color: var(--gray); letter-spacing: .08em; text-transform: uppercase; }
-  nav.top { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
-  nav.top a { font-size: 12px; color: var(--gray-lt); padding: 6px 10px; border: none; border-radius: 6px; }
-  nav.top a:hover { color: var(--white); background: rgba(255,255,255,.05); }
+  /* ── Shell ── */
+  #shell { display: flex; height: 100vh; overflow: hidden; }
+  #sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--navy2); border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow-y: auto; }
+  #sidebar-logo { padding: 20px 16px 14px; border-bottom: 1px solid var(--line); }
+  #sidebar-logo img { height: 22px; display: block; }
+  #sidebar-logo .fallback { display: none; font-size: 16px; font-weight: 500; color: var(--teal); }
+  #sidebar-logo .sub { font-size: 11px; color: var(--gray); margin-top: 4px; letter-spacing: .06em; text-transform: uppercase; }
+  nav { flex: 1; padding: 10px 0; }
+  .nav-section { padding: 10px 16px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 16px; font-size: 13px; color: var(--gray-lt); border: none; border-left: 2px solid transparent; transition: all .15s; }
+  .nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
+  .nav-item.active { color: var(--teal); border-left-color: var(--teal); background: rgba(73,194,179,.06); }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  #sidebar-foot { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 11px; color: var(--gray); line-height: 1.5; }
 
-  /* ── Layout ── */
-  main { max-width: var(--max); margin: 0 auto; padding: 32px 24px 80px; }
-  section { padding: 40px 0 8px; border-top: 1px solid var(--line); }
-  section:first-of-type { border-top: none; padding-top: 16px; }
-  h1 { font-size: 32px; font-weight: 500; line-height: 1.2; margin-bottom: 10px; }
-  h2 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  #main { flex: 1; overflow-y: auto; padding: 40px 48px 80px; }
+  .page { display: none; max-width: 1040px; animation: fadeIn .2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Typography ── */
+  h1 { font-size: 28px; font-weight: 500; margin-bottom: 8px; line-height: 1.2; }
+  h2 { font-size: 20px; font-weight: 500; margin: 32px 0 12px; }
   h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
   h4 { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--gray); margin: 14px 0 6px; }
   p { color: var(--gray-lt); margin-bottom: 12px; }
-  .lead { font-size: 16px; max-width: 720px; margin-bottom: 24px; }
+  .lead { font-size: 16px; color: var(--gray-lt); max-width: 680px; margin-bottom: 28px; }
+  .small { font-size: 13px; }
   .kicker { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
-  .small { font-size: 12.5px; }
-  ul.plain { list-style: none; }
-  ul.dash li { color: var(--gray-lt); font-size: 13px; margin: 5px 0 5px 14px; position: relative; }
-  ul.dash li::before { content: ''; position: absolute; left: -14px; top: 10px; width: 6px; height: 1px; background: var(--gray); }
-
   .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; letter-spacing: .03em; white-space: nowrap; }
   .tag-teal { background: rgba(73,194,179,.15); color: var(--teal); }
   .tag-magenta { background: rgba(201,63,219,.15); color: var(--magenta); }
   .tag-blue { background: rgba(25,102,255,.2); color: var(--blue-lt); }
   .tag-gray { background: rgba(255,255,255,.08); color: var(--gray-lt); }
+  ul.dash { list-style: none; }
+  ul.dash li { color: var(--gray-lt); font-size: 13px; margin: 5px 0 5px 14px; position: relative; }
+  ul.dash li::before { content: ''; position: absolute; left: -14px; top: 10px; width: 6px; height: 1px; background: var(--gray); }
+  .mono { font-family: var(--mono); font-size: 12px; color: var(--teal); }
 
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
-  .grid { display: grid; gap: 12px; margin: 16px 0 24px; }
-  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  /* ── Cards & grids ── */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; margin-bottom: 12px; }
+  .card-sm { padding: 14px 18px; }
   .card h3 { margin-bottom: 8px; }
   .card p { font-size: 13px; margin-bottom: 8px; }
   .card p:last-child { margin-bottom: 0; }
+  .grid { display: grid; gap: 12px; margin: 12px 0 24px; }
+  .grid-3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .grid .card { margin: 0; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 
-  /* ── Flow strip ── */
-  .flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin: 20px 0 8px; }
-  .node { flex: 1; min-width: 150px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  /* ── Steps (numbered) ── */
+  .steps { list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding: 7px 0 7px 32px; font-size: 13px; color: var(--gray-lt); border-bottom: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 9px; width: 22px; height: 22px; border-radius: 50%; background: rgba(73,194,179,.15); color: var(--teal); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .steps li .tag { vertical-align: middle; }
+
+  /* ── Phase flow strip ── */
+  .flow { display: flex; align-items: stretch; flex-wrap: wrap; margin: 20px 0 16px; }
+  .node { flex: 1; min-width: 140px; background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all .15s; }
+  .node:hover { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.05); }
+  .node.on { border-color: var(--teal); background: rgba(73,194,179,.08); }
   .node.entry { border-style: dashed; }
+  .node.entry.on { border-color: var(--blue-lt); background: rgba(25,102,255,.08); }
   .node .num { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
   .node .name { font-size: 14px; font-weight: 500; margin: 2px 0 4px; }
-  .node .out { font-size: 11px; color: var(--teal); font-family: ui-monospace, Menlo, Consolas, monospace; line-height: 1.5; }
-  .gate { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 6px; min-width: 52px; }
-  .gate .lock { font-size: 16px; line-height: 1; }
-  .gate .lbl { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); margin-top: 2px; }
-  .flow-note { font-size: 12.5px; color: var(--gray-lt); max-width: 760px; }
+  .node .out { font-size: 11px; color: var(--teal); font-family: var(--mono); line-height: 1.5; }
+  .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 6px; min-width: 48px; color: var(--gray); }
+  .conn .lock { font-size: 15px; line-height: 1; }
+  .conn .lbl { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+  .flow-tail { display: flex; justify-content: flex-end; align-items: center; margin: -6px 0 16px; }
+  .conn.tail { flex-direction: row; gap: 8px; padding: 0 12px; }
+  .conn.tail .lbl { margin: 0; }
+  .node.small { flex: 0 0 auto; min-width: 220px; padding: 10px 14px; }
+  .lens-band { margin: 4px 0 16px; }
+  .lens-band .lbl { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .lens-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lens-pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; border: 1px solid var(--line); color: var(--gray); background: rgba(255,255,255,.03); transition: all .15s; }
+  .lens-pill.on { background: rgba(201,63,219,.15); border-color: rgba(201,63,219,.4); color: var(--magenta); }
+  .lens-pill.dim { opacity: .25; }
+  #sf-detail { background: var(--card); border: 1px solid rgba(73,194,179,.25); border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; min-height: 90px; }
+  .sf-row { display: flex; gap: 16px; align-items: flex-start; margin-top: 10px; }
+  .sf-lbl { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: .07em; min-width: 90px; padding-top: 4px; flex-shrink: 0; }
+  .sf-row .tag { margin: 0 4px 4px 0; }
 
-  /* ── Phase cards ── */
-  .phase { border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; margin: 16px 0; background: var(--card); }
-  .phase-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-  .phase-head h3 { font-size: 18px; margin: 0; }
-  .phase-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin-top: 12px; }
-  .phase-cols h4 { margin-top: 0; }
-  .phase-cols li { font-size: 13px; }
-  .phase .files { font-size: 11.5px; color: var(--teal); font-family: ui-monospace, Menlo, Consolas, monospace; }
-  .steps { list-style: none; counter-reset: s; }
-  .steps li { counter-increment: s; position: relative; padding: 6px 0 6px 30px; font-size: 13px; color: var(--gray-lt); border-bottom: 1px solid var(--line); }
-  .steps li:last-child { border-bottom: none; }
-  .steps li::before { content: counter(s); position: absolute; left: 0; top: 8px; width: 20px; height: 20px; border-radius: 50%; background: rgba(73,194,179,.15); color: var(--teal); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-  .steps li .tag { vertical-align: middle; }
+  /* ── Accordions (skills) ── */
+  .acc { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+  .acc-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; cursor: pointer; transition: background .15s; }
+  .acc-head:hover { background: rgba(255,255,255,.03); }
+  .acc-left { display: flex; align-items: center; gap: 12px; }
+  .acc-ic { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; background: rgba(73,194,179,.12); }
+  .acc-ic.b { background: rgba(25,102,255,.12); } .acc-ic.m { background: rgba(201,63,219,.12); } .acc-ic.g { background: rgba(255,255,255,.06); }
+  .acc-title { font-size: 13px; font-weight: 500; }
+  .acc-sub { font-size: 11px; color: var(--gray); font-family: var(--mono); }
+  .acc-body { display: none; padding: 0 18px 14px 62px; border-top: 1px solid var(--line); }
+  .acc-body p { font-size: 12.5px; margin-top: 10px; }
+  .acc.open .acc-body { display: block; animation: fadeIn .15s ease; }
+  .chev { color: var(--gray); transition: transform .2s; }
+  .acc.open .chev { transform: rotate(180deg); }
 
   /* ── Tables ── */
   .tbl-wrap { overflow-x: auto; margin: 12px 0 20px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 8px 12px; color: var(--gray); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  td { padding: 9px 12px; border-bottom: 1px solid var(--line); color: var(--gray-lt); vertical-align: top; line-height: 1.5; }
-  tr:last-child td { border-bottom: none; }
-  td:first-child { color: var(--white); white-space: nowrap; }
-  td.mono, .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; color: var(--teal); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.t th { text-align: left; padding: 8px 12px; color: var(--gray); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.t td { padding: 9px 12px; border-bottom: 1px solid var(--line); color: var(--gray-lt); vertical-align: top; line-height: 1.5; }
+  table.t tr:last-child td { border-bottom: none; }
+  table.t td:first-child { color: var(--white); white-space: nowrap; }
 
   /* ── Callouts ── */
-  .callout { display: flex; gap: 14px; align-items: flex-start; border-radius: 10px; padding: 14px 18px; margin: 14px 0; border: 1px solid; }
+  .callout { display: flex; gap: 14px; align-items: flex-start; border-radius: 10px; padding: 14px 18px; margin: 16px 0; border: 1px solid; }
   .callout .ico { font-size: 18px; line-height: 1.3; flex-shrink: 0; }
   .callout p { font-size: 13px; margin: 0; }
   .c-blue { background: rgba(25,102,255,.08); border-color: rgba(25,102,255,.3); }
   .c-teal { background: rgba(73,194,179,.06); border-color: rgba(73,194,179,.3); }
   .c-magenta { background: rgba(201,63,219,.06); border-color: rgba(201,63,219,.3); }
+  .gate-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 
   /* ── Gate block ── */
   .gate-block { border: 1px solid rgba(25,102,255,.35); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; }
-  .gate-block .row { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+  .gate-block .row { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 11px 18px; border-bottom: 1px solid var(--line); }
   .gate-block .row:last-child { border-bottom: none; }
   .gate-block .n { font-size: 20px; font-weight: 700; color: rgba(255,255,255,.18); line-height: 1.1; }
   .gate-block .t { font-size: 13.5px; color: var(--white); font-weight: 500; }
   .gate-block .d { font-size: 12.5px; color: var(--gray-lt); margin-top: 2px; }
-  .opts { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 4px; }
 
   /* ── Memory tiers ── */
-  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; margin: 16px 0; }
+  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin: 16px 0; }
   .tier { border-radius: 10px; padding: 18px; border: 1px solid; }
   .tier h3 { margin-bottom: 2px; }
-  .tier .path { display: block; background: none; padding: 0; margin-bottom: 10px; color: var(--gray); }
-  .tier .f { display: block; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; color: var(--teal); padding: 2px 0; }
+  .tier .path { font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 10px; }
+  .tier .f { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--teal); padding: 2px 0; }
   .tier .rule { font-size: 12px; color: var(--gray-lt); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
 
-  /* ── Skill list ── */
-  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px; margin: 12px 0 20px; }
-  .skill { display: flex; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
-  .skill .ic { font-size: 16px; flex-shrink: 0; }
-  .skill .n { font-size: 13px; font-weight: 500; }
-  .skill .n a { border: none; color: var(--white); }
-  .skill .n a:hover { color: var(--teal); }
-  .skill .w { font-size: 11px; color: var(--gray); }
-  .skill .d { font-size: 12.5px; color: var(--gray-lt); margin-top: 3px; }
+  /* ── Two-panel viewer (docs) ── */
+  .two-panel { display: flex; height: calc(100vh - 150px); min-height: 420px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: rgba(0,0,0,.12); }
+  .panel-left { width: 232px; flex-shrink: 0; border-right: 1px solid var(--line); overflow-y: auto; padding: 6px 0 20px; }
+  .panel-right { flex: 1; overflow-y: auto; padding: 22px 28px 40px; }
+  .panel-group { padding: 10px 14px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+  .panel-item { display: block; padding: 5px 14px; font-size: 12px; color: var(--gray-lt); border: none; border-left: 2px solid transparent; transition: all .15s; font-family: var(--mono); font-size: 11.5px; }
+  .panel-item:hover { color: var(--white); background: rgba(255,255,255,.03); }
+  .panel-item.active { color: var(--teal); border-left-color: var(--teal); background: rgba(73,194,179,.06); }
+  .doc-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .path-chip { font-family: var(--mono); font-size: 12px; color: var(--teal); background: rgba(73,194,179,.08); padding: 3px 10px; border-radius: 4px; }
+  .view-toggle { display: flex; gap: 4px; margin-left: auto; }
+  .view-btn { padding: 4px 12px; font-size: 12px; font-family: inherit; background: transparent; border: 1px solid var(--line); border-radius: 4px; color: var(--gray); cursor: pointer; }
+  .view-btn:hover { color: var(--white); }
+  .view-btn.active { background: rgba(73,194,179,.12); border-color: var(--teal); color: var(--teal); }
+  .raw-wrap { display: flex; background: #080e1a; border: 1px solid var(--line); border-radius: 8px; overflow: auto; }
+  .raw-nums { padding: 14px 8px 14px 14px; color: #2e3545; font-family: var(--mono); font-size: 12px; line-height: 1.65; text-align: right; user-select: none; flex-shrink: 0; }
+  .raw-nums span { display: block; }
+  .raw-pre { padding: 14px 14px 14px 0; color: #c8d0e0; font-family: var(--mono); font-size: 12px; line-height: 1.65; white-space: pre; flex: 1; margin: 0; }
 
-  /* ── Footer ── */
-  footer { border-top: 1px solid var(--line); padding: 20px 24px 40px; font-size: 12px; color: var(--gray); text-align: center; }
+  /* ── Rendered markdown ── */
+  .md { max-width: 760px; }
+  .md h1 { font-size: 24px; font-weight: 500; margin: 6px 0 14px; }
+  .md h2 { font-size: 17px; font-weight: 500; margin: 28px 0 10px; padding-bottom: 7px; border-bottom: 1px solid var(--line); }
+  .md h3 { font-size: 14px; font-weight: 500; margin: 18px 0 7px; }
+  .md h4, .md h5, .md h6 { font-size: 13px; font-weight: 500; margin: 14px 0 6px; color: var(--gray-lt); text-transform: none; letter-spacing: 0; }
+  .md p { font-size: 14px; margin: 0 0 12px; line-height: 1.72; }
+  .md ul, .md ol { padding-left: 22px; margin: 0 0 12px; }
+  .md li { color: var(--gray-lt); font-size: 14px; margin: 5px 0; line-height: 1.65; }
+  .md li > ul, .md li > ol { margin: 4px 0; }
+  .md blockquote { border-left: 3px solid var(--teal); padding: 10px 16px; margin: 14px 0; background: rgba(73,194,179,.05); border-radius: 0 6px 6px 0; }
+  .md blockquote p { margin: 0 0 6px; }
+  .md blockquote p:last-child { margin: 0; }
+  .md hr { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+  .md pre { background: rgba(0,0,0,.4); border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; overflow-x: auto; margin: 10px 0 16px; line-height: 1.55; }
+  .md pre code { background: none; padding: 0; font-size: 12.5px; }
+  .md table { width: 100%; border-collapse: collapse; margin: 12px 0 16px; font-size: 13px; }
+  .md thead th { text-align: left; padding: 8px 12px; background: rgba(255,255,255,.04); color: var(--gray-lt); font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+  .md tbody td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--gray-lt); vertical-align: top; line-height: 1.55; }
+  .md img { max-width: 100%; }
+  .notice { background: rgba(201,63,219,.06); border: 1px solid rgba(201,63,219,.25); border-radius: 8px; padding: 16px 20px; margin-top: 8px; }
+  .notice p { font-size: 13px; }
+  .notice pre { background: rgba(0,0,0,.4); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; font-family: var(--mono); font-size: 12px; color: #c8d0e0; margin: 8px 0; overflow-x: auto; }
 
-  @media (max-width: 720px) {
-    h1 { font-size: 26px; }
-    main { padding: 20px 16px 60px; }
-    .gate { flex-direction: row; min-width: 0; width: 100%; padding: 4px 0; }
-    .gate .lbl { margin: 0 0 0 6px; }
-  }
-  @media print {
-    header { position: static; }
-    nav.top { display: none; }
-    body { background: #fff; color: #111; }
-    p, td, li, .flow-note { color: #222 !important; }
-    .card, .phase, .node, .tier, .skill, .gate-block { background: none !important; border-color: #bbb !important; }
-    a { color: #0b5; border: none; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+
+  @media (max-width: 860px) {
+    #shell { flex-direction: column; height: auto; overflow: visible; }
+    #sidebar { width: 100%; flex-direction: column; border-right: none; border-bottom: 1px solid var(--line); overflow: visible; }
+    nav { display: flex; flex-wrap: wrap; padding: 6px 8px; }
+    .nav-section { width: 100%; padding: 8px 8px 2px; }
+    .nav-item { padding: 6px 10px; border-left: none; border-radius: 6px; }
+    .nav-item.active { border-left: none; }
+    #sidebar-foot { display: none; }
+    #main { padding: 24px 18px 60px; overflow: visible; }
+    .two-panel { flex-direction: column; height: auto; }
+    .panel-left { width: 100%; border-right: none; border-bottom: 1px solid var(--line); max-height: 220px; }
+    .conn { flex-direction: row; width: 100%; min-width: 0; padding: 4px 0; }
+    .conn .lbl { margin: 0 0 0 6px; }
   }
 </style>
 </head>
 <body>
+<div id="shell">
 
-<header>
-  <div class="bar">
-    <div class="brand">
-      <img src="../assets/insights-lockup-rev.svg" alt="Insights Forge" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <span class="fallback">Insights Forge</span>
-      <span class="sub">Agent guide</span>
-    </div>
-    <nav class="top">
-      <a href="#overview">Overview</a>
-      <a href="#flow">Flow</a>
-      <a href="#phases">Phases</a>
-      <a href="#gates">Gates</a>
-      <a href="#lenses">Lenses</a>
-      <a href="#skills">Skills</a>
-      <a href="#memory">Memory</a>
-      <a href="#guardrails">Guardrails</a>
-      <a href="#start">Getting started</a>
-      <a href="#docs">Docs</a>
-    </nav>
+<!-- ── Sidebar ── -->
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <img src="../assets/insights-lockup-rev.svg" alt="Insights Forge" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span class="fallback">Insights Forge</span>
+    <div class="sub">Agent guide</div>
   </div>
-</header>
+  <nav>
+    <div class="nav-section">Start here</div>
+    <a class="nav-item" href="#/overview" data-page="overview"><span class="nav-dot" style="background:#49C2B3"></span>Overview</a>
+    <a class="nav-item" href="#/start" data-page="start"><span class="nav-dot" style="background:#49C2B3"></span>Getting started</a>
 
-<main>
+    <div class="nav-section">Phases</div>
+    <a class="nav-item" href="#/flow" data-page="flow"><span class="nav-dot" style="background:#49C2B3"></span>Phase flow</a>
+    <a class="nav-item" href="#/phase0" data-page="phase0"><span class="nav-dot" style="background:#6F747F"></span>Phase 0 — Context</a>
+    <a class="nav-item" href="#/phase1" data-page="phase1"><span class="nav-dot" style="background:#6F747F"></span>Phase 1 — Diagnose</a>
+    <a class="nav-item" href="#/phase2" data-page="phase2"><span class="nav-dot" style="background:#6F747F"></span>Phase 2 — Solution</a>
+    <a class="nav-item" href="#/phase3" data-page="phase3"><span class="nav-dot" style="background:#6F747F"></span>Phase 3 — Deliver</a>
 
-<!-- ═══════════════ OVERVIEW ═══════════════ -->
-<section id="overview">
+    <div class="nav-section">Tooling</div>
+    <a class="nav-item" href="#/skills" data-page="skills"><span class="nav-dot" style="background:#C93FDB"></span>Skills</a>
+    <a class="nav-item" href="#/lenses" data-page="lenses"><span class="nav-dot" style="background:#C93FDB"></span>Lenses</a>
+    <a class="nav-item" href="#/tools" data-page="tools"><span class="nav-dot" style="background:#C93FDB"></span>Tools &amp; hooks</a>
+
+    <div class="nav-section">Architecture</div>
+    <a class="nav-item" href="#/memory" data-page="memory"><span class="nav-dot" style="background:#1966FF"></span>Memory model</a>
+    <a class="nav-item" href="#/artifacts" data-page="artifacts"><span class="nav-dot" style="background:#1966FF"></span>Artifacts</a>
+    <a class="nav-item" href="#/gates" data-page="gates"><span class="nav-dot" style="background:#1966FF"></span>Gates &amp; controls</a>
+
+    <div class="nav-section">Reference</div>
+    <a class="nav-item" href="#/docs" data-page="docs"><span class="nav-dot" style="background:#b0b5be"></span>Docs browser</a>
+  </nav>
+  <div id="sidebar-foot">When this guide and a source file disagree, the source wins. The Docs browser renders the repository files live.</div>
+</aside>
+
+<!-- ── Main ── -->
+<main id="main">
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<section class="page active" id="page-overview">
   <div class="kicker">What this is</div>
   <h1>An agent that structures consulting judgment — and waits for yours.</h1>
-  <p class="lead">Insights Forge helps Dynatrace consulting teams turn an ambiguous customer problem into a MECE diagnosis, a ranked set of testable hypotheses, an action plan with named owners and exit criteria, and leadership-ready deliverables. It works in four phases with a human approval gate between each one.</p>
+  <p class="lead">Insights Forge helps Dynatrace consulting teams turn an ambiguous customer problem into a MECE diagnosis, ranked testable hypotheses, an action plan with named owners and exit criteria, and leadership-ready deliverables — in four phases, with a human approval gate between each one.</p>
 
   <div class="grid grid-3">
-    <div class="card">
-      <span class="tag tag-teal">Core purpose</span>
-      <h3 style="margin-top:10px">Structure and accelerate</h3>
-      <p>Takes a vague problem description and turns it into an issue tree, prioritized hypotheses, a signal-to-KPI map, and a plan your leadership can act on. It structures engineering judgment; it does not replace it.</p>
-    </div>
-    <div class="card">
-      <span class="tag tag-blue">What it never does</span>
-      <h3 style="margin-top:10px">No live system access</h3>
-      <p>Never runs queries against Dynatrace or any production system, never generates DQL or SQL, never executes configuration changes. Your team keeps the data lookups and the changes.</p>
-    </div>
-    <div class="card">
-      <span class="tag tag-magenta">Guardrail</span>
-      <h3 style="margin-top:10px">You decide what happens next</h3>
-      <p>Every phase ends with a five-part gate summary and a pause. Only an explicit "approve" advances the work — "looks good" does not.</p>
-    </div>
+    <div class="card card-sm"><span class="tag tag-teal">Core purpose</span><h3 style="margin-top:10px">Structure and accelerate</h3><p>Turns a vague problem description into an issue tree, prioritized hypotheses, a signal-to-KPI map, and a plan your leadership can act on. It structures engineering judgment; it does not replace it.</p></div>
+    <div class="card card-sm"><span class="tag tag-blue">What it never does</span><h3 style="margin-top:10px">No live system access</h3><p>Never runs queries against Dynatrace or any production system, never generates DQL or SQL, never executes configuration changes. Your team keeps the lookups and the changes.</p></div>
+    <div class="card card-sm"><span class="tag tag-magenta">Guardrail</span><h3 style="margin-top:10px">You decide what happens next</h3><p>Every phase ends with a five-part gate summary and a pause. Only an explicit "approve" advances the work — "looks good" does not.</p></div>
   </div>
 
   <h2>Operating principles</h2>
   <div class="grid grid-2">
-    <div class="card"><h3>🔒 Explicit phases, explicit approval</h3><p>Four phases, five gates (Phase 3 has two: one-pager, then deck). Nothing moves without a go-ahead, and every gate decision is logged.</p></div>
-    <div class="card"><h3>🔍 Honest about evidence</h3><p>When data is thin or a hypothesis cannot be validated with the instrumentation that exists, the gap is named in the artifact — never papered over with confidence.</p></div>
-    <div class="card"><h3>📐 MECE structure, ranked hypotheses, named exit criteria</h3><p>Every artifact is reviewable in a 15-minute leadership window. "Confirmed", "ruled out", and "inconclusive" are defined before anyone looks at data.</p></div>
-    <div class="card"><h3>🚧 Out-of-scope is a hard, engagement-wide constraint</h3><p>Exclusions captured at Phase 0 are pasted into every critique lens and honored in every phase — even when the excluded capability is active in the tenant.</p></div>
-    <div class="card"><h3>🧭 Never recommends instrumentation the client lacks</h3><p>Active capabilities are the boundary of what can be surfaced. A missing capability becomes an instrumentation gap or a named follow-on, not a recommended action.</p></div>
-    <div class="card"><h3>🗣️ Every session starts with the problem</h3><p>"Describe the problem you're trying to solve." The agent never assumes what the issue is before you say it.</p></div>
+    <div class="card card-sm"><h3>🔒 Explicit phases, explicit approval</h3><p>Four phases, five gates (Phase 3 has two: one-pager, then deck). Nothing moves without a go-ahead, and every gate decision is logged.</p></div>
+    <div class="card card-sm"><h3>🔍 Honest about evidence</h3><p>When data is thin or a hypothesis cannot be validated with the instrumentation that exists, the gap is named in the artifact — never papered over with confidence.</p></div>
+    <div class="card card-sm"><h3>📐 MECE structure, ranked hypotheses, named exit criteria</h3><p>Every artifact is reviewable in a 15-minute leadership window. "Confirmed", "ruled out", and "inconclusive" are defined before anyone looks at data.</p></div>
+    <div class="card card-sm"><h3>🚧 Out-of-scope is a hard, engagement-wide constraint</h3><p>Exclusions captured at Phase 0 are pasted into every critique lens and honored in every phase — even when the excluded capability is active in the tenant.</p></div>
+    <div class="card card-sm"><h3>🧭 Never recommends instrumentation the client lacks</h3><p>Active capabilities are the boundary of what can be surfaced. A missing capability becomes an instrumentation gap or a named follow-on, not a recommended action.</p></div>
+    <div class="card card-sm"><h3>🗣️ Every session starts with the problem</h3><p>"Describe the problem you're trying to solve." The agent never assumes what the issue is before you say it.</p></div>
+  </div>
+
+  <h2>Where to go next</h2>
+  <div class="grid grid-3">
+    <a class="card card-sm" href="#/flow" style="border-color:rgba(73,194,179,.3)"><h3>Phase flow →</h3><p>Click through what runs in each phase: skills, lenses, artifacts, gates.</p></a>
+    <a class="card card-sm" href="#/start" style="border-color:rgba(25,102,255,.3)"><h3>Getting started →</h3><p>Install, one-time setup, and your first engagement end to end.</p></a>
+    <a class="card card-sm" href="#/docs" style="border-color:rgba(201,63,219,.3)"><h3>Docs browser →</h3><p>Read the operating manual, docs, skills, and lens files as they are in the repository.</p></a>
   </div>
 </section>
 
-<!-- ═══════════════ FLOW ═══════════════ -->
-<section id="flow">
-  <div class="kicker">How an engagement flows</div>
-  <h2>Four phases, five gates, one folder</h2>
-  <p class="lead">Everything the agent writes for an engagement lands in one dated folder under the client's workspace: <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code>. The folder is self-describing — its <code>current-context.md</code> opens with a status block (<code>state</code>, <code>phase</code>, <code>last-touched</code>), so there is no global pointer file and two sessions for two clients can never collide.</p>
+<!-- ═══════════ PHASE FLOW ═══════════ -->
+<section class="page" id="page-flow">
+  <h1>Phase flow</h1>
+  <p class="lead">Four phases, five gates, one folder. Click a stage to see what runs inside it — which skills, which lenses, and what it writes.</p>
 
-  <div class="flow">
-    <div class="node entry">
-      <div class="num">Entry</div>
-      <div class="name">Seed prompt or /drill</div>
-      <div class="out">intake brief (optional)</div>
-    </div>
-    <div class="gate"><span class="lock">→</span><span class="lbl">opt</span></div>
-    <div class="node">
-      <div class="num">Phase 0</div>
-      <div class="name">Context</div>
-      <div class="out">current-context.md</div>
-    </div>
-    <div class="gate"><span class="lock">🔐</span><span class="lbl">gate</span></div>
-    <div class="node">
-      <div class="num">Phase 1</div>
-      <div class="name">Diagnose</div>
-      <div class="out">issue-tree · hypotheses · signals-map</div>
-    </div>
-    <div class="gate"><span class="lock">🔐</span><span class="lbl">gate</span></div>
-    <div class="node">
-      <div class="num">Phase 2</div>
-      <div class="name">Solution</div>
-      <div class="out">action-plan.md</div>
-    </div>
-    <div class="gate"><span class="lock">🔐</span><span class="lbl">gate</span></div>
-    <div class="node">
-      <div class="num">Phase 3</div>
-      <div class="name">Deliver</div>
-      <div class="out">one-pager 🔐 → deck 🔐</div>
-    </div>
+  <div class="flow" id="flow-strip">
+    <div class="node entry" data-sf="seed"><div class="num">Entry</div><div class="name">Seed prompt / drill</div><div class="out">intake brief (optional)</div></div>
+    <div class="conn"><span class="lock">→</span><span class="lbl">opt</span></div>
+    <div class="node" data-sf="p0"><div class="num">Phase 0</div><div class="name">Context</div><div class="out">current-context.md</div></div>
+    <div class="conn"><span class="lock">🔐</span><span class="lbl">gate</span></div>
+    <div class="node" data-sf="p1"><div class="num">Phase 1</div><div class="name">Diagnose</div><div class="out">issue-tree · hypotheses · signals-map</div></div>
+    <div class="conn"><span class="lock">🔐</span><span class="lbl">gate</span></div>
+    <div class="node" data-sf="p2"><div class="num">Phase 2</div><div class="name">Solution</div><div class="out">action-plan.md</div></div>
+    <div class="conn"><span class="lock">🔐</span><span class="lbl">gate</span></div>
+    <div class="node" data-sf="p3"><div class="num">Phase 3</div><div class="name">Deliver</div><div class="out">one-pager 🔐 → deck 🔐</div></div>
   </div>
-  <p class="flow-note">After the deck is approved, "Archive this investigation" writes a tagged <code>lessons-learned.md</code> and flips the folder to <code>state: complete</code>. Before Phase 0 the agent reads four long-term files and holds them all session: <code>domain-knowledge.md</code>, the playbook hub, <code>frameworks.md</code>, and the stakeholder-profile hub. Individual playbooks, profiles, and drill sheets are read only when a phase needs them. Each phase's skill file is read immediately before its artifact is produced — never pre-loaded.</p>
-</section>
+  <div class="flow-tail">
+    <div class="conn tail"><span class="lock">↳</span><span class="lbl">after deck approval</span></div>
+    <div class="node entry small" data-sf="close"><div class="num">Close</div><div class="name">Archive</div><div class="out">lessons-learned.md · state: complete</div></div>
+  </div>
 
-<!-- ═══════════════ PHASES ═══════════════ -->
-<section id="phases">
-  <div class="kicker">Phase by phase</div>
-  <h2>What each phase produces, asks of you, and checks</h2>
-
-  <!-- Phase 0 -->
-  <div class="phase" id="phase-0">
-    <div class="phase-head"><span class="tag tag-gray">Phase 0</span><h3>Context framing</h3><span class="files">skills/context-framing/SKILL.md</span></div>
-    <p class="small">Frames the engagement before any diagnosis. The output is a complete <code>current-context.md</code>: customer, vertical, the C.S.I.R. frame (Context, Specific Information, Intent, Response Format), active capabilities, out-of-scope exclusions, stakeholder archetype, consulting objective, and 3–5 orientation hypotheses that are starting candidates, not findings.</p>
-    <div class="phase-cols">
-      <div>
-        <h4>Asks you — in three phases</h4>
-        <ol class="steps">
-          <li><strong>A · Narrative funnel.</strong> Q1 customer, Q2 vertical, Q3 C.S.I.R. — one question at a time, each answer driving the next.</li>
-          <li><strong>B · Closed drill block.</strong> Q4 tenant type, Q5 capability checklist, Q6 RUM status, Q7 stakeholder, Q9 trigger — one batched message.</li>
-          <li><strong>C · Vertical drill sheet.</strong> Five pre-targeted questions for the customer's vertical, in one message, in place of a generic "what does the technical team care about?"</li>
-        </ol>
-      </div>
-      <div>
-        <h4>Rules that shape the conversation</h4>
-        <ul class="dash">
-          <li><strong>Marginal-value test</strong> — an optional field is asked only if a different answer could change the issue tree, the hypotheses, or the deliverable's framing. Skipped fields are listed at the gate so you can say "ask anyway."</li>
-          <li><strong>Brief-complete fast path</strong> — a pasted seed-prompt brief with every required field filled collapses the rounds into one sharpening message.</li>
-          <li><strong>Calibration routing</strong> — your three self-calibrations (experience, account familiarity, customer maturity) set drill depth, council size, gate verbosity, and the plan's ambition ceiling.</li>
-          <li><strong>Cross-engagement lessons</strong> — up to three ranked matches from other engagements' tagged <code>lessons-learned.md</code> front-matter, never their full text.</li>
-        </ul>
-      </div>
-      <div>
-        <h4>Produces</h4>
-        <ul class="dash">
-          <li><span class="mono">current-context.md</span> with status front-matter (<code>state: active</code>, <code>phase: 0</code>)</li>
-          <li><span class="mono">decisions-log.md</span> opened for the engagement</li>
-          <li>A background doc-freshness check on cited Dynatrace docs, surfaced at the gate</li>
-        </ul>
-        <h4>Lenses</h4>
-        <p class="small">None mandatory. Any of the six on demand.</p>
-      </div>
+  <div class="lens-band">
+    <div class="lbl">Sub-agents active in the selected stage</div>
+    <div class="lens-row">
+      <span class="lens-pill" data-lens="freshness">doc-freshness</span>
+      <span class="lens-pill" data-lens="mece">MECE</span>
+      <span class="lens-pill" data-lens="consultative">Consultative</span>
+      <span class="lens-pill" data-lens="ice">ICE</span>
+      <span class="lens-pill" data-lens="skeptic">Skeptic</span>
+      <span class="lens-pill" data-lens="optimist">Optimist</span>
+      <span class="lens-pill" data-lens="customer">Customer</span>
     </div>
   </div>
 
-  <!-- Phase 1 -->
-  <div class="phase" id="phase-1">
-    <div class="phase-head"><span class="tag tag-gray">Phase 1</span><h3>Diagnose</h3><span class="files">mece-decomposition → hypothesis-generation → signal-mapping → ice-scoring</span></div>
-    <p class="small">Four artifacts in sequence, each feeding the next. One gate fires after all four exist.</p>
-    <div class="phase-cols">
-      <div>
-        <h4>Sequence</h4>
-        <ol class="steps">
-          <li><strong>Issue tree</strong> — restate the problem as a question; 4–7 mutually exclusive branches at one abstraction level, each with "what we'd see if this is the cause." <span class="tag tag-magenta">MECE lens</span> critiques it before it is shown.</li>
-          <li><strong>Hypotheses</strong> — 2–4 testable claims per branch: expected signals, validation approach, required metrics (kinds of data, never queries), falsifiable exit criteria. <span class="tag tag-magenta">Consultative lens</span> runs a framing pass on tree and hypothesis wording.</li>
-          <li><strong>Signals map</strong> — technical signal → UX outcome → business KPI, with every broken link named as an instrumentation gap. Matched playbooks are read here, one at a time.</li>
-          <li><strong>ICE scores</strong> — Impact × Confidence ÷ Effort, each 1–10, ranked. <span class="tag tag-magenta">ICE lens</span> runs last, after the signals map, and flags where one dimension carries the score.</li>
-        </ol>
-      </div>
-      <div>
-        <h4>Produces</h4>
-        <ul class="dash">
-          <li><span class="mono">issue-tree.md</span> — branches, MECE check record, version history</li>
-          <li><span class="mono">hypotheses.md</span> — status legend: open → validating → confirmed / ruled out; ruled-out rows are never deleted</li>
-          <li><span class="mono">signals-map.md</span> — SLIs/SLOs · UX outcomes · business KPIs · instrumentation gaps</li>
-        </ul>
-        <h4>Asks you</h4>
-        <p class="small">To approve, redirect the framing, or iterate through a lens. Anything touching an out-of-scope capability is dropped and reported under the gate's "out-of-scope cost."</p>
-      </div>
-    </div>
-  </div>
+  <div id="sf-detail"></div>
 
-  <!-- Phase 2 -->
-  <div class="phase" id="phase-2">
-    <div class="phase-head"><span class="tag tag-gray">Phase 2</span><h3>Solution — action plan</h3><span class="files">skills/action-plan-builder/SKILL.md</span></div>
-    <p class="small">Translates the ranked diagnosis into investigation actions, recommended actions, decision asks, and risks — grounded in the client's real instrumentation (<code>environment.md</code>) and framed in 30/60/90-day windows.</p>
-    <div class="phase-cols">
-      <div>
-        <h4>Sequence</h4>
-        <ol class="steps">
-          <li><span class="tag tag-magenta">MECE lens</span> on the opportunity set — the full space of levers the plan could pull.</li>
-          <li><strong>Draft</strong> against the client's instrumentation and under the <strong>ambition ceiling</strong>: at low customer maturity, transformation-level moves become named follow-ons, not recommended actions.</li>
-          <li><strong>Persona council</strong> — Skeptic, Optimist, Customer, Consultative. Round 1 blind and concurrent (one dispatch message), Round 2 cross-examination, Round 3 only if positions are still moving. Artifacts go to lenses by path; exclusions are pasted verbatim.</li>
-          <li><strong>Agent reconciles</strong> — rules on every material disagreement in a "Tensions resolved" section instead of averaging it away.</li>
-          <li><span class="tag tag-magenta">ICE lens</span> re-ranks after the council, on execution semantics.</li>
-        </ol>
-      </div>
-      <div>
-        <h4>Produces</h4>
-        <ul class="dash">
-          <li><span class="mono">action-plan.md</span> — investigation actions (data source, owner, confirmed/ruled-out criteria) · recommended actions (ranked, conditional on evidence) · decision asks (named leader, named decision) · risks and tradeoffs (each with a mitigation) · tensions resolved</li>
-        </ul>
-        <h4>Escape hatch</h4>
-        <p class="small">The full council is forced for high-stakes deliverables, on your request, or when calibration routing says so (low experience and low customer maturity together).</p>
-      </div>
-    </div>
-  </div>
+  <div class="callout c-blue"><div class="ico">🔐</div><div><strong>Every gate offers three responses</strong><div class="gate-opts"><span class="tag tag-teal">Approve → advance</span><span class="tag tag-blue">Redirect → revise scope</span><span class="tag tag-magenta">Iterate through a lens → critique &amp; revise</span></div><p style="margin-top:8px">Every decision is recorded in <code>decisions-log.md</code>; an approval also moves the engagement's <code>phase:</code> front-matter. See <a href="#/gates">Gates &amp; controls</a>.</p></div></div>
 
-  <!-- Phase 3 -->
-  <div class="phase" id="phase-3">
-    <div class="phase-head"><span class="tag tag-gray">Phase 3</span><h3>Deliver</h3><span class="files">exec-onepager → brand-humanizer → pptx-builder</span></div>
-    <p class="small">Two deliverables with two gates. The deck is generated only after the one-pager is approved. Both are written inside the engagement folder — never at the repo root.</p>
-    <div class="phase-cols">
-      <div>
-        <h4>3a · One-pager (five steps)</h4>
-        <ol class="steps">
-          <li><strong>Recipe selection</strong> from the layout catalog, after answering three narrative questions (tension, reader need, strongest evidence).</li>
-          <li><strong>Content assembly</strong> in structured text — plan-fidelity rules: no re-ranking, no new findings, no promoting open hypotheses.</li>
-          <li><strong>Brand-humanizer pre-pass</strong> <span class="tag tag-magenta">mandatory</span> — removes AI writing patterns and Dynatrace voice violations before any HTML exists.</li>
-          <li><strong>HTML render</strong> from the humanized copy, following the reference one-pager's component patterns exactly.</li>
-          <li><strong>Brand gate</strong> — <code>tools/onepager-lint.py</code> must pass: one printed page, content budget, 9px font floor, palette, sanitized sources, no unresolved assets; plus an exclusion scan.</li>
-        </ol>
-      </div>
-      <div>
-        <h4>3b · Deck</h4>
-        <ul class="dash">
-          <li>Spec JSON at <span class="mono">deck-spec-YYYY-MM-DD.json</span>, generated by <code>tools/pptx-generator.py</code> into <span class="mono">deck-YYYY-MM-DD.pptx</span> from the brand template (64 layouts).</li>
-          <li>Layouts are chosen by content count (3 vs 4 vs 6 icon cards; 2–6 text columns); a chart with missing data is a counted failure, not a silent slide.</li>
-          <li>Wave backgrounds restyle text for the dark overlay; the deck gate repeats the exclusion scan.</li>
-        </ul>
-        <h4>Produces</h4>
-        <p class="small mono">&lt;slug&gt;-onepager.html · deck-spec-YYYY-MM-DD.json · deck-YYYY-MM-DD.pptx</p>
-      </div>
-    </div>
+  <h2>Before Phase 0 — session init</h2>
+  <div class="card" style="max-width:720px">
+    <p>The agent reads four long-term files and holds them all session: <code>domain-knowledge.md</code>, the playbook hub, <code>frameworks.md</code>, and the stakeholder-profile hub. Individual playbooks, profiles, and vertical drill sheets are read only when a phase needs them. Each phase's skill file is read <strong>immediately before</strong> its artifact is produced — never pre-loaded.</p>
+    <p>Then it establishes the engagement: a new problem creates <code>memory/clients/&lt;client&gt;/engagements/&lt;YYYY-MM-DD-slug&gt;/</code>; resuming scans every engagement's status front-matter for <code>state: active</code> or <code>paused</code> and lets you pick. The session holds that path for the rest of its life.</p>
   </div>
 </section>
 
-<!-- ═══════════════ GATES ═══════════════ -->
-<section id="gates">
-  <div class="kicker">Human-in-the-loop</div>
-  <h2>Gates and the five-part summary</h2>
-  <p class="lead">At every gate — Phase 0, 1, 2, and both Phase 3 gates — the agent presents the same five-part block. It is the decision frame, not a recap of the artifact: part 3 is where you find out whether the agent understood.</p>
+<!-- ═══════════ PHASE 0 ═══════════ -->
+<section class="page" id="page-phase0">
+  <span class="tag tag-gray">Phase 0</span>
+  <h1 style="margin-top:10px">Context framing</h1>
+  <p class="lead">Frame the engagement before any diagnosis. Produces a complete <code>current-context.md</code> with every MUST-HAVE field populated and 3–5 orientation hypotheses that are starting candidates, not findings.</p>
+  <div class="chips"><span class="tag tag-teal">skills/context-framing/SKILL.md</span><span class="tag tag-teal">skills/drill/SKILL.md</span><span class="tag tag-gray">stakeholder-profile hub + matched profile</span><span class="tag tag-gray">drill-sheets/&lt;vertical&gt;.md</span><span class="tag tag-gray">client-question-bank.md</span></div>
+
+  <div class="callout c-blue"><div class="ico">🌱</div><div><span class="tag tag-blue" style="margin-bottom:6px">Optional entry points</span><p><strong>Seed Prompt Generator</strong> — the browser-runnable form in <code>html/</code> assembles an intake brief you paste as your opening message. <strong><code>/drill</code></strong> — the same intake, conversationally, in chat. Both emit the brief format in <code>docs/brief-contract.md</code>; a brief with every required field filled takes the <strong>fast path</strong>: one sharpening message instead of several rounds.</p></div></div>
+
+  <h2>Questions — in three phases</h2>
+  <p class="small">Open questions first and one at a time, where breadth comes from; closed lookups batched, because a checklist of facts does not suffer from batching the way narrative does. The order is load-bearing: the narrative answers decide which factual probes matter and which drill sheet applies.</p>
+  <ol class="steps">
+    <li><strong>A · Narrative funnel.</strong> Q1 customer and what they do; Q2 vertical; Q3 the C.S.I.R. frame — Context, Specific Information, Intent, Response Format. One question at a time, each answer driving the next.</li>
+    <li><strong>B · Closed drill block.</strong> Q4 tenant type (SaaS or Managed); Q5 active-capability checklist — the boundary of what can be surfaced; Q6 RUM status on the focus application; Q7 stakeholder (name, archetype, what they judge success by); Q9 engagement trigger. One labeled message.</li>
+    <li><strong>C · Vertical drill sheet.</strong> Five pre-targeted questions for the customer's vertical (<code>memory/long-term/drill-sheets/</code>), pruned by Q5 and the exclusions, asked in one message in place of a generic "what does the technical team care about?"</li>
+  </ol>
+
+  <h2>Rules that shape the conversation</h2>
+  <div class="grid grid-2">
+    <div class="card card-sm"><h3>Marginal-value test</h3><p>An optional field is asked only if a different answer could change the issue tree, the hypothesis set, or the deliverable's framing. Skipped fields are recorded as <code>not asked (low marginal value: …)</code> and listed at the gate so you can say "ask anyway."</p></div>
+    <div class="card card-sm"><h3>Calibration routing</h3><p>Your three self-calibrations — Dynatrace consulting experience, account familiarity, customer maturity — route drill depth, council size, gate verbosity, and the plan's ambition ceiling. Recorded once in <code>current-context.md</code>; later phases inherit it.</p></div>
+    <div class="card card-sm"><h3>Out-of-scope exclusions</h3><p>Captured here and honored everywhere: pasted verbatim into every lens dispatch, subtracted from what "active capability" would otherwise allow. If honoring one narrows the plan, the gate says so.</p></div>
+    <div class="card card-sm"><h3>Cross-engagement lessons</h3><p>Up to three ranked matches from other engagements' tagged <code>lessons-learned.md</code> front-matter and hook line — never their full text, which stays inside its client folder.</p></div>
+  </div>
+
+  <h2>Exit criteria for <code>current-context.md</code></h2>
+  <div class="grid grid-3">
+    <div class="card card-sm"><span class="tag tag-teal">MUST-HAVE</span><ul class="dash" style="margin-top:8px"><li>Customer + vertical</li><li>Engagement frame (C.S.I.R.)</li><li>Active capabilities</li><li>Out-of-scope exclusions</li><li>Consulting objective</li><li>Stakeholder archetype</li></ul></div>
+    <div class="card card-sm"><span class="tag tag-blue">SHOULD-HAVE</span><ul class="dash" style="margin-top:8px"><li>Tenant type</li><li>RUM status (conditional)</li><li>Technical team priorities (drill sheet)</li><li>Engagement trigger</li></ul><p style="margin-top:8px">Each holds a value, "declined at gate", or "not asked (low marginal value)".</p></div>
+    <div class="card card-sm"><span class="tag tag-gray">NICE-TO-HAVE</span><ul class="dash" style="margin-top:8px"><li>Prior engagement reference</li></ul><p style="margin-top:8px">Recorded only if volunteered.</p></div>
+  </div>
+
+  <div class="callout c-teal"><div class="ico">🔐</div><p><strong>Phase 0 gate.</strong> No mandatory lenses; any of the six on demand. The gate's Assumptions part names every provisional brief value, every not-asked field, and every drill-sheet question pruned by an exclusion. Approval writes the decisions-log row and sets <code>phase: 1</code>.</p></div>
+</section>
+
+<!-- ═══════════ PHASE 1 ═══════════ -->
+<section class="page" id="page-phase1">
+  <span class="tag tag-gray">Phase 1</span>
+  <h1 style="margin-top:10px">Diagnose</h1>
+  <p class="lead">Four artifacts in sequence, each feeding the next. One gate fires after all four exist.</p>
+  <div class="chips"><span class="tag tag-teal">mece-decomposition</span><span style="color:var(--gray)">→</span><span class="tag tag-teal">hypothesis-generation</span><span style="color:var(--gray)">→</span><span class="tag tag-teal">signal-mapping</span><span style="color:var(--gray)">→</span><span class="tag tag-teal">ice-scoring</span></div>
+
+  <div class="acc open">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">🌲</div><div><div class="acc-title">1a — Issue tree</div><div class="acc-sub">issue-tree.md · MECE lens mandatory</div></div></div><span class="chev">▾</span></div>
+    <div class="acc-body">
+      <ol class="steps" style="margin-top:10px">
+        <li>Restate the problem as a question, not a statement.</li>
+        <li>Pick the axis of decomposition: system layer, user journey, team boundary, or time.</li>
+        <li>Draft 4–7 branches — problem spaces, never solutions — all at one abstraction level.</li>
+        <li>For each branch write "what we'd see if this is the cause"; add an instrumentation-gaps branch when the cause may be invisible.</li>
+        <li><span class="tag tag-magenta">MECE lens</span> critiques overlap, gaps, and mixed levels before the tree is shown; revisions are recorded in the version history.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="acc">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic b">💡</div><div><div class="acc-title">1b — Hypotheses</div><div class="acc-sub">hypotheses.md · Consultative framing pass</div></div></div><span class="chev">▾</span></div>
+    <div class="acc-body">
+      <ol class="steps" style="margin-top:10px">
+        <li>2–4 testable claims per branch: expected signals, validation approach, required metrics (kinds of data — never queries), status.</li>
+        <li>Falsifiable exit criteria for each: what "confirmed", "ruled out", and "inconclusive" look like.</li>
+        <li>Instrumentation gaps named explicitly; nothing that depends on an excluded capability.</li>
+        <li><span class="tag tag-magenta">Consultative lens</span> runs a framing pass on tree and hypothesis wording — business terms, precise SLI/SLO/RUM vocabulary, calibrated to the named stakeholder's profile.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="acc">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic m">🔗</div><div><div class="acc-title">1c — Signals map</div><div class="acc-sub">signals-map.md · matched playbooks read here</div></div></div><span class="chev">▾</span></div>
+    <div class="acc-body">
+      <ol class="steps" style="margin-top:10px">
+        <li>List the SLIs/SLOs relevant to each hypothesis; read only the playbook(s) the problem shape matches.</li>
+        <li>Map each signal to a user-visible UX outcome, and each outcome to a business KPI — quantified where possible.</li>
+        <li>Every broken link in the chain becomes a named instrumentation gap; a capability that is out of scope is recorded as unavailable.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="acc">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic b">⚖️</div><div><div class="acc-title">1d — ICE scores</div><div class="acc-sub">hypotheses.md updated · ICE lens runs last</div></div></div><span class="chev">▾</span></div>
+    <div class="acc-body">
+      <div class="card card-sm" style="margin:12px 0;background:rgba(25,102,255,.06);border-color:rgba(25,102,255,.2)"><code style="font-size:13px;color:var(--blue-lt)">ICE = (Impact × Confidence) / Effort</code><p style="margin-top:6px">Each dimension 1–10. Ranked descending. The ICE lens runs after the signals map exists and flags where one dimension carries the score.</p></div>
+    </div>
+  </div>
+
+  <div class="callout c-teal"><div class="ico">🔐</div><p><strong>Phase 1 gate</strong> — after all four artifacts. Mandatory lens order: MECE (tree) → Consultative (framing) → ICE (last, after the signals map). Any lever dropped for touching an exclusion is reported under "out-of-scope cost". Approval sets <code>phase: 2</code>.</p></div>
+</section>
+
+<!-- ═══════════ PHASE 2 ═══════════ -->
+<section class="page" id="page-phase2">
+  <span class="tag tag-gray">Phase 2</span>
+  <h1 style="margin-top:10px">Solution — action plan</h1>
+  <p class="lead">Translate the ranked diagnosis into investigation actions, recommended actions, decision asks, and documented risks — grounded in the client's real instrumentation and framed in 30/60/90-day windows.</p>
+  <div class="chips"><span class="tag tag-teal">skills/action-plan-builder/SKILL.md</span><span class="tag tag-gray">hypotheses.md · signals-map.md · current-context.md</span><span class="tag tag-gray">environment.md</span><span class="tag tag-gray">matched playbooks + profile</span></div>
+
+  <h2>Procedure</h2>
+  <p class="small" style="max-width:700px">A deliberate order: the opportunity space first, then a draft against real instrumentation, then a council that deliberates, then reconciliation, then re-ranking. The sequence is the point.</p>
+  <ol class="steps">
+    <li><span class="tag tag-magenta">MECE lens</span> on the opportunity set — the full space of levers the plan could pull, collectively exhaustive and mutually exclusive.</li>
+    <li><strong>Draft the plan</strong> under the <strong>ambition ceiling</strong>: ground every action in <code>environment.md</code>; anything the client's instrumentation cannot support becomes an instrumentation work item; at low customer maturity, transformation-level moves become named follow-ons, not recommended actions.</li>
+    <li><strong>Persona council</strong> — <span class="tag tag-magenta">Skeptic</span> <span class="tag tag-magenta">Optimist</span> <span class="tag tag-magenta">Customer</span> <span class="tag tag-magenta">Consultative</span>. Round 1 blind and concurrent (all four in one dispatch message), Round 2 cross-examination, Round 3 only if positions are still moving. Artifacts go to lenses by path; the exclusions are pasted verbatim; the Optimist also receives the ambition ceiling.</li>
+    <li><strong>Agent reconciles</strong> — rules on every material disagreement in a "Tensions resolved" section instead of averaging it away; folds the Skeptic's "questions a leader will ask" into the decision asks.</li>
+    <li><span class="tag tag-magenta">ICE lens</span> re-ranks after the council, on execution semantics (Confidence = likelihood it executes; Impact = magnitude if it lands).</li>
+    <li>Write <code>action-plan.md</code>; present the gate block.</li>
+  </ol>
+
+  <h2>action-plan.md sections</h2>
+  <div class="grid grid-3">
+    <div class="card card-sm"><h3 style="color:var(--teal)">Investigation actions</h3><p>What to measure, against which data source, who is involved, with pre-agreed confirmed / ruled-out criteria.</p></div>
+    <div class="card card-sm"><h3 style="color:var(--teal)">Recommended actions</h3><p>Ranked by impact vs effort; each conditional on the evidence that must come back first.</p></div>
+    <div class="card card-sm"><h3 style="color:var(--blue-lt)">Decision asks</h3><p>Named leaders, named decisions — not open-ended questions.</p></div>
+    <div class="card card-sm"><h3 style="color:var(--magenta)">Risks &amp; tradeoffs</h3><p>Each risk has a cost and a mitigation, in the same view as the recommendation.</p></div>
+    <div class="card card-sm"><h3 style="color:var(--magenta)">Tensions resolved</h3><p>Each council conflict: the claim in dispute, each side's logic, the agent's ruling. Required.</p></div>
+    <div class="card card-sm"><h3 style="color:var(--gray-lt)">Follow-ons</h3><p>Transformation-level moves held back by the ambition ceiling, listed separately and unranked.</p></div>
+  </div>
+
+  <div class="callout c-magenta"><div class="ico">🧭</div><p><strong>Escape hatch.</strong> The full council — all three rounds, no convergence skip — is forced for high-stakes deliverables, on your request, or when calibration routing says so (low consulting experience together with low customer maturity).</p></div>
+  <div class="callout c-teal"><div class="ico">🔐</div><p><strong>Phase 2 gate.</strong> Approve to Phase 3, redirect to revise the plan, or iterate through any lens. Approval sets <code>phase: 3</code>.</p></div>
+</section>
+
+<!-- ═══════════ PHASE 3 ═══════════ -->
+<section class="page" id="page-phase3">
+  <span class="tag tag-gray">Phase 3</span>
+  <h1 style="margin-top:10px">Deliver</h1>
+  <p class="lead">Two deliverables with two gates. The deck is generated only after the one-pager is approved. Both are written inside the engagement folder — never at the repo root.</p>
+  <div class="chips"><span class="tag tag-teal">skills/exec-onepager/SKILL.md</span><span class="tag tag-teal">skills/brand-humanizer/SKILL.md</span><span class="tag tag-teal">skills/pptx-builder/SKILL.md</span><span class="tag tag-gray">brand/brand-spec.md</span><span class="tag tag-gray">matched stakeholder profile</span></div>
+
+  <h2>3a — Executive one-pager (five steps)</h2>
+  <ol class="steps">
+    <li><strong>Recipe selection</strong> — reads the layout catalog and the reference one-pager; answers three narrative questions (tension, reader need, strongest evidence) before choosing components; records the recipe and a <em>Why</em>.</li>
+    <li><strong>Content assembly</strong> — structured, labeled text for every slot, no HTML yet. Plan-fidelity rules: no re-ranking, no new findings, no promoting open hypotheses. Terminology depth follows the calibration routing.</li>
+    <li><strong>Brand-humanizer pre-pass</strong> <span class="tag tag-magenta">mandatory</span> — removes AI writing patterns (em dashes, rule-of-three, hedging) and Dynatrace voice violations before any HTML exists. Fixing copy in text costs far less than fixing it in finished HTML.</li>
+    <li><strong>HTML render</strong> — builds <code>&lt;slug&gt;-onepager.html</code> from the humanized copy, following the reference component patterns exactly; no improvised CSS or color values; no text outside the recipe's slots.</li>
+    <li><strong>Brand gate</strong> — <code>tools/onepager-lint.py</code> must pass: one printed page (headless Chrome), content budget against the reference, 9px font floor, palette, heading case, no dashes, sanitized sources, no unresolved assets — plus an exclusion scan and plan-fidelity check. Then the one-pager gate.</li>
+  </ol>
+
+  <h2>3b — PowerPoint deck</h2>
+  <div class="grid grid-2">
+    <div class="card card-sm"><h3>How it is built</h3><p>A spec JSON at <code>deck-spec-YYYY-MM-DD.json</code> is rendered by <code>tools/pptx-generator.py</code> on the brand template (64 layouts) into <code>deck-YYYY-MM-DD.pptx</code>. Layouts are chosen by content count (3, 4, or 6 icon cards; 2–6 text columns); a chart with missing data is a counted failure, not a silent slide; wave backgrounds restyle text for the dark overlay.</p></div>
+    <div class="card card-sm"><h3>Deck structure</h3><ul class="dash"><li>Title slide — problem, audience, date, presenter</li><li>Executive summary — problem + business impact on one slide</li><li>Top findings — 3–5, cards or detail slides</li><li>Recommended actions — table</li><li>Risks &amp; decision asks — leadership questions, named decisions</li><li>Appendix (optional) — issue tree, signals map, ICE table</li></ul></div>
+  </div>
+
+  <div class="callout c-teal"><div class="ico">🔐</div><p><strong>Two gates.</strong> The one-pager gate runs the brand gate and exclusion scan; the deck gate repeats the exclusion scan on the spec and the generated file. No lenses are mandatory in Phase 3 — packaging, not analysis — but any of the six can be invoked. Both approvals leave <code>phase: 3</code>; only investigation-reset changes <code>state:</code>.</p></div>
+</section>
+
+<!-- ═══════════ SKILLS ═══════════ -->
+<section class="page" id="page-skills">
+  <h1>Skills</h1>
+  <p class="lead">Fifteen procedural files, each read immediately before its artifact is produced. They are not slash commands — with one exception, <code>/drill</code>, which you invoke yourself. Click a skill for its procedure; "Open" renders the file in the Docs browser.</p>
+
+  <h2>Phase-bound</h2>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">📋</div><div><div class="acc-title">context-framing</div><div class="acc-sub">Phase 0 · skills/context-framing/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Three-phase intake (narrative funnel → closed drill block → vertical drill sheet), seed-prompt absorption with a brief-complete fast path, marginal-value test on optional fields, calibration routing, cross-engagement lessons, 3–5 orientation hypotheses. Writes <code>current-context.md</code> and opens <code>decisions-log.md</code>. <a href="#/docs/sk-context-framing">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">💬</div><div><div class="acc-title">drill</div><div class="acc-sub">Phase 0 · /drill · skills/drill/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Chat-native intake. Collects the same fields as the browser form (partial drills skip what a pasted brief already answered), asks the vertical drill sheet, emits the brief format in <code>docs/brief-contract.md</code>, and hands off to context-framing. <a href="#/docs/sk-drill">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">🌲</div><div><div class="acc-title">mece-decomposition</div><div class="acc-sub">Phase 1a · skills/mece-decomposition/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>4–7 branch issue tree from the consulting objective; branches are problem spaces, never solutions; MECE lens before presenting. Writes <code>issue-tree.md</code>. <a href="#/docs/sk-mece-decomposition">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic b">💡</div><div><div class="acc-title">hypothesis-generation</div><div class="acc-sub">Phase 1b · skills/hypothesis-generation/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>2–4 testable hypotheses per branch with expected signals, validation approach, required metrics, and falsifiable exit criteria; reads the drill-sheet answers and the calibration routing for terminology depth. <a href="#/docs/sk-hypothesis-generation">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic m">🔗</div><div><div class="acc-title">signal-mapping</div><div class="acc-sub">Phase 1c · skills/signal-mapping/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Technical signal → UX outcome → business KPI chains; reads only the matched playbook files; broken links become instrumentation gaps; excluded capabilities are recorded as unavailable. Writes <code>signals-map.md</code>. <a href="#/docs/sk-signal-mapping">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic b">⚖️</div><div><div class="acc-title">ice-scoring</div><div class="acc-sub">Phase 1d · Phase 2 · skills/ice-scoring/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Impact × Confidence ÷ Effort, each 1–10; ICE lens for independent validation; owns the Phase 1 gate block. <a href="#/docs/sk-ice-scoring">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">📝</div><div><div class="acc-title">action-plan-builder</div><div class="acc-sub">Phase 2 · skills/action-plan-builder/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Opportunity set → draft under the ambition ceiling → persona council (single-message rounds, conditional Round 3, escape hatch) → reconcile into "Tensions resolved" → ICE re-rank; 30/60/90-day framing. Writes <code>action-plan.md</code>. <a href="#/docs/sk-action-plan-builder">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">📄</div><div><div class="acc-title">exec-onepager</div><div class="acc-sub">Phase 3a · skills/exec-onepager/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Five-step orchestrator: recipe selection, content assembly, mandatory brand-humanizer pre-pass, HTML render, linter-backed brand gate. Writes <code>&lt;slug&gt;-onepager.html</code> inside the engagement folder. <a href="#/docs/sk-exec-onepager">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic m">✍️</div><div><div class="acc-title">brand-humanizer</div><div class="acc-sub">Phase 3 · mandatory pre-pass · skills/brand-humanizer/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Two bars before any copy ships: reads like a person wrote it (no em dashes, hedging, rule-of-three, chatbot filler) and reads like Dynatrace wrote it (sentence case, active voice, correct product names, trademark symbols). Cross-checks <code>brand-spec.md</code>. <a href="#/docs/sk-brand-humanizer">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic">📊</div><div><div class="acc-title">pptx-builder</div><div class="acc-sub">Phase 3b · skills/pptx-builder/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Spec JSON → <code>tools/pptx-generator.py</code> → deck gate. Requires explicit one-pager approval first. Outputs <code>deck-YYYY-MM-DD.pptx</code> in the engagement folder. <a href="#/docs/sk-pptx-builder">Open</a></p></div></div>
+
+  <h2>On demand</h2>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic g">🔎</div><div><div class="acc-title">external-research</div><div class="acc-sub">Any phase · skills/external-research/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Allowlisted domains only (<code>tools/fetch-allowlist.txt</code>, enforced by a hook). Local memory first, then fetch. Every fact carries URL, page-last-updated, and retrieval date; citations older than a week are stale. <a href="#/docs/sk-external-research">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic g">⏸</div><div><div class="acc-title">investigation-reset</div><div class="acc-sub">Pause · resume · archive · skills/investigation-reset/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p><strong>Nothing ever moves.</strong> Archive captures tagged <code>lessons-learned.md</code>, adds an outcome row to the client README, marks <code>state: complete</code>. Pause marks <code>state: paused</code>. Resume scans engagement statuses and flips the chosen one back to <code>active</code>. Switching clients removes the session's isolation marker — with your approval. <a href="#/docs/sk-investigation-reset">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic g">👤</div><div><div class="acc-title">stakeholder-overlay</div><div class="acc-sub">When a leader is named · skills/stakeholder-overlay/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Layers a named-leader profile over one of the eight archetypes: cares most about, ignores, information preference, KPI vocabulary, technical depth, sensitivities. Written to the client workspace only after approval. <a href="#/docs/sk-stakeholder-overlay">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic g">🌐</div><div><div class="acc-title">environment-intake</div><div class="acc-sub">First engagement with a client · skills/environment-intake/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Persistent Dynatrace environment facts — management zones, key apps, SLOs, synthetics, RUM depth, log management, instrumentation gaps, OneAgent coverage — into <code>memory/clients/&lt;client&gt;/environment.md</code>. <a href="#/docs/sk-environment-intake">Open</a></p></div></div>
+  <div class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-left"><div class="acc-ic g">📈</div><div><div class="acc-title">value-highlight</div><div class="acc-sub">QBR · renewal · skills/value-highlight/SKILL.md</div></div></div><span class="chev">▾</span></div><div class="acc-body"><p>Backward-looking value brief from the client's completed engagements and <code>contract.md</code>; 2–4 narrative threads (discovery, improvement, risk mitigation, strategic insight, instrumentation progress); honors the exclusions. <a href="#/docs/sk-value-highlight">Open</a></p></div></div>
+</section>
+
+<!-- ═══════════ LENSES ═══════════ -->
+<section class="page" id="page-lenses">
+  <h1>Sub-agent lenses</h1>
+  <p class="lead">Six narrow-job critique agents in <code>.claude/agents/</code>, each with a fixed output format and a "Hard exclusions" block, plus one background checker. All six lenses run on the workspace's <code>sonnet</code> alias; the freshness checker on <code>haiku</code>.</p>
+
+  <div class="callout c-blue"><div class="ico">📨</div><p><strong>Dispatch rule — one message per round.</strong> Every lens in a round is dispatched in a single message so they run concurrently, never as a chain. Artifacts are handed over by path; the engagement's out-of-scope exclusions are pasted verbatim into every prompt, because a sub-agent starts with a fresh context and knows only what the dispatch hands it.</p></div>
+
+  <div class="grid grid-2">
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></span><strong>MECE lens</strong></div><p><strong>When:</strong> Phase 1 on the issue tree; Phase 2 on the opportunity set.</p><p>Overlap between branches · gaps (third-party, business process, instrumentation, deploy) · mixed abstraction levels · solution-shaped branches. <a href="#/docs/ag-mece-lens">Open</a></p></div>
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--blue-lt)"></span><strong>Consultative lens</strong></div><p><strong>When:</strong> Phase 1 framing pass on tree and hypotheses; Phase 2 council member.</p><p>Voice matches a senior technical leader · SLI/SLO/RUM terminology precise · tradeoffs surfaced, not buried · calibrated to the named stakeholder's profile. <a href="#/docs/ag-consultative-lens">Open</a></p></div>
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></span><strong>ICE lens</strong></div><p><strong>When:</strong> Phase 1 last, after the signals map; Phase 2 re-rank after the council.</p><p>Scores Impact / Confidence / Effort · produces the ranked table · flags where one dimension carries the score. <a href="#/docs/ag-ice-lens">Open</a></p></div>
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--magenta)"></span><strong>Skeptic lens</strong></div><p><strong>When:</strong> Phase 2 council; on demand at any gate.</p><p>Hidden assumptions · single-signal "evidence" · scenarios where the plan misleads · the questions a leader will ask. <a href="#/docs/ag-skeptic-lens">Open</a></p></div>
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--blue-lt)"></span><strong>Optimist lens</strong></div><p><strong>When:</strong> Phase 2 council; on demand at any gate.</p><p>Steelmans the plan: upside left on the table, compounding benefits, parallelization — within the engagement's ambition ceiling. <a href="#/docs/ag-optimist-lens">Open</a></p></div>
+    <div class="card card-sm"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--blue-lt)"></span><strong>Customer lens</strong></div><p><strong>When:</strong> Phase 2 council; on demand at any gate.</p><p>Does the work match what end users actually experience? Which journeys are deprioritized? Right problem, or easiest problem? <a href="#/docs/ag-customer-lens">Open</a></p></div>
+  </div>
+
+  <div class="card card-sm" style="max-width:640px"><span class="tag tag-gray">Background agent</span><h3 style="margin-top:8px">doc-freshness-checker</h3><p>Dispatched at Phase 0 start when the last check is older than a week. Re-fetches cited Dynatrace docs, compares page-last-updated dates, writes <code>memory/long-term/freshness-report.md</code>. Never edits long-term files; the main agent surfaces results at the Phase 0 gate. <a href="#/docs/ag-doc-freshness">Open</a></p></div>
+
+  <h2>Lenses at each gate</h2>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>Gate</th><th>Mandatory</th><th>On demand</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 0</td><td>None (doc-freshness runs in the background)</td><td>Any of the six</td></tr>
+      <tr><td>Phase 1</td><td>MECE (tree) → Consultative (framing pass) → ICE (after the signals map)</td><td>Any of the six</td></tr>
+      <tr><td>Phase 2</td><td>MECE (opportunity set) → council: Skeptic · Optimist · Customer · Consultative (Round 1 blind, Round 2 cross-examination, Round 3 conditional) → agent reconciles → ICE re-ranks</td><td>Any of the six</td></tr>
+      <tr><td>Phase 3 (both gates)</td><td>None — packaging, not analysis</td><td>Any of the six</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small"><a href="#/docs/lenses">docs/lenses.md</a> is the authority for which lenses run when; each agent file is authoritative for its own procedure and output.</p>
+</section>
+
+<!-- ═══════════ TOOLS & HOOKS ═══════════ -->
+<section class="page" id="page-tools">
+  <h1>Tools &amp; hooks</h1>
+  <p class="lead">What holds the agent to its rules: the constraints it never crosses, the hooks that enforce them mechanically, and the scripts that gate the deliverables.</p>
+
+  <div class="grid grid-2">
+    <div class="card"><h3>Never, under any instruction</h3><ul class="dash"><li>Generate DQL, SQL, or any executable query syntax</li><li>Run live queries or execute production or configuration changes</li><li>Invent metrics, SLIs, or instrumentation the client does not have</li><li>Read another client's folder, even when you name one</li><li>Advance a phase without explicit approval of the current one</li><li>Write to long-term memory or client overlays without confirmation</li><li>Surface anything that depends on an out-of-scope capability</li></ul></div>
+    <div class="card"><h3>Hooks in <code>.claude/settings.json</code></h3><ul class="dash"><li><strong>Client isolation</strong> (PreToolUse on file tools) — locks the session to a client on its first substantive touch of that client's folder; blocks every other client's folder; per-session marker so concurrent sessions cannot collide</li><li><strong>Fetch allowlist</strong> (PreToolUse on WebFetch) — only domains in <code>tools/fetch-allowlist.txt</code> pass; lookalike domains are held for your decision</li><li><strong>Workspace conformance</strong> (PostToolUse) — every edit under skills, agents, long-term memory, tools, or docs re-runs <code>tools/conformance-check.py</code></li><li><strong>Session start / end</strong> — creates and cleans up the per-session client marker</li><li><strong>git pre-commit</strong> — blocks a commit that fails conformance (<code>git config core.hooksPath tools/githooks</code>)</li></ul></div>
+  </div>
+
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>Tool</th><th>Used in</th><th>What it checks or builds</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">tools/onepager-lint.py</td><td>Phase 3 brand gate</td><td>One printed page (headless Chrome), content budget against the reference one-pager, 9px font floor, palette, heading case, dashes, citation format, unresolved assets.</td></tr>
+      <tr><td class="mono">tools/pptx-generator.py</td><td>Phase 3 deck</td><td>Builds the deck from the spec JSON on the brand template; content-driven layout sizing; charts in brand series colors; wave backgrounds with restyled text.</td></tr>
+      <tr><td class="mono">tools/conformance-check.py</td><td>Workspace edits</td><td>Referenced paths and links resolve (this guide's links included); no client names in the shared tier; every lens carries its exclusions block; the intake brief stays in sync across contract, form, and <code>/drill</code>; the backlog ledger cites real paths.</td></tr>
+      <tr><td class="mono">tools/seed-prompt-generator-bundle.py</td><td>Editing the form</td><td>Unpacks and repacks the browser-runnable Seed Prompt Generator from its readable source.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Full reference: <a href="#/docs/tools-readme">tools/README.md</a>.</p>
+</section>
+
+<!-- ═══════════ MEMORY ═══════════ -->
+<section class="page" id="page-memory">
+  <h1>Memory model</h1>
+  <p class="lead">Two tiers with strict isolation between client data and shared knowledge — stated in the operating manual and enforced by a hook, not just by instruction.</p>
+
+  <div class="tiers">
+    <div class="tier" style="border-color:rgba(73,194,179,.3);background:rgba(73,194,179,.04)"><h3 style="color:var(--teal)">Root library</h3><div class="path">memory/long-term/</div><span class="f">domain-knowledge.md · frameworks.md · terminology.md</span><span class="f">dynatrace-playbooks.md (hub) → playbooks/*.md</span><span class="f">stakeholder-profiles.md (hub) → profiles/*.md</span><span class="f">drill-sheets/ (one per vertical)</span><span class="f">client-question-bank.md · freshness-report.md</span><span class="f">brand/brand-spec.md · brand/reference/</span><div class="rule">Read freely every session. Hubs load at start; individual files on need. Writes require explicit approval. <strong>Never contains client data.</strong></div></div>
+    <div class="tier" style="border-color:rgba(201,63,219,.3);background:rgba(201,63,219,.04)"><h3 style="color:var(--magenta)">Client workspace</h3><div class="path">memory/clients/&lt;client&gt;/</div><span class="f">README.md (engagement history)</span><span class="f">environment.md · contract.md</span><span class="f">stakeholder-overlays.md</span><span class="f">engagements/&lt;YYYY-MM-DD-slug&gt;/</span><div class="rule">Fully isolated per client. Template at <code>memory/clients/_template/</code>. Never read unless that client is the session's engagement.</div></div>
+    <div class="tier" style="border-color:rgba(25,102,255,.3);background:rgba(25,102,255,.04)"><h3 style="color:var(--blue-lt)">Engagement folder</h3><div class="path">…/engagements/&lt;YYYY-MM-DD-slug&gt;/</div><span class="f">current-context.md (status front-matter)</span><span class="f">issue-tree.md · hypotheses.md · signals-map.md</span><span class="f">action-plan.md · decisions-log.md</span><span class="f">&lt;slug&gt;-onepager.html · deck-spec · deck.pptx</span><span class="f">lessons-learned.md (tagged, on archive)</span><div class="rule">Self-describing via <code>state: active | paused | complete</code> and <code>phase:</code>. Nothing ever moves — pause and archive flip a field.</div></div>
+  </div>
+
+  <h2>Context isolation, mechanically enforced</h2>
+  <div class="card" style="max-width:760px"><p>After loading the root library, the session establishes its engagement path and derives the client name from it. From then on all client-specific reads come only from that client's folder. A PreToolUse hook enforces it: the session is locked to the client on its first substantive touch (a per-session marker in <code>.claude/session-clients/</code>), and file-tool access to every other client is blocked.</p><p>Exactly <strong>two read-only exceptions</strong> exist: (1) at session start or resume, scanning every engagement's <code>current-context.md</code> status front-matter to list resumable work; (2) at Phase 0, reading other engagements' <code>lessons-learned.md</code> front-matter and Cross-engagement hook line. Nothing else crosses a client boundary. Switching clients mid-session goes through investigation-reset, which has you approve removing the marker.</p></div>
+
+  <h2>Promotion path: client → long-term</h2>
+  <div class="callout c-teal"><div class="ico">⬆️</div><p>On archive the agent may propose promoting a signal pattern, failure mode, or playbook insight to the root library. Each promotion is a separate, explicit approval. There is no auto-promotion by design — a lesson that would improve a drill sheet or playbook goes through the same path.</p></div>
+  <p class="small">Deeper: <a href="#/docs/memory">docs/memory.md</a> · <a href="#/docs/lt-readme">memory/long-term/README.md</a></p>
+</section>
+
+<!-- ═══════════ ARTIFACTS ═══════════ -->
+<section class="page" id="page-artifacts">
+  <h1>Artifacts</h1>
+  <p class="lead">Every phase writes named files into the engagement folder <code>memory/clients/&lt;client&gt;/engagements/&lt;dated-slug&gt;/</code>. Each has a fixed shape defined in its skill's Output section; each is updated with a version note, never silently overwritten.</p>
+
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>File</th><th>Phase</th><th>Holds</th><th>Gate</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">current-context.md</td><td>0</td><td>Status front-matter · the problem in your words · reframed objective · scope and exclusions · stakeholders · capabilities · analyst calibration and routing · orientation hypotheses</td><td>Phase 0; updated at every gate</td></tr>
+      <tr><td class="mono">issue-tree.md</td><td>1a</td><td>Root question · 4–7 branches with "what we'd see" · instrumentation-gaps branch · MECE-lens record · append-only version history</td><td>Part of Phase 1</td></tr>
+      <tr><td class="mono">hypotheses.md</td><td>1b/1d</td><td>Per-branch hypotheses: expected signals · validation approach · required metrics (kinds of data, not queries) · status (open → validating → confirmed / ruled out) · ICE scores</td><td>Part of Phase 1</td></tr>
+      <tr><td class="mono">signals-map.md</td><td>1c</td><td>SLI/SLO → UX outcome → business KPI chains, quantified where possible · instrumentation gaps</td><td>Phase 1</td></tr>
+      <tr><td class="mono">action-plan.md</td><td>2</td><td>Investigation actions with exit criteria · ranked recommended actions (conditional on evidence) · decision asks · risks and tradeoffs · tensions resolved · follow-ons</td><td>Phase 2</td></tr>
+      <tr><td class="mono">decisions-log.md</td><td>All</td><td>Append-only audit trail: timestamp · phase · what was presented · approve / redirect / iterate · rationale in your words · next action</td><td>Every gate</td></tr>
+      <tr><td class="mono">&lt;slug&gt;-onepager.html</td><td>3a</td><td>The executive one-pager, linter-clean, one printed page</td><td>One-pager gate</td></tr>
+      <tr><td class="mono">deck-spec-YYYY-MM-DD.json · deck-YYYY-MM-DD.pptx</td><td>3b</td><td>Generator input and the generated deck</td><td>Deck gate</td></tr>
+      <tr><td class="mono">lessons-learned.md</td><td>Archive</td><td>Tagged front-matter (vertical, problem shape, capabilities, state, engagement) · what worked · what to avoid · new knowledge · the one-line Cross-engagement hook</td><td>Written by investigation-reset</td></tr>
+      <tr><td class="mono">value-brief-YYYY-MM-DD.md</td><td>On demand</td><td>QBR / renewal brief from completed engagements</td><td>Your approval</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Field guide</h2>
+  <div class="grid grid-2">
+    <div class="card card-sm"><h3>Status front-matter</h3><p><code>state</code> — active | paused | complete; pause and archive flip it, nothing moves. <code>phase</code> — the phase being entered: Phase 0 approval → 1, Phase 1 → 2, Phase 2 → 3; Phase 3 approvals leave 3. <code>last-touched</code> — set at every gate. A resumed engagement whose <code>phase</code> is stale means a gate was closed incorrectly.</p></div>
+    <div class="card card-sm"><h3>Calibration routing row</h3><p>One line per route that deviates from the default — drill depth, council size, gate verbosity, ambition ceiling — computed once at Phase 0 from the three analyst calibrations, so later skills inherit it instead of re-deriving it.</p></div>
+    <div class="card card-sm"><h3>Hypothesis rows</h3><p>A hypothesis is a specific, falsifiable claim. "Latency goes up" is not a signal; "p95 on cart-service rises step-function-like after a deploy" is. Ruled-out rows are never deleted — they are part of the audit trail.</p></div>
+    <div class="card card-sm"><h3>Decision-log rows</h3><p>Exactly one of approve / redirect / iterate. The rationale is captured in your words where possible — that is what makes the log useful months later. Approvals also carry the two gate writes (log row + <code>phase:</code>).</p></div>
+  </div>
+  <p class="small">Templates: <a href="#/docs/tpl-eng-readme">engagements/README.md</a> · <a href="#/docs/tpl-decisions">decisions-log.md</a> · <a href="#/docs/tpl-lessons">lessons-learned.md</a></p>
+</section>
+
+<!-- ═══════════ GATES ═══════════ -->
+<section class="page" id="page-gates">
+  <h1>Gates &amp; controls</h1>
+  <p class="lead">At every gate — Phase 0, 1, 2, and both Phase 3 gates — the agent presents the same five-part block, then pauses. It is the decision frame, not a recap of the artifact.</p>
 
   <div class="gate-block">
     <div class="row"><div class="n">1</div><div><div class="t">Conclusion</div><div class="d">The single most important finding or decision from this phase, in one sentence.</div></div></div>
     <div class="row"><div class="n">2</div><div><div class="t">What changed</div><div class="d">What was produced, revised, or resolved compared to the prior gate.</div></div></div>
-    <div class="row"><div class="n">3</div><div><div class="t">Assumptions and confidence gaps</div><div class="d">Every assumption you should know about and every place thin evidence limits confidence — specific to this engagement, never boilerplate. At Phase 0 this includes every optional field the agent chose not to ask.</div></div></div>
-    <div class="row"><div class="n">4</div><div><div class="t">Out-of-scope cost</div><div class="d">Any lever or opportunity excluded because it touched an out-of-scope capability — or "No out-of-scope items arose this phase."</div></div></div>
-    <div class="row"><div class="n">5</div><div><div class="t">Approve / Redirect / Iterate</div><div class="d">The closing line that names the next phase, the redirect available, and the lenses you can run.</div></div></div>
+    <div class="row"><div class="n">3</div><div><div class="t">Assumptions and confidence gaps</div><div class="d">Every assumption you should know about and every place thin evidence limits confidence — specific to this engagement, never boilerplate. This is the part that answers "did the agent understand?"</div></div></div>
+    <div class="row"><div class="n">4</div><div><div class="t">Out-of-scope cost</div><div class="d">Any lever excluded because it touched an out-of-scope capability — or "No out-of-scope items arose this phase."</div></div></div>
+    <div class="row"><div class="n">5</div><div><div class="t">Approve / Redirect / Iterate</div><div class="d">The closing line: the next phase, the redirect available, the lenses you can run.</div></div></div>
   </div>
 
   <div class="grid grid-3">
-    <div class="card" style="border-color:rgba(73,194,179,.35)"><span class="tag tag-teal">Approve</span><p style="margin-top:8px">Proceed. Only an explicit go-ahead counts ("approve", "go ahead", "proceed to Phase N"). Two writes close the gate: a row in <code>decisions-log.md</code> and the <code>phase:</code> front-matter set to the phase being entered.</p></div>
-    <div class="card" style="border-color:rgba(25,102,255,.35)"><span class="tag tag-blue">Redirect</span><p style="margin-top:8px">Change scope, framing, or priority. The agent revises and re-presents the same gate. Logged; does not move <code>phase:</code>.</p></div>
-    <div class="card" style="border-color:rgba(201,63,219,.35)"><span class="tag tag-magenta">Iterate through a lens</span><p style="margin-top:8px">Pick any of the six lenses; the agent runs it, revises, and re-presents. This is on top of the lenses each phase already runs.</p></div>
+    <div class="card card-sm" style="border-color:rgba(73,194,179,.35)"><span class="tag tag-teal">Approve</span><p style="margin-top:8px"><strong>Binary.</strong> Only an explicit go-ahead counts — "approve", "go ahead", "proceed to Phase N". "Looks good", partial praise, silence, or a topic change are not approval. Two writes close the gate: a <code>decisions-log.md</code> row and the <code>phase:</code> front-matter.</p></div>
+    <div class="card card-sm" style="border-color:rgba(25,102,255,.35)"><span class="tag tag-blue">Redirect</span><p style="margin-top:8px">Change scope, framing, or priority. The agent revises and re-presents the same gate. Logged; <code>phase:</code> does not move.</p></div>
+    <div class="card card-sm" style="border-color:rgba(201,63,219,.35)"><span class="tag tag-magenta">Iterate through a lens</span><p style="margin-top:8px">Pick any of the six; the agent runs it, revises, and re-presents. On top of the lenses each phase already runs — never a substitute.</p></div>
   </div>
 
-  <div class="callout c-blue"><div class="ico">🎚️</div><p><strong>Verbosity follows calibration routing.</strong> The default is the full block. A "terse" route keeps parts 1 and 5 in full and compresses 2–4 to one line each. A "full" route adds a one-line "why this matters" under parts 2 and 3. No route ever omits a part — an empty part 3 hides risk.</p></div>
-</section>
+  <div class="callout c-blue"><div class="ico">🎚️</div><p><strong>Verbosity follows calibration routing.</strong> Default: the full block. A "terse" route keeps parts 1 and 5 in full and compresses 2–4 to one line each. A "full" route adds a one-line "why this matters" under parts 2 and 3. No route ever omits a part — an empty part 3 hides risk.</p></div>
 
-<!-- ═══════════════ LENSES ═══════════════ -->
-<section id="lenses">
-  <div class="kicker">Sub-agents</div>
-  <h2>Six critique lenses and one background checker</h2>
-  <p class="lead">Each lens lives in <code>.claude/agents/</code> with a narrow job, a fixed output format, and a "Hard exclusions" block. Lenses in a round are dispatched in a single message so they run concurrently; each receives artifacts by path and the engagement's exclusions pasted verbatim. All six run on the workspace's <code>sonnet</code> alias; the freshness checker on <code>haiku</code>.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Lens</th><th>Mandatory when</th><th>What it does</th></tr></thead>
-      <tbody>
-        <tr><td>MECE</td><td>Phase 1 on the issue tree · Phase 2 on the opportunity set</td><td>Overlap between branches, gaps (third-party, business process, instrumentation, deploy), mixed abstraction levels, solution-shaped branches.</td></tr>
-        <tr><td>Consultative</td><td>Phase 1 framing pass · Phase 2 council</td><td>Voice matches a senior technical leader's expectations; SLI/SLO/RUM terminology precise; tradeoffs surfaced, not buried; calibrated to the named stakeholder's profile.</td></tr>
-        <tr><td>ICE</td><td>Phase 1 last, after the signals map · Phase 2 re-rank after the council</td><td>Scores Impact, Confidence, Effort; produces the ranked table; flags where one dimension is doing all the work.</td></tr>
-        <tr><td>Skeptic</td><td>Phase 2 council</td><td>Hidden assumptions, single-signal "evidence", scenarios where the plan misleads, and the questions a leader will ask.</td></tr>
-        <tr><td>Optimist</td><td>Phase 2 council</td><td>Steelmans the plan: upside left on the table, compounding benefits, parallelization — within the engagement's ambition ceiling.</td></tr>
-        <tr><td>Customer</td><td>Phase 2 council</td><td>Does the work match what end users actually experience? Which journeys are deprioritized? Right problem or easiest problem?</td></tr>
-        <tr><td>doc-freshness-checker</td><td>Background, Phase 0 start, when the last check is older than a week</td><td>Re-fetches cited Dynatrace docs, compares page-last-updated dates, writes <code>freshness-report.md</code>. Never edits long-term memory.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="small">Which lenses are mandatory in which phase is defined in <a href="../docs/lenses.md">docs/lenses.md</a>; each agent file defines its own procedure and output.</p>
-</section>
-
-<!-- ═══════════════ SKILLS ═══════════════ -->
-<section id="skills">
-  <div class="kicker">Procedures</div>
-  <h2>Fifteen skills</h2>
-  <p class="lead">A skill is the procedure the agent reads immediately before producing an artifact. They are not slash commands — with one exception, <code>/drill</code>, which you invoke yourself.</p>
-
-  <h4>Phase-bound</h4>
-  <div class="skills">
-    <div class="skill"><div class="ic">📋</div><div><div class="n"><a href="../skills/context-framing/SKILL.md">context-framing</a></div><div class="w">Phase 0</div><div class="d">Three-phase intake, seed-prompt absorption, marginal-value test, calibration routing, orientation hypotheses.</div></div></div>
-    <div class="skill"><div class="ic">💬</div><div><div class="n"><a href="../skills/drill/SKILL.md">drill</a></div><div class="w">Phase 0 · <code>/drill</code></div><div class="d">Chat-native intake that emits the same brief as the browser form, then hands off to context-framing.</div></div></div>
-    <div class="skill"><div class="ic">🌲</div><div><div class="n"><a href="../skills/mece-decomposition/SKILL.md">mece-decomposition</a></div><div class="w">Phase 1a</div><div class="d">4–7 branch issue tree; branches are problem spaces, never solutions.</div></div></div>
-    <div class="skill"><div class="ic">💡</div><div><div class="n"><a href="../skills/hypothesis-generation/SKILL.md">hypothesis-generation</a></div><div class="w">Phase 1b</div><div class="d">2–4 testable claims per branch with signals, validation approach, and exit criteria.</div></div></div>
-    <div class="skill"><div class="ic">🔗</div><div><div class="n"><a href="../skills/signal-mapping/SKILL.md">signal-mapping</a></div><div class="w">Phase 1c</div><div class="d">Signal → UX → KPI chains; reads only the matched playbooks.</div></div></div>
-    <div class="skill"><div class="ic">⚖️</div><div><div class="n"><a href="../skills/ice-scoring/SKILL.md">ice-scoring</a></div><div class="w">Phase 1d · Phase 2</div><div class="d">Impact × Confidence ÷ Effort; owns the Phase 1 gate block.</div></div></div>
-    <div class="skill"><div class="ic">📝</div><div><div class="n"><a href="../skills/action-plan-builder/SKILL.md">action-plan-builder</a></div><div class="w">Phase 2</div><div class="d">Opportunity set → draft → council → reconcile → re-rank; 30/60/90-day framing.</div></div></div>
-    <div class="skill"><div class="ic">📄</div><div><div class="n"><a href="../skills/exec-onepager/SKILL.md">exec-onepager</a></div><div class="w">Phase 3a</div><div class="d">Five-step orchestrator ending in the linter-backed brand gate.</div></div></div>
-    <div class="skill"><div class="ic">✍️</div><div><div class="n"><a href="../skills/brand-humanizer/SKILL.md">brand-humanizer</a></div><div class="w">Phase 3 · mandatory pre-pass</div><div class="d">Reads like a person wrote it, and like Dynatrace wrote it.</div></div></div>
-    <div class="skill"><div class="ic">📊</div><div><div class="n"><a href="../skills/pptx-builder/SKILL.md">pptx-builder</a></div><div class="w">Phase 3b</div><div class="d">Spec JSON → generator → deck gate. Only after one-pager approval.</div></div></div>
-  </div>
-
-  <h4>On demand</h4>
-  <div class="skills">
-    <div class="skill"><div class="ic">🔎</div><div><div class="n"><a href="../skills/external-research/SKILL.md">external-research</a></div><div class="w">Any phase</div><div class="d">Allowlisted Dynatrace docs and community only; every fact carries URL, page date, and retrieval date.</div></div></div>
-    <div class="skill"><div class="ic">⏸</div><div><div class="n"><a href="../skills/investigation-reset/SKILL.md">investigation-reset</a></div><div class="w">Pause · resume · archive</div><div class="d">Nothing moves; a field flips. Archive captures tagged lessons and an outcome row.</div></div></div>
-    <div class="skill"><div class="ic">👤</div><div><div class="n"><a href="../skills/stakeholder-overlay/SKILL.md">stakeholder-overlay</a></div><div class="w">When a leader is named</div><div class="d">Layers a named-leader profile over an archetype, in the client workspace only.</div></div></div>
-    <div class="skill"><div class="ic">🌐</div><div><div class="n"><a href="../skills/environment-intake/SKILL.md">environment-intake</a></div><div class="w">First engagement with a client</div><div class="d">Persistent Dynatrace environment facts into <code>environment.md</code>.</div></div></div>
-    <div class="skill"><div class="ic">📈</div><div><div class="n"><a href="../skills/value-highlight/SKILL.md">value-highlight</a></div><div class="w">QBR · renewal</div><div class="d">Backward-looking value brief from completed engagements and <code>contract.md</code>.</div></div></div>
-  </div>
-</section>
-
-<!-- ═══════════════ MEMORY ═══════════════ -->
-<section id="memory">
-  <div class="kicker">State and knowledge</div>
-  <h2>Memory model</h2>
-  <p class="lead">Two tiers with strict isolation between client data and shared knowledge — stated in the operating manual and enforced by a hook, not just by instruction.</p>
-
-  <div class="tiers">
-    <div class="tier" style="border-color:rgba(73,194,179,.3);background:rgba(73,194,179,.04)">
-      <h3 style="color:var(--teal)">Root library</h3>
-      <span class="path">memory/long-term/</span>
-      <span class="f">domain-knowledge.md · frameworks.md · terminology.md</span>
-      <span class="f">dynatrace-playbooks.md (hub) → playbooks/*.md</span>
-      <span class="f">stakeholder-profiles.md (hub) → profiles/*.md</span>
-      <span class="f">drill-sheets/ (one per vertical)</span>
-      <span class="f">client-question-bank.md · freshness-report.md</span>
-      <span class="f">brand/brand-spec.md · brand/reference/</span>
-      <div class="rule">Read freely every session. Hubs load at start; individual files on need. Writes require explicit approval. <strong>Never contains client data.</strong></div>
-    </div>
-    <div class="tier" style="border-color:rgba(201,63,219,.3);background:rgba(201,63,219,.04)">
-      <h3 style="color:var(--magenta)">Client workspace</h3>
-      <span class="path">memory/clients/&lt;client&gt;/</span>
-      <span class="f">README.md (engagement history)</span>
-      <span class="f">environment.md · contract.md</span>
-      <span class="f">stakeholder-overlays.md</span>
-      <span class="f">engagements/&lt;YYYY-MM-DD-slug&gt;/</span>
-      <div class="rule">Fully isolated per client. Template at <code>memory/clients/_template/</code>. Never read unless that client is the session's engagement.</div>
-    </div>
-    <div class="tier" style="border-color:rgba(25,102,255,.3);background:rgba(25,102,255,.04)">
-      <h3 style="color:var(--blue-lt)">Engagement folder</h3>
-      <span class="path">…/engagements/&lt;YYYY-MM-DD-slug&gt;/</span>
-      <span class="f">current-context.md (status front-matter)</span>
-      <span class="f">issue-tree.md · hypotheses.md · signals-map.md</span>
-      <span class="f">action-plan.md · decisions-log.md</span>
-      <span class="f">&lt;slug&gt;-onepager.html · deck-spec · deck.pptx</span>
-      <span class="f">lessons-learned.md (tagged, on archive)</span>
-      <div class="rule">Self-describing via <code>state: active | paused | complete</code> and <code>phase:</code>. Nothing ever moves — pause and archive flip a field.</div>
-    </div>
-  </div>
-
-  <h3>Context isolation, mechanically enforced</h3>
-  <p class="small">A PreToolUse hook locks each session to a client on its first substantive touch of that client's folder (a per-session marker, so concurrent sessions cannot collide) and blocks file-tool access to every other client. Exactly two read-only exceptions exist: scanning every engagement's status front-matter at session start to list resumable work, and reading other engagements' <code>lessons-learned.md</code> front-matter and hook line at Phase 0. Switching clients mid-session goes through investigation-reset, with your approval.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Artifact</th><th>What it holds</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">current-context.md</td><td>Status front-matter, the problem in your words, the reframed objective, scope and exclusions, stakeholders, capabilities, calibration routing, orientation hypotheses. Updated at every gate.</td></tr>
-        <tr><td class="mono">issue-tree.md</td><td>Root question, 4–7 branches with "what we'd see", an instrumentation-gaps branch when the cause may be invisible, the MECE-lens record, append-only version history.</td></tr>
-        <tr><td class="mono">hypotheses.md</td><td>Per-branch hypotheses with expected signals, validation approach, required metrics (kinds of data, not queries), status, and ICE scores.</td></tr>
-        <tr><td class="mono">signals-map.md</td><td>SLI/SLO → UX outcome → business KPI chains, quantified where possible; every broken link listed as a gap.</td></tr>
-        <tr><td class="mono">action-plan.md</td><td>Investigation actions with exit criteria, ranked recommended actions (conditional on evidence), decision asks for named leaders, risks with mitigations, tensions resolved.</td></tr>
-        <tr><td class="mono">decisions-log.md</td><td>Append-only audit trail: timestamp, phase, what was presented, approve / redirect / iterate, rationale in your words, next action.</td></tr>
-        <tr><td class="mono">lessons-learned.md</td><td>Written on archive. Tagged front-matter (vertical, problem shape, capabilities) plus a one-line cross-engagement hook — the only part other clients' sessions may read.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout c-teal"><div class="ico">⬆️</div><p><strong>Promotion path, client → long-term.</strong> On archive the agent may propose promoting a signal pattern, failure mode, or playbook insight to the root library. Each promotion is a separate, explicit approval. There is no auto-promotion by design.</p></div>
-</section>
-
-<!-- ═══════════════ GUARDRAILS ═══════════════ -->
-<section id="guardrails">
-  <div class="kicker">What holds it to the rules</div>
-  <h2>Hard constraints, hooks, and tools</h2>
-
+  <h2>Hard constraints (never bypassable)</h2>
   <div class="grid grid-2">
-    <div class="card">
-      <h3>Never, under any instruction</h3>
-      <ul class="dash">
-        <li>Generate DQL, SQL, or any executable query syntax</li>
-        <li>Run live queries or execute production or configuration changes</li>
-        <li>Invent metrics, SLIs, or instrumentation the client does not have</li>
-        <li>Read another client's folder, even when you name one</li>
-        <li>Advance a phase without explicit approval of the current one</li>
-        <li>Write to long-term memory or client overlays without confirmation</li>
-        <li>Surface anything that depends on an out-of-scope capability</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Hooks registered in <code>.claude/settings.json</code></h3>
-      <ul class="dash">
-        <li><strong>Client isolation</strong> (PreToolUse on file tools) — the session lock described above</li>
-        <li><strong>Fetch allowlist</strong> (PreToolUse on WebFetch) — only <code>tools/fetch-allowlist.txt</code> domains pass; lookalikes are held for your decision</li>
-        <li><strong>Workspace conformance</strong> (PostToolUse) — every edit under skills, agents, long-term memory, tools, or docs re-runs <code>tools/conformance-check.py</code></li>
-        <li><strong>Session start / end</strong> — creates and cleans up the per-session client marker</li>
-        <li><strong>git pre-commit</strong> — blocks a commit that fails conformance (<code>git config core.hooksPath tools/githooks</code>)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Tool</th><th>Used in</th><th>What it checks or builds</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">tools/onepager-lint.py</td><td>Phase 3 brand gate</td><td>One printed page (headless Chrome), content budget against the reference, font floor, palette, heading case, dashes, citation format, unresolved assets.</td></tr>
-        <tr><td class="mono">tools/pptx-generator.py</td><td>Phase 3 deck</td><td>Builds the deck from the spec JSON on the brand template; content-driven layout sizing; charts with brand series colors; wave backgrounds.</td></tr>
-        <tr><td class="mono">tools/conformance-check.py</td><td>Workspace edits</td><td>Referenced paths and links resolve; no client names in the shared tier; every lens carries its exclusions block; the intake brief stays in sync across contract, form, and <code>/drill</code>; the backlog ledger cites real paths.</td></tr>
-        <tr><td class="mono">tools/seed-prompt-generator-bundle.py</td><td>Editing the form</td><td>Unpacks and repacks the browser-runnable Seed Prompt Generator from its readable source.</td></tr>
-      </tbody>
-    </table>
+    <div class="card card-sm"><p>🚫 No DQL, SQL, or executable query syntax, under any circumstances</p></div>
+    <div class="card card-sm"><p>🚫 No production changes or configuration updates executed</p></div>
+    <div class="card card-sm"><p>🚫 No fabricated metrics, SLIs, or instrumentation that the client does not have</p></div>
+    <div class="card card-sm"><p>🚫 No reading another client's folder, even if you name one</p></div>
+    <div class="card card-sm"><p>🚫 No advancing a phase without explicit approval of the current one</p></div>
+    <div class="card card-sm"><p>🚫 No writing to long-term memory or client overlays without confirmation</p></div>
   </div>
 </section>
 
-<!-- ═══════════════ GETTING STARTED ═══════════════ -->
-<section id="start">
-  <div class="kicker">Run your first engagement</div>
-  <h2>Getting started</h2>
+<!-- ═══════════ GETTING STARTED ═══════════ -->
+<section class="page" id="page-start">
+  <h1>Getting started</h1>
+  <p class="lead">Everything from "just opened this folder" to a finished first investigation.</p>
 
-  <div class="grid grid-2">
-    <div class="card">
-      <h3>Install</h3>
-      <p><strong>Installation = open this folder in Claude Code.</strong> <code>CLAUDE.md</code> loads on every session and is the operating manual. The VS Code extension is recommended so you can watch artifacts appear under <code>memory/clients/</code> as the agent works.</p>
-      <h4>One-time setup (about 15 minutes)</h4>
-      <ol class="steps">
-        <li>Add your team's acronyms and internal service names to <code>memory/long-term/terminology.md</code>.</li>
-        <li>Fill the <code>[team to note]</code> slots in <code>memory/long-term/domain-knowledge.md</code> with org-level context — never client details.</li>
-        <li>Run <code>git config core.hooksPath tools/githooks</code>, and install <code>tools/requirements.txt</code> into a virtualenv for the deck generator.</li>
-        <li>Optional: validate the vertical drill sheets with a practitioner who works each vertical — they ship as drafts.</li>
-      </ol>
-    </div>
-    <div class="card">
-      <h3>Start an engagement</h3>
-      <ol class="steps">
-        <li><strong>Pre-fill, or don't.</strong> Open the browser-runnable Seed Prompt Generator in <code>html/</code>, fill it, and paste the brief as your opening message; or type <code>/drill</code> for the same intake in chat; or simply answer <em>"Describe the problem you're trying to solve."</em></li>
-        <li><strong>Answer Phase 0.</strong> Q1–Q3 as a conversation, the factual block in one message, then your customer's five drill-sheet questions. A complete brief collapses this to one sharpening message.</li>
-        <li><strong>Read the gate block, then say "approve"</strong> — or redirect, or ask for a lens. Part 3 lists what the agent assumed and what it chose not to ask.</li>
-        <li><strong>Continue through Phases 1, 2, 3.</strong> Each has its own gate; the deck waits for the one-pager.</li>
-        <li><strong>Close.</strong> "Archive this investigation" captures tagged lessons and an outcome row. "Pause" and "Resume &lt;client&gt;" flip the folder's state without moving anything.</li>
-      </ol>
-    </div>
+  <h2>Installation</h2>
+  <div class="card" style="max-width:720px;display:flex;gap:16px;align-items:flex-start"><div style="font-size:28px">📂</div><div><strong>Installation = open this folder in Claude Code.</strong><p style="margin-top:6px">Open <code>insights-forge/</code> in VS Code with the Claude Code extension. <code>CLAUDE.md</code> loads on every session — it is the operating manual. The extension is recommended so you can watch artifacts appear under <code>memory/clients/</code> as the agent works; the terminal works too.</p></div></div>
+
+  <h2>One-time workspace setup (about 15 minutes)</h2>
+  <ol class="steps" style="max-width:720px">
+    <li><strong>Terminology.</strong> Add your team's acronyms and internal service names to <code>memory/long-term/terminology.md</code> — the agent uses your vocabulary in deliverables.</li>
+    <li><strong>Domain knowledge slots.</strong> Fill the <code>[team to note]</code> slots in <code>memory/long-term/domain-knowledge.md</code> with org-level context. Never client details — those go in each client's <code>environment.md</code>.</li>
+    <li><strong>Hooks and tools.</strong> Run <code>git config core.hooksPath tools/githooks</code>; install <code>tools/requirements.txt</code> into a virtualenv for the deck generator.</li>
+    <li><strong>Drill sheets (optional but high value).</strong> The eight vertical sheets ship as drafts; one session with a practitioner per vertical turns them into the instrument your consultants run in front of customers.</li>
+  </ol>
+
+  <h2>Before your first engagement with a new client</h2>
+  <div class="card card-sm" style="max-width:720px"><p>Copy <code>memory/clients/_template/</code> to <code>memory/clients/&lt;client-name&gt;/</code>. The agent populates <code>environment.md</code> (environment-intake) and <code>stakeholder-overlays.md</code> (stakeholder-overlay, when you name a leader). These persist across engagements with the same client — intake happens once.</p></div>
+
+  <h2>Running an investigation</h2>
+  <ol class="steps" style="max-width:720px">
+    <li><strong>Pre-fill, or don't.</strong> Open the browser-runnable Seed Prompt Generator in <code>html/</code>, fill it, and paste the brief as your opening message; or type <code>/drill</code> for the same intake in chat; or simply answer <em>"Describe the problem you're trying to solve."</em></li>
+    <li><strong>Answer Phase 0.</strong> Q1–Q3 as a conversation, the factual block in one message, then your customer's five drill-sheet questions. A complete brief collapses all of it into one sharpening message.</li>
+    <li><strong>Read the gate block, then say "approve"</strong> — or redirect, or ask for a lens. Part 3 lists what the agent assumed and what it chose not to ask.</li>
+    <li><strong>Continue through Phases 1, 2, 3.</strong> Each has its own gate and artifacts; the deck waits for the one-pager. Don't skip gates — they catch bad assumptions before downstream work bakes them in.</li>
+    <li><strong>Close.</strong> <em>"Archive this investigation."</em> The agent asks four lessons-learned questions, writes the tagged <code>lessons-learned.md</code>, adds an outcome row to the client README, proposes any long-term promotions for your approval, and marks <code>state: complete</code>.</li>
+  </ol>
+
+  <h2>Phase 0 — the nine questions</h2>
+  <div class="tbl-wrap"><table class="t" style="max-width:820px">
+    <thead><tr><th>Q</th><th>Asks</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td>Q1</td><td>Customer and what they do</td><td>A · conversation</td></tr>
+      <tr><td>Q2</td><td>Customer vertical — selects the drill sheet</td><td>A · conversation</td></tr>
+      <tr><td>Q3</td><td>C.S.I.R. — Context, Specific Information, Intent, Response Format</td><td>A · conversation</td></tr>
+      <tr><td>Q4</td><td>Tenant type (SaaS or Managed)</td><td>B · one message</td></tr>
+      <tr><td>Q5</td><td>Active Dynatrace capabilities (checklist) — the boundary of what can be surfaced</td><td>B · one message</td></tr>
+      <tr><td>Q6</td><td>RUM status on the focus application</td><td>B · one message</td></tr>
+      <tr><td>Q7</td><td>Stakeholder: name, archetype, what they judge success by</td><td>B · one message</td></tr>
+      <tr><td>Q9</td><td>Engagement trigger (QBR, renewal, expansion, incident follow-up)</td><td>B · one message</td></tr>
+      <tr><td>Q8</td><td>Technical team priorities — five targeted questions from the vertical drill sheet</td><td>C · one message</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Working with multiple clients</h2>
+  <div class="grid grid-2" style="max-width:720px">
+    <div class="card card-sm"><span class="tag tag-gray">Pause</span><p style="margin-top:6px"><em>"Pause this engagement and start a new one."</em> Marks <code>state: paused</code>; nothing moves; any number can be paused at once.</p></div>
+    <div class="card card-sm"><span class="tag tag-teal">Resume</span><p style="margin-top:6px"><em>"Resume [client]."</em> The agent scans engagement statuses, you pick one, it flips back to <code>active</code>. Client data never crosses a client boundary.</p></div>
   </div>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Q</th><th>Asks</th><th>Phase</th></tr></thead>
-      <tbody>
-        <tr><td>Q1</td><td>Customer and what they do</td><td>A · conversation</td></tr>
-        <tr><td>Q2</td><td>Customer vertical (selects the drill sheet)</td><td>A · conversation</td></tr>
-        <tr><td>Q3</td><td>C.S.I.R. — Context, Specific Information, Intent, Response Format</td><td>A · conversation</td></tr>
-        <tr><td>Q4</td><td>Tenant type (SaaS or Managed)</td><td>B · one message</td></tr>
-        <tr><td>Q5</td><td>Active Dynatrace capabilities (checklist) — the boundary of what can be surfaced</td><td>B · one message</td></tr>
-        <tr><td>Q6</td><td>RUM status on the focus application</td><td>B · one message</td></tr>
-        <tr><td>Q7</td><td>Stakeholder: name, archetype, what they judge success by</td><td>B · one message</td></tr>
-        <tr><td>Q9</td><td>Engagement trigger (QBR, renewal, expansion, incident follow-up)</td><td>B · one message</td></tr>
-        <tr><td>Q8</td><td>Technical team priorities — five targeted questions from the vertical drill sheet</td><td>C · one message</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout c-magenta"><div class="ico">📍</div><p><strong>Where am I?</strong> Open the engagement's <code>current-context.md</code>: its front-matter says <code>state</code> and <code>phase</code>; <code>decisions-log.md</code> beside it is the audit trail. To list every active or paused engagement, scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state</code>.</p></div>
+  <div class="callout c-magenta"><div class="ico">📍</div><p><strong>Where am I?</strong> Open the engagement's <code>current-context.md</code>: its front-matter says <code>state</code> and <code>phase</code>; <code>decisions-log.md</code> beside it is the audit trail. To list every active or paused engagement, scan <code>memory/clients/*/engagements/*/current-context.md</code> for <code>state</code>. Anything stale or wrong? Ask the agent to reframe — that's a Phase 0 redirect.</p></div>
+  <p class="small">Full walkthrough: <a href="#/docs/getting-started">docs/getting-started.md</a> · <a href="#/docs/workflow">docs/workflow.md</a></p>
 </section>
 
-<!-- ═══════════════ DOCS ═══════════════ -->
-<section id="docs">
-  <div class="kicker">Read the source</div>
-  <h2>Documentation</h2>
-  <p class="lead">This page is the map. The behavior lives in the files below; when the two disagree, the source wins. Open the links in VS Code — they are repository files, not web pages.</p>
+<!-- ═══════════ DOCS BROWSER ═══════════ -->
+<section class="page" id="page-docs">
+  <h1>Docs browser</h1>
+  <p class="lead" style="margin-bottom:16px">The repository's documentation, skills, memory files, and sub-agents — rendered live from disk, so this browser can never drift from the source. Pick a file on the left.</p>
+  <div class="two-panel">
+    <div class="panel-left" id="docs-nav">
+      <div class="panel-group">Docs</div>
+      <a class="panel-item" href="#/docs/getting-started" data-key="getting-started" data-src="../docs/getting-started.md">getting-started.md</a>
+      <a class="panel-item" href="#/docs/workflow" data-key="workflow" data-src="../docs/workflow.md">workflow.md</a>
+      <a class="panel-item" href="#/docs/lenses" data-key="lenses" data-src="../docs/lenses.md">lenses.md</a>
+      <a class="panel-item" href="#/docs/seed-prompt-generator" data-key="seed-prompt-generator" data-src="../docs/seed-prompt-generator.md">seed-prompt-generator.md</a>
+      <a class="panel-item" href="#/docs/brief-contract" data-key="brief-contract" data-src="../docs/brief-contract.md">brief-contract.md</a>
+      <a class="panel-item" href="#/docs/skills" data-key="skills" data-src="../docs/skills.md">skills.md</a>
+      <a class="panel-item" href="#/docs/memory" data-key="memory" data-src="../docs/memory.md">memory.md</a>
+      <a class="panel-item" href="#/docs/research" data-key="research" data-src="../docs/research.md">research.md</a>
+      <a class="panel-item" href="#/docs/deliverables" data-key="deliverables" data-src="../docs/deliverables.md">deliverables.md</a>
+      <a class="panel-item" href="#/docs/customizing" data-key="customizing" data-src="../docs/customizing.md">customizing.md</a>
 
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>If you want to…</th><th>Read</th></tr></thead>
-      <tbody>
-        <tr><td>Understand how the agent operates</td><td><a href="../CLAUDE.md">CLAUDE.md</a> — the operating manual, authoritative</td></tr>
-        <tr><td>Set up and run a first investigation</td><td><a href="../docs/getting-started.md">docs/getting-started.md</a></td></tr>
-        <tr><td>See the four phases in depth</td><td><a href="../docs/workflow.md">docs/workflow.md</a></td></tr>
-        <tr><td>Pre-fill Phase 0 with the browser form</td><td><a href="../docs/seed-prompt-generator.md">docs/seed-prompt-generator.md</a> · <a href="../docs/brief-contract.md">docs/brief-contract.md</a></td></tr>
-        <tr><td>Learn what each lens does and when</td><td><a href="../docs/lenses.md">docs/lenses.md</a></td></tr>
-        <tr><td>Browse the skills index</td><td><a href="../docs/skills.md">docs/skills.md</a></td></tr>
-        <tr><td>Understand the memory tiers and isolation</td><td><a href="../docs/memory.md">docs/memory.md</a></td></tr>
-        <tr><td>Understand citations and the fetch allowlist</td><td><a href="../docs/research.md">docs/research.md</a></td></tr>
-        <tr><td>Produce a one-pager or deck</td><td><a href="../docs/deliverables.md">docs/deliverables.md</a> · <a href="../memory/long-term/brand/brand-spec.md">brand-spec.md</a></td></tr>
-        <tr><td>Customize for your team</td><td><a href="../docs/customizing.md">docs/customizing.md</a></td></tr>
-        <tr><td>Run or extend the tools and hooks</td><td><a href="../tools/README.md">tools/README.md</a></td></tr>
-      </tbody>
-    </table>
+      <div class="panel-group">Root</div>
+      <a class="panel-item" href="#/docs/claude-md" data-key="claude-md" data-src="../CLAUDE.md">CLAUDE.md</a>
+      <a class="panel-item" href="#/docs/readme" data-key="readme" data-src="../README.md">README.md</a>
+      <a class="panel-item" href="#/docs/tools-readme" data-key="tools-readme" data-src="../tools/README.md">tools/README.md</a>
+      <a class="panel-item" href="#/docs/roadmap" data-key="roadmap" data-src="../plans/ROADMAP.md">plans/ROADMAP.md</a>
+      <a class="panel-item" href="#/docs/backlog" data-key="backlog" data-src="../plans/BACKLOG-STATUS.md">plans/BACKLOG-STATUS.md</a>
+
+      <div class="panel-group">Long-term memory</div>
+      <a class="panel-item" href="#/docs/lt-readme" data-key="lt-readme" data-src="../memory/long-term/README.md">README.md</a>
+      <a class="panel-item" href="#/docs/domain-knowledge" data-key="domain-knowledge" data-src="../memory/long-term/domain-knowledge.md">domain-knowledge.md</a>
+      <a class="panel-item" href="#/docs/playbooks" data-key="playbooks" data-src="../memory/long-term/dynatrace-playbooks.md">dynatrace-playbooks.md</a>
+      <a class="panel-item" href="#/docs/frameworks" data-key="frameworks" data-src="../memory/long-term/frameworks.md">frameworks.md</a>
+      <a class="panel-item" href="#/docs/profiles" data-key="profiles" data-src="../memory/long-term/stakeholder-profiles.md">stakeholder-profiles.md</a>
+      <a class="panel-item" href="#/docs/terminology" data-key="terminology" data-src="../memory/long-term/terminology.md">terminology.md</a>
+      <a class="panel-item" href="#/docs/question-bank" data-key="question-bank" data-src="../memory/long-term/client-question-bank.md">client-question-bank.md</a>
+      <a class="panel-item" href="#/docs/drill-sheets" data-key="drill-sheets" data-src="../memory/long-term/drill-sheets/README.md">drill-sheets/README.md</a>
+      <a class="panel-item" href="#/docs/brand-spec" data-key="brand-spec" data-src="../memory/long-term/brand/brand-spec.md">brand/brand-spec.md</a>
+
+      <div class="panel-group">Client template</div>
+      <a class="panel-item" href="#/docs/tpl-readme" data-key="tpl-readme" data-src="../memory/clients/_template/README.md">README.md</a>
+      <a class="panel-item" href="#/docs/tpl-environment" data-key="tpl-environment" data-src="../memory/clients/_template/environment.md">environment.md</a>
+      <a class="panel-item" href="#/docs/tpl-contract" data-key="tpl-contract" data-src="../memory/clients/_template/contract.md">contract.md</a>
+      <a class="panel-item" href="#/docs/tpl-overlays" data-key="tpl-overlays" data-src="../memory/clients/_template/stakeholder-overlays.md">stakeholder-overlays.md</a>
+      <a class="panel-item" href="#/docs/tpl-eng-readme" data-key="tpl-eng-readme" data-src="../memory/clients/_template/engagements/README.md">engagements/README.md</a>
+      <a class="panel-item" href="#/docs/tpl-decisions" data-key="tpl-decisions" data-src="../memory/clients/_template/engagements/decisions-log.md">decisions-log.md</a>
+      <a class="panel-item" href="#/docs/tpl-lessons" data-key="tpl-lessons" data-src="../memory/clients/_template/engagements/lessons-learned.md">lessons-learned.md</a>
+
+      <div class="panel-group">Skills</div>
+      <a class="panel-item" href="#/docs/sk-context-framing" data-key="sk-context-framing" data-src="../skills/context-framing/SKILL.md">context-framing</a>
+      <a class="panel-item" href="#/docs/sk-drill" data-key="sk-drill" data-src="../skills/drill/SKILL.md">drill</a>
+      <a class="panel-item" href="#/docs/sk-mece-decomposition" data-key="sk-mece-decomposition" data-src="../skills/mece-decomposition/SKILL.md">mece-decomposition</a>
+      <a class="panel-item" href="#/docs/sk-hypothesis-generation" data-key="sk-hypothesis-generation" data-src="../skills/hypothesis-generation/SKILL.md">hypothesis-generation</a>
+      <a class="panel-item" href="#/docs/sk-signal-mapping" data-key="sk-signal-mapping" data-src="../skills/signal-mapping/SKILL.md">signal-mapping</a>
+      <a class="panel-item" href="#/docs/sk-ice-scoring" data-key="sk-ice-scoring" data-src="../skills/ice-scoring/SKILL.md">ice-scoring</a>
+      <a class="panel-item" href="#/docs/sk-action-plan-builder" data-key="sk-action-plan-builder" data-src="../skills/action-plan-builder/SKILL.md">action-plan-builder</a>
+      <a class="panel-item" href="#/docs/sk-exec-onepager" data-key="sk-exec-onepager" data-src="../skills/exec-onepager/SKILL.md">exec-onepager</a>
+      <a class="panel-item" href="#/docs/sk-brand-humanizer" data-key="sk-brand-humanizer" data-src="../skills/brand-humanizer/SKILL.md">brand-humanizer</a>
+      <a class="panel-item" href="#/docs/sk-pptx-builder" data-key="sk-pptx-builder" data-src="../skills/pptx-builder/SKILL.md">pptx-builder</a>
+      <a class="panel-item" href="#/docs/sk-external-research" data-key="sk-external-research" data-src="../skills/external-research/SKILL.md">external-research</a>
+      <a class="panel-item" href="#/docs/sk-investigation-reset" data-key="sk-investigation-reset" data-src="../skills/investigation-reset/SKILL.md">investigation-reset</a>
+      <a class="panel-item" href="#/docs/sk-stakeholder-overlay" data-key="sk-stakeholder-overlay" data-src="../skills/stakeholder-overlay/SKILL.md">stakeholder-overlay</a>
+      <a class="panel-item" href="#/docs/sk-environment-intake" data-key="sk-environment-intake" data-src="../skills/environment-intake/SKILL.md">environment-intake</a>
+      <a class="panel-item" href="#/docs/sk-value-highlight" data-key="sk-value-highlight" data-src="../skills/value-highlight/SKILL.md">value-highlight</a>
+
+      <div class="panel-group">Sub-agents</div>
+      <a class="panel-item" href="#/docs/ag-mece-lens" data-key="ag-mece-lens" data-src="../.claude/agents/mece-lens.md">mece-lens</a>
+      <a class="panel-item" href="#/docs/ag-ice-lens" data-key="ag-ice-lens" data-src="../.claude/agents/ice-lens.md">ice-lens</a>
+      <a class="panel-item" href="#/docs/ag-skeptic-lens" data-key="ag-skeptic-lens" data-src="../.claude/agents/skeptic-lens.md">skeptic-lens</a>
+      <a class="panel-item" href="#/docs/ag-optimist-lens" data-key="ag-optimist-lens" data-src="../.claude/agents/optimist-lens.md">optimist-lens</a>
+      <a class="panel-item" href="#/docs/ag-consultative-lens" data-key="ag-consultative-lens" data-src="../.claude/agents/consultative-lens.md">consultative-lens</a>
+      <a class="panel-item" href="#/docs/ag-customer-lens" data-key="ag-customer-lens" data-src="../.claude/agents/customer-lens.md">customer-lens</a>
+      <a class="panel-item" href="#/docs/ag-doc-freshness" data-key="ag-doc-freshness" data-src="../.claude/agents/doc-freshness-checker.md">doc-freshness-checker</a>
+    </div>
+    <div class="panel-right" id="doc-panel"><p style="color:var(--gray)">Loading…</p></div>
   </div>
 </section>
 
 </main>
+</div>
 
-<footer>
-  Insights Forge · Agent guide · This page carries no copies of the docs, so it cannot drift from them — the links above are the source of truth.
-</footer>
+<script>
+/* ───────────────────────── Router ───────────────────────── */
+const PAGE_IDS = Array.from(document.querySelectorAll('.page')).map(p => p.id.replace('page-', ''));
+function route() {
+  const raw = location.hash.replace(/^#\/?/, '');
+  const [page, sub] = raw.split('/');
+  const target = PAGE_IDS.includes(page) ? page : 'overview';
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + target));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === target));
+  document.getElementById('main').scrollTop = 0;
+  if (target === 'flow') sfSelect(sub || 'p0');
+  if (target === 'docs') showDoc(sub || 'getting-started');
+}
+window.addEventListener('hashchange', route);
 
+/* ───────────────────────── Accordions ───────────────────────── */
+function toggleAcc(head) { head.parentElement.classList.toggle('open'); }
+
+/* ───────────────────────── Phase flow step-through ───────────────────────── */
+const SF = {
+  seed: { title: 'Entry — Seed Prompt Generator or /drill', tag: 'Pre-Phase 0 · optional',
+    desc: 'The browser-runnable form in <code>html/</code> (or <code>/drill</code> in chat) collects the intake and emits the brief format in <code>docs/brief-contract.md</code>. Paste it as your opening message: Phase 0 absorbs it as provisional answers, asks only the gaps, and — when every required field is filled — collapses the clarifying rounds into one sharpening message.',
+    skills: ['drill'], lenses: [], artifacts: ['intake brief'], gate: 'None — the brief feeds the Phase 0 gate' },
+  p0: { title: 'Phase 0 — Context', tag: 'context-framing',
+    desc: 'Loads the four session-init files and establishes the engagement folder. Three-phase questioning (narrative funnel → closed drill block → vertical drill sheet), the marginal-value test on optional fields, calibration routing, cross-engagement lessons, and 3–5 orientation hypotheses produce <code>current-context.md</code>. A doc-freshness check runs in the background.',
+    skills: ['context-framing', 'stakeholder-overlay (if a leader is named)', 'environment-intake (first engagement)'], lenses: ['doc-freshness (background)'], artifacts: ['current-context.md', 'decisions-log.md'], gate: 'Phase 0 gate → sets phase: 1' },
+  p1: { title: 'Phase 1 — Diagnose', tag: 'mece-decomposition → hypothesis-generation → signal-mapping → ice-scoring',
+    desc: 'Decomposes the framed problem into a MECE issue tree, generates 2–4 testable hypotheses per branch, maps technical signals → UX outcomes → business KPIs (reading only the matched playbooks), then scores and ranks. Three mandatory lenses run in sequence before the gate.',
+    skills: ['mece-decomposition', 'hypothesis-generation', 'signal-mapping', 'ice-scoring'], lenses: ['MECE (issue tree)', 'Consultative (framing pass)', 'ICE (last, after the signals map)'], artifacts: ['issue-tree.md', 'hypotheses.md', 'signals-map.md'], gate: 'Phase 1 gate → sets phase: 2' },
+  p2: { title: 'Phase 2 — Solution', tag: 'action-plan-builder + persona council',
+    desc: 'Translates the ranked diagnosis into an action plan with owners, exit criteria, and 30/60/90-day framing, under the engagement\'s ambition ceiling. The council runs Round 1 blind and concurrent, Round 2 as cross-examination, Round 3 only if positions are still moving; the agent reconciles into "Tensions resolved"; ICE re-ranks.',
+    skills: ['action-plan-builder', 'ice-scoring (re-rank)'], lenses: ['MECE (opportunity set)', 'Skeptic', 'Optimist', 'Customer', 'Consultative', 'ICE (re-rank)'], artifacts: ['action-plan.md'], gate: 'Phase 2 gate → sets phase: 3' },
+  p3: { title: 'Phase 3 — Deliver', tag: 'exec-onepager → brand-humanizer → pptx-builder',
+    desc: 'Five-step one-pager orchestration ending in the linter-backed brand gate; then, only after the one-pager is approved, the deck is generated from a spec JSON on the brand template. Both files land inside the engagement folder. No lens is mandatory — packaging, not analysis.',
+    skills: ['exec-onepager', 'brand-humanizer', 'pptx-builder'], lenses: [], artifacts: ['<slug>-onepager.html', 'deck-spec-YYYY-MM-DD.json', 'deck-YYYY-MM-DD.pptx'], gate: 'One-pager gate, then deck gate — phase stays 3' },
+  close: { title: 'Close — Archive', tag: 'investigation-reset',
+    desc: 'Four lessons-learned questions become a tagged <code>lessons-learned.md</code> (front-matter plus the one-line Cross-engagement hook other clients\' sessions may read). An outcome row goes into the client README, any long-term promotions are proposed for your approval, and the folder flips to <code>state: complete</code>. Nothing moves.',
+    skills: ['investigation-reset'], lenses: [], artifacts: ['lessons-learned.md', 'client README outcome row'], gate: 'Each proposed promotion to long-term memory is a separate approval' }
+};
+const SF_LENSES = { freshness: ['p0'], mece: ['p1', 'p2'], consultative: ['p1', 'p2'], ice: ['p1', 'p2'], skeptic: ['p2'], optimist: ['p2'], customer: ['p2'] };
+function sfSelect(key) {
+  if (!SF[key]) key = 'p0';
+  document.querySelectorAll('[data-sf]').forEach(n => n.classList.toggle('on', n.dataset.sf === key));
+  document.querySelectorAll('.lens-pill').forEach(l => {
+    const on = (SF_LENSES[l.dataset.lens] || []).includes(key);
+    l.classList.toggle('on', on); l.classList.toggle('dim', !on);
+  });
+  const d = SF[key];
+  const tags = (arr, cls) => arr.map(s => `<span class="tag ${cls}">${s}</span>`).join('');
+  document.getElementById('sf-detail').innerHTML =
+    `<div><strong style="font-size:14px">${d.title}</strong> <span class="tag tag-gray" style="margin-left:8px;font-size:10px">${d.tag}</span></div>` +
+    `<p style="font-size:13px;margin:8px 0 6px;max-width:720px">${d.desc}</p>` +
+    (d.skills.length ? `<div class="sf-row"><div class="sf-lbl">Skills</div><div>${tags(d.skills, 'tag-teal')}</div></div>` : '') +
+    `<div class="sf-row"><div class="sf-lbl">Lenses</div><div>${d.lenses.length ? tags(d.lenses, 'tag-magenta') : '<span class="small" style="color:var(--gray)">none mandatory — any of the six on demand</span>'}</div></div>` +
+    `<div class="sf-row"><div class="sf-lbl">Artifacts</div><div>${d.artifacts.map(a => `<code>${escHtml(a)}</code>`).join('<span style="margin:0 6px;color:var(--gray)">·</span>')}</div></div>` +
+    `<div class="sf-row"><div class="sf-lbl">Gate</div><div class="small" style="color:var(--gray-lt)">${d.gate}</div></div>`;
+}
+document.querySelectorAll('#flow-strip [data-sf]').forEach(n => n.addEventListener('click', () => { location.hash = '#/flow/' + n.dataset.sf; }));
+
+/* ───────────────────────── Docs browser ───────────────────────── */
+const DOC_INDEX = {};   // key → {src, label}
+const DOC_BY_SRC = {};  // normalized src → key
+document.querySelectorAll('#docs-nav .panel-item').forEach(a => {
+  DOC_INDEX[a.dataset.key] = { src: a.dataset.src, label: a.textContent.trim() };
+  DOC_BY_SRC[normalizePath(a.dataset.src)] = a.dataset.key;
+});
+const docCache = {};
+let currentDoc = null, currentView = 'rendered';
+
+function normalizePath(p) {
+  const out = [];
+  for (const seg of p.split('/')) {
+    if (seg === '' || seg === '.') continue;
+    if (seg === '..') { if (out.length && out[out.length - 1] !== '..') out.pop(); else out.push('..'); }
+    else out.push(seg);
+  }
+  return out.join('/');
+}
+function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function showDoc(key) {
+  if (!DOC_INDEX[key]) key = 'getting-started';
+  currentDoc = key;
+  document.querySelectorAll('#docs-nav .panel-item').forEach(a => a.classList.toggle('active', a.dataset.key === key));
+  const active = document.querySelector('#docs-nav .panel-item.active');
+  if (active) active.scrollIntoView({ block: 'nearest' });
+  const def = DOC_INDEX[key];
+  const panel = document.getElementById('doc-panel');
+  const header = (extra) => `<div class="doc-head"><span class="path-chip">${escHtml(def.src.replace(/^\.\.\//, ''))}</span>${extra || ''}</div>`;
+  if (location.protocol === 'file:') {
+    panel.innerHTML = header() +
+      `<div class="notice"><p style="font-weight:500;color:var(--white)">Live rendering needs a local web server.</p>` +
+      `<p>Browsers block reading sibling files from <code>file://</code>. From the repository root run one of these, then open the guide at the address shown:</p>` +
+      `<pre>python3 -m http.server 8000      # then http://localhost:8000/html/</pre>` +
+      `<p>Or use the VS Code Live Server extension on <code>html/index.html</code>. Until then, open the file directly: <a href="${def.src}">${escHtml(def.src.replace(/^\.\.\//, ''))}</a></p></div>`;
+    return;
+  }
+  panel.innerHTML = header() + '<p style="color:var(--gray)">Loading…</p>';
+  const render = (text) => {
+    if (currentDoc !== key) return;
+    const toggle = `<div class="view-toggle"><button class="view-btn${currentView === 'rendered' ? ' active' : ''}" onclick="setView('rendered')">Rendered</button><button class="view-btn${currentView === 'raw' ? ' active' : ''}" onclick="setView('raw')">Raw</button></div>`;
+    let body;
+    if (currentView === 'raw') {
+      const lines = text.replace(/\r\n?/g, '\n').split('\n');
+      body = `<div class="raw-wrap"><div class="raw-nums">${lines.map((_, i) => `<span>${i + 1}</span>`).join('')}</div><pre class="raw-pre">${escHtml(text)}</pre></div>`;
+    } else {
+      body = `<div class="md">${mdToHtml(text, def.src)}</div>`;
+    }
+    panel.innerHTML = header(toggle) + body;
+    panel.scrollTop = 0;
+  };
+  if (docCache[key] !== undefined) { render(docCache[key]); return; }
+  fetch(def.src).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(text => { docCache[key] = text; render(text); })
+    .catch(err => { if (currentDoc === key) panel.innerHTML = header() + `<div class="notice"><p style="font-weight:500;color:var(--white)">Could not load file</p><p>${escHtml(String(err))} — is the server serving the repository root?</p></div>`; });
+}
+function setView(mode) { currentView = mode; if (currentDoc) showDoc(currentDoc); }
+
+/* ───────────────────────── Minimal Markdown renderer (GFM subset) ───────────────────────── */
+function mdToHtml(src, docSrc) {
+  src = src.replace(/\r\n?/g, '\n').replace(/^---\n[\s\S]*?\n---\n/, '');
+  const dir = docSrc.slice(0, docSrc.lastIndexOf('/') + 1);
+  const lines = src.split('\n');
+  let html = '', i = 0;
+
+  const linkHtml = (text, url) => {
+    if (/^(https?:|mailto:)/.test(url)) return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`;
+    if (url.startsWith('#')) return `<span>${text}</span>`;
+    const clean = url.split('#')[0];
+    const norm = normalizePath(dir + clean);
+    const key = DOC_BY_SRC[norm];
+    if (key) return `<a href="#/docs/${key}">${text}</a>`;
+    return `<a href="${dir + clean}">${text}</a>`;
+  };
+  const inline = (s) => {
+    const codes = [];
+    s = s.replace(/`([^`]+)`/g, (m, c) => { codes.push('<code>' + escHtml(c) + '</code>'); return ' ' + (codes.length - 1) + ' '; });
+    s = escHtml(s);
+    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, u) => `<img alt="${alt}" src="${/^https?:/.test(u) ? u : dir + u}">`);
+    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, u) => linkHtml(t, u));
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/(^|[\s(>])\*([^*\n]+)\*(?=[\s.,;:)!?<]|$)/g, '$1<em>$2</em>');
+    s = s.replace(/(^|[\s(>])_([^_\n]+)_(?=[\s.,;:)!?<]|$)/g, '$1<em>$2</em>');
+    s = s.replace(/ (\d+) /g, (m, n) => codes[n]);
+    return s;
+  };
+  const isListLine = (l) => /^\s*([-*+]|\d+\.)\s+/.test(l);
+  const isTableSep = (l) => /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(l);
+
+  while (i < lines.length) {
+    const line = lines[i];
+    if (line.trim() === '') { i++; continue; }
+    // fenced code
+    let m;
+    if ((m = line.match(/^\s*```/))) {
+      let j = i + 1, buf = [];
+      while (j < lines.length && !/^\s*```/.test(lines[j])) { buf.push(lines[j]); j++; }
+      html += `<pre><code>${escHtml(buf.join('\n'))}</code></pre>`;
+      i = j + 1; continue;
+    }
+    if ((m = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/))) { html += `<h${m[1].length}>${inline(m[2])}</h${m[1].length}>`; i++; continue; }
+    if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) { html += '<hr>'; i++; continue; }
+    if (/^\s*>/.test(line)) {
+      let j = i, buf = [];
+      while (j < lines.length && /^\s*>/.test(lines[j])) { buf.push(lines[j].replace(/^\s*>\s?/, '')); j++; }
+      html += `<blockquote>${mdToHtml(buf.join('\n'), docSrc)}</blockquote>`;
+      i = j; continue;
+    }
+    if (line.includes('|') && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+      const splitRow = (r) => r.replace(/\\\|/g, '').trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => inline(c.trim().replace(//g, '|')));
+      const head = splitRow(line);
+      let j = i + 2, rows = [];
+      while (j < lines.length && lines[j].includes('|') && lines[j].trim() !== '') { rows.push(splitRow(lines[j])); j++; }
+      html += `<table><thead><tr>${head.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+      i = j; continue;
+    }
+    if (isListLine(line)) {
+      const items = []; let j = i;
+      while (j < lines.length) {
+        const lm = lines[j].match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
+        if (lm) { items.push({ indent: lm[1].replace(/\t/g, '    ').length, ordered: /\d/.test(lm[2]), text: lm[3] }); j++; continue; }
+        if (lines[j].trim() === '') { if (j + 1 < lines.length && isListLine(lines[j + 1])) { j++; continue; } break; }
+        if (/^\s{2,}\S/.test(lines[j]) && items.length) { items[items.length - 1].text += ' ' + lines[j].trim(); j++; continue; }
+        break;
+      }
+      let out = ''; const stack = [];
+      for (const it of items) {
+        while (stack.length && it.indent < stack[stack.length - 1].indent) { out += stack.pop().ordered ? '</li></ol>' : '</li></ul>'; }
+        if (!stack.length || it.indent > stack[stack.length - 1].indent) { out += (it.ordered ? '<ol>' : '<ul>') + '<li>' + inline(it.text); stack.push({ indent: it.indent, ordered: it.ordered }); }
+        else { out += '</li><li>' + inline(it.text); }
+      }
+      while (stack.length) out += stack.pop().ordered ? '</li></ol>' : '</li></ul>';
+      html += out; i = j; continue;
+    }
+    // paragraph
+    let j = i, buf = [];
+    while (j < lines.length && lines[j].trim() !== '' && !/^\s*```/.test(lines[j]) && !/^#{1,6}\s/.test(lines[j]) && !/^\s*>/.test(lines[j]) && !isListLine(lines[j]) && !(lines[j].includes('|') && j + 1 < lines.length && isTableSep(lines[j + 1]))) { buf.push(lines[j].trim()); j++; }
+    html += `<p>${inline(buf.join(' '))}</p>`;
+    i = j;
+  }
+  return html;
+}
+
+route();
+</script>
 </body>
 </html>
